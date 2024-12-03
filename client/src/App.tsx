@@ -1,14 +1,15 @@
-import { Map } from '@/components';
-import '@maptiler/leaflet-maptilersdk';
-import L, { LatLngExpression } from 'leaflet';
+// Library
+import { LatLngExpression, Marker as LeafletMarker, icon } from 'leaflet';
 import markerIconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
 import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup } from 'react-leaflet';
+// Components
+import { BasicMap } from '@/components';
 
 const Settings = () => {
-	const DefaultIcon = L.icon({
+	const DefaultIcon = icon({
 		iconUrl: markerIconUrl,
 		iconRetinaUrl: markerIconRetinaUrl,
 		shadowUrl: markerShadowUrl,
@@ -18,7 +19,7 @@ const Settings = () => {
 		shadowSize: [41, 41],
 	});
 
-	L.Marker.prototype.options.icon = DefaultIcon;
+	LeafletMarker.prototype.options.icon = DefaultIcon;
 	return null;
 };
 
@@ -33,7 +34,7 @@ function App() {
 				style={{ height: '100vh', width: '100vw' }}
 				preferCanvas={true}>
 				<Settings />
-				<Map />
+				<BasicMap />
 				<Marker position={position}>
 					<Popup>
 						A pretty CSS3 popup. <br /> Easily customizable.
