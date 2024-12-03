@@ -13,7 +13,7 @@ COPY package*.json ./
 # Install dependencies
 RUN bun install
 # If you're using Yarn, you can use `RUN yarn install`
-
+RUN bun run build
 # Copy the rest of the application code to the working directory
 COPY . .
 
