@@ -1,13 +1,17 @@
 {
     "version": 2,
+    "projectSettings": {
+        "buildCommand": "bun run build",
+        "outputDirectory": "dist",
+        "installCommand": "bun install"
+    },
     "buildCommand": "bun run build",
     "outputDirectory": "dist",
     "installCommand": "bun install",
-    "developmentCommand": "bun run dev",
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/"
+        "destination": "/"
         }
     ]
 }
