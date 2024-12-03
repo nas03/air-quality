@@ -4,6 +4,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
+    "build": "tsc && tsc-alias",
     "test": "echo \"Error: no test specified\" && exit 1",
     "kysely": "kysely-codegen --include-pattern='public.*' --out-file src/helpers/types/db.d.ts"
   },
