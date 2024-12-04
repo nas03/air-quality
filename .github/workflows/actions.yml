@@ -1,0 +1,8 @@
+name: 'Server AWS CodeBuild CI'
+on:
+  push:
+    branches:
+      - main
+jobs:
+    signIn:
+        environment: 

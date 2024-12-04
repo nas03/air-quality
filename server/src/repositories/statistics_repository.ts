@@ -9,7 +9,7 @@ const getByDistrictID = async (district_id: string, time?: Date): Promise<Select
   return result;
 };
 
-const getHistory = async (district_id: string, startDate: Date, endDate: Date): Promise<Selectable<Statistics>[]> => {
+const getDistrictHistory = async (district_id: string, startDate: Date, endDate: Date): Promise<Selectable<Statistics>[]> => {
   const query = db
     .selectFrom("statistics")
     .where((eb) => eb.and([eb("statistics.district_id", "=", district_id), eb.between("statistics.time", startDate, endDate)]))
@@ -18,4 +18,9 @@ const getHistory = async (district_id: string, startDate: Date, endDate: Date): 
   return await query;
 };
 
-export { getByDistrictID, getHistory };
+const getRankByDate = async (time: Date): Promise<Selectable<Statistics>[]> => {
+  const query = db.selectFrom("statistics").selectAll().where("time", "=", time);
+  return await query.execute();
+};
+
+export { getByDistrictID, getDistrictHistory, getRankByDate };
