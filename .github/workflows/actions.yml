@@ -11,4 +11,7 @@ jobs:
       - buildspec-override:true
     steps:
       - name: Finish
-        run: echo "Hello World"
+        run: |
+          cd air-quality/server
+          npm install
+          npm run build
