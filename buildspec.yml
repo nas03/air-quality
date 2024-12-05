@@ -35,7 +35,6 @@ phases:
     #   runtime: version
     #   runtime: version
     commands:
-      - sudo apt install unzip
       - curl -fsSL https://bun.sh/install | bash
 
   pre_build:
