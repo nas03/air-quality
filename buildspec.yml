@@ -26,20 +26,18 @@ version: 0.2
 #   # build-list:
 #   # build-matrix:
 #   # build-graph:
-        
+
 phases:
-  install:
-    # run-as: Linux-user-name
-    # on-failure: ABORT | CONTINUE
-    # runtime-versions:
-    #   runtime: version
-    #   runtime: version
-    commands:
-      - sudo apt install unzip
-      - curl -fsSL https://bun.sh/install | bash
-    finally:
-      - source ~/.bashrc 
-    
+  # install:
+  #   # run-as: Linux-user-name
+  #   # on-failure: ABORT | CONTINUE
+  #   # runtime-versions:
+  #   #   runtime: version
+  #   #   runtime: version
+  #   commands:
+  #     - sudo apt install unzip
+  #     - curl -fsSL https://bun.sh/install | bash
+
   pre_build:
     commands:
       - cd server
@@ -47,7 +45,7 @@ phases:
     # finally:
     #   - command
     #   - command
-    
+
   build:
     commands:
       - npm run build
@@ -55,7 +53,7 @@ phases:
     # finally:
     #   - command
     #   - command
-    
+
   # post_build:
   #   run-as: Linux-user-name
   #   on-failure: ABORT | CONTINUE
@@ -65,7 +63,6 @@ phases:
   #   finally:
   #     - command
   #     - command
-    
 # reports:
 #   report-group-name-or-arn:
 #     files:
