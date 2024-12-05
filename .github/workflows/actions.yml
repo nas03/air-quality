@@ -2,7 +2,16 @@ name: 'Server AWS CodeBuild CI'
 on:
   push:
     branches:
-      - main
+      - 'release'
+
 jobs:
-    signIn:
-        environment: 
+  build:
+    runs-on: codebuild-airq-${{github.run_id}}-${{github.run_attempt}}
+    steps:
+      - name: cd to server dir
+        run: cd server
+      - name: Install npm packages
+        run: npm install
+      - name: Build
+        run: npm run build
+      
