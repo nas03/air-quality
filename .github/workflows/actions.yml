@@ -9,3 +9,6 @@ jobs:
     runs-on:
       - codebuild-airq-${{github.run_id}}-${{github.run_attempt}}
       - buildspec-override:true
+    steps:
+      - name: Finish
+        run: echo "Hello World"
