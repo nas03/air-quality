@@ -28,27 +28,24 @@ version: 0.2
 #   # build-graph:
 
 phases:
-  # install:
-  #   # run-as: Linux-user-name
-  #   # on-failure: ABORT | CONTINUE
-  #   # runtime-versions:
-  #   #   runtime: version
-  #   #   runtime: version
-  #   commands:
-  #     - sudo apt install unzip
-  #     - curl -fsSL https://bun.sh/install | bash
+  install:
+    # run-as: Linux-user-name
+    # on-failure: ABORT | CONTINUE
+    # runtime-versions:
+    #   runtime: version
+    #   runtime: version
+    commands:
+      - sudo apt install unzip
+      - curl -fsSL https://bun.sh/install | bash
 
-  # pre_build:
-  #   commands:
-  #     - cd server
-  #     - npm install
-    # finally:
-    #   - command
-    #   - command
+  pre_build:
+    commands:
+      - echo CLONE DIRECTORY
+      - git clone https://github.com/nas03/air-quality.git
 
   build:
     commands:
-      - cd server
+      - cd air-quality/server
       - npm install
       - npm run build
     #   - command
