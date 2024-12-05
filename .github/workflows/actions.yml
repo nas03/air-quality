@@ -9,7 +9,7 @@ jobs:
     runs-on: codebuild-airq-${{github.run_id}}-${{github.run_attempt}}
     steps:
       - name: cd to server dir
-        run: cd server
+        run: cd air-quality/server
       - name: Install npm packages
         run: npm install
       - name: Build
