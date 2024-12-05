@@ -25,11 +25,11 @@ export interface MDistricts {
 }
 
 export interface Statistics {
-  avg_value: number | null;
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
   district_id: string | null;
   id: Generated<number>;
+  pm_25: number | null;
   time: Timestamp | null;
   updated_at: Generated<Timestamp | null>;
 }

@@ -1,18 +1,13 @@
 import { resMessage, statusCode } from "@/helpers/const";
-import { createResponse, jwtToken, zodParse } from "@/helpers/utils/utils";
+import { createJWTToken, createResponse, validate, verifyJWTToken } from "@/helpers/utils/utils";
 import { usersRepository } from "@/repositories";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
-import z from "zod";
+import { createUserSchema, signInSchema, signOutSchema } from "./schema/users.schema";
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const schema = z.object({
-      username: z.string(),
-      password: z.string(),
-      email: z.string(),
-    });
-    const payload = await zodParse(schema, req.body);
+    const payload = await validate(createUserSchema, req.body);
     if (!payload) {
       return createResponse(res, statusCode.BAD_REQUEST, "fail", resMessage.field_invalid, null);
     }
@@ -29,37 +24,38 @@ const createUser = async (req: Request, res: Response) => {
 
 const signIn = async (req: Request, res: Response) => {
   try {
-    const schema = z
-      .object({
-        type: z.enum(["email", "username"]),
-        username: z.string().optional(),
-        email: z.string().optional(),
-        password: z.string(),
-      })
-      .refine((data) => {
-        if (data.type === "username" && !data.username) {
-          return false;
-        }
-        if (data.type === "email" && !data.email) {
-          return false;
-        }
-        return true;
-      });
-    const data = await zodParse(schema, req.body);
+    const data = await validate(signInSchema, req.body);
     if (!data) {
       return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.field_invalid, null);
     }
+
     const user = await usersRepository.getUser(String(data[data.type]), data.type);
-    const validate = await bcrypt.compare(data.password, String(user?.password));
-    if (!user || !validate) {
+    if (!user) return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.user_not_exists, null);
+
+    const validatePassword = await bcrypt.compare(data.password, String(user?.password));
+    if (!validatePassword) {
       return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.wrong_credentials, null);
     }
-    const signInToken = jwtToken({ user_id: user.user_id });
-    return createResponse(res, statusCode.SUCCESS, "success", null, signInToken);
+
+    const access_token = createJWTToken({ user_id: user.user_id }, "15m");
+    const refresh_token = createJWTToken({ user_id: user.user_id }, "30d");
+    return createResponse(res, statusCode.SUCCESS, "success", null, { access_token, refresh_token });
   } catch (error) {
     console.log("Error sign in user", error);
     return createResponse(res, statusCode.ERROR, "error", resMessage.server_error, null);
   }
 };
 
-export { createUser, signIn };
+const signOut = async (req: Request, res: Response) => {
+  try {
+    const data = await validate(signOutSchema, req.body);
+    if (!data) return createResponse(res, statusCode.BAD_REQUEST, "fail", resMessage.field_invalid);
+    const verify = verifyJWTToken(data.user_id, data.access_token);
+    if (!verify) return createResponse(res, statusCode.UNAUTHORIZED, "fail", resMessage.token_invalid);
+    return createResponse(res, statusCode.SUCCESS, "success", null, null);
+  } catch (error) {
+    console.log("Error signing out user", error);
+    return createResponse(res, statusCode.ERROR, "error", resMessage.server_error, null);
+  }
+};
+export { createUser, signIn, signOut };
