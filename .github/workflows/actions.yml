@@ -6,4 +6,6 @@ on:
 
 jobs:
   build:
-    runs-on: codebuild-airq-${{github.run_id}}-${{github.run_attempt}}
+    runs-on:
+      - codebuild-airq-${{github.run_id}}-${{github.run_attempt}}
+      - buildspec-override:true
