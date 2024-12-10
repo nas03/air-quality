@@ -16,3 +16,8 @@ export const statusCode = {
   METHOD_NOT_ALLOWED: 405,
   ERROR: 500,
 } as const;
+
+export const flag = {
+  FALSE: 0,
+  TRUE: 1,
+} as const;

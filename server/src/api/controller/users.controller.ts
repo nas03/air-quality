@@ -3,7 +3,7 @@ import { createJWTToken, createResponse, validate, verifyJWTToken } from "@/help
 import { usersRepository } from "@/repositories";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
-import { createUserSchema, signInSchema, signOutSchema } from "./schema/users.schema";
+import { createUserSchema, refreshTokenSchema, signInSchema, signOutSchema } from "./schema/users.schema";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -58,4 +58,18 @@ const signOut = async (req: Request, res: Response) => {
     return createResponse(res, statusCode.ERROR, "error", resMessage.server_error, null);
   }
 };
-export { createUser, signIn, signOut };
+
+const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const data = await validate(refreshTokenSchema, req.body);
+    if (!data) return createResponse(res, statusCode.BAD_REQUEST, "fail", resMessage.field_invalid);
+    const [verifyAccessToken, verifyRefreshToken] = [verifyJWTToken(1, data.access_token), verifyJWTToken(1, data.refresh_token)];
+    const newAccessToken = createJWTToken({ user_id: 1 });
+    return createResponse(res, statusCode.SUCCESS, "success", null, { access_token: newAccessToken });
+  } catch (error) {
+    console.log("Error refresh token", error);
+    return createResponse(res, statusCode.ERROR, "error", resMessage.server_error);
+  }
+};
+export { createUser, refreshToken, signIn, signOut };
+

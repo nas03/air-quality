@@ -38,7 +38,8 @@ const getRankByDate = async (req: Request, res: Response) => {
     if (!query) {
       return createResponse(res, statusCode.BAD_REQUEST, "fail", resMessage.field_invalid, null);
     }
-    const data = await statisticsRepository.getRankByDate(query.time);
+
+    const data = await statisticsRepository.getRankByDate(new Date("2024-11-14"));
     return createResponse(res, statusCode.SUCCESS, "success", null, data);
   } catch (error) {
     console.log("Error fetching by date", error);

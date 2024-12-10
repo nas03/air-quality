@@ -20,3 +20,4 @@ export const signInSchema = z
   });
 
 export const signOutSchema = z.object({ user_id: z.number(), access_token: z.string() });
+export const refreshTokenSchema = z.object({ access_token: z.string(), refresh_token: z.string() });
