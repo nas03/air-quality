@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const createUserSchema = z.object({ username: z.string(), password: z.string(), email: z.string() });
+export const createUserSchema = z.object({ username: z.string(), password: z.string(), email: z.string().email() });
 
 export const signInSchema = z
   .object({
@@ -8,6 +8,7 @@ export const signInSchema = z
     username: z.string().optional(),
     email: z.string().optional(),
     password: z.string(),
+    session_id: z.string(),
   })
   .refine((data) => {
     if (data.type === "username" && !data.username) {

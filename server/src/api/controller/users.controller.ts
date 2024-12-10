@@ -4,7 +4,6 @@ import { usersRepository } from "@/repositories";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { createUserSchema, refreshTokenSchema, signInSchema, signOutSchema } from "./schema/users.schema";
-
 const createUser = async (req: Request, res: Response) => {
   try {
     const payload = await validate(createUserSchema, req.body);
@@ -28,8 +27,7 @@ const signIn = async (req: Request, res: Response) => {
     if (!data) {
       return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.field_invalid, null);
     }
-
-    const user = await usersRepository.getUser(String(data[data.type]), data.type);
+    const user = await usersRepository.getUserLoginInfo(String(data[data.type]), data.type, data.session_id);
     if (!user) return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.user_not_exists, null);
 
     const validatePassword = await bcrypt.compare(data.password, String(user?.password));
@@ -37,8 +35,8 @@ const signIn = async (req: Request, res: Response) => {
       return createResponse(res, statusCode.BAD_REQUEST, "error", resMessage.wrong_credentials, null);
     }
 
-    const access_token = createJWTToken({ user_id: user.user_id }, "15m");
-    const refresh_token = createJWTToken({ user_id: user.user_id }, "30d");
+    const access_token = createJWTToken({ user_id: user?.user_id }, "15m");
+    const refresh_token = createJWTToken({ user_id: user?.user_id }, "30d");
     return createResponse(res, statusCode.SUCCESS, "success", null, { access_token, refresh_token });
   } catch (error) {
     console.log("Error sign in user", error);
@@ -63,7 +61,10 @@ const refreshToken = async (req: Request, res: Response) => {
   try {
     const data = await validate(refreshTokenSchema, req.body);
     if (!data) return createResponse(res, statusCode.BAD_REQUEST, "fail", resMessage.field_invalid);
-    const [verifyAccessToken, verifyRefreshToken] = [verifyJWTToken(1, data.access_token), verifyJWTToken(1, data.refresh_token)];
+    const [verifyAccessToken, verifyRefreshToken] = [
+      verifyJWTToken(1, data.access_token),
+      verifyJWTToken(1, data.refresh_token),
+    ];
     const newAccessToken = createJWTToken({ user_id: 1 });
     return createResponse(res, statusCode.SUCCESS, "success", null, { access_token: newAccessToken });
   } catch (error) {
@@ -72,4 +73,3 @@ const refreshToken = async (req: Request, res: Response) => {
   }
 };
 export { createUser, refreshToken, signIn, signOut };
-

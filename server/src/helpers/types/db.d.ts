@@ -54,9 +54,21 @@ export interface UsersFavorite {
   user_id: number | null;
 }
 
+export interface UsersSession {
+  access_token: string;
+  created_at: Timestamp | null;
+  deleted: number | null;
+  id: Generated<number>;
+  refresh_token: string | null;
+  session_id: string;
+  updated_at: Timestamp | null;
+  user_id: number;
+}
+
 export interface DB {
   m_districts: MDistricts;
   statistics: Statistics;
   users: Users;
   users_favorite: UsersFavorite;
+  users_session: UsersSession;
 }

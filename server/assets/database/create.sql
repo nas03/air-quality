@@ -42,6 +42,19 @@ create table users_favorite (
                                 created_at timestamp
 );
 
+create table users_session
+(
+    id            int generated always as identity primary key,
+    user_id       int not null,
+    session_id    varchar(255) not null ,
+    access_token  text not null ,
+    refresh_token text,
+    deleted       int,
+    updated_at    timestamp,
+    created_at    timestamp
+
+);
+
 CREATE OR REPLACE FUNCTION update_updated_at_column()
     RETURNS TRIGGER AS
 $$
@@ -72,5 +85,11 @@ EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER set_updated_at
     BEFORE UPDATE
     ON users_favorite
+    FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
+
+CREATE TRIGGER set_updated_at
+    BEFORE UPDATE
+    ON users_session
     FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
