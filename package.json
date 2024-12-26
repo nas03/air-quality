@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "vercel": "^39.1.2"
-  },
-  "devDependencies": {
-    "@types/morgan": "^1.9.9",
-    "morgan": "^1.10.0"
-  }
-}
