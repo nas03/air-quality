@@ -1,1 +1,3 @@
-export * from './userInteractor';
+export * from "./statisticInteractor";
+export * from "./userInteractor";
+

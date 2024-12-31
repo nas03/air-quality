@@ -15,13 +15,13 @@ export interface MDistricts {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
   district_id: string;
-  eng_district: string | null;
-  eng_type: string | null;
-  province_id: string | null;
+  eng_district: string;
+  eng_type: string;
+  province_id: string;
   updated_at: Generated<Timestamp | null>;
-  vn_district: string | null;
-  vn_province: string | null;
-  vn_type: string | null;
+  vn_district: string;
+  vn_province: string;
+  vn_type: string;
 }
 
 export interface Statistics {
@@ -56,12 +56,12 @@ export interface UsersFavorite {
 
 export interface UsersSession {
   access_token: string;
-  created_at: Timestamp | null;
+  created_at: Generated<Timestamp | null>;
   deleted: number | null;
   id: Generated<number>;
   refresh_token: string | null;
   session_id: string;
-  updated_at: Timestamp | null;
+  updated_at: Generated<Timestamp | null>;
   user_id: number;
 }
 

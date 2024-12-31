@@ -1,0 +1,3 @@
+- [x] Implement API request authentication
+- [ ] Implement Redis cache mechanism
+- [ ] Setup CI/CD

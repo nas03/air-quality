@@ -1,1 +1,3 @@
-export * from './userRepository';
+export * from "./statisticRepository";
+export * from "./userRepository";
+
