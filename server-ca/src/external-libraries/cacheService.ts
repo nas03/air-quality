@@ -2,7 +2,19 @@ import { ICacheService } from "@/interfaces/external-library/ICacheService";
 import Redis from "ioredis";
 
 export class CacheService implements ICacheService {
-  private readonly redisClient = new Redis();
+  private readonly redisClient;
+  constructor() {
+    try {
+      this.redisClient = new Redis({
+        username: "default",
+        password: process.env.REDIS_PASSWORD,
+        port: 12511,
+        host: "redis-12511.c295.ap-southeast-1-1.ec2.redns.redis-cloud.com",
+      });
+    } catch (error) {
+      console.log("Error connecting to Redis", (error as Error).message);
+    }
+  }
 
   async exists(key: string): Promise<boolean> {
     const exists = await this.redisClient.exists(key);

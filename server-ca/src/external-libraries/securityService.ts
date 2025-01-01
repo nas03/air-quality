@@ -1,16 +1,15 @@
-import { encryptionSalt } from "@/config/constant";
 import { ISecurityService } from "@/interfaces/external-library/ISecurityService";
-import bcrypt from "bcryptjs";
+import argon from "argon2";
 import jwt from "jsonwebtoken";
 
 export class SecurityService implements ISecurityService {
   async encryptString(input: string): Promise<string> {
-    const result = await bcrypt.hash(input, encryptionSalt.DEFAULT);
+    const result = await argon.hash(input);
     return result;
   }
 
   async compareString(input: string, hashedString: string): Promise<boolean> {
-    const result = await bcrypt.compare(input, hashedString);
+    const result = await argon.verify(hashedString, input);
     return result;
   }
 
@@ -26,8 +25,4 @@ export class SecurityService implements ISecurityService {
     const decodeObj = jwt.verify(input, String(process.env.JWT_SECRET));
     return decodeObj as T;
   }
-
-  //   async decrypt(input: string): Promise<string> {
-  //       return await bcrypt.decodeBase64()
-  //   }
 }

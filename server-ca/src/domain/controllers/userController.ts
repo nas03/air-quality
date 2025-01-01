@@ -14,7 +14,7 @@ export class UserController extends BaseController<UserInteractor> {
     };
 
     const isUserExists = await this.interactor.findUser(body.username);
-    if (!isUserExists) {
+    if (isUserExists?.user_id) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "fail",
         message: resMessage.user_existed,
@@ -50,6 +50,7 @@ export class UserController extends BaseController<UserInteractor> {
         data: null,
       });
     }
+
     const securityService = new SecurityService();
     const validatePassword = await securityService.compareString(body.password, isUserExists.password);
     if (!validatePassword) {
@@ -61,14 +62,8 @@ export class UserController extends BaseController<UserInteractor> {
     }
 
     const [access_token, refresh_token] = await Promise.all([
-      securityService.createToken(
-        { user_id: isUserExists.user_id, username: isUserExists.username },
-        "15m"
-      ),
-      securityService.createToken(
-        { user_id: isUserExists.user_id, username: isUserExists.username },
-        "30d"
-      ),
+      securityService.createToken({ user_id: isUserExists.user_id, username: isUserExists.username }, "15m"),
+      securityService.createToken({ user_id: isUserExists.user_id, username: isUserExists.username }, "30d"),
     ]);
 
     return res.status(statusCode.SUCCESS).json({
@@ -79,4 +74,8 @@ export class UserController extends BaseController<UserInteractor> {
       },
     });
   };
+
+  // onSignout = async (req: Request, res: Response) => {
+
+  // }
 }

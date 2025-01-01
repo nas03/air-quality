@@ -7,7 +7,7 @@ export class MDistrict {
     public eng_district: string | null,
     public vn_type: string | null,
     public eng_type: string | null,
-    public deleted?: number,
+    public deleted?: number | null,
     public updated_at?: Date | null,
     public created_at?: Date | null
   ) {}

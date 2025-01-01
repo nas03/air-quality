@@ -2,11 +2,12 @@ import { UserInteractor } from "@/domain/interactors";
 import { catchAsync } from "@/domain/middlewares/catchAsync";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
+import districtRouter from "@/domain/routes/districtRoutes";
 import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 
-const routes = [...userRouter, ...statisticRouter];
+const routes = [...userRouter, ...statisticRouter, ...districtRouter];
 
 const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);
@@ -34,12 +35,16 @@ routes.forEach((route) => {
     case "PUT":
       router.put(path, handler);
       break;
+    case "PATCH":
+      router.patch(path, handler);
+      break;
     case "DELETE":
       router.delete(path, handler);
       break;
   }
 });
 
+// Log router path
 router.stack.forEach((middleware: any) => {
   if (middleware.route) {
     Object.keys(middleware.route.methods).forEach((method) => {
