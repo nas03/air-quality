@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 5500
 
 # Command to run the app
-CMD ["node", "-r", "tsconfig-paths/register", "dist/index.js"]
+CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
