@@ -70,6 +70,7 @@ export class StatisticRepository implements IStatisticRepository {
   }
   async getRankByDate(date: Date): Promise<(Statistic & MDistrict)[] | null> {
     const formattedDate = new Date(new Date(date).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
+    console.log({ formattedDate });
     const query = db
       .selectFrom("statistics")
       .leftJoin("m_districts", "m_districts.district_id", "statistics.district_id")
