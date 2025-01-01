@@ -21,12 +21,7 @@ export class StatisticRepository implements IStatisticRepository {
         "m_districts.eng_type",
       ])
       .where("statistics.district_id", "=", district_id);
-    if (date)
-      query.where(
-        "statistics.time",
-        "=",
-        new Date(new Date(date).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }))
-      );
+    if (date) query = query.where("statistics.time", "=", date);
     const result = await query.execute();
     return result ?? null;
   }

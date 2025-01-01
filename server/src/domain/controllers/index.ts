@@ -1,3 +1,4 @@
-export * from './baseController';
-export * from './userController';
+export * from "./baseController";
+export * from "./dataController";
+export * from "./userController";
 

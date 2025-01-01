@@ -1,7 +1,7 @@
 import { resMessage, statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
 import { UserInteractor } from "@/domain/interactors";
-import { SecurityService } from "@/external-libraries/securityService";
+import { SecurityService } from "@/services/securityService";
 import { Request, Response } from "express";
 
 export class UserController extends BaseController<UserInteractor> {

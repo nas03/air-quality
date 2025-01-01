@@ -1,4 +1,4 @@
-import { ISecurityService } from "@/interfaces/external-library/ISecurityService";
+import { ISecurityService } from "@/interfaces/services/ISecurityService";
 import argon from "argon2";
 import jwt from "jsonwebtoken";
 

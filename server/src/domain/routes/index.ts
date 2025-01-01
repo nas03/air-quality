@@ -2,12 +2,13 @@ import { UserInteractor } from "@/domain/interactors";
 import { catchAsync } from "@/domain/middlewares/catchAsync";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
+import dataRouter from "@/domain/routes/dataRoutes";
 import districtRouter from "@/domain/routes/districtRoutes";
 import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 
-const routes = [...userRouter, ...statisticRouter, ...districtRouter];
+const routes = [...userRouter, ...statisticRouter, ...districtRouter, ...dataRouter];
 
 const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);

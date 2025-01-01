@@ -1,7 +1,7 @@
 import { resMessage, statusCode } from "@/config/constant";
 import { UserInteractor } from "@/domain/interactors";
-import { SecurityService } from "@/external-libraries/securityService";
-import { Validator } from "@/external-libraries/validateService";
+import { SecurityService } from "@/services/securityService";
+import { Validator } from "@/services/validateService";
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 
