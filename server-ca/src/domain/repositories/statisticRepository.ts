@@ -55,11 +55,7 @@ export class StatisticRepository implements IStatisticRepository {
         eb
           .and([
             eb("statistics.district_id", "=", district_id),
-            eb.between(
-              "statistics.time",
-              new Date(new Date(start_date).toLocaleString("en-US", { timeZone: "Asia/Bangkok" })),
-              new Date(new Date(end_date).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }))
-            ),
+            eb.between("statistics.time", start_date, end_date),
             eb("statistics.district_id", "is not", null),
           ])
           .and("statistics.deleted", "=", flag.FALSE)
@@ -69,8 +65,7 @@ export class StatisticRepository implements IStatisticRepository {
     return await query.execute();
   }
   async getRankByDate(date: Date): Promise<(Statistic & MDistrict)[] | null> {
-    const formattedDate = new Date(new Date(date).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
-    console.log({ formattedDate });
+    console.log({ date });
     const query = db
       .selectFrom("statistics")
       .leftJoin("m_districts", "m_districts.district_id", "statistics.district_id")
@@ -88,7 +83,7 @@ export class StatisticRepository implements IStatisticRepository {
       ])
       .where((eb) =>
         eb.and([
-          eb("statistics.time", "=", formattedDate),
+          eb("statistics.time", "=", date),
           eb("statistics.deleted", "=", flag.FALSE),
           eb("m_districts.deleted", "=", flag.FALSE),
         ])
