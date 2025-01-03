@@ -8,7 +8,6 @@ interface IPropsOpenLayerMap {
   time: string;
 }
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
-  const mapRef = useRef(null);
   const wmsLayerRef = useRef<TileLayer<TileWMS> | null>(null);
   useEffect(() => {
     const map = new Map({
@@ -28,6 +27,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
         zoom: 8,
       }),
     });
+
     const wmsLayer = new TileLayer({
       source: new TileWMS({
         url: "http://localhost:8080/geoserver/air/wms",
