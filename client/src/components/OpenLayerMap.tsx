@@ -33,14 +33,29 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
         url: "http://localhost:8080/geoserver/air/wms",
         projection: "EPSG:4326",
         params: {
-          LAYERS: "air:precipitation",
+          LAYERS: "air:AQI",
           TIME: time,
           TILED: true,
         },
         serverType: "geoserver",
       }),
+      opacity: 0.6,
     });
     map.addLayer(wmsLayer);
+    const labelLayer = new TileLayer({
+      source: new TileWMS({
+        url: "http://localhost:8080/geoserver/air/wms",
+        projection: "EPSG:4326",
+        params: {
+          LAYERS: "air:gadm41_VNM_2",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      opacity: 0.7,
+      maxZoom: 12,
+    });
+    map.addLayer(labelLayer);
     wmsLayerRef.current = wmsLayer;
     return () => {
       map.dispose();
