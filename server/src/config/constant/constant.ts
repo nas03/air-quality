@@ -26,4 +26,9 @@ export const flag = {
 
 export const encryptionSalt = {
   DEFAULT: 15,
-};
+} as const;
+
+export const cacheTime = {
+  DEFAULT: 3600,
+  DEV: 5,
+} as const;

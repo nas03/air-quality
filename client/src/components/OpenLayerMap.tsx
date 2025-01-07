@@ -1,25 +1,26 @@
-import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
-import { TileWMS } from "ol/source";
-import "ol/ol.css";
+import { TimeContext } from "@/context";
 import "@/open.css";
-import { useEffect, useRef } from "react";
+import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
+import TileLayer from "ol/layer/Tile";
+import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
+import { TileWMS } from "ol/source";
+import { useContext, useEffect, useRef } from "react";
 
 interface IPropsOpenLayerMap {
-  time: string;
+  // time: string;
 }
-const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
+const OpenLayerMap: React.FC<IPropsOpenLayerMap> = () => {
   const layersRef = useRef<TileLayer[] | null>(null);
-
+  const { time } = useContext(TimeContext);
   useEffect(() => {
     const layers = [
       new TileLayer({
         source: new TileWMS({
           url: "http://localhost:8080/geoserver/air/wms",
           params: {
-            LAYERS: "air:AQI",
+            LAYERS: "air:air",
             TIME: time,
             TILED: true,
           },
@@ -27,21 +28,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
           cacheSize: 4096,
           crossOrigin: "anonymous",
         }),
-        opacity: 0.6,
-      }),
-      new TileLayer({
-        source: new TileWMS({
-          url: "http://localhost:8080/geoserver/air/wms",
-          params: {
-            LAYERS: "air:gadm41_VNM_2",
-            TILED: true,
-          },
-          serverType: "geoserver",
-          cacheSize: 4096,
-          crossOrigin: "anonymous",
-        }),
-        opacity: 0.4,
-        maxZoom: 12,
+        opacity: 1,
       }),
     ];
     layersRef.current = layers;
@@ -59,9 +46,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = ({ time }) => {
         center: fromLonLat([105.97, 17.9459]),
       }),
     });
-    Promise.resolve(
-      apply(map, styleUrl).then(() => map.getLayers().extend([...layers])),
-    );
+    Promise.resolve(apply(map, styleUrl).then(() => map.getLayers().extend([...layers])));
 
     return () => {
       map.dispose();

@@ -27,6 +27,12 @@ const statisticRouter: Route[] = [
     controller: statisticController.onGetRankByDate.bind(statisticController),
     role: "user",
   },
+  {
+    path: "/statistics/time-list",
+    method: "GET",
+    controller: statisticController.onGetTimeList.bind(statisticController),
+    role: "",
+  },
 ];
 
 export default statisticRouter;

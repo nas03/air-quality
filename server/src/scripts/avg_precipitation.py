@@ -23,7 +23,7 @@ ulx, xres, xskew, uly, yskew, yres = dist_ds.GetGeoTransform()
 lrx = ulx + (dist_ds.RasterXSize * xres)
 lry = uly + (dist_ds.RasterYSize * yres)
 
-year = "2020"
+year = "2024"
 year_log = []
 
 for filepath in glob.iglob(os.path.join(folder_geotiff_path, "*.tif")):
@@ -61,10 +61,10 @@ for filepath in glob.iglob(os.path.join(folder_geotiff_path, "*.tif")):
     new_data = new_data[mask]
     new_dist = new_dist[mask]
 
-    df = pd.DataFrame({"dist_ID": new_dist, "avg_value": new_data})
+    df = pd.DataFrame({"dist_ID": new_dist, "pm_25": new_data})
     df = df.groupby("dist_ID", as_index=False).mean()
     df["time"] = timeInfo
-    df = df[["time", "dist_ID", "avg_value"]]
+    df = df[["time", "dist_ID", "pm_25"]]
 
     # print(meta)
     sub_meta = meta[["ID", "GID_2"]]

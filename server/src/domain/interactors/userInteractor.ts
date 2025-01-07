@@ -1,3 +1,4 @@
+import { cacheTime } from "@/config/constant";
 import { emailRegex } from "@/config/constant/regex";
 import { UserRepository } from "@/domain/repositories";
 import { User } from "@/entities";
@@ -30,7 +31,7 @@ export class UserInteractor implements IUserInteractor {
 
     let data: Awaited<User | null> = null;
     data = await this.userRepository.findUser({ [searchKey]: accountIdentifier });
-    if (data) await this.cacheService.set(hashKey, data, 3600);
+    if (data) await this.cacheService.set(hashKey, data);
     return data;
   };
 

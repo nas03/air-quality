@@ -47,4 +47,13 @@ export class StatisticController extends BaseController<StatisticInteractor> {
       data,
     });
   };
+
+  onGetTimeList = async (req: Request, res: Response) => {
+    const data = await this.interactor.getTimeList();
+    const result = data.map((el) => el.time);
+    return res.status(200).json({
+      status: "success",
+      data: result,
+    });
+  };
 }

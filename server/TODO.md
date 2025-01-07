@@ -2,6 +2,6 @@
 
 - [x] Implement API request authentication
 - [x] Implement Redis cache mechanism
-- [ ] Get average aqi_index + pm2.5 by districts/province
-- [ ] Get time of dataset (in 7 days)
+- [x] Get time of dataset (in 7 days)
+- [x] Get average aqi_index + pm2.5 by districts/province
 - [ ] Setup CI/CD

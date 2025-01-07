@@ -10,4 +10,5 @@ export interface IStatisticRepository {
   ): Promise<(Statistic & MDistrict)[] | null>;
 
   getRankByDate(date: Date): Promise<(Statistic & MDistrict)[] | null>;
+  getTimeList(): Promise<Pick<Statistic, "time">[]>;
 }

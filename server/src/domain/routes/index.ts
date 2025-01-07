@@ -22,7 +22,7 @@ routes.forEach((route) => {
     router.use(path, middleware);
   }
   if (role === "user") {
-    router.use(path, userMiddleware.authorizeUser.bind(userMiddleware));
+    // router.use(path, userMiddleware.authorizeUser.bind(userMiddleware));
   }
 
   const handler = catchAsync(controller);

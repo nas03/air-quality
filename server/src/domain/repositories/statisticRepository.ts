@@ -86,4 +86,14 @@ export class StatisticRepository implements IStatisticRepository {
 
     return await query.execute();
   }
+
+  async getTimeList(): Promise<Pick<Statistic, "time">[]> {
+    const query = await db
+      .selectFrom("statistics")
+      .select("time")
+      .groupBy("time")
+      .orderBy("time", "asc")
+      .execute();
+    return query;
+  }
 }

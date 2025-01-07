@@ -1,6 +1,6 @@
-import InfoBar from "@/components/InfoBar";
 import OpenLayerMap from "@/components/OpenLayerMap";
-import SearchBar from "@/components/SearchBar";
+import SideBar from "@/components/SideBar/SideBar";
 import TimeSlider from "@/components/TimeSlider";
 
-export { TimeSlider, SearchBar, OpenLayerMap, InfoBar };
+export { OpenLayerMap, SideBar, TimeSlider };
+

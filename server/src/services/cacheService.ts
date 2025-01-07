@@ -1,3 +1,4 @@
+import { cacheTime } from "@/config/constant";
 import { ICacheService } from "@/interfaces/services/ICacheService";
 import Redis from "ioredis";
 
@@ -82,7 +83,7 @@ export class CacheService implements ICacheService {
       if (ttlSeconds) {
         await this.redisClient.setex(key, ttlSeconds, serializedValue);
       } else {
-        await this.redisClient.set(key, serializedValue);
+        await this.redisClient.setex(key, serializedValue, cacheTime.DEFAULT);
       }
     } catch (error) {
       console.error("Error setting value:", error);
