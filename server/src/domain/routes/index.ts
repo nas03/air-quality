@@ -4,11 +4,12 @@ import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
 import dataRouter from "@/domain/routes/dataRoutes";
 import districtRouter from "@/domain/routes/districtRoutes";
+import stationsRouter from "@/domain/routes/stationsRoute";
 import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 
-const routes = [...userRouter, ...statisticRouter, ...districtRouter, ...dataRouter];
+const routes = [...userRouter, ...statisticRouter, ...districtRouter, ...dataRouter, ...stationsRouter];
 
 const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);

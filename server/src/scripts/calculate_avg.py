@@ -1,21 +1,54 @@
 import os
 import glob
-from osgeo import gdal
+from osgeo import gdal  # type: ignore
 import numpy as np
 import datetime
 import pandas as pd
 
+
 # import shapefile
+def lerp(aqi_low, aqi_high, conc_low, conc_high, conc):
+    """Linear interpolation function with division by zero check."""
+    if conc_high == conc_low:
+        return 0  # Or another default value
+    return aqi_low + (conc - conc_low) * (aqi_high - aqi_low) / (conc_high - conc_low)
+
+
+def calculate_aqi(pm25):
+    """Convert PM2.5 concentration to AQI."""
+    if np.isnan(pm25):  # Check if pm25 is NaN
+        return None  # Or return None if you prefer
+
+    c = round(pm25 * 10) / 10  # Equivalent to Math.floor(10 * pm25) / 10
+    if c < 0:
+        return 0  # Values below 0 are beyond AQI
+    elif c < 12.1:
+        return round(lerp(0, 50, 0.0, 12.0, c))
+    elif c < 35.5:
+        return round(lerp(51, 100, 12.1, 35.4, c))
+    elif c < 55.5:
+        return round(lerp(101, 150, 35.5, 55.4, c))
+    elif c < 150.5:
+        return round(lerp(151, 200, 55.5, 150.4, c))
+    elif c < 250.5:
+        return round(lerp(201, 300, 150.5, 250.4, c))
+    elif c < 350.5:
+        return round(lerp(301, 400, 250.5, 350.4, c))
+    elif c < 500.5:
+        return round(lerp(401, 500, 350.5, 500.4, c))
+    else:
+        return 500  # Values above 500 are beyond AQI
+
 
 # input path
 folder_geotiff_path = r"assets/data"
 # output path
 folder_csv_path = r"assets/output"
 
-meta_path = r"scripts/data/districtsVN.xlsx"
+meta_path = r"src/scripts/data/districtsVN.xlsx"
 meta = pd.read_excel(meta_path)
 
-dist_path = r"scripts/data/VN_districts_100m.tif"
+dist_path = r"src/scripts/data/VN_districts_100m.tif"
 dist_ds = gdal.Open(dist_path, gdal.GA_ReadOnly)
 dist = dist_ds.ReadAsArray()  # nodata 65535
 
@@ -63,15 +96,18 @@ for filepath in glob.iglob(os.path.join(folder_geotiff_path, "*.tif")):
 
     df = pd.DataFrame({"dist_ID": new_dist, "pm_25": new_data})
     df = df.groupby("dist_ID", as_index=False).mean()
+    df = df.dropna(subset=["pm_25"])
+    df["aqi_index"] = df["pm_25"].apply(calculate_aqi)
     df["time"] = timeInfo
-    df = df[["time", "dist_ID", "pm_25"]]
+    df = df[["time", "dist_ID", "pm_25", "aqi_index"]]
 
     # print(meta)
     sub_meta = meta[["ID", "GID_2"]]
-    sub_meta.columns = ["dist_ID", "GID_2"]
+    sub_meta = sub_meta.rename(columns={"ID": "dist_ID", "GID_2": "GID_2"})
     df = pd.merge(df, sub_meta)
     df = df.rename(columns={"GID_2": "district_id"})
     df = df.drop(columns=["dist_ID"])
+    df = df[["district_id", "pm_25", "aqi_index", "time"]]
     year_log.append(df)
     os.remove(temp_fpath)
 

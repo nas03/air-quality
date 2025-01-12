@@ -11,6 +11,34 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export interface AQISupa {
+  elevation: number | null;
+  fid: Generated<number>;
+  ingestion: Timestamp | null;
+  location: string | null;
+  the_geom: string | null;
+}
+
+export interface GeographyColumns {
+  coord_dimension: number | null;
+  f_geography_column: string | null;
+  f_table_catalog: string | null;
+  f_table_name: string | null;
+  f_table_schema: string | null;
+  srid: number | null;
+  type: string | null;
+}
+
+export interface GeometryColumns {
+  coord_dimension: number | null;
+  f_geometry_column: string | null;
+  f_table_catalog: string | null;
+  f_table_name: string | null;
+  f_table_schema: string | null;
+  srid: number | null;
+  type: string | null;
+}
+
 export interface MDistricts {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
@@ -24,19 +52,39 @@ export interface MDistricts {
   vn_type: string;
 }
 
+export interface SpatialRefSys {
+  auth_name: string | null;
+  auth_srid: number | null;
+  proj4text: string | null;
+  srid: number;
+  srtext: string | null;
+}
+
+export interface Stations {
+  aqi_index: number;
+  created_at: Generated<Timestamp | null>;
+  lat: number;
+  lng: number;
+  station_id: string;
+  status: string;
+  timestamp: Timestamp | null;
+  updated_at: Generated<Timestamp | null>;
+}
+
 export interface Statistics {
+  aqi_index: number;
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
-  district_id: string | null;
+  district_id: string;
   id: Generated<number>;
-  pm_25: number | null;
-  time: Timestamp | null;
+  pm_25: number;
+  time: Timestamp;
   updated_at: Generated<Timestamp | null>;
 }
 
 export interface Users {
   created_at: Generated<Timestamp | null>;
-  deleted: number | null;
+  deleted: Generated<number | null>;
   email: string;
   password: string;
   phone_number: string;
@@ -47,7 +95,7 @@ export interface Users {
 
 export interface UsersFavorite {
   created_at: Generated<Timestamp | null>;
-  deleted: number | null;
+  deleted: Generated<number | null>;
   district_id: string | null;
   id: Generated<number>;
   updated_at: Generated<Timestamp | null>;
@@ -66,7 +114,12 @@ export interface UsersSession {
 }
 
 export interface DB {
+  AQI_Supa: AQISupa;
+  geography_columns: GeographyColumns;
+  geometry_columns: GeometryColumns;
   m_districts: MDistricts;
+  spatial_ref_sys: SpatialRefSys;
+  stations: Stations;
   statistics: Statistics;
   users: Users;
   users_favorite: UsersFavorite;

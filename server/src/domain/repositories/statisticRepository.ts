@@ -11,6 +11,7 @@ export class StatisticRepository implements IStatisticRepository {
       .select([
         "statistics.id",
         "statistics.pm_25",
+        "statistics.aqi_index",
         "statistics.time",
         "m_districts.district_id",
         "m_districts.province_id",
@@ -37,6 +38,7 @@ export class StatisticRepository implements IStatisticRepository {
       .select([
         "statistics.id",
         "statistics.pm_25",
+        "statistics.aqi_index",
         "statistics.time",
         "statistics.district_id",
         "m_districts.province_id",
@@ -67,8 +69,9 @@ export class StatisticRepository implements IStatisticRepository {
       .select([
         "statistics.id",
         "statistics.pm_25",
-        "statistics.time",
+        "statistics.aqi_index",
         "statistics.district_id",
+        "statistics.time",
         "m_districts.province_id",
         "m_districts.vn_district",
         "m_districts.vn_type",

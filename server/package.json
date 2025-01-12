@@ -3,7 +3,8 @@
     "kysely": "kysely-codegen --include-pattern='public.*' --out-file src/db.d.ts",
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
     "start": "node dist/server.js",
-    "build": "tsc && tsc-alias"
+    "build": "tsc && tsc-alias",
+    "scrape": "python src/scripts/scraper.py"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.717.0",
