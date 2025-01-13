@@ -9,6 +9,11 @@
 
 ## 6-1-2025 -> 12-1-2025
 
-- [ ] Search bar
-  - [ ] Handle same vn_district
-- [ ] AQI Chart
+- [x] Search bar
+  - [x] Handle same vn_district
+- [x] AQI Chart
+- [x] WarningTab cards
+- [x] Show marks of stations (AQI)
+- [ ] Show AQI rank of district/provinces
+- [ ] User login/signup
+- [ ] Email notifications

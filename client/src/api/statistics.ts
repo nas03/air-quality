@@ -11,9 +11,9 @@ export const getStatisticHistoryByDistrict = async (
   district_id: string,
   start_date: string,
   end_date: string,
-): Promise<(Statistic & { aqi_index: number } & MDistrict)[] | null> => {
+): Promise<(Statistic & MDistrict)[] | null> => {
   if (!district_id || !start_date || !end_date) return null;
-  const response = await api.get<APIResponse<(Statistic & { aqi_index: number } & MDistrict)[] | null>>(
+  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>(
     `/statistics/district/${district_id}/history`,
     {
       params: { start_date, end_date },
@@ -25,9 +25,9 @@ export const getStatisticHistoryByDistrict = async (
 export const getStatisticByDistrict = async (
   district_id: string,
   date: string,
-): Promise<(Statistic & { aqi_index: number } & MDistrict)[] | null> => {
+): Promise<(Statistic & MDistrict)[] | null> => {
   if (!district_id || !date) return null;
-  const response = await api.get<APIResponse<(Statistic & { aqi_index: number } & MDistrict)[] | null>>(
+  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>(
     `/statistics/district/${district_id}`,
     {
       params: { date },

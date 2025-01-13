@@ -1,15 +1,11 @@
+import { ChartOptions } from "@/config/constants";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
 
 interface IPropsTemplateCard {
   className?: string;
   title?: string;
-  chartOptions: {
-    label: string;
-    disabled?: boolean;
-    value: 0 | 1;
-    content: React.ReactNode;
-  }[];
+  chartOptions: ChartOptions;
   selectedValue: 0 | 1;
   onValueChange: (value: 0 | 1) => void;
   descriptionText?: string;
@@ -27,7 +23,7 @@ const TemplateCard: React.FC<IPropsTemplateCard> = ({
       <Collapse
         expandIconPosition="end"
         defaultActiveKey={["1"]}
-        className="relative h-fit w-full rounded-md"
+        className="relative h-fit w-full rounded-md p-0"
         bordered={false}
         collapsible="icon"
       >
@@ -57,7 +53,7 @@ const TemplateCard: React.FC<IPropsTemplateCard> = ({
               </div>
             </>
           }
-          className="w-full rounded-md bg-white"
+          className="w-full rounded-md bg-white p-0 first:p-0"
         >
           {chartOptions.find((option) => option.value === selectedValue)?.content}
         </Collapse.Panel>

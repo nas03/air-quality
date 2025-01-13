@@ -1,4 +1,5 @@
 export type APIResponse<T> = { status: string; data: T; message?: string };
+
 export type MDistrict = {
   district_id: string;
   province_id: string;
@@ -11,15 +12,18 @@ export type MDistrict = {
   updated_at?: Date;
   created_at?: Date;
 };
+
 export type Statistic = {
   id?: number;
   district_id: string;
   pm_25: number;
+  aqi_index: number;
   time: Date;
   deleted?: number;
   updated_at?: Date | null;
   created_at?: Date | null;
 };
+
 export type User = {
   username: string;
   email: string;
@@ -29,3 +33,11 @@ export type User = {
   updated_at?: Date | null;
   created_at?: Date | null;
 };
+
+export type ChartOptions = {
+  label: string;
+  value: 0 | 1;
+  disabled?: boolean;
+  default?: number;
+  content: React.ReactNode;
+}[];

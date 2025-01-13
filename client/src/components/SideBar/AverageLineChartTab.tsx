@@ -1,6 +1,7 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 import TemplateCard from "@/components/SideBar/TemplateCard";
-import { chartConfig } from "@/components/SideBar/config";
+import { averageLineChartConfig } from "@/components/SideBar/config";
+import { ChartOptions } from "@/config/constants";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -20,7 +21,8 @@ const AverageLineChart: React.FC<IPropsAverageLineChart> = ({ className, distric
 
   const mutation = useMutation({
     mutationKey: ["district"],
-    mutationFn: (district_id: string) => getStatisticHistoryByDistrict(district_id, "2024-11-01", "2024-11-06"),
+    mutationFn: (district_id: string) =>
+      getStatisticHistoryByDistrict(district_id, "2024-11-01", "2024-11-06"),
   });
 
   useEffect(() => {
@@ -48,11 +50,7 @@ const AverageLineChart: React.FC<IPropsAverageLineChart> = ({ className, distric
     }
   }, [mutation.data]);
 
-  const chartOptions: {
-    label: string;
-    value: 0 | 1;
-    content: React.ReactNode;
-  }[] = [
+  const chartOptions: ChartOptions = [
     { label: "AQI", chartType: "aqi" as const, value: 0 as const },
     { label: "PM2.5", chartType: "pm25" as const, value: 1 as const },
   ].map((config) => ({
@@ -60,7 +58,7 @@ const AverageLineChart: React.FC<IPropsAverageLineChart> = ({ className, distric
     value: config.value,
     content: (
       <LineChart
-        {...chartConfig[config.value]}
+        {...averageLineChartConfig[config.value]}
         grid={{ horizontal: true, vertical: true }}
         series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
         xAxis={[

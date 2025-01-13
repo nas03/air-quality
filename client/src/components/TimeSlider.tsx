@@ -1,15 +1,8 @@
+import { IPropsTimeSlider } from "@/components/types";
 import { TimeContext } from "@/context";
 import { PlayCircleFilled } from "@ant-design/icons";
 import { Slider, SliderSingleProps } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-
-interface IPropsTimeSlider {
-  setTime: (value: string | ((prevState: string) => string)) => void;
-}
-interface IPropsTimeSlider {
-  setTime: (value: string | ((prevState: string) => string)) => void;
-  className?: string;
-}
 
 const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className }) => {
   const [sliderValue, setSliderValue] = useState(0);
@@ -19,7 +12,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className }) => {
   useEffect(() => {
     const tempMark: SliderSingleProps["marks"] = Object.fromEntries(
       timeList.slice(0, 6).map((time, index) => {
-        const formattedTime = time.replace(/-/g, "/");
+        const formattedTime = time.split("-").reverse().join("/");
         return [
           index,
           {
@@ -58,7 +51,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className }) => {
 
   return (
     <div
-      className={`${className} flex h-fit w-[55vw] flex-row items-start gap-10 rounded-xl bg-white bg-opacity-70 p-5 px-10`}
+      className={`${className} absolute bottom-0 ml-[26rem] flex h-fit w-[calc(100vw-30rem)] flex-row items-start gap-10 rounded-xl bg-white bg-opacity-70 px-10 pt-3`}
     >
       <button className="shrink-0 rounded-full text-4xl" onClick={handleClick}>
         <PlayCircleFilled translate="yes" />

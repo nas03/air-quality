@@ -24,7 +24,7 @@ const colorConfig: { [key: number]: { label: string; color: { min: number; max: 
   },
 };
 
-export const chartConfig: { [key: string]: Pick<LineChartProps, "viewBox" | "width" | "height" | "yAxis"> } =
+export const averageLineChartConfig: { [key: string]: Pick<LineChartProps, "viewBox" | "width" | "height" | "yAxis"> } =
   Object.fromEntries(
     Object.entries(colorConfig).map((entry) => {
       const [key, value] = entry;

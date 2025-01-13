@@ -22,23 +22,29 @@ const SearchBar: React.FC<IPropsSearchBar> = (props) => {
   };
 
   const handleSelect = (value: string) => {
-    const [type, ...districtParts] = value.split(" ");
-    const district = districtParts.join(" ").split(",")[0];
+    let district = "";
+    let type = "";
+    if (value.includes("Huyện") || value.includes("Quận")) {
+      const parts = value.split(",")[0].split(" ");
+      type = parts[0];
+      district = parts.slice(1).join(" ");
+    } else {
+      const parts = value.split(",")[0].split(" ");
+      type = parts.slice(0, 2).join(" ");
+      district = parts.slice(2).join(" ");
+    }
     const province = value.split(",")[1].trim();
 
     const targetDistrict = props.districts.find(
-      (el) =>
-        el.vn_district === district &&
-        el.vn_province === province &&
-        el.vn_type === type
+      (el) => el.vn_district === district && el.vn_province === province && el.vn_type === type,
     );
     props.setTargetDistrict(targetDistrict?.district_id || "");
   };
   return (
-    <div className={`${props.className} flex max-w-full flex-row gap-3 rounded-md bg-white px-2 py-2`}>
-      <SearchOutlined className="shrink-0 rounded-md px-2 py-2 hover:bg-blue-100" />
+    <div className={`${props.className} flex h-12 max-w-full flex-row gap-3 rounded-md bg-white px-2 py-2`}>
+      <SearchOutlined className="h-full shrink-0 rounded-md px-2 py-2 hover:bg-blue-100" />
       <AutoComplete
-        className="min-w-[6rem] flex-1 rounded-md p-0"
+        className="h-full min-w-[6rem] flex-1 rounded-md p-0"
         onSearch={handleSearch}
         variant="borderless"
         placeholder="Search..."
