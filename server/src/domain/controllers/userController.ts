@@ -1,4 +1,4 @@
-import { resMessage, statusCode } from "@/config/constant";
+import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
 import { UserInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services/securityService";
@@ -28,6 +28,7 @@ export class UserController extends BaseController<UserInteractor> {
       phone_number: body.phone_number,
       email: body.email,
       password: hashedPassword,
+      role: AUTHENTICATION.USER_ROLE.USER,
     });
 
     return res.status(200).json({
@@ -35,47 +36,4 @@ export class UserController extends BaseController<UserInteractor> {
       data: newUser,
     });
   };
-
-  onSignin = async (req: Request, res: Response) => {
-    const body = req.body as {
-      accountIdentifier: string;
-      password: string;
-    };
-
-    const isUserExists = await this.interactor.findUser(body.accountIdentifier);
-    if (!isUserExists) {
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        message: resMessage.wrong_credentials,
-        data: null,
-      });
-    }
-
-    const securityService = new SecurityService();
-    const validatePassword = await securityService.compareString(body.password, isUserExists.password);
-    if (!validatePassword) {
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        message: resMessage.wrong_credentials,
-        data: null,
-      });
-    }
-
-    const [access_token, refresh_token] = await Promise.all([
-      securityService.createToken({ user_id: isUserExists.user_id, username: isUserExists.username }, "15m"),
-      securityService.createToken({ user_id: isUserExists.user_id, username: isUserExists.username }, "30d"),
-    ]);
-
-    return res.status(statusCode.SUCCESS).json({
-      status: "success",
-      data: {
-        access_token,
-        refresh_token,
-      },
-    });
-  };
-
-  // onSignout = async (req: Request, res: Response) => {
-
-  // }
 }

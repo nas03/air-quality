@@ -1,6 +1,5 @@
 import { getTimeList } from "@/api";
-import { LayerToggle, OpenLayerMap, SideBar, TimeSlider } from "@/components";
-import Authentication from "@/components/Authentication/Authentication";
+import { Authentication, LayerToggle, OpenLayerMap, SideBar, TimeSlider } from "@/components";
 import { ConfigContext, GeoContext, TimeContext } from "@/context";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -21,7 +20,7 @@ function App() {
     station: true,
     model: true,
   });
-
+  const [expanded, setExpanded] = useState(true);
   useEffect(() => {
     isSuccess && setTime(timeList[0]);
   }, [isSuccess]);
@@ -36,10 +35,10 @@ function App() {
             >
               <OpenLayerMap setMarkData={setMarkData} />
               <div id="overlay-layer" className="z-[1000]">
-                <Authentication className="absolute right-0 top-0 mr-[3rem] mt-[3rem]" />
-                <SideBar />
-                <LayerToggle className="ml-[29rem] pt-[3.5rem]" />
-                <TimeSlider className="" setTime={setTime} />
+                <Authentication className="absolute right-3 top-[1.5rem]" />
+                <SideBar setExpanded={setExpanded} />
+                <LayerToggle className="ml-[29rem] pt-[1.5rem]" />
+                <TimeSlider expanded={expanded} className="" setTime={setTime} />
               </div>
             </GeoContext.Provider>
           </TimeContext.Provider>

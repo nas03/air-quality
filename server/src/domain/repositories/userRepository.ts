@@ -5,11 +5,7 @@ import { IUserRepository } from "@/interfaces";
 
 export class UserRepository implements IUserRepository {
   createUser = async (data: User): Promise<Pick<User, "user_id" | "username"> | null> => {
-    const query = await db
-      .insertInto("users")
-      .values(data)
-      .returning(["user_id", "username"])
-      .executeTakeFirst();
+    const query = await db.insertInto("users").values(data).returning(["user_id", "username"]).executeTakeFirst();
     return query ?? null;
   };
 
@@ -41,7 +37,7 @@ export class UserRepository implements IUserRepository {
         .updateTable("users")
         .where("user_id", "=", user_id)
         .set("deleted", flag.TRUE)
-        .returning(["email", "username", "password", "phone_number", "user_id"])
+        .returning(["email", "username", "password", "phone_number", "user_id", "role"])
         .executeTakeFirst();
       return query ?? null;
     });

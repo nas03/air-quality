@@ -1,4 +1,4 @@
-export const resMessage = {
+export const resMessage = Object.freeze({
   field_invalid: "Fields are invalid",
   server_error: "Server error",
   db_failed: "Failed to update database",
@@ -7,9 +7,9 @@ export const resMessage = {
   user_existed: "User is existed",
   user_not_authorized: "User is not authorized",
   token_invalid: "Token is invalid",
-} as const;
+});
 
-export const statusCode = {
+export const statusCode = Object.freeze({
   SUCCESS: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
@@ -17,18 +17,30 @@ export const statusCode = {
   FORBIDDEN: 403,
   METHOD_NOT_ALLOWED: 405,
   ERROR: 500,
-} as const;
+});
 
-export const flag = {
+export const flag = Object.freeze({
   FALSE: 0,
   TRUE: 1,
-} as const;
+});
 
-export const encryptionSalt = {
+export const encryptionSalt = Object.freeze({
   DEFAULT: 15,
-} as const;
+});
 
-export const cacheTime = {
+export const cacheTime = Object.freeze({
   DEFAULT: 3600,
   DEV: 5,
-} as const;
+});
+
+export const AUTHENTICATION = Object.freeze({
+  TOKEN_VERIFICATION: Object.freeze({
+    INVALID: 0,
+    VALID: 1,
+    EXPIRED: 2,
+  }),
+  USER_ROLE: Object.freeze({
+    USER: 1,
+    ADMIN: 2,
+  }),
+});

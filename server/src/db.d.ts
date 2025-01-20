@@ -52,6 +52,13 @@ export interface MDistricts {
   vn_type: string;
 }
 
+export interface PointsData {
+  geom: string | null;
+  id: Generated<number>;
+  name: string | null;
+  point_value: number;
+}
+
 export interface SpatialRefSys {
   auth_name: string | null;
   auth_srid: number | null;
@@ -61,24 +68,37 @@ export interface SpatialRefSys {
 }
 
 export interface Stations {
-  aqi_index: number;
+  aqi_index: number | null;
   created_at: Generated<Timestamp | null>;
+  deleted: Generated<number | null>;
+  lat: number | null;
+  lng: number | null;
+  station_id: string;
+  station_name: string;
+  status: string;
+  timestamp: Timestamp | null;
+  updated_at: Generated<Timestamp | null>;
+}
+
+export interface StationsPointMap {
+  aqi_index: number;
+  color: string;
+  geom: string | null;
   lat: number;
   lng: number;
   station_id: string;
   status: string;
   timestamp: Timestamp | null;
-  updated_at: Generated<Timestamp | null>;
 }
 
 export interface Statistics {
   aqi_index: number;
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
-  district_id: string;
+  district_id: string | null;
   id: Generated<number>;
   pm_25: number;
-  time: Timestamp;
+  time: Timestamp | null;
   updated_at: Generated<Timestamp | null>;
 }
 
@@ -88,6 +108,7 @@ export interface Users {
   email: string;
   password: string;
   phone_number: string;
+  role: Generated<number>;
   updated_at: Generated<Timestamp | null>;
   user_id: Generated<number>;
   username: string;
@@ -118,8 +139,10 @@ export interface DB {
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   m_districts: MDistricts;
+  points_data: PointsData;
   spatial_ref_sys: SpatialRefSys;
   stations: Stations;
+  stations_point_map: StationsPointMap;
   statistics: Statistics;
   users: Users;
   users_favorite: UsersFavorite;

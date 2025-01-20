@@ -14,6 +14,8 @@
 - [x] AQI Chart
 - [x] WarningTab cards
 - [x] Show marks of stations (AQI)
+- [x] User login/signup
+
+## 13-1 -> 19-1
 - [ ] Show AQI rank of district/provinces
-- [ ] User login/signup
 - [ ] Email notifications

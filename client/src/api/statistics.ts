@@ -12,13 +12,17 @@ export const getStatisticHistoryByDistrict = async (
   start_date: string,
   end_date: string,
 ): Promise<(Statistic & MDistrict)[] | null> => {
-  if (!district_id || !start_date || !end_date) return null;
+  if (!district_id || !start_date || !end_date) {
+    return null;
+  }
+
   const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>(
     `/statistics/district/${district_id}/history`,
     {
       params: { start_date, end_date },
     },
   );
+
   return response.data.data;
 };
 
@@ -26,12 +30,21 @@ export const getStatisticByDistrict = async (
   district_id: string,
   date: string,
 ): Promise<(Statistic & MDistrict)[] | null> => {
-  if (!district_id || !date) return null;
-  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>(
-    `/statistics/district/${district_id}`,
-    {
-      params: { date },
-    },
-  );
+  if (!district_id || !date) {
+    return null;
+  }
+
+  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>(`/statistics/district/${district_id}`, {
+    params: { date },
+  });
+
+  return response.data.data;
+};
+
+export const getRankByDate = async (date: string) => {
+  if (!date) return [];
+  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>("/statistics/ranking", {
+    params: { date: date },
+  });
   return response.data.data;
 };

@@ -9,6 +9,9 @@
 - [x] Add AQI calculation to Python script
   - [x] Update database
 - [x] Data crawl script for *cem.gov.vn*
+
+## 13-1 -> 19-1
 - [ ] AQI ranking of provinces/districts
+- [ ] Implement authentication
 - [ ] user sign in/sign up implementation
 - [ ] Send warning emails to user

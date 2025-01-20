@@ -18,13 +18,6 @@ const userRouter: Route[] = [
     role: "",
     middleware: [userMiddleware.validateCreateUser],
   },
-  {
-    path: "/users/signin",
-    method: "POST",
-    controller: userController.onSignin.bind(userController),
-    role: "",
-    middleware: [userMiddleware.validateSignin],
-  },
 ];
 
 export default userRouter;

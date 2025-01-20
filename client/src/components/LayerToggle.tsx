@@ -22,7 +22,7 @@ const LayerToggle: React.FC<IPropsLayerToggle> = (props) => {
         {buttons.map((option) => (
           <Button
             key={option.value}
-            className={`rounded-full ${configContext.layer[option.value] ? "bg-blue-500" : "bg-slate-400"} px-4 py-2`}
+            className={`rounded-full ${configContext.layer[option.value] ? "bg-[#0057FC]" : "bg-white text-black"} px-4 py-2`}
             onClick={() => {
               configContext.setLayer({
                 ...configContext.layer,

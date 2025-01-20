@@ -5,11 +5,11 @@ const colorConfig: { [key: number]: { label: string; color: { min: number; max: 
   0: {
     label: "AQI",
     color: [
-      { min: 0, max: 100 },
-      { min: 100, max: 200 },
-      { min: 200, max: 300 },
-      { min: 300, max: 400 },
-      { min: 400, max: 500 },
+      { min: 0, max: 50 },
+      { min: 51, max: 100 },
+      { min: 101, max: 150 },
+      { min: 151, max: 200 },
+      { min: 201, max: 500 },
     ],
   },
   1: {
@@ -45,3 +45,12 @@ export const averageLineChartConfig: { [key: string]: Pick<LineChartProps, "view
       return [key, data];
     }),
   );
+
+export const getStyleRankTable = (aqi_index: number) => {
+  if (aqi_index < 50) return { status: "Good", color: "#009966" };
+  else if (aqi_index < 100) return { status: "Moderate", color: "#ffd033" };
+  else if (aqi_index < 150) return { status: "Unhealthy for Sensitive Groups", color: "#eb5c33" };
+  else if (aqi_index < 200) return { status: "Unhealthy", color: "#8f0070" };
+  else if (aqi_index < 300) return { status: "Very Unhealthy", color: "#70006a" };
+  else return { status: "Hazardous", color: "#7e0023" };
+};

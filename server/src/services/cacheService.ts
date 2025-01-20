@@ -83,7 +83,7 @@ export class CacheService implements ICacheService {
       if (ttlSeconds) {
         await this.redisClient.setex(key, ttlSeconds, serializedValue);
       } else {
-        await this.redisClient.setex(key, serializedValue, cacheTime.DEFAULT);
+        await this.redisClient.setex(key, cacheTime.DEFAULT, serializedValue);
       }
     } catch (error) {
       console.error("Error setting value:", error);

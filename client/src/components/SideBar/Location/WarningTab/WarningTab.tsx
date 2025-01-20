@@ -1,7 +1,7 @@
-import TemplateCard from "@/components/SideBar/TemplateCard";
-import ModelTab from "@/components/SideBar/WarningTab/ModelTab";
-import StationsTab from "@/components/SideBar/WarningTab/StationsTab";
-import { IPropsWarningTab } from "@/components/SideBar/WarningTab/types";
+import TemplateCard from "@/components/SideBar/Location/TemplateCard";
+import ModelTab from "@/components/SideBar/Location/WarningTab/ModelTab";
+import StationsTab from "@/components/SideBar/Location/WarningTab/StationsTab";
+import { IPropsWarningTab } from "@/components/SideBar/Location/WarningTab/types";
 import { ChartOptions } from "@/config/constants";
 import { useState } from "react";
 

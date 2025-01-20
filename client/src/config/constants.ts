@@ -29,6 +29,7 @@ export type User = {
   email: string;
   password: string;
   phone_number: string;
+  role: string;
   user_id?: number;
   updated_at?: Date | null;
   created_at?: Date | null;

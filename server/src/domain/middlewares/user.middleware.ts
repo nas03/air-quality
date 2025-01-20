@@ -1,4 +1,5 @@
-import { resMessage, statusCode } from "@/config/constant";
+import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
+import { UserToken } from "@/domain/controllers/types";
 import { UserInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services/securityService";
 import { Validator } from "@/services/validateService";
@@ -57,13 +58,15 @@ export class UserMiddleware {
       if (!access_token) {
         throw Error(resMessage.user_not_authorized);
       }
-      const verifiedToken = this.securityService.verifyToken<{ user_id: string; username: string }>(
-        access_token
-      );
-      const findUser = await this.userInteractor.findUser(Number(verifiedToken.user_id));
-      if (!findUser) {
-        throw Error(resMessage.user_not_authorized);
-      }
+
+      const verifiedToken = this.securityService.verifyToken(access_token);
+      if (verifiedToken === AUTHENTICATION.TOKEN_VERIFICATION.VALID) {
+        const decodedToken = this.securityService.decodeToken<UserToken>(access_token);
+        const findUser = await this.userInteractor.findUser(Number(decodedToken?.user_id));
+        if (!findUser) {
+          throw Error(resMessage.user_not_exists);
+        }
+      } else throw Error(resMessage.user_not_authorized);
       next();
     } catch (error) {
       res.status(statusCode.UNAUTHORIZED).json({

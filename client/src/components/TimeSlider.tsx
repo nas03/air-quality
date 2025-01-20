@@ -4,7 +4,7 @@ import { PlayCircleFilled } from "@ant-design/icons";
 import { Slider, SliderSingleProps } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 
-const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className }) => {
+const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }) => {
   const [sliderValue, setSliderValue] = useState(0);
   const [marks, setMarks] = useState<SliderSingleProps["marks"] | undefined>(undefined);
   const { timeList } = useContext(TimeContext);
@@ -51,7 +51,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className }) => {
 
   return (
     <div
-      className={`${className} absolute bottom-0 ml-[26rem] flex h-fit w-[calc(100vw-30rem)] flex-row items-start gap-10 rounded-xl bg-white bg-opacity-70 px-10 pt-3`}
+      className={`${className} absolute bottom-0 flex h-fit transition-all duration-150 ${expanded ? "ml-[26rem] w-[calc(100vw-30rem)]" : "w-screen"} flex-row items-start gap-10 rounded-xl bg-white bg-opacity-70 px-10 pt-3`}
     >
       <button className="shrink-0 rounded-full text-4xl" onClick={handleClick}>
         <PlayCircleFilled translate="yes" />

@@ -38,11 +38,12 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
         projection: "EPSG:3857",
         center: fromLonLat([105.97, 17.9459]),
       }),
+      controls: [],
     });
 
     Promise.resolve(
       apply(map, styleUrl).then(() => {
-        map.getLayers().extend([...layers]);
+        // map.getLayers().extend([...layers]);
       }),
     );
 

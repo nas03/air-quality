@@ -1,6 +1,6 @@
 import { getStatisticHistoryByDistrict } from "@/api";
-import TemplateCard from "@/components/SideBar/TemplateCard";
 import { averageLineChartConfig } from "@/components/SideBar/config";
+import TemplateCard from "@/components/SideBar/Location/TemplateCard";
 import { ChartOptions } from "@/config/constants";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
@@ -21,8 +21,7 @@ const AverageLineChart: React.FC<IPropsAverageLineChart> = ({ className, distric
 
   const mutation = useMutation({
     mutationKey: ["district"],
-    mutationFn: (district_id: string) =>
-      getStatisticHistoryByDistrict(district_id, "2024-11-01", "2024-11-06"),
+    mutationFn: (district_id: string) => getStatisticHistoryByDistrict(district_id, "2024-11-01", "2024-11-06"),
   });
 
   useEffect(() => {

@@ -1,12 +1,12 @@
 import { getStatisticByDistrict } from "@/api";
-import InfoCards from "@/components/SideBar/WarningTab/InfoCards";
-import { IPropsModelTab } from "@/components/SideBar/WarningTab/types";
+import InfoCards from "@/components/SideBar/Location/WarningTab/InfoCards";
+import { IPropsModelTab } from "@/components/SideBar/Location/WarningTab/types";
 import { convertCoordinate } from "@/config/utils";
 import { GeoContext, TimeContext } from "@/context";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 
-const ModelTab: React.FC<IPropsModelTab> = (props) => {
+const StationsTab: React.FC<IPropsModelTab> = (props) => {
   const { time } = useContext(TimeContext);
   const geoContext = useContext(GeoContext);
   const [coordinate, setCoordinate] = useState<[string, string]>(["", ""]);
@@ -22,7 +22,7 @@ const ModelTab: React.FC<IPropsModelTab> = (props) => {
 
   useEffect(() => {
     if (mutation.data) {
-      // console.log(mutation.data);
+      //   console.log(mutation.data);
     }
   }, [mutation.data]);
 
@@ -43,7 +43,7 @@ const ModelTab: React.FC<IPropsModelTab> = (props) => {
             </p>
           </div>
         }
-        source="Mô hình"
+        source="Trạm"
       />
       <InfoCards.AirQualityCard
         aqi_index={geoContext.value || null}
@@ -52,11 +52,9 @@ const ModelTab: React.FC<IPropsModelTab> = (props) => {
         time={time}
       />
       <InfoCards.HealthRecommendationCard
-        recommendation={
-          "Nhóm người nhạy cảm có thể chịu ảnh hưởng sức khỏe. Số đông không có nguy cơ bị tác động"
-        }
+        recommendation={"Nhóm người nhạy cảm có thể chịu ảnh hưởng sức khỏe. Số đông không có nguy cơ bị tác động"}
       />
     </div>
   );
 };
-export default ModelTab;
+export default StationsTab;
