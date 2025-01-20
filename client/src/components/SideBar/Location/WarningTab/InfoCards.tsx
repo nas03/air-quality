@@ -1,8 +1,4 @@
-import {
-    IPropsAirQualityCard,
-    IPropsDataSourceCard,
-    IPropsHealthRecommendationCard,
-} from "@/components/SideBar/WarningTab/types";
+import { IPropsAirQualityCard, IPropsDataSourceCard, IPropsHealthRecommendationCard } from "@/components/SideBar/Location/WarningTab/types";
 import { AimOutlined, FieldTimeOutlined, HeartOutlined } from "@ant-design/icons";
 import React from "react";
 
@@ -13,7 +9,8 @@ const DataSourceCard: React.FC<IPropsDataSourceCard> = ({ source, content }) => 
         <AimOutlined className="flex-shrink text-3xl" />
         <div className="flex flex-grow flex-col gap-3">
           <p className="text-sm font-semibold">
-            Nguồn-{">"}{source}
+            Nguồn-{">"}
+            {source}
           </p>
           <div className="flex flex-col gap-1 text-xs font-medium">{content}</div>
         </div>

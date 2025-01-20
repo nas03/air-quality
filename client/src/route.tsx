@@ -1,6 +1,7 @@
 import App from "@/App";
 import { SignIn } from "@/components";
-import AdminPage from "@/pages/AdminPage";
+import { AdminPage } from "@/pages";
+
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 
 export const rootRoute = createRootRoute();
