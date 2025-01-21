@@ -4,6 +4,7 @@
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc && tsc-alias",
+    "docker": "docker compose up --build --detach --force-recreate",
     "scrape": "python src/scripts/scraper.py"
   },
   "dependencies": {
