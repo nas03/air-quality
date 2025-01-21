@@ -1,6 +1,6 @@
 import { IPropsLayerToggle } from "@/components/types";
 import { ConfigContext } from "@/context";
-import { LayerConfig } from "@/types";
+import { LayerConfig } from "@/types/components";
 import { Button, Flex } from "antd";
 import { useContext } from "react";
 

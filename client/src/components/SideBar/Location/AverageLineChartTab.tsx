@@ -1,7 +1,7 @@
 import { getStatisticHistoryByDistrict } from "@/api";
-import { averageLineChartConfig } from "@/components/SideBar/config";
 import TemplateCard from "@/components/SideBar/Location/TemplateCard";
-import { ChartOptions } from "@/types";
+import { averageLineChartConfig } from "@/components/SideBar/utils";
+import { ChartOptions } from "@/types/components";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";

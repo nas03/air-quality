@@ -1,6 +1,6 @@
 import { getRankByDate } from "@/api";
 import Loading from "@/components/Loading";
-import { getStyleRankTable } from "@/components/SideBar/config";
+import { getStyleRankTable } from "@/components/SideBar/utils";
 import { TimeContext } from "@/context";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";

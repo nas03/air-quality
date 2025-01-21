@@ -1,6 +1,5 @@
-import App from "@/App";
 import { SignIn } from "@/components";
-import { AdminPage } from "@/pages";
+import { AdminPage, App } from "@/pages";
 
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 

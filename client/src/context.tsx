@@ -1,4 +1,4 @@
-import { AuthContextType, ConfigContextType, GeoContextType, TimeContextType } from "@/types";
+import { AuthContextType, ConfigContextType, GeoContextType, TimeContextType } from "@/types/contexts";
 import { createContext } from "react";
 
 export const TimeContext = createContext<TimeContextType>({
@@ -20,11 +20,9 @@ export const ConfigContext = createContext<ConfigContextType>({
   },
 });
 
-const DEFAULT_AUTH_CONTEXT: AuthContextType = {
+export const AuthenticationContext = createContext<AuthContextType>({
   user: null,
   token: null,
   login: async () => true,
   logout: () => null,
-};
-
-export const AuthenticationContext = createContext<AuthContextType>(DEFAULT_AUTH_CONTEXT);
+});

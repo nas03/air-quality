@@ -1,2 +1,3 @@
 import AdminPage from "./AdminPage";
-export { AdminPage };
+import App from "./App";
+export { AdminPage, App };

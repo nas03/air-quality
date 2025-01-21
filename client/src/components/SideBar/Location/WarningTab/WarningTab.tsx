@@ -2,7 +2,7 @@ import TemplateCard from "@/components/SideBar/Location/TemplateCard";
 import ModelTab from "@/components/SideBar/Location/WarningTab/ModelTab";
 import StationsTab from "@/components/SideBar/Location/WarningTab/StationsTab";
 import { IPropsWarningTab } from "@/components/SideBar/Location/WarningTab/types";
-import { ChartOptions } from "@/types";
+import { ChartOptions } from "@/types/components";
 import { useState } from "react";
 
 const WarningTab: React.FC<IPropsWarningTab> = (props) => {

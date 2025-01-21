@@ -1,17 +1,5 @@
 import api from "@/config/api";
-import { APIResponse } from "@/types";
-
-interface SignInResponse {
-  user_id: number;
-  username: string;
-  access_token: string;
-}
-
-interface VerifyTokenResponse {
-  verified: boolean;
-  user_id: number;
-  role: string;
-}
+import { APIResponse, SignInResponse, VerifyTokenResponse } from "@/types/api";
 
 export const signin = async (email: string, password: string): Promise<SignInResponse | false> => {
   const response = await api.post<APIResponse<SignInResponse>>("/auth/signin", {

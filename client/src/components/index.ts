@@ -1,8 +1,8 @@
-import Authentication from "@/components/Authentication/Authentication";
-import SignIn from "@/components/Authentication/SignIn";
-import LayerToggle from "@/components/LayerToggle";
-import OpenLayerMap from "@/components/OpenLayerMap";
-import SideBar from "@/components/SideBar/SideBar";
-import TimeSlider from "@/components/TimeSlider";
-export { Authentication, LayerToggle, OpenLayerMap, SideBar, SignIn, TimeSlider };
-
+import Authentication from "./Authentication/Authentication";
+import SignIn from "./Authentication/SignIn";
+import LayerToggle from "./LayerToggle";
+import Loading from "./Loading";
+import OpenLayerMap from "./OpenLayerMap";
+import SideBar from "./SideBar/SideBar";
+import TimeSlider from "./TimeSlider";
+export { Authentication, LayerToggle, Loading, OpenLayerMap, SideBar, SignIn, TimeSlider };
