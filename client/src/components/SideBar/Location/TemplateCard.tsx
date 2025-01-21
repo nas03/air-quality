@@ -1,4 +1,4 @@
-import { ChartOptions } from "@/config/constants";
+import { ChartOptions } from "@/types";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
 

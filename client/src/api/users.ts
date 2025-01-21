@@ -1,5 +1,5 @@
 import api from "@/config/api";
-import { APIResponse } from "@/config/constants";
+import { APIResponse } from "@/types";
 
 interface SignInResponse {
   user_id: number;

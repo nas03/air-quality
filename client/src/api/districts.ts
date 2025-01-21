@@ -1,5 +1,5 @@
 import api from "@/config/api";
-import { APIResponse, MDistrict } from "@/config/constants";
+import { APIResponse, MDistrict } from "@/types";
 
 export const getAllDistricts = async (): Promise<MDistrict[]> => {
   const query = await api.get<APIResponse<MDistrict[]>>("/districts");

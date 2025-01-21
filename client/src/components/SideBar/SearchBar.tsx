@@ -1,4 +1,4 @@
-import { MDistrict } from "@/config/constants";
+import { MDistrict } from "@/types";
 import { SearchOutlined } from "@ant-design/icons";
 import { AutoComplete, AutoCompleteProps } from "antd";
 import { useState } from "react";

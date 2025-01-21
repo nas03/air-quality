@@ -1,6 +1,6 @@
 # air-quality
 
-[Graduation Dissertation]: Air Quality Prediction System
+[Graduation Dissertation]: Air Quality Forecast System
 
 ## Air Quality Prediction System
 
@@ -21,4 +21,4 @@ The project aims to enhance the accuracy and responsiveness of air quality predi
 2. Run Client
  `cd client && npm run build && npm run start`
 3. Run Server
- `cd server && npm run build $$ npm run start`
+ `cd server && npm run build && npm run start`

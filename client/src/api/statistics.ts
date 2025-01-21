@@ -1,5 +1,5 @@
 import api from "@/config/api";
-import { APIResponse, MDistrict, Statistic } from "@/config/constants";
+import { APIResponse, MDistrict, Statistic } from "@/types";
 
 export const getTimeList = async (): Promise<string[]> => {
   const query = await api.get<APIResponse<string[]>>("/statistics/time-list");
