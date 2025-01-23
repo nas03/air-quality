@@ -3,11 +3,11 @@ import { TimeContext } from "@/context";
 import "@/open.css";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
-import ImageLayer from "ol/layer/Image";
+import { getBottomLeft } from "ol/extent";
 import TileLayer from "ol/layer/Tile";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
-import { ImageWMS, TileWMS } from "ol/source";
+import { TileWMS } from "ol/source";
 import React, { useContext, useEffect, useRef } from "react";
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
@@ -36,7 +36,6 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
           params: {
             LAYERS: "air:AQI",
             TIME: time,
-            TILED: true,
             FORMAT: "image/png",
           },
           serverType: "geoserver",
@@ -44,42 +43,21 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
         }),
         opacity: 1,
       }),
-      new ImageLayer({
-        source: new ImageWMS({
+      new TileLayer({
+        source: new TileWMS({
           url: "http://localhost:8080/geoserver/air/wms",
           params: {
-            LAYERS: "air:gadm41_VNM_2",
-            TIME: time,
+            LAYERS: "air:gadm41_VNM",
             FORMAT: "image/png",
+            TILED: true,
+            tilesorigin: getBottomLeft(map.getView().getProjection().getExtent()).toString(),
           },
           serverType: "geoserver",
+          cacheSize: 4096,
         }),
         opacity: 1,
       }),
-      new ImageLayer({
-        source: new ImageWMS({
-          url: "http://localhost:8080/geoserver/air/wms",
-          params: {
-            LAYERS: "air:gadm41_VNM_1",
-            TIME: time,
-            FORMAT: "image/png",
-          },
-          serverType: "geoserver",
-        }),
-        opacity: 1,
-      }),
-      new ImageLayer({
-        source: new ImageWMS({
-          url: "http://localhost:8080/geoserver/air/wms",
-          params: {
-            LAYERS: "air:gadm41_VNM_3",
-            TIME: time,
-            FORMAT: "image/png",
-          },
-          serverType: "geoserver",
-        }),
-        opacity: 1,
-      }),
+
       new TileLayer({
         source: new TileWMS({
           url: "http://localhost:8080/geoserver/air/wms",
@@ -130,7 +108,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
                 coordinate: [Number(evt.coordinate[0]), Number(evt.coordinate[1])],
                 value: Number(aqi_index),
                 location: [vn_type, vn_district].join(" ") + ", " + vn_province,
-                time: data.timeStamp.split('T')[0].split("-").reverse().join("/"),
+                time: data.timeStamp.split("T")[0].split("-").reverse().join("/"),
               });
             }
           });

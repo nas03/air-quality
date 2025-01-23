@@ -1,12 +1,13 @@
-import requests
 import json
+import os
+from io import StringIO
+
+import numpy as np
 import pandas as pd
 import psycopg2
 import psycopg2.extras
-import numpy as np
-from io import StringIO
+import requests
 from dotenv import load_dotenv
-import os
 
 # Register adapters for numpy data types
 psycopg2.extensions.register_adapter(np.int64, psycopg2._psycopg.AsIs)
@@ -88,7 +89,7 @@ def scrape():
             geom = EXCLUDED.geom;
         """
 
-        load_dotenv()
+        load_dotenv("./server/.env")
 
         conn_params = {
             "dbname": os.getenv("SUPABASE_DB_NAME"),
@@ -109,6 +110,10 @@ def scrape():
         print(f"Database error: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+# Export the function
+__all__ = ["scrape"]
 
 
 if __name__ == "__main__":

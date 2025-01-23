@@ -36,6 +36,7 @@ Rankings & User Settings:
 
 Data Integration & Automation:
 
+- [x] Fix duplicate labels of TiledWMS
 - [ ] Implement notification system
 - [ ] Integrate monitoring station data from GeoServer
 - [ ] Configure automated daily data collection

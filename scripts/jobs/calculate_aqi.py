@@ -1,16 +1,17 @@
-import os
-import glob
-from osgeo import gdal
-import numpy as np
 import datetime
+import glob
+import os
+
+import numpy as np
 import pandas as pd
+from osgeo import gdal  # type: ignore
 
 # import shapefile
 
 # input path
-folder_geotiff_path = r"assets/data"
+input_folder = r"assets/input"
 # output path
-folder_out_path = r"assets/out"
+output_folder = r"assets/out"
 
 
 def lerp(aqi_low, aqi_high, conc_low, conc_high, conc):
@@ -46,31 +47,38 @@ def calculate_aqi(pm25):
         return 500  # Values above 500 are beyond AQI
 
 
-for filepath in glob.iglob(os.path.join(folder_geotiff_path, "*.tif")):
-    print(filepath)
-    _, filename = os.path.split(filepath)
-    output_file = os.path.join(folder_out_path, filename.replace("PM25", "AQI"))
-    ds = gdal.Open(filepath)
-    band = ds.GetRasterBand(1)
-    pm25_data = band.ReadAsArray()
+def export_data():
+    for filepath in glob.iglob(os.path.join(input_folder, "*.tif")):
+        print(filepath)
+        _, filename = os.path.split(filepath)
+        output_file = os.path.join(output_folder, filename.replace("PM25", "AQI"))
+        ds = gdal.Open(filepath)
+        band = ds.GetRasterBand(1)
+        pm25_data = band.ReadAsArray()
 
-    aqi_data = np.vectorize(calculate_aqi)(pm25_data)
-    # Save AQI data to new GeoTIFF
-    driver = gdal.GetDriverByName("GTiff")
-    out_ds = driver.Create(
-        output_file, ds.RasterXSize, ds.RasterYSize, 1, gdal.GDT_Float32
-    )
-    out_ds.SetGeoTransform(ds.GetGeoTransform())
-    out_ds.SetProjection(ds.GetProjection())
+        aqi_data = np.vectorize(calculate_aqi)(pm25_data)
+        # Save AQI data to new GeoTIFF
+        driver = gdal.GetDriverByName("GTiff")
+        out_ds = driver.Create(
+            output_file, ds.RasterXSize, ds.RasterYSize, 1, gdal.GDT_Float32
+        )
+        out_ds.SetGeoTransform(ds.GetGeoTransform())
+        out_ds.SetProjection(ds.GetProjection())
 
-    # Write AQI data to output
-    out_band = out_ds.GetRasterBand(1)
-    out_band.WriteArray(aqi_data)
-    out_band.SetNoDataValue(-9999)  # Set NoData value for missing data
-    out_band.FlushCache()
+        # Write AQI data to output
+        out_band = out_ds.GetRasterBand(1)
+        out_band.WriteArray(aqi_data)
+        out_band.SetNoDataValue(-9999)  # Set NoData value for missing data
+        out_band.FlushCache()
 
-    # Close datasets
-    ds = None
-    out_ds = None
+        # Close datasets
+        ds = None
+        out_ds = None
 
-    print(f"AQI raster saved to {output_file}")
+        print(f"AQI raster saved to {output_file}")
+
+
+__all__ = ["export_data"]
+
+if __name__ == "__main__":
+    export_data()
