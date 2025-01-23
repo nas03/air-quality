@@ -1,4 +1,4 @@
-import AuthenticationProvider from "@/components/Authentication/AuthenticationProvider";
+import AuthenticationProvider from "@/components/AuthenticationProvider";
 import router from "@/route";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";

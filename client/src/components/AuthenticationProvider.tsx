@@ -1,10 +1,10 @@
 import { signin } from "@/api";
-import { AuthUser } from "@/components/Authentication/types";
+import { AuthUser } from "@/components/types";
 import { AuthenticationContext } from "@/context";
 import { AuthContextType } from "@/types/contexts";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
-const AuthenticationProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthenticationProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(() => {
     const storedUser = sessionStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -49,5 +49,4 @@ const AuthenticationProvider = ({ children }: { children: React.ReactNode }) => 
   return <AuthenticationContext.Provider value={contextValue}>{children}</AuthenticationContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthenticationContext);
 export default AuthenticationProvider;

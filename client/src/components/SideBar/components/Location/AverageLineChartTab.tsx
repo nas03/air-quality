@@ -1,5 +1,5 @@
 import { getStatisticHistoryByDistrict } from "@/api";
-import TemplateCard from "@/components/SideBar/Location/TemplateCard";
+import TemplateCard from "@/components/SideBar/components/Location/TemplateCard";
 import { averageLineChartConfig } from "@/components/SideBar/utils";
 import { ChartOptions } from "@/types/components";
 import { LineChart } from "@mui/x-charts";

@@ -1,6 +1,6 @@
 import { getStatisticByDistrict } from "@/api";
-import InfoCards from "@/components/SideBar/Location/WarningTab/InfoCards";
-import { IPropsModelTab } from "@/components/SideBar/Location/WarningTab/types";
+import InfoCards from "@/components/SideBar/components/Location/WarningTab/InfoCards";
+import { IPropsModelTab } from "@/components/SideBar/components/Location/WarningTab/types";
 import { convertCoordinate } from "@/config/utils";
 import { GeoContext, TimeContext } from "@/context";
 import { useMutation } from "@tanstack/react-query";

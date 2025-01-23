@@ -31,9 +31,15 @@ export class UserController extends BaseController<UserInteractor> {
       role: AUTHENTICATION.USER_ROLE.USER,
     });
 
+    if (!newUser)
+      return res.status(statusCode.ERROR).json({
+        status: "error",
+        message: "Error creating new user",
+      });
+
     return res.status(200).json({
       status: "success",
-      data: newUser,
+      data: null,
     });
   };
 }

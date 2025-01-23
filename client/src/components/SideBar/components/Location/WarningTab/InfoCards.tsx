@@ -1,4 +1,4 @@
-import { IPropsAirQualityCard, IPropsDataSourceCard, IPropsHealthRecommendationCard } from "@/components/SideBar/Location/WarningTab/types";
+import { IPropsAirQualityCard, IPropsDataSourceCard, IPropsHealthRecommendationCard } from "@/components/SideBar/components/Location/WarningTab/types";
 import { AimOutlined, FieldTimeOutlined, HeartOutlined } from "@ant-design/icons";
 import React from "react";
 

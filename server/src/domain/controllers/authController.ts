@@ -96,7 +96,7 @@ export class AuthController extends BaseController<UserInteractor> {
     }
 
     const validatePassword = await securityService.compareString(password, isUserExists.password);
-
+    
     if (!validatePassword) {
       return res.status(statusCode.SUCCESS).json({
         status: "success",

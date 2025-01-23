@@ -1,21 +1,42 @@
-## 1-1-2025 -> 5-1-2025
+# Client Development Tasks
 
-- [x] Load raster layer to UI
-- [x] Styling raster layer
-- [x] Change layer based on time
-- [x] Scripts convert PM2.5 to AQI_Index
-- [x] Serve shape file
-- [x] Display layers as group
+## Week 1 (Jan 1-5, 2025)
 
-## 6-1-2025 -> 12-1-2025
+Map Visualization Core Features:
 
-- [x] Search bar
-  - [x] Handle same vn_district
-- [x] AQI Chart
-- [x] WarningTab cards
-- [x] Show marks of stations (AQI)
-- [x] User login/signup
+- [x] Implement raster layer loading and display
+- [x] Add styling for raster layer visualization
+- [x] Enable dynamic layer updates based on time selection
+- [x] Implement PM2.5 to AQI Index conversion scripts
+- [x] Set up shape file serving functionality
+- [x] Organize and display layers in logical groups
 
-## 13-1 -> 19-1
-- [ ] Show AQI rank of district/provinces
-- [ ] Email notifications
+## Week 2 (Jan 6-12, 2025)
+
+User Interface & Authentication:
+
+- [x] Search functionality
+  - [x] Handle duplicate district names in Vietnam
+- [x] Air Quality Index (AQI) charting
+- [x] Warning tab information cards
+- [x] Display AQI monitoring station markers
+- [x] User authentication system (login/signup)
+
+## Week 3 (Jan 13-19, 2025)
+
+Rankings & User Settings:
+
+- [x] District/Province AQI ranking system
+- [x] User preferences management
+  - [x] Notification configuration
+  - [x] User profile management
+  - [x] Additional settings
+
+## Week 4 (Jan 21-26, 2025)
+
+Data Integration & Automation:
+
+- [ ] Implement notification system
+- [ ] Integrate monitoring station data from GeoServer
+- [ ] Configure automated daily data collection
+- [ ] Set up data crawler for moitruongthudo.vn

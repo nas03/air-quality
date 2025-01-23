@@ -1,4 +1,5 @@
 import { SignIn } from "@/components";
+import Signup from "@/components/SignUp";
 import { AdminPage, App } from "@/pages";
 
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
@@ -36,6 +37,12 @@ const signInRoute = createRoute({
   component: SignIn,
 });
 
+const signUpRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "/signup",
+  component: Signup,
+});
+
 const homeRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/",
@@ -44,7 +51,7 @@ const homeRoute = createRoute({
 
 /* ROUTE TREE */
 const protectedRouteTree = protectedRoute.addChildren([adminRoute]);
-const publicRouteTree = publicRoute.addChildren([signInRoute, homeRoute]);
+const publicRouteTree = publicRoute.addChildren([signInRoute, homeRoute, signUpRoute]);
 
 const routeTree = rootRoute.addChildren([protectedRouteTree, publicRouteTree]);
 

@@ -1,5 +1,5 @@
 export type APIResponse<T> = {
-  status: string;
+  status: "error" | "fail" | "success";
   data: T;
   message?: string;
 };

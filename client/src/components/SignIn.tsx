@@ -1,10 +1,10 @@
-import { useAuth } from "@/components/Authentication/AuthenticationProvider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 const SignIn = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) => {
@@ -53,9 +53,9 @@ const SignIn = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) 
                   </div>
                   <div className="mt-4 text-center text-sm">
                     Don&apos;t have an account?{" "}
-                    <a href="#" className="underline underline-offset-4">
+                    <Link to="/signup" className="underline underline-offset-4">
                       Sign up
-                    </a>
+                    </Link>
                   </div>
                 </form>
               </CardContent>

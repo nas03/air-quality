@@ -15,5 +15,25 @@ export const signin = async (email: string, password: string): Promise<SignInRes
 export const verifyToken = async (token: string): Promise<boolean> => {
   const response = await api.post<APIResponse<VerifyTokenResponse>>("/auth/verify-token", { token });
 
-  return !(response.data.status === "error" || response.data.status === "failed");
+  return !(response.data.status === "error" || response.data.status === "fail");
+};
+
+export type CreateUserParams = {
+  username: string;
+  email: string;
+  phone_number: string;
+  password: string;
+};
+export const createUser = async (payload: CreateUserParams) => {
+  const response = await api.post<APIResponse<null>>("/users/signup", {
+    username: payload.username,
+    email: payload.email,
+    password: payload.password,
+    phone_number: payload.phone_number,
+  });
+
+  if (["fail", "error"].includes(response.data.status)) {
+    throw Error("Error creating new user");
+  }
+  return null;
 };

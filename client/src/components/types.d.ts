@@ -14,10 +14,12 @@ export interface IPropsOpenLayerMap {
     coordinate,
     value,
     location,
+    time,
   }: {
     coordinate: [number, number];
     value: number;
     location: string;
+    time: string;
   }) => void;
 }
 
@@ -27,3 +29,10 @@ export interface IPropsLayerToggle {
   layer: { station: boolean; model: boolean }; */
   className?: string;
 }
+
+/* AuthenticationProvider */
+export type AuthUser = {
+  user_id: number;
+  // role: string;
+  username: string;
+};

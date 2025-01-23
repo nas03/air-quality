@@ -1,21 +1,35 @@
-# Server TODO
+# Server Development Tasks
 
-## 01/01/2025 -> 05/01/2025
+## Week 1 (Jan 1-5, 2025)
 
-- [x] Implement API request authentication
-- [x] Implement Redis cache mechanism
-- [x] Get time of dataset (in 7 days)
-- [x] Get average aqi_index + pm2.5 by districts/province
+Core API & Data Management:
 
-## 06/01/2025 -> 12/01/2025
+- [x] Set up API authentication system
+- [x] Implement Redis caching for improved performance
+- [x] Create endpoint to fetch 7-day historical dataset
+- [x] Build API for district/province AQI and PM2.5 averages
 
-- [x] Add AQI calculation to Python script
-  - [x] Update database
-- [x] Data crawl script for _cem.gov.vn_
+## Week 2 (Jan 6-12, 2025)
 
-## 13/01 -> 19/01
+Data Processing & Collection:
 
-- [ ] AQI ranking of provinces/districts
-- [ ] Implement authentication
-- [ ] user sign in/sign up implementation
-- [ ] Send warning emails to user
+- [x] Enhance Python script with AQI calculations
+  - [x] Update database schema and data
+- [x] Develop data crawler for Center of Environmental Monitoring (cem.gov.vn)
+
+## Week 3 (Jan 13-19, 2025)
+
+User Systems & Rankings:
+
+- [x] Create API endpoints for AQI rankings by region
+- [x] Implement user authentication system
+- [x] Build user registration and login functionality
+
+## Week 4 (Jan 21-26, 2025)
+
+Data Integration & Notifications:
+
+- [ ] Integrate data from moitruongthudo.vn
+- [ ] Add PM2.5 data collection from CEM
+- [ ] Implement data labeling system
+- [ ] Set up automated email warning system for users

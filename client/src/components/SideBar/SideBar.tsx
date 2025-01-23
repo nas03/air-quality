@@ -1,9 +1,9 @@
 import { getAllDistricts } from "@/api/districts";
-import AverageLineChart from "@/components/SideBar/Location/AverageLineChartTab";
-import WarningTab from "@/components/SideBar/Location/WarningTab/WarningTab";
-import RankTable from "@/components/SideBar/Rank/RankTable";
+import AverageLineChart from "@/components/SideBar/components/Location/AverageLineChartTab";
+import WarningTab from "@/components/SideBar/components/Location/WarningTab/WarningTab";
+import RankTable from "@/components/SideBar/components/Rank/RankTable";
 
-import SearchBar from "@/components/SideBar/SearchBar";
+import SearchBar from "@/components/SideBar/components/SearchBar";
 
 import { IPropsSideBar } from "@/components/types";
 import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
