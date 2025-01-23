@@ -1,7 +1,7 @@
 import { EditOutlined } from "@ant-design/icons";
-import { Avatar, Button, Divider, GetProp, Input, message, Typography, Upload, UploadProps } from "antd";
+import { Avatar, Button, Divider, GetProp, Input, message, Upload, UploadProps } from "antd";
 import { useState } from "react";
-const { Text } = Typography;
+
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
@@ -31,6 +31,7 @@ const ProfileConfig = () => {
     }
     if (info.file.status === "done") {
       // Get this url from response in real world.
+      console.log(loading);
       getBase64(info.file.originFileObj as FileType, (url) => {
         setLoading(false);
         setImageUrl(url);
