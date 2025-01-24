@@ -7,9 +7,10 @@ import { Label } from "@radix-ui/react-label";
 import { Link, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
-const SignIn = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) => {
+const SigninPage = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) => {
   const auth = useAuth();
   const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -67,4 +68,4 @@ const SignIn = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) 
   );
 };
 
-export default SignIn;
+export default SigninPage;

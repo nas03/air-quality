@@ -12,7 +12,7 @@ const RankTable: React.FC<IPropsRankTable> = (props) => {
   const mutation = useMutation({
     mutationKey: ["rank", timeContext.time],
     mutationFn: (date: string) => getRankByDate(date),
-    networkMode: 'offlineFirst'
+    networkMode: "offlineFirst",
   });
   const [tableData, setTableData] = useState<{ vn_district: string; aqi_index: number }[]>([]);
 

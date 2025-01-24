@@ -10,7 +10,12 @@ export interface GeoContextType {
 }
 
 export interface ConfigContextType {
-  setLayer: (layer: { station: boolean; model: boolean }) => void;
+  setLayer: React.Dispatch<
+    React.SetStateAction<{
+      station: boolean;
+      model: boolean;
+    }>
+  >;
   layer: {
     station: boolean;
     model: boolean;

@@ -1,3 +1,5 @@
 import AdminPage from "./AdminPage";
-import App from "./App";
-export { AdminPage, App };
+import AppPage from "./AppPage";
+import SigninPage from "./SigninPage";
+import SignupPage from "./SignupPage";
+export { AdminPage, AppPage, SigninPage, SignupPage };

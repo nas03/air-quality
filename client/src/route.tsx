@@ -1,6 +1,4 @@
-import { SignIn } from "@/components";
-import Signup from "@/components/SignUp";
-import { AdminPage, App } from "@/pages";
+import { AdminPage, AppPage, SigninPage, SignupPage } from "@/pages";
 
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 
@@ -34,19 +32,19 @@ const adminRoute = createRoute({
 const signInRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/signin",
-  component: SignIn,
+  component: SigninPage,
 });
 
 const signUpRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/signup",
-  component: Signup,
+  component: SignupPage,
 });
 
 const homeRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/",
-  component: App,
+  component: AppPage,
 });
 
 /* ROUTE TREE */

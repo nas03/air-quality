@@ -6,17 +6,11 @@ import { Link } from "@tanstack/react-router";
 import { Avatar, Button, Dropdown, MenuProps } from "antd";
 import { useState } from "react";
 
-const UserMenu: React.FC<IPropsUserMenu> = (props) => {
-  const auth = useAuth();
+const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
+  const { user } = useAuth();
   const [openSettingModal, setOpenSettingModal] = useState(false);
-  const btns = [
-    {
-      label: "Sign in",
-      url: "/signin",
-    },
-  ];
 
-  const items: MenuProps["items"] = [
+  const navigationItems: MenuProps["items"] = [
     {
       key: "profile",
       label: "Profile",
@@ -37,27 +31,26 @@ const UserMenu: React.FC<IPropsUserMenu> = (props) => {
       icon: <SettingOutlined />,
     },
   ];
+
+  const renderAuthenticatedView = () => (
+    <Dropdown menu={{ items: navigationItems }} placement="bottomLeft" trigger={["click"]}>
+      <Avatar size="large" icon={<UserOutlined />} src="avatar.jpg" />
+    </Dropdown>
+  );
+
+  const renderUnauthenticatedView = () => (
+    <Link to="/signin">
+      <Button type="default" className="rounded-3xl bg-white" icon={<LoginOutlined />} iconPosition="start">
+        Sign in
+      </Button>
+    </Link>
+  );
+
   return (
-    <>
-      <div className={`${props.className} flex flex-row gap-3`}>
-        <SettingModal openModal={openSettingModal} setOpenModal={setOpenSettingModal} />
-        {auth.user?.user_id ? (
-          <>
-            <Dropdown menu={{ items }} placement="bottomLeft" trigger={["click"]}>
-              <Avatar size={"large"} icon={<UserOutlined />} src="avatar.jpg" />
-            </Dropdown>
-          </>
-        ) : (
-          btns.map((btn) => (
-            <Link key={btn.url} to={btn.url}>
-              <Button type="default" className="rounded-3xl bg-white" icon={<LoginOutlined />} iconPosition={"start"}>
-                {btn.label}
-              </Button>
-            </Link>
-          ))
-        )}
-      </div>
-    </>
+    <div className={`${className} flex flex-row gap-3`}>
+      <SettingModal openModal={openSettingModal} setOpenModal={setOpenSettingModal} />
+      {user?.user_id ? renderAuthenticatedView() : renderUnauthenticatedView()}
+    </div>
   );
 };
 
