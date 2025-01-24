@@ -1,8 +1,13 @@
 import { IPropsLayerToggle } from "@/components/types";
 import { ConfigContext } from "@/context";
-import { LayerConfig } from "@/types/components";
+
 import { Button, Flex } from "antd";
 import { useContext, useMemo } from "react";
+interface LayerConfig {
+  label: string;
+  value: "station" | "model";
+  enabled?: boolean;
+}
 
 const LayerToggle: React.FC<IPropsLayerToggle> = ({ className }) => {
   const { layer, setLayer } = useContext(ConfigContext);

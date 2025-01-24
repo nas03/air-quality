@@ -1,7 +1,7 @@
 import { getStatisticHistoryByDistrict } from "@/api";
-import TemplateCard from "@/components/SideBar/components/Location/LineChart/TemplateCard";
+import TemplateCard, { ChartOptions } from "@/components/SideBar/components/Location/LineChart/TemplateCard";
 import { averageLineChartConfig } from "@/components/SideBar/utils";
-import { ChartOptions } from "@/types/components";
+
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
@@ -60,7 +60,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
     mutation.mutate(district_id);
   }, [district_id]);
 
-  const chartOptions: ChartOptions = useMemo(
+  const chartOptions: ChartOptions[] = useMemo(
     () =>
       [
         { label: "AQI", chartType: "aqi" as const, value: 0 as const },

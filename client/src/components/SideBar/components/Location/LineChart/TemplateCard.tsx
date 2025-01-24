@@ -1,11 +1,18 @@
-import { ChartOptions } from "@/types/components";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
+
+export interface ChartOptions {
+  label: string;
+  value: 0 | 1;
+  disabled?: boolean;
+  default?: number;
+  content: React.ReactNode;
+}
 
 interface IPropsTemplateCard {
   className?: string;
   title?: string;
-  chartOptions: ChartOptions;
+  chartOptions: ChartOptions[];
   selectedValue: 0 | 1;
   onValueChange: (value: 0 | 1) => void;
   descriptionText?: string;
@@ -36,7 +43,7 @@ const TemplateCard: React.FC<IPropsTemplateCard> = ({
                 <div className="flex w-full flex-wrap items-center gap-2">
                   <p className="text-xs font-semibold">{descriptionText}</p>
                   <div className="flex flex-row gap-3 text-xs text-white">
-                    {chartOptions.map((option) => (
+                    {chartOptions.map((option: ChartOptions) => (
                       <button
                         key={option.value}
                         className={`rounded-full ${
@@ -55,10 +62,11 @@ const TemplateCard: React.FC<IPropsTemplateCard> = ({
           }
           className="w-full rounded-md bg-white p-0 first:p-0"
         >
-          {chartOptions.find((option) => option.value === selectedValue)?.content}
+          {chartOptions.find((option: ChartOptions) => option.value === selectedValue)?.content}
         </Collapse.Panel>
       </Collapse>
     </div>
   );
 };
+
 export default TemplateCard;
