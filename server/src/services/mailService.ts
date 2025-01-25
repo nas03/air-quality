@@ -14,13 +14,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 export class MailService implements IMailService {
-  sendMail = async (payload: { from: string; to: string; subject: string; html?: string }): Promise<boolean> => {
+  sendMail = async (mailOptions: { to: string; subject: string; html?: string }): Promise<boolean> => {
     try {
-      const mailOptions = {
-        to: "sonanhnguyen003@gmail.com",
-        subject: "Hello from Nodemailer",
-        text: "This is a test email sent using Nodemailer.",
-      };
       await transporter.sendMail(mailOptions);
       return true;
     } catch (error) {

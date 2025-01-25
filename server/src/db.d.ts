@@ -52,6 +52,15 @@ export interface MDistricts {
   vn_type: string;
 }
 
+export interface MRecommendation {
+  color: string;
+  id: Generated<number>;
+  max_threshold: number;
+  min_threshold: number;
+  recommendation: string;
+  status: string;
+}
+
 export interface PointsData {
   geom: string | null;
   id: Generated<number>;
@@ -130,8 +139,8 @@ export interface UsersSetting {
   deleted: Generated<number | null>;
   email_notification: Generated<boolean | null>;
   id: number;
-  phone_notification: Generated<boolean | null>;
   profile_url: string | null;
+  sms_notification: Generated<boolean | null>;
   updated_at: Generated<Timestamp | null>;
   user_id: number | null;
   user_location: string | null;
@@ -142,6 +151,7 @@ export interface DB {
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   m_districts: MDistricts;
+  m_recommendation: MRecommendation;
   points_data: PointsData;
   spatial_ref_sys: SpatialRefSys;
   stations: Stations;

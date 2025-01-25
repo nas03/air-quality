@@ -1,3 +1,9 @@
+type UserEmailNotification = {
+  user_id: number;
+  email: string;
+  user_location: string | null;
+};
 export interface IUserSettingRepository {
-  getAllUserEmail(filter: { email_notification?: boolean; phone_notification?: boolean }): Promise<string[]>;
+  userEmailNotificationSettings(): Promise<UserEmailNotification[]>;
+  getRecommendation(district_ids: string[]);
 }
