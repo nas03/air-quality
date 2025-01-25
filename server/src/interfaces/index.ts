@@ -5,6 +5,7 @@ export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
 
 export * from "./repositories/IDistrictRepository";
+export * from "./repositories/IMailRepository";
 export * from "./repositories/IStationsRepository";
 export * from "./repositories/IStatisticRepository";
 export * from "./repositories/IUserRepository";

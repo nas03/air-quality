@@ -2,7 +2,7 @@ import { db } from "@/config/db";
 import { IUserSettingRepository } from "@/interfaces";
 
 export class UserSettingRepository implements IUserSettingRepository {
-  async getRecommendation() {
+  async getRecommendation(date: Date, district_id?: string) {
     const getUserEmailSetting = db
       .selectFrom("users_setting as us")
       .innerJoin("users as u", "u.user_id", "us.user_id")
@@ -10,9 +10,10 @@ export class UserSettingRepository implements IUserSettingRepository {
       .where("us.email_notification", "=", true);
 
     const getRecommendation = getUserEmailSetting
-      .leftJoin("statistics as s", (join) =>
-        join.onRef("us.user_location", "=", "s.district_id").on("s.time", "=", new Date("2024-11-30"))
-      )
+      .leftJoin("statistics as s", (join) => {
+        if (district_id) return join.on("us.user_location", "=", district_id).on("s.time", "=", date);
+        return join.onRef("us.user_location", "=", "s.district_id").on("s.time", "=", date);
+      })
       .leftJoin("m_recommendation as mr", (join) =>
         join.on((eb) =>
           eb.and([
@@ -25,6 +26,7 @@ export class UserSettingRepository implements IUserSettingRepository {
     const result = await getRecommendation.execute();
     return result;
   }
+
   async userEmailNotificationSettings() {
     const query = db
       .selectFrom("users_setting as us")

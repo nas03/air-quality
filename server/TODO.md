@@ -31,4 +31,4 @@ Data Integration & Notifications:
 
 - [ ] Integrate data from moitruongthudo.vn
 - [ ] Add PM2.5 data collection from CEM
-- [ ] Set up automated email warning system for users
+- [x] Set up automated email warning system for users

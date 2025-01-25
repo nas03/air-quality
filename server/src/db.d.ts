@@ -39,6 +39,12 @@ export interface GeometryColumns {
   type: string | null;
 }
 
+export interface Mail {
+  html: string;
+  id: number;
+  subject: string;
+}
+
 export interface MDistricts {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
@@ -152,6 +158,7 @@ export interface DB {
   geometry_columns: GeometryColumns;
   m_districts: MDistricts;
   m_recommendation: MRecommendation;
+  mail: Mail;
   points_data: PointsData;
   spatial_ref_sys: SpatialRefSys;
   stations: Stations;
