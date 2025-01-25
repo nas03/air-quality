@@ -3,9 +3,10 @@ import { BaseController } from "@/domain/controllers/baseController";
 import { DistrictInteractor } from "@/domain/interactors/districtInteractor";
 import { Request, Response } from "express";
 
-export class DistrictController extends BaseController<DistrictInteractor> {
+export class DistrictController extends BaseController<[DistrictInteractor]> {
+  private districtInteractor = this.interactors[0];
   onGetAllDistricts = async (req: Request, res: Response) => {
-    const data = await this.interactor.getAllDistrict();
+    const data = await this.districtInteractor.getAllDistrict();
     return res.status(statusCode.SUCCESS).json({
       status: "success",
       data,
@@ -16,7 +17,7 @@ export class DistrictController extends BaseController<DistrictInteractor> {
     const params = req.params as {
       district_id: string;
     };
-    const data = await this.interactor.findDistrict(params.district_id);
+    const data = await this.districtInteractor.findDistrict(params.district_id);
     return res.status(statusCode.SUCCESS).json({
       status: "success",
       data,

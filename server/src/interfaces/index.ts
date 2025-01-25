@@ -1,3 +1,4 @@
+export * from "./interactors/INotificationInteractor";
 export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
 

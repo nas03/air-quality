@@ -4,7 +4,8 @@ import { UserInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services/securityService";
 import { Request, Response } from "express";
 
-export class UserController extends BaseController<UserInteractor> {
+export class UserController extends BaseController<[UserInteractor]> {
+  private userInteractor = this.interactors[0];
   onCreateUser = async (req: Request, res: Response) => {
     const body = req.body as {
       username: string;
@@ -13,7 +14,7 @@ export class UserController extends BaseController<UserInteractor> {
       email: string;
     };
 
-    const isUserExists = await this.interactor.findUser(body.username);
+    const isUserExists = await this.userInteractor.findUser(body.username);
     if (isUserExists?.user_id) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "fail",
@@ -23,7 +24,7 @@ export class UserController extends BaseController<UserInteractor> {
     }
 
     const hashedPassword = await new SecurityService().encryptString(body.password);
-    const newUser = await this.interactor.createUser({
+    const newUser = await this.userInteractor.createUser({
       username: body.username,
       phone_number: body.phone_number,
       email: body.email,

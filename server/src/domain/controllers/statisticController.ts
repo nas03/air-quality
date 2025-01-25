@@ -2,7 +2,8 @@ import { BaseController } from "@/domain/controllers/baseController";
 import { StatisticInteractor } from "@/domain/interactors";
 import { Request, Response } from "express";
 
-export class StatisticController extends BaseController<StatisticInteractor> {
+export class StatisticController extends BaseController<[StatisticInteractor]> {
+  private statisticInteractor = this.interactors[0];
   onGetByDistrictID = async (req: Request, res: Response) => {
     const params = req.params as {
       district_id: string;
@@ -10,7 +11,7 @@ export class StatisticController extends BaseController<StatisticInteractor> {
     const queries = req.query as unknown as {
       date?: Date;
     };
-    const data = await this.interactor.getByDistrictID(params["district_id"], queries.date);
+    const data = await this.statisticInteractor.getByDistrictID(params["district_id"], queries.date);
     return res.status(200).json({
       status: "success",
       data,
@@ -26,7 +27,7 @@ export class StatisticController extends BaseController<StatisticInteractor> {
       end_date: Date;
     };
 
-    const data = await this.interactor.getDistrictHistory(
+    const data = await this.statisticInteractor.getDistrictHistory(
       params.district_id,
       queries.start_date,
       queries.end_date
@@ -41,7 +42,7 @@ export class StatisticController extends BaseController<StatisticInteractor> {
     const queries = req.query as unknown as {
       date: Date;
     };
-    const data = await this.interactor.getRankByDate(queries.date);
+    const data = await this.statisticInteractor.getRankByDate(queries.date);
     return res.status(200).json({
       status: "success",
       data,
@@ -49,7 +50,7 @@ export class StatisticController extends BaseController<StatisticInteractor> {
   };
 
   onGetTimeList = async (req: Request, res: Response) => {
-    const data = await this.interactor.getTimeList();
+    const data = await this.statisticInteractor.getTimeList();
     const result = data.map((el) => el.time);
     return res.status(200).json({
       status: "success",

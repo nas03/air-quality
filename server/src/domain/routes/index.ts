@@ -3,14 +3,21 @@ import { catchAsync } from "@/domain/middlewares/catchAsync";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
 import authRouter from "@/domain/routes/authRoute";
-import dataRouter from "@/domain/routes/dataRoutes";
 import districtRouter from "@/domain/routes/districtRoutes";
+import notificationRouter from "@/domain/routes/notificationRoute";
 import stationsRouter from "@/domain/routes/stationsRoute";
 import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 
-const routes = [...userRouter, ...statisticRouter, ...districtRouter, ...dataRouter, ...stationsRouter, ...authRouter];
+const routes = [
+  ...userRouter,
+  ...statisticRouter,
+  ...districtRouter,
+  ...stationsRouter,
+  ...authRouter,
+  ...notificationRouter,
+];
 
 const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);

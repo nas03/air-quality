@@ -5,9 +5,9 @@ import { UserInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services/securityService";
 import { Request, Response } from "express";
 
-export class AuthController extends BaseController<UserInteractor> {
+export class AuthController extends BaseController<[UserInteractor]> {
   private securityService = new SecurityService();
-
+  private userInteractor = this.interactors[0];
   onRotateRefreshToken = (req: Request, res: Response) => {
     const refresh_token = req.headers["authorization"];
 
@@ -85,7 +85,7 @@ export class AuthController extends BaseController<UserInteractor> {
 
     const { accountIdentifier, password } = req.body;
 
-    const isUserExists = await this.interactor.findUser(accountIdentifier);
+    const isUserExists = await this.userInteractor.findUser(accountIdentifier);
 
     if (!isUserExists) {
       return res.status(statusCode.SUCCESS).json({
@@ -96,7 +96,7 @@ export class AuthController extends BaseController<UserInteractor> {
     }
 
     const validatePassword = await securityService.compareString(password, isUserExists.password);
-    
+
     if (!validatePassword) {
       return res.status(statusCode.SUCCESS).json({
         status: "success",

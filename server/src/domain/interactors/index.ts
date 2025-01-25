@@ -1,4 +1,4 @@
-export * from "./dataInteractor";
+export * from "./notificationInteractor";
 export * from "./statisticInteractor";
 export * from "./userInteractor";
 

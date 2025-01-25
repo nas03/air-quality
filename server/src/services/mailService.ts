@@ -7,20 +7,25 @@ const transporter = nodemailer.createTransport({
   service: "Gmail",
   host: "smtp.gmail.com",
   port: 465,
-  secure: true, // true for port 465, false for other ports
+  secure: true,
   auth: {
     user: process.env.MAIL,
     pass: process.env.MAIL_PASSWORD,
   },
 });
 export class MailService implements IMailService {
-  sendMail = async (from: string, to: string, subject: string, html: string): Promise<boolean> => {
-    const mailOptions = {
-      to: "sonanhguyen003@gmail.com",
-      subject: "Hello from Nodemailer",
-      text: "This is a test email sent using Nodemailer.",
-    };
-    await transporter.sendMail(mailOptions);
-    return true;
+  sendMail = async (payload: { from: string; to: string; subject: string; html?: string }): Promise<boolean> => {
+    try {
+      const mailOptions = {
+        to: "sonanhnguyen003@gmail.com",
+        subject: "Hello from Nodemailer",
+        text: "This is a test email sent using Nodemailer.",
+      };
+      await transporter.sendMail(mailOptions);
+      return true;
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      return false;
+    }
   };
 }

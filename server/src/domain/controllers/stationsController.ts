@@ -3,13 +3,14 @@ import { BaseController } from "@/domain/controllers/baseController";
 import { StationsInteractor } from "@/domain/interactors/stationsInteractor";
 import { Request, Response } from "express";
 
-export class StationsController extends BaseController<StationsInteractor> {
+export class StationsController extends BaseController<[StationsInteractor]> {
+  private stationInteractor = this.interactors[0];
   onGetStationByID = async (req: Request, res: Response) => {
     const station_id = req.params["station_id"];
     const query = req.query as unknown as {
       date: Date;
     };
-    const data = await this.interactor.getStationByID(station_id, query.date);
+    const data = await this.stationInteractor.getStationByID(station_id, query.date);
     return res.status(statusCode.SUCCESS).json({
       status: "success",
       data: data,
@@ -20,7 +21,7 @@ export class StationsController extends BaseController<StationsInteractor> {
     const query = req.query as unknown as {
       date: Date;
     };
-    const data = await this.interactor.getAllStations(query.date);
+    const data = await this.stationInteractor.getAllStations(query.date);
     return res.status(statusCode.SUCCESS).json({
       status: "success",
       data: data,
