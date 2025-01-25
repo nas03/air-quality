@@ -1,8 +1,7 @@
 import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
 import { UserToken } from "@/domain/controllers/types";
 import { UserInteractor } from "@/domain/interactors";
-import { SecurityService } from "@/services/securityService";
-import { Validator } from "@/services/validateService";
+import { SecurityService, Validator } from "@/services";
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 

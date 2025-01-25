@@ -1,8 +1,8 @@
 import { cacheTime } from "@/config/constant";
 import { StatisticRepository } from "@/domain/repositories";
 import { MDistrict, Statistic } from "@/entities";
-import { IStatisticInteractor } from "@/interfaces/interactors/IStatisticInteractor";
-import { CacheService } from "@/services/cacheService";
+import { IStatisticInteractor } from "@/interfaces";
+import { CacheService } from "@/services";
 
 export class StatisticInteractor implements IStatisticInteractor {
   private statisticRepository: StatisticRepository;

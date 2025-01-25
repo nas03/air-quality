@@ -1,4 +1,4 @@
-export class Stations {
+export class Station {
   constructor(
     public station_id: string | null,
     public status: string | null,

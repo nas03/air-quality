@@ -1,6 +1,6 @@
 import { statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
-import { StationsInteractor } from "@/domain/interactors/stationsInteractor";
+import { StationsInteractor } from "@/domain/interactors";
 import { Request, Response } from "express";
 
 export class StationsController extends BaseController<[StationsInteractor]> {

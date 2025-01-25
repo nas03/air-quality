@@ -114,15 +114,6 @@ export interface Users {
   username: string;
 }
 
-export interface UsersFavorite {
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  district_id: string | null;
-  id: Generated<number>;
-  updated_at: Generated<Timestamp | null>;
-  user_id: number | null;
-}
-
 export interface UsersSession {
   access_token: string;
   created_at: Generated<Timestamp | null>;
@@ -132,6 +123,18 @@ export interface UsersSession {
   session_id: string;
   updated_at: Generated<Timestamp | null>;
   user_id: number;
+}
+
+export interface UsersSetting {
+  created_at: Generated<Timestamp | null>;
+  deleted: Generated<number | null>;
+  email_notification: Generated<boolean | null>;
+  id: number;
+  phone_notification: Generated<boolean | null>;
+  profile_url: string | null;
+  updated_at: Generated<Timestamp | null>;
+  user_id: number | null;
+  user_location: string | null;
 }
 
 export interface DB {
@@ -145,6 +148,6 @@ export interface DB {
   stations_point_map: StationsPointMap;
   statistics: Statistics;
   users: Users;
-  users_favorite: UsersFavorite;
   users_session: UsersSession;
+  users_setting: UsersSetting;
 }

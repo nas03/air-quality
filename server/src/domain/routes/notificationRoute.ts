@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/type";
+import { Route } from "@/config/constant/types";
 import { NotificationController } from "@/domain/controllers";
 import { NotificationInteractor } from "@/domain/interactors";
 import { Router } from "express";

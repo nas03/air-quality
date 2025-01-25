@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/type";
+import { Route } from "@/config/constant/types";
 import { StationsController } from "@/domain/controllers/stationsController";
 import { StationsInteractor } from "@/domain/interactors/stationsInteractor";
 import { StationsRepository } from "@/domain/repositories/stationsRepository";

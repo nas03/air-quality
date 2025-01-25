@@ -29,7 +29,7 @@ export class UserRepository implements IUserRepository {
     const transaction = await db.transaction().execute(async (trx) => {
       const query = await trx
         .with("deleteUserAndFavorite", (qb) =>
-          qb.updateTable("users_favorite").where("user_id", "=", user_id).set("deleted", flag.TRUE)
+          qb.updateTable("users_setting").where("user_id", "=", user_id).set("deleted", flag.TRUE)
         )
         .with("deleteUserAndSession", (qb) =>
           qb.updateTable("users_session").where("user_id", "=", user_id).set("deleted", flag.TRUE)

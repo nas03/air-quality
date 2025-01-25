@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/type";
+import { Route } from "@/config/constant/types";
 import { UserController } from "@/domain/controllers";
 import { UserInteractor } from "@/domain/interactors";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";

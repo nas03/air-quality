@@ -1,6 +1,6 @@
-import { Stations } from "@/entities/Stations";
+import { Station } from "@/entities/Station";
 
 export interface IStationsInteractor {
-    getStationByID(station_id: string, date?: Date): Promise<Stations | null>
-    getAllStations(date?: Date): Promise<Stations[]>
+    getStationByID(station_id: string, date?: Date): Promise<Station | null>
+    getAllStations(date?: Date): Promise<Station[]>
 }

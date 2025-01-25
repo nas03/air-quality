@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/type";
+import { Route } from "@/config/constant/types";
 import { DistrictController } from "@/domain/controllers/districtController";
 import { DistrictInteractor } from "@/domain/interactors/districtInteractor";
 import { DistrictRepository } from "@/domain/repositories/districtRepository";

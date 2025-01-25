@@ -1,9 +1,8 @@
-import { cacheTime } from "@/config/constant";
-import { emailRegex } from "@/config/constant/regex";
+import { emailRegex } from "@/config/constant";
 import { UserRepository } from "@/domain/repositories";
 import { User } from "@/entities";
 import { IUserInteractor } from "@/interfaces";
-import { CacheService } from "@/services/cacheService";
+import { CacheService } from "@/services";
 
 export class UserInteractor implements IUserInteractor {
   private userRepository: UserRepository;

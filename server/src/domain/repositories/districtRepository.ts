@@ -1,7 +1,7 @@
 import { flag } from "@/config/constant";
 import { db } from "@/config/db";
 import { MDistrict } from "@/entities";
-import { IDistrictRepository } from "@/interfaces/repositories/IDistrictRepository";
+import { IDistrictRepository } from "@/interfaces";
 
 export class DistrictRepository implements IDistrictRepository {
   async findDistrict(district_id: string): Promise<MDistrict | null> {

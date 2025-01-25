@@ -1,6 +1,6 @@
 import { statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
-import { DistrictInteractor } from "@/domain/interactors/districtInteractor";
+import { DistrictInteractor } from "@/domain/interactors";
 import { Request, Response } from "express";
 
 export class DistrictController extends BaseController<[DistrictInteractor]> {

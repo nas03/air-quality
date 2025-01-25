@@ -1,15 +1,15 @@
-import { DistrictRepository } from "@/domain/repositories/districtRepository";
+import { DistrictRepository } from "@/domain/repositories";
 import { MDistrict } from "@/entities";
-import { IDistrictInteractor } from "@/interfaces/interactors/IDistrictInteractor";
-import { CacheService } from "@/services/cacheService";
+import { IDistrictInteractor } from "@/interfaces";
+import { CacheService } from "@/services";
 
 export class DistrictInteractor implements IDistrictInteractor {
   private readonly districtRepository: DistrictRepository;
-  private readonly cacheService: CacheService
+  private readonly cacheService: CacheService;
 
   constructor(districtRepository: DistrictRepository) {
     this.districtRepository = districtRepository;
-    this.cacheService = new CacheService()
+    this.cacheService = new CacheService();
   }
 
   async findDistrict(district_id: any): Promise<MDistrict | null> {

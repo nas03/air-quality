@@ -1,5 +1,5 @@
 import { INotificationInteractor } from "@/interfaces";
-import { MailService } from "@/services/mailService";
+import { MailService } from "@/services";
 
 export class NotificationInteractor implements INotificationInteractor {
   private mailService: MailService;
