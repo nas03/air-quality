@@ -33,33 +33,9 @@ jobs:
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
-          docker compose up --build --detach --force-recreate
+          docker compose build --no-cache
           docker save airq-server:latest | gzip > airq-server.tar.gz
           aws s3 cp airq-server.tar.gz s3://uet-airq/images/
       # - name: Create artifact
       #   run: |
       #     aws s3 sync server/dist s3://uet-airq/dist --delete
-      # - name: Start AWS CodeBuild Project
-      #   run: |
-      #     aws codebuild start-build --project-name airq
-
-      # - name: Wait for CodeBuild to complete
-      #   run: |
-      #     BUILD_ID=$(aws codebuild list-builds-for-project --project-name airq --sort-order DESCENDING --max-items 1 --query 'ids[0]' --output text)
-      #     aws codebuild batch-get-builds --ids $BUILD_ID --query 'builds[0].buildStatus' --output text
-      #     while [ "$(aws codebuild batch-get-builds --ids $BUILD_ID --query 'builds[0].buildStatus' --output text)" == "IN_PROGRESS" ]; do
-      #       echo "Build in progress..."
-      #       sleep 30
-      #     done
-      #     if [ "$(aws codebuild batch-get-builds --ids $BUILD_ID --query 'builds[0].buildStatus' --output text)" != "SUCCEEDED" ]; then
-      #       echo "Build failed"
-      #       exit 1
-      #     fi
-
-      # - name: Download build artifacts
-      #   run: |
-      #     aws s3 cp s3://your-codebuild-artifacts-bucket/artifact.zip ./artifact.zip
-
-      # - name: Deploy to S3
-      #   run: |
-      #     aws s3 sync ./artifact-folder s3://your-deployment-bucket --delete
