@@ -30,6 +30,7 @@ jobs:
           npm run build
       - name: Create .env file
         run: |
+          cd server
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text >> .env
           done
