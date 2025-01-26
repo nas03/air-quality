@@ -32,7 +32,7 @@ jobs:
         run: |
           cd server
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
-            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text >> .env
+            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
           npm run docker
       # - name: Start AWS CodeBuild Project
