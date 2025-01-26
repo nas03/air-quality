@@ -1,10 +1,10 @@
 services:
   app:
-    container_name: airq-web-server
+    container_name: airq-server:latest
     build:
       context: .
       dockerfile: Dockerfile
-    image: airq-web-server
+    image: airq-server:latest
     ports:
       - "5500:5500"
     env_file:
