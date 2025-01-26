@@ -67,13 +67,6 @@ export interface MRecommendation {
   status: string;
 }
 
-export interface PointsData {
-  geom: string | null;
-  id: Generated<number>;
-  name: string | null;
-  point_value: number;
-}
-
 export interface SpatialRefSys {
   auth_name: string | null;
   auth_srid: number | null;
@@ -83,19 +76,6 @@ export interface SpatialRefSys {
 }
 
 export interface Stations {
-  aqi_index: number | null;
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  lat: number | null;
-  lng: number | null;
-  station_id: string;
-  station_name: string;
-  status: string;
-  timestamp: Timestamp | null;
-  updated_at: Generated<Timestamp | null>;
-}
-
-export interface StationsPointMap {
   aqi_index: number;
   color: string;
   geom: string | null;
@@ -159,10 +139,8 @@ export interface DB {
   m_districts: MDistricts;
   m_recommendation: MRecommendation;
   mail: Mail;
-  points_data: PointsData;
   spatial_ref_sys: SpatialRefSys;
   stations: Stations;
-  stations_point_map: StationsPointMap;
   statistics: Statistics;
   users: Users;
   users_session: UsersSession;
