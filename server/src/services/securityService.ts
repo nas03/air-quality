@@ -1,7 +1,8 @@
+// Start of Selection
 import { AUTHENTICATION } from "@/config/constant";
 import { ISecurityService } from "@/interfaces/services/ISecurityService";
 import argon from "argon2";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 export class SecurityService implements ISecurityService {
   async encryptString(input: string): Promise<string> {
@@ -14,8 +15,9 @@ export class SecurityService implements ISecurityService {
     return result;
   }
 
-  async createToken(payload: object, expiredIn?: string): Promise<string> {
-    return jwt.sign(payload, String(process.env.JWT_SECRET), expiredIn ? { expiresIn: expiredIn } : undefined);
+  async createToken(payload: object, expiresIn?: string | number): Promise<string> {
+    const options: SignOptions | undefined = expiresIn ? { expiresIn } : undefined;
+    return jwt.sign(payload, String(process.env.JWT_SECRET), options);
   }
 
   decodeToken<T>(input: string): T {
@@ -28,10 +30,8 @@ export class SecurityService implements ISecurityService {
       jwt.verify(input, String(process.env.JWT_SECRET));
       return AUTHENTICATION.TOKEN_VERIFICATION.VALID;
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.name === "TokenExpiredError") {
-          return AUTHENTICATION.TOKEN_VERIFICATION.EXPIRED;
-        }
+      if (error instanceof jwt.TokenExpiredError) {
+        return AUTHENTICATION.TOKEN_VERIFICATION.EXPIRED;
       }
       return AUTHENTICATION.TOKEN_VERIFICATION.INVALID;
     }
