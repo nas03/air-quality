@@ -32,9 +32,11 @@ jobs:
         run: |
           cd server
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
-            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
+            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> dist/.env
           done
-          npm run docker
+      - name: Create artifact
+        run: |
+          aws s3 sync server/dist s3://uet-airq/dist --delete
       # - name: Start AWS CodeBuild Project
       #   run: |
       #     aws codebuild start-build --project-name airq
