@@ -22,9 +22,9 @@ jobs:
       - name: Build
         run: |
             cd server
-            bun run install
-            bun run build
-            bun run docker
+            npm run install
+            npm run build
+            npm run docker
       # - name: Start AWS CodeBuild Project
       #   run: |
       #     aws codebuild start-build --project-name airq
