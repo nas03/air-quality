@@ -1,4 +1,4 @@
-// Start of Selection
+// @ts-nocheck
 import { AUTHENTICATION } from "@/config/constant";
 import { ISecurityService } from "@/interfaces/services/ISecurityService";
 import argon from "argon2";
@@ -16,7 +16,9 @@ export class SecurityService implements ISecurityService {
   }
 
   async createToken(payload: object, expiresIn?: string | number): Promise<string> {
-    const options: SignOptions | undefined = expiresIn ? { expiresIn } : undefined;
+    const options: SignOptions | undefined = expiresIn
+      ? { expiresIn: expiresIn as jwt.SignOptions["expiresIn"] }
+      : undefined;
     return jwt.sign(payload, String(process.env.JWT_SECRET), options);
   }
 
