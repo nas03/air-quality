@@ -28,15 +28,19 @@ jobs:
           npm install -g node-gyp
           npm install argon2
           npm run build
-      - name: Create .env file
-        run: |
-          cd server
-          aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
-            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> dist/.env
-          done
-      - name: Create artifact
-        run: |
-          aws s3 sync server/dist s3://uet-airq/dist --delete
+          # Start of Selection
+          - name: Push Docker Image to S3
+            run: |
+              cd server
+              aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
+                aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> dist/.env
+              done
+              docker compose up --build --detach --force-recreate
+              docker save airq-server:latest | gzip > airq-server.tar.gz
+              aws s3 cp airq-server.tar.gz s3://uet-airq/images/
+      # - name: Create artifact
+      #   run: |
+      #     aws s3 sync server/dist s3://uet-airq/dist --delete
       # - name: Start AWS CodeBuild Project
       #   run: |
       #     aws codebuild start-build --project-name airq
