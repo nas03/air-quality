@@ -44,9 +44,9 @@ jobs:
       - name: Run Docker and Upload to S3
         run: |
           cd server
-          docker build -t airq-server .
-          docker save airq-server:latest | gzip > airq-server.tar.gz
-          aws s3 cp airq-server.tar.gz s3://uet-airq/images/
+          aws s3 cp dist s3://uet-airq/build/
+        # docker build -t airq-server .
+        # docker save airq-server:latest | gzip > airq-server.tar.gz
 
       # Uncomment the below section if needed to sync the dist directory
       # - name: Create artifact
