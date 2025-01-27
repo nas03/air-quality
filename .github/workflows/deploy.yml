@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Ensure you're using GitHub-hosted runners for GitHub Actions
+    runs-on: codebuild-airq-${{github.run_id}}-${{github.run_attempt}} # Ensure you're using GitHub-hosted runners for GitHub Actions
 
     steps:
       - name: Checkout repository
