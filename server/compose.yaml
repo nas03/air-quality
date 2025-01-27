@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: airq-server:latest
+    container_name: airq-server
     build:
       context: .
       dockerfile: Dockerfile
