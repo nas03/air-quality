@@ -21,7 +21,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          npm install
           npm install -g node-gyp
+          npm install argon2
 
       - name: Download secrets from AWS Secrets Manager
         run: |

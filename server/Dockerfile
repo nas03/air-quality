@@ -1,8 +1,6 @@
 # Use an official Node runtime as a parent image
 FROM node:20
 
-ARG BUN_VERSION=1.1.20
-
 # Set the working directory in the container
 WORKDIR /app
 # RUN curl -fsSL https://bun.sh/install | bash
@@ -12,6 +10,9 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+RUN npm install -g node-gyp
+RUN npm install argon2
+
 # If you're using Yarn, you can use `RUN yarn install`
 # RUN bun run build
 # Copy the rest of the application code to the working directory

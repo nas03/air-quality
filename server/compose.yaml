@@ -11,4 +11,4 @@ services:
       - .env
     volumes:
       - .:/app
-    command: ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
+    command: ["node", "-r", "tsconfig-paths/register", "server.js"]
