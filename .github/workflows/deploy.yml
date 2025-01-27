@@ -30,12 +30,6 @@ jobs:
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
 
-      - name: Install Node.js dependencies
-        run: |
-          cd server
-          npm install
-          npm install argon2
-
       - name: Build application
         run: |
           cd server
@@ -44,7 +38,7 @@ jobs:
       - name: Run Docker and Upload to S3
         run: |
           cd server
-          aws s3 cp dist s3://uet-airq/build/
+          aws s3 cp dist s3://uet-airq/build/ --recursive
         # docker build -t airq-server .
         # docker save airq-server:latest | gzip > airq-server.tar.gz
 
