@@ -19,12 +19,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'ap-southeast-1'
 
-      - name: Install dependencies
-        run: |
-          cd server
-          npm install
-          npm install -g node-gyp
-          npm install argon2
+      # - name: Install dependencies
+      #   run: |
+      #     cd server
+      #     npm install
+      #     npm install -g node-gyp
+      #     npm install argon2
 
       - name: Download secrets from AWS Secrets Manager
         run: |
@@ -33,17 +33,21 @@ jobs:
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
 
-      - name: Build application
-        run: |
-          cd server
-          npm run build
+      # - name: Build application
+      # run: |
+      # cd server
+      # npm run build
 
-      - name: Run Docker and Upload to S3
+      # - name: Run Docker and Upload to S3
+      #   run: |
+      #     cd server
+      #     aws s3 cp dist s3://uet-airq/build/ --recursive
+      - name: Run Docker and Upload
         run: |
           cd server
-          aws s3 cp dist s3://uet-airq/build/ --recursive
-        # docker build -t airq-server .
-        # docker save airq-server:latest | gzip > airq-server.tar.gz
+          npm run docker
+          docker save airq-server:latest | gzip > airq-server.tar.gz
+          aws s3 cp airq-server.tar.gz s3://uet-airq/build/
 
       # Uncomment the below section if needed to sync the dist directory
       # - name: Create artifact

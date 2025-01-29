@@ -13,6 +13,7 @@ RUN npm install
 RUN npm install -g node-gyp
 RUN npm install argon2
 
+RUN npm run build
 # If you're using Yarn, you can use `RUN yarn install`
 # RUN bun run build
 # Copy the rest of the application code to the working directory
