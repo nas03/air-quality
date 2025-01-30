@@ -47,7 +47,7 @@ jobs:
           cd server
           npm run docker
           docker save airq-server:latest | gzip > airq-server.tar.gz
-          aws s3 cp airq-server.tar.gz s3://uet-airq/build/
+          aws s3 sync airq-server.tar.gz s3://uet-airq/images --delete
 
       # Uncomment the below section if needed to sync the dist directory
       # - name: Create artifact
