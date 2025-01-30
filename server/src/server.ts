@@ -34,8 +34,8 @@ const startupServer = () => {
   // 		});
   // 	}
   // });
-  server.listen(PORT, () => {
-    console.log("Server is listening on PORT: ", PORT);
+  server.listen(5500, "0.0.0.0", () => {
+    console.log("Server is running on port 5500");
   });
 };
 

@@ -53,6 +53,9 @@ jobs:
       - name: Run Docker and Upload
         run: |
           cd server
+          aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
+            aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
+          done
           npm run docker
           docker save airq-server:latest | gzip > airq-server.tar.gz
           aws s3 cp airq-server.tar.gz s3://uet-airq/airq-server.tar.gz
