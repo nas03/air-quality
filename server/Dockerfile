@@ -14,7 +14,7 @@ RUN npm install argon2
 
 # Copy the entire application code
 COPY . .
-
+COPY production.env .
 # Copy environment variables
 
 
