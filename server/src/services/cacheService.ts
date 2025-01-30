@@ -5,7 +5,7 @@ import Redis from "ioredis";
 export class CacheService implements ICacheService {
   private readonly redisClient = new Redis({
     username: "default",
-    password: process.env.REDIS_PASSWORD,
+    password: "evZA0KtsVBPoKsF4Vvt9z5Xa6yJlN5qh",
     port: 12511,
     host: "redis-12511.c295.ap-southeast-1-1.ec2.redns.redis-cloud.com",
     disconnectTimeout: 0,

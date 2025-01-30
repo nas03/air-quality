@@ -32,10 +32,11 @@ jobs:
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
-        
+
       - name: Dist
         run: |
-          cd server/dist
+          mkdir dist
+          cd dist
           aws secretsmanager list-secrets --query 'SecretList[*].Name' --output text | tr '\t' '\n' | while read secret; do
             aws secretsmanager get-secret-value --secret-id "$secret" --query SecretString --output text | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> .env
           done
@@ -54,7 +55,7 @@ jobs:
           cd server
           npm run docker
           docker save airq-server:latest | gzip > airq-server.tar.gz
-          aws s3 sync airq-server.tar.gz s3://uet-airq/images --delete
+          aws s3 cp airq-server.tar.gz s3://uet-airq/images
 
       # Uncomment the below section if needed to sync the dist directory
       # - name: Create artifact
