@@ -3,21 +3,26 @@ FROM node:20
 
 # Set the working directory in the container
 WORKDIR /app
-# RUN curl -fsSL https://bun.sh/install | bash
-# ENV PATH="${PATH}:/root/.bun/bin"
-# Copy package.json and yarn.lock/package-lock.json
-COPY package*.json .
+
+# Copy package.json and package-lock.json before installing dependencies
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 RUN npm install -g node-gyp
 RUN npm install argon2
 
+# Copy the entire application code
 COPY . .
+
+# Copy environment variables
+COPY .env .env
+
+# Build the application
 RUN npm run build
 
-# Expose the port your app runs on
+# Expose the application port
 EXPOSE 5500
 
-# Command to run the app
+# Start the application
 CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
