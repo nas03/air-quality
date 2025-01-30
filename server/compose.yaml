@@ -9,6 +9,5 @@ services:
       - "5500:5500"
     env_file:
       - .env
-    volumes:
-      - .:/app
+    
     command: ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
