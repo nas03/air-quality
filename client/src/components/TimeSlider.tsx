@@ -1,8 +1,9 @@
 import { IPropsTimeSlider } from "@/components/types";
 import { TimeContext } from "@/context";
-import { PlayCircleFilled } from "@ant-design/icons";
+import { cn } from "@/lib/utils";
 import { Slider, SliderSingleProps } from "antd";
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import { GoPlay } from "react-icons/go";
 
 const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }) => {
   const [sliderValue, setSliderValue] = useState(0);
@@ -10,9 +11,9 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
   const { timeList } = useContext(TimeContext);
 
   const formatTimeLabel = useCallback((time: string, isLast: boolean) => {
-    const formattedTime = time.split("-").reverse().join("/");
+    const formattedTime = time.split("-").reverse().join("-");
     return {
-      style: isLast ? { color: "#f50" } : { fontWeight: "bold" },
+      style: isLast ? { color: "red", fontSize: 12 } : { fontWeight: 500, fontSize: 12 },
       label: isLast ? <strong>{formattedTime}</strong> : formattedTime,
     };
   }, []);
@@ -51,14 +52,16 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
     return () => clearInterval(intervalId);
   }, [sliderValue, updateSliderValue, setTime, timeList]);
 
-  const containerClasses = `${className} absolute bottom-0 flex h-fit transition-all duration-150 
-    ${expanded ? "ml-[26rem] w-[calc(100vw-30rem)]" : "w-screen"} 
-    flex-row items-start gap-10 rounded-xl bg-white bg-opacity-70 px-10 pt-3`;
-
   return (
-    <div className={containerClasses}>
+    <div
+      className={cn(
+        className,
+        expanded ? "ml-[28rem] w-[calc(100vw-30rem)]" : "w-screen",
+        "bg-3 font-roboto absolute bottom-0 flex h-fit flex-row items-center gap-16 rounded-md bg-white/50 pb-2 pl-10 pr-16 pt-5 backdrop-blur-md transition-all duration-150",
+      )}
+    >
       <button className="shrink-0 rounded-full text-4xl" onClick={handleClick}>
-        <PlayCircleFilled translate="yes" />
+        <GoPlay />
       </button>
       {timeList.at(0) && (
         <Slider

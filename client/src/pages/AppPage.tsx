@@ -1,5 +1,5 @@
 import { getTimeList } from "@/api";
-import { LayerToggle, OpenLayerMap, SideBar, TimeSlider, UserMenu } from "@/components";
+import { LayerToggle, Notifications, OpenLayerMap, SideBar, TimeSlider, UserMenu } from "@/components";
 import { ConfigContext, GeoContext, TimeContext } from "@/context";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -40,7 +40,10 @@ const AppPage = () => {
           >
             <OpenLayerMap setMarkData={setMarkData} />
             <div id="overlay-layer" className="z-[1000]">
-              <UserMenu className="absolute right-3 top-[1.5rem]" />
+              <div className="absolute right-3 mt-[1.5rem] flex flex-row items-center gap-5">
+                <Notifications className="" />
+                <UserMenu className="" />
+              </div>
               <SideBar setExpanded={setExpanded} />
               <LayerToggle className="ml-[29rem] pt-[1.5rem]" />
               <TimeSlider expanded={expanded} className="" setTime={setTime} />

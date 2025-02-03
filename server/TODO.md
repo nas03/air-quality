@@ -1,5 +1,11 @@
 # Server Development Tasks
 
+## Main Tasks
+
+- [ ] Setup CI/CD Pipeline
+  - [x] Create docker container
+  - [ ] Auto deploy container
+
 ## Week 1 (Jan 1-5, 2025)
 
 Core API & Data Management:

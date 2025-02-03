@@ -47,7 +47,7 @@ const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
   );
 
   return (
-    <div className={`${className} flex flex-row gap-3`}>
+    <div className={`${className} flex cursor-pointer flex-row gap-3`}>
       <SettingModal openModal={openSettingModal} setOpenModal={setOpenSettingModal} />
       {user?.user_id ? renderAuthenticatedView() : renderUnauthenticatedView()}
     </div>

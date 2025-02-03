@@ -1,6 +1,6 @@
 import { IPropsOpenLayerMap } from "@/components/types";
 import { TimeContext } from "@/context";
-import "@/open.css";
+import "@/css/open.css";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { getBottomLeft } from "ol/extent";

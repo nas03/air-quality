@@ -53,7 +53,7 @@ def calculate_aqi(pm25):
     if np.isnan(pm25):  # Check if pm25 is NaN
         return None  # Or return None if you prefer
 
-    c = round(pm25 * 10) / 10  # Equivalent to Math.floor(10 * pm25) / 10
+    c = round(pm25 * 10) / 10
     if c < 0:
         return 0  # Values below 0 are beyond AQI
     elif c < 12.1:

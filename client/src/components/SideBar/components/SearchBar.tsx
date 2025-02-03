@@ -50,7 +50,7 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
 
   return (
     <div className={`${className} flex h-12 max-w-full flex-row gap-3 rounded-md bg-white px-2 py-2`}>
-      <SearchOutlined className="h-full shrink-0 rounded-md px-2 py-2 hover:bg-blue-100" />
+      <SearchOutlined className="h-full shrink-0 cursor-pointer rounded-md px-2 py-2 hover:bg-blue-100" />
       <AutoComplete
         className="h-full min-w-[6rem] flex-1 rounded-md p-0"
         onSearch={handleSearch}
