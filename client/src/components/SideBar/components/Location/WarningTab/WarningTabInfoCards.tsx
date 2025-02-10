@@ -42,7 +42,7 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location 
   const renderName = () => {
     // if (isModelSource) {
     return (
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-5">
         <span className="">{isModelSource ? "Vị trí" : "Trạm"}:</span>
         <span className="col-span-4">{name}</span>
       </div>

@@ -178,7 +178,9 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
           type: 0,
           coordinate: coordinate.map(Number),
           value: Number(aqiFeature.properties?.GRAY_INDEX),
-          location: `${[locationFeature.properties?.TYPE_2, locationFeature.properties?.NAME_2].join(" ")}, ${locationFeature.properties?.NAME_1}`,
+          location: locationFeature.properties?.NAME_2
+            ? `${[locationFeature.properties?.TYPE_2, locationFeature.properties?.NAME_2].join(" ")}, ${locationFeature.properties?.NAME_1}`
+            : locationFeature.properties?.NAME_1,
           time: data.timeStamp.split("T")[0].split("-").reverse().join("/"),
         };
       };

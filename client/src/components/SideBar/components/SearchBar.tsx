@@ -1,7 +1,8 @@
+import { GeoContext } from "@/context";
 import { MDistrict } from "@/types/db";
 import { SearchOutlined } from "@ant-design/icons";
 import { AutoComplete, AutoCompleteProps } from "antd";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 interface IPropsSearchBar {
   className?: string;
@@ -11,7 +12,7 @@ interface IPropsSearchBar {
 
 const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetDistrict }) => {
   const [options, setOptions] = useState<AutoCompleteProps["options"]>([]);
-
+  const geoContext = useContext(GeoContext);
   const formatDistrictLabel = (district: MDistrict) =>
     `${district.vn_type} ${district.vn_district}, ${district.vn_province}`;
 
@@ -26,7 +27,10 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
   };
 
   const parseDistrictValue = (value: string) => {
-    const [districtPart, provincePart] = value.split(",");
+    const segments = value.split(",");
+    if (segments.length !== 2) return { district: "", province: "", type: "" };
+
+    const [districtPart, provincePart] = segments;
     const province = provincePart.trim();
 
     const isSimpleType = districtPart.includes("Huyện") || districtPart.includes("Quận");
@@ -40,7 +44,7 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
 
   const handleSelect = (value: string) => {
     const { district, province, type } = parseDistrictValue(value);
-
+    if (!district || !province || !type) return;
     const targetDistrict = districts.find(
       (el) => el.vn_district === district && el.vn_province === province && el.vn_type === type,
     );
@@ -48,6 +52,9 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
     setTargetDistrict(targetDistrict?.district_id || "");
   };
 
+  useEffect(() => {
+    if (geoContext.location) handleSelect(geoContext.location);
+  }, [geoContext.location]);
   return (
     <div className={`${className} flex h-12 max-w-full flex-row gap-3 rounded-md bg-white px-2 py-2`}>
       <SearchOutlined className="h-full shrink-0 cursor-pointer rounded-md px-2 py-2 hover:bg-blue-100" />
