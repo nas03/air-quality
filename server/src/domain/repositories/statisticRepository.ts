@@ -4,7 +4,10 @@ import { MDistrict, Statistic } from "@/entities";
 import { IStatisticRepository } from "@/interfaces";
 
 export class StatisticRepository implements IStatisticRepository {
-  async getByDistrictID(district_id: string, date?: Date): Promise<(Statistic & MDistrict)[] | null> {
+  async getByDistrictID(
+    district_id: string,
+    date?: Date
+  ): Promise<(Statistic & MDistrict)[] | null> {
     let query = db
       .selectFrom("statistics")
       .leftJoin("m_districts", "statistics.district_id", "m_districts.district_id")
@@ -62,7 +65,6 @@ export class StatisticRepository implements IStatisticRepository {
     return await query.execute();
   }
   async getRankByDate(date: Date): Promise<(Statistic & MDistrict)[] | null> {
-    console.log({ date });
     const query = db
       .selectFrom("statistics")
       .leftJoin("m_districts", "m_districts.district_id", "statistics.district_id")

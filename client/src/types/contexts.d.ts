@@ -4,6 +4,7 @@ export interface TimeContextType {
 }
 
 export interface GeoContextType {
+  type: 0 | 1;
   coordinate: [number, number] | undefined;
   value: number | undefined;
   location: string;
@@ -21,6 +22,11 @@ export interface ConfigContextType {
     model: boolean;
   };
 }
+
+export type AuthUser = {
+  user_id: number;
+  username: string;
+};
 
 export interface AuthContextType {
   user?: AuthUser | null;

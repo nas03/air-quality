@@ -51,6 +51,7 @@ def prepare_dataframe(data):
             "qi": "aqi_index",
             "qi_time": "timestamp",
             "station_name": "station_name",
+            "address": "address",
         }
     )
 
@@ -92,6 +93,8 @@ def insert_data(df, conn):
     """Insert DataFrame into database"""
     records = df[
         [
+            "address",
+            "station_name",
             "station_id",
             "aqi_index",
             "status",
@@ -105,7 +108,7 @@ def insert_data(df, conn):
     values = [tuple(r) for r in records]
 
     insert_query = """
-    INSERT INTO stations_point_map (station_id, aqi_index, status, color, timestamp, lat, lng, geom)
+    INSERT INTO stations (address, station_name, station_id, aqi_index, status, color, timestamp, lat, lng, geom)
     VALUES %s
     ON CONFLICT (station_id) DO UPDATE SET
         aqi_index = EXCLUDED.aqi_index,
@@ -114,7 +117,9 @@ def insert_data(df, conn):
         timestamp = EXCLUDED.timestamp,
         lat = EXCLUDED.lat,
         lng = EXCLUDED.lng,
-        geom = EXCLUDED.geom;
+        geom = EXCLUDED.geom,
+        station_name = EXCLUDED.station_name,
+        address = EXCLUDED.address;
     """
 
     with conn.cursor() as cur:

@@ -13,7 +13,7 @@ export class UserInteractor implements IUserInteractor {
     this.cacheService = new CacheService();
   }
 
-  findUser = async (accountIdentifier: unknown): Promise<User | null> => {
+  findUser = async (accountIdentifier: unknown) => {
     let searchKey = "";
     switch (typeof accountIdentifier) {
       case "number":
@@ -34,12 +34,12 @@ export class UserInteractor implements IUserInteractor {
     return data;
   };
 
-  createUser = async (input: User): Promise<Pick<User, "user_id" | "username"> | null> => {
+  createUser = async (input: User) => {
     const data = await this.userRepository.createUser(input);
     return data;
   };
 
-  deleteUser = async (user_id: number): Promise<User | null> => {
+  deleteUser = async (user_id: number) => {
     const data = await this.userRepository.deleteUser(user_id);
     if (!data) {
       return null;

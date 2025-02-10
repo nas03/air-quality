@@ -12,8 +12,8 @@ interface DataSourceCardProps {
 interface AirQualityCardProps {
   status: string;
   time: string;
-  aqi_index: number | null;
-  pm_25: number | null;
+  aqi_index: string;
+  pm_25: string;
 }
 
 interface HealthRecommendationCardProps {
@@ -24,33 +24,29 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location 
   const isModelSource = source === "Mô hình";
 
   const renderLocation = () => {
-    if (isModelSource) {
-      return (
-        <div className="grid grid-cols-2">
-          <p>
-            <span className="text-sm font-semibold">Vĩ độ: </span>
-            {location[0]}
-          </p>
-          <p>
-            <span className="text-sm font-semibold">Kinh độ: </span>
-            {location[1]}
-          </p>
-        </div>
-      );
-    }
-    return <p>{location}</p>;
+    // if (isModelSource) {
+    return (
+      <div className="grid grid-cols-2">
+        <p>
+          <span className="text-sm font-semibold">Vĩ độ: </span>
+          {location[0]}
+        </p>
+        <p>
+          <span className="text-sm font-semibold">Kinh độ: </span>
+          {location[1]}
+        </p>
+      </div>
+    );
   };
 
   const renderName = () => {
-    if (isModelSource) {
-      return (
-        <div className="grid grid-cols-5 gap-1">
-          <p className="">Vị trí:</p>
-          <p className="col-span-4">{name}</p>
-        </div>
-      );
-    }
-    return name;
+    // if (isModelSource) {
+    return (
+      <div className="grid grid-cols-5 gap-1">
+        <span className="">{isModelSource ? "Vị trí" : "Trạm"}:</span>
+        <span className="col-span-4">{name}</span>
+      </div>
+    );
   };
 
   return (
@@ -63,7 +59,7 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location 
         </p>
         <div className="flex flex-col gap-1 text-xs font-medium">
           <div className="grid grid-rows-2 gap-1 text-xs font-medium">
-            <p className="text-sm font-semibold">{renderName()}</p>
+            <span className="line-clamp-3 text-sm font-semibold">{renderName()}</span>
             {renderLocation()}
           </div>
         </div>
@@ -93,11 +89,11 @@ const AirQualityCard: React.FC<AirQualityCardProps> = ({ status, time, aqi_index
         />
         <div className="gap-1">
           <h6 className="text-xs text-white opacity-60">AQI VN</h6>
-          <p className="text-base">{aqi_index}</p>
+          <p className="text-center text-base">{aqi_index}</p>
         </div>
         <div className="gap-1 border-l-2 border-slate-200 pl-4">
           <h6 className="text-xs text-white opacity-60">PM2.5 (µg/m3)</h6>
-          <p className="text-base">{pm_25}</p>
+          <p className="text-center text-base">{pm_25}</p>
         </div>
       </div>
     </div>

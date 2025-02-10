@@ -2,8 +2,18 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
 // https://vite.dev/config/
+/* const ReactCompilerConfig = {
+  target: "18", // '17' | '18' | '19'
+}; */
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    /*     {
+      babel: {
+        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
+      },
+    } */
+  ],
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {

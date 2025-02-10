@@ -1,5 +1,4 @@
 import { DistrictRepository } from "@/domain/repositories";
-import { MDistrict } from "@/entities";
 import { IDistrictInteractor } from "@/interfaces";
 import { CacheService } from "@/services";
 
@@ -12,12 +11,12 @@ export class DistrictInteractor implements IDistrictInteractor {
     this.cacheService = new CacheService();
   }
 
-  async findDistrict(district_id: any): Promise<MDistrict | null> {
+  async findDistrict(district_id: any) {
     const data = await this.districtRepository.findDistrict(district_id);
     return data;
   }
 
-  async getAllDistrict(): Promise<MDistrict[]> {
+  async getAllDistrict() {
     const data = await this.districtRepository.getAllDistricts();
     return data;
   }

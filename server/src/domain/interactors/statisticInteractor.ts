@@ -12,7 +12,7 @@ export class StatisticInteractor implements IStatisticInteractor {
     this.cacheService = new CacheService();
   }
 
-  getByDistrictID = async (district_id: string, date?: Date): Promise<(Statistic & MDistrict)[] | null> => {
+  getByDistrictID = async (district_id: string, date?: Date) => {
     let hashKey = ["statistics", district_id, "date", date].join(":");
     const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
     if (cache) return cache;
@@ -25,23 +25,23 @@ export class StatisticInteractor implements IStatisticInteractor {
     return data;
   };
 
-  getDistrictHistory = async (
-    district_id: string,
-    start_date: Date,
-    end_date: Date
-  ): Promise<(Statistic & MDistrict)[] | null> => {
+  getDistrictHistory = async (district_id: string, start_date: Date, end_date: Date) => {
     let hashKey = ["statistics", district_id, "history", start_date, end_date].join(":");
     const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
     if (cache) return cache;
 
-    const data = await this.statisticRepository.getDistrictHistory(district_id, start_date, end_date);
+    const data = await this.statisticRepository.getDistrictHistory(
+      district_id,
+      start_date,
+      end_date
+    );
     if (data) {
       await this.cacheService.set(hashKey, data, cacheTime.DEV);
     }
     return data;
   };
 
-  getRankByDate = async (date: Date): Promise<(Statistic & MDistrict)[] | null> => {
+  getRankByDate = async (date: Date) => {
     let hashKey = ["statistics", "rank", "date", date].join(":");
     const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
     if (cache) return cache;
@@ -51,7 +51,7 @@ export class StatisticInteractor implements IStatisticInteractor {
     return data;
   };
 
-  getTimeList = async (): Promise<Pick<Statistic, "time">[]> => {
+  getTimeList = async () => {
     let hashKey = ["statistics", "date", "*"].join(":");
     const cache = await this.cacheService.get<Pick<Statistic, "time">[]>(hashKey);
     if (cache) return cache;

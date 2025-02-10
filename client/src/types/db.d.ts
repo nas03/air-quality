@@ -32,3 +32,21 @@ export type User = {
   updated_at?: Date | null;
   created_at?: Date | null;
 };
+
+export type UserNotification = {
+  aqi_index: number | null;
+  archived: number | null;
+  id: number;
+  location_id: string | null;
+  recommendation_id: number | null;
+  timestamp: Date;
+  user_id: number | null;
+};
+export type MRecommendation = {
+  color: string;
+  id: number;
+  max_threshold: number;
+  min_threshold: number;
+  recommendation: string;
+  status: string;
+};

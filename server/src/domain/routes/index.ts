@@ -4,9 +4,9 @@ import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
 import authRouter from "@/domain/routes/authRoute";
 import districtRouter from "@/domain/routes/districtRoutes";
-import notificationRouter from "@/domain/routes/notificationRoute";
 import stationsRouter from "@/domain/routes/stationsRoute";
 import statisticRouter from "@/domain/routes/statisticRoutes";
+import notificationRouter from "@/domain/routes/userNotificationRoute";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 

@@ -4,16 +4,20 @@ import { User } from "@/entities";
 import { IUserRepository } from "@/interfaces";
 
 export class UserRepository implements IUserRepository {
-  createUser = async (data: User): Promise<Pick<User, "user_id" | "username"> | null> => {
-    const query = await db.insertInto("users").values(data).returning(["user_id", "username"]).executeTakeFirst();
+  createUser = async (data: User) => {
+    const query = await db
+      .insertInto("users")
+      .values(data)
+      .returning(["user_id", "username"])
+      .executeTakeFirst();
     return query ?? null;
   };
 
-  updateUser = async (user_id: number): Promise<User | null> => {
+  updateUser = async (user_id: number) => {
     throw new Error("Method is not implemented");
   };
 
-  findUser = async (input: { user_id?: number; email?: string; username?: string }): Promise<User | null> => {
+  findUser = async (input: { user_id?: number; email?: string; username?: string }) => {
     let query = db.selectFrom("users");
 
     if (input.user_id) query = query.where("user_id", "=", input.user_id);
@@ -25,7 +29,7 @@ export class UserRepository implements IUserRepository {
     return result ?? null;
   };
 
-  deleteUser = async (user_id: number): Promise<User | null> => {
+  deleteUser = async (user_id: number) => {
     const transaction = await db.transaction().execute(async (trx) => {
       const query = await trx
         .with("deleteUserAndFavorite", (qb) =>

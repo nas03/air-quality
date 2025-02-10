@@ -57,6 +57,7 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
         variant="borderless"
         placeholder="Search..."
         options={options}
+        aria-autocomplete="list"
         onSelect={handleSelect}
       />
     </div>

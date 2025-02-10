@@ -1,7 +1,6 @@
 import { signin } from "@/api";
-import { AuthUser } from "@/components/types";
 import { AuthenticationContext } from "@/context";
-import { AuthContextType } from "@/types/contexts";
+import { AuthContextType, AuthUser } from "@/types/contexts";
 import React, { useCallback, useState } from "react";
 
 export const AuthenticationProvider = ({ children }: { children: React.ReactNode }) => {

@@ -1,5 +1,4 @@
 import { StationsRepository } from "@/domain/repositories";
-import { Station } from "@/entities";
 import { IStationsInteractor } from "@/interfaces";
 
 export class StationsInteractor implements IStationsInteractor {
@@ -8,11 +7,11 @@ export class StationsInteractor implements IStationsInteractor {
     this.stationsRepository = stationsRepository;
   }
 
-  async getAllStations(date?: Date): Promise<Station[]> {
+  async getAllStations(date?: Date) {
     const data = await this.stationsRepository.getAllStations(date);
     return data;
   }
-  async getStationByID(station_id: string, date?: Date): Promise<Station | null> {
+  async getStationByID(station_id: string, date?: Date) {
     const data = await this.stationsRepository.getStationByID(station_id, date);
     return data;
   }

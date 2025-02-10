@@ -109,6 +109,16 @@ export interface Users {
   username: string;
 }
 
+export interface UsersNotification {
+  aqi_index: number | null;
+  archived: Generated<number | null>;
+  id: Generated<number>;
+  location_id: string | null;
+  recommendation_id: number | null;
+  timestamp: Generated<Timestamp | null>;
+  user_id: number | null;
+}
+
 export interface UsersSession {
   access_token: string;
   created_at: Generated<Timestamp | null>;
@@ -143,6 +153,7 @@ export interface DB {
   stations: Stations;
   statistics: Statistics;
   users: Users;
+  users_notification: UsersNotification;
   users_session: UsersSession;
   users_setting: UsersSetting;
 }

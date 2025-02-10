@@ -1,8 +1,8 @@
 export * from "./interactors/IDistrictInteractor";
-export * from "./interactors/INotificationInteractor";
 export * from "./interactors/IStationsInteractor";
 export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
+export * from "./interactors/IUserNotificationInteractor";
 
 export * from "./repositories/IDistrictRepository";
 export * from "./repositories/IMailRepository";

@@ -7,8 +7,8 @@ export interface IPropsAirQualityInfoPanel {
   type: "station" | "model";
   name: string;
   location: string | string[];
-  aqi_index: number;
-  pm_25: number;
+  aqi_index: string;
+  pm_25: string;
   recommendation: string;
 }
 

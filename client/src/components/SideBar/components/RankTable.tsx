@@ -38,7 +38,7 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData }) => {
 
   return (
     <Loading loading={!data} className="h-[95%]">
-      <div className={cn(className, "mt-3 h-full")}>
+      <div className={cn(className, "mt-3 h-full font-sans")}>
         <div className="grid grid-cols-7 bg-white pb-2 uppercase text-slate-400 opacity-100" id="table-header">
           <p className="text-center font-semibold">#</p>
           <p className="col-span-2 pl-3 pr-2 text-start font-semibold">Địa điểm</p>

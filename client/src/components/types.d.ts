@@ -11,11 +11,13 @@ export interface IPropsSideBar {
 /* OpenLayerMap */
 export interface IPropsOpenLayerMap {
   setMarkData: ({
+    type,
     coordinate,
     value,
     location,
     time,
   }: {
+    type: 0 | 1;
     coordinate: [number, number];
     value: number;
     location: string;
@@ -29,10 +31,3 @@ export interface IPropsLayerToggle {
   layer: { station: boolean; model: boolean }; */
   className?: string;
 }
-
-/* AuthenticationProvider */
-export type AuthUser = {
-  user_id: number;
-  // role: string;
-  username: string;
-};

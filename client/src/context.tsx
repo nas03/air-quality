@@ -7,6 +7,7 @@ export const TimeContext = createContext<TimeContextType>({
 });
 
 export const GeoContext = createContext<GeoContextType>({
+  type: 0,
   coordinate: undefined,
   value: undefined,
   location: "",
