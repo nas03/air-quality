@@ -1,6 +1,7 @@
 import { getTimeList } from "@/api";
 import { GradientBar, LayerToggle, Notifications, OpenLayerMap, SideBar, TimeSlider, UserMenu } from "@/components";
 import { ConfigContext, GeoContext, TimeContext } from "@/context";
+import { MarkData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -9,14 +10,9 @@ const AppPage = () => {
     queryKey: ["time"],
     queryFn: getTimeList,
   });
+
   const [time, setTime] = useState("");
-  const [markData, setMarkData] = useState<{
-    type: 0 | 1;
-    coordinate: [number, number] | undefined;
-    value: number | undefined;
-    location: string;
-    time: string;
-  }>({
+  const [markData, setMarkData] = useState<MarkData>({
     type: 0,
     coordinate: undefined,
     value: undefined,

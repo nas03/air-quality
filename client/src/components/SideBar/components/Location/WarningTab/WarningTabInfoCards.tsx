@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { AimOutlined, FieldTimeOutlined, HeartOutlined } from "@ant-design/icons";
 import React from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
@@ -14,6 +15,8 @@ interface AirQualityCardProps {
   time: string;
   aqi_index: string;
   pm_25: string;
+  color: string;
+  icon: string;
 }
 
 interface HealthRecommendationCardProps {
@@ -68,11 +71,19 @@ const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location 
   );
 };
 
-const AirQualityCard: React.FC<AirQualityCardProps> = ({ status, time, aqi_index = 0, pm_25 = 0 }) => {
+const AirQualityCard: React.FC<AirQualityCardProps> = ({ status, time, aqi_index, pm_25, color, icon }) => {
   const formattedTime = time ? time.split("-").reverse().join("/") : "";
 
+  const isYellow = color === "#facf39";
+
   return (
-    <div className="rounded-lg border-2 border-[#eb5c33] bg-[#eb5c33] px-[1rem] py-5 text-white">
+    <div
+      className={cn("rounded-lg border-2 px-[1rem] py-5", isYellow ? "text-black" : "text-white")}
+      style={{
+        backgroundColor: color,
+        borderColor: color,
+      }}
+    >
       <div className="flex flex-row items-center justify-between text-xs">
         <p className="font-semibold">Chất lượng không khí ngày hiện tại: {status}</p>
         <p className="flex flex-row gap-1">
@@ -82,17 +93,16 @@ const AirQualityCard: React.FC<AirQualityCardProps> = ({ status, time, aqi_index
       </div>
       <div className="mt-4 flex w-full flex-row items-center justify-between">
         <img
-          loading="lazy"
-          src="face_mask_icon.png"
-          className="h-full border-r-2 border-slate-200 px-4"
+          src={`aqi/${icon}`}
+          className={cn("h-full border-r-2 px-4", isYellow ? "border-slate-600" : "border-x-slate-200")}
           alt="Face mask icon"
         />
         <div className="gap-1">
-          <h6 className="text-xs text-white opacity-60">AQI VN</h6>
+          <h6 className={cn("text-xs opacity-60", isYellow ? "text-black" : "text-white")}>AQI VN</h6>
           <p className="text-center text-base">{aqi_index}</p>
         </div>
-        <div className="gap-1 border-l-2 border-slate-200 pl-4">
-          <h6 className="text-xs text-white opacity-60">PM2.5 (µg/m3)</h6>
+        <div className={cn("gap-1 border-l-2 pl-4", isYellow ? "border-slate-600" : "border-x-slate-200")}>
+          <h6 className={cn("text-xs opacity-60", isYellow ? "text-black" : "text-white")}>PM2.5 (µg/m3)</h6>
           <p className="text-center text-base">{pm_25}</p>
         </div>
       </div>
@@ -115,5 +125,3 @@ export const WarningTabInfoCards = {
   DataSourceCard,
   AirQualityCard,
 };
-
-export default WarningTabInfoCards;

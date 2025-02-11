@@ -1,4 +1,5 @@
 export * from "./interactors/IDistrictInteractor";
+export * from "./interactors/IMRecomendationInteractor";
 export * from "./interactors/IStationsInteractor";
 export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
@@ -6,6 +7,7 @@ export * from "./interactors/IUserNotificationInteractor";
 
 export * from "./repositories/IDistrictRepository";
 export * from "./repositories/IMailRepository";
+export * from "./repositories/IMRecommendationRepository";
 export * from "./repositories/IStationsRepository";
 export * from "./repositories/IStatisticRepository";
 export * from "./repositories/IUserRepository";

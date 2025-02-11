@@ -57,7 +57,7 @@ const Notifications = ({ className }: React.ComponentPropsWithoutRef<"div">) => 
   useEffect(() => {
     const data = query.data?.map((el) => ({
       aqi_index: String(el.aqi_index) ?? "--",
-      recommendation: el.recommendation,
+      recommendation: el.en_recommendation,
       timestamp: getRelativeTime(el.timestamp),
     }));
     if (data) setNotifications(data);

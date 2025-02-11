@@ -2,7 +2,7 @@ import { MRecommendation, User, UserNotification } from "@/entities";
 
 export interface UserNotificationWithRecommendation
   extends Omit<UserNotification, "recommendation_id">,
-    Pick<MRecommendation, "recommendation" | "color"> {}
+    Pick<MRecommendation, "en_recommendation" | "vn_recommendation" | "color"> {}
 
 export interface AllEmailNotification
   extends UserNotificationWithRecommendation,

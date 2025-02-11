@@ -1,3 +1,5 @@
+import { MarkData } from "@/types";
+
 /* TimeSlider */
 export interface IPropsTimeSlider {
   setTime: (value: string | ((prevState: string) => string)) => void;
@@ -10,19 +12,7 @@ export interface IPropsSideBar {
 }
 /* OpenLayerMap */
 export interface IPropsOpenLayerMap {
-  setMarkData: ({
-    type,
-    coordinate,
-    value,
-    location,
-    time,
-  }: {
-    type: 0 | 1;
-    coordinate: [number, number];
-    value: number;
-    location: string;
-    time: string;
-  }) => void;
+  setMarkData: React.Dispatch<React.SetStateAction<MarkData>>;
 }
 
 /* LayerToggle */

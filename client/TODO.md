@@ -37,7 +37,12 @@ Rankings & User Settings:
 Data Integration & Automation:
 
 - [x] Fix duplicate labels of TiledWMS
-- [ ] Implement notification system
-- [ ] Integrate monitoring station data from GeoServer
-- [ ] Configure automated daily data collection
-- [ ] Set up data crawler for moitruongthudo.vn
+- [x] Implement notification system
+- [x] Integrate monitoring station data from GeoServer
+- [x] Configure automated daily data collection
+- [x] Set up data crawler for moitruongthudo.vn
+
+## Week 5 (Feb 10-16, 2025)
+
+- [x] Turn on/off visibility of layers
+- [x] Fill data of stations layer to warning tab

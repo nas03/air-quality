@@ -47,6 +47,8 @@ export type MRecommendation = {
   id: number;
   max_threshold: number;
   min_threshold: number;
-  recommendation: string;
-  status: string;
+  vn_recommendation: string;
+  en_recommendation: string;
+  en_status: string;
+  vn_status: string;
 };

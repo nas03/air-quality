@@ -1,4 +1,5 @@
-import WarningTabInfoCards from "@/components/SideBar/components/Location/WarningTab/WarningTabInfoCards";
+import { WarningTabInfoCards } from "@/components/SideBar/components/Location/WarningTab/WarningTabInfoCards";
+import { getSvgAndColorByAQI } from "@/components/SideBar/utils";
 import { TimeContext } from "@/context";
 import { useContext } from "react";
 
@@ -10,10 +11,13 @@ export interface IPropsAirQualityInfoPanel {
   aqi_index: string;
   pm_25: string;
   recommendation: string;
+  status: string;
 }
 
 const AirQualityInfoPanel: React.FC<IPropsAirQualityInfoPanel> = (props) => {
   const { time } = useContext(TimeContext);
+  const format = getSvgAndColorByAQI(Number(props.aqi_index));
+
   return (
     <div className="flex w-full flex-col gap-3">
       <WarningTabInfoCards.DataSourceCard
@@ -24,8 +28,10 @@ const AirQualityInfoPanel: React.FC<IPropsAirQualityInfoPanel> = (props) => {
       <WarningTabInfoCards.AirQualityCard
         aqi_index={props.aqi_index}
         pm_25={props.pm_25}
-        status="Có hại cho sức khoẻ"
+        status={props.status}
         time={time}
+        color={format.color}
+        icon={format.icon}
       />
       <WarningTabInfoCards.HealthRecommendationCard recommendation={props.recommendation} />
     </div>

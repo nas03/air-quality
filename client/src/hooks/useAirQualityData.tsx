@@ -1,0 +1,60 @@
+import { getRecommendationDefinition } from "@/api";
+import { convertCoordinate } from "@/lib/utils";
+import { AirQualityData } from "@/types";
+import { GeoContextType } from "@/types/contexts";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+const getProjectedCoordinates = (geoContext: GeoContextType) => {
+  const sourceProjection = "EPSG:3857";
+  const targetProjection = geoContext.type === 0 ? "EPSG:4326" : "EPSG:3857";
+  const converted = convertCoordinate(sourceProjection, targetProjection, geoContext.coordinate);
+  return converted ? converted.map(Number) : null;
+};
+const useAirQualityData = (time: string, geoContext: GeoContextType) => {
+  const [data, setData] = useState<AirQualityData>({
+    aqi_index: 0,
+    pm_25: 0,
+    status: "string",
+    time,
+    name: "",
+    location: "",
+    recommendation: "",
+  });
+
+  const { data: recommendations } = useQuery({
+    queryKey: ["recommendations", "all"],
+    queryFn: getRecommendationDefinition,
+  });
+
+  const findRecommendation = (value: number) => {
+    if (!recommendations) return { recommendation: "", status: "" };
+    const recommendation = recommendations.find((r) => value >= r.min_threshold && value <= r.max_threshold);
+    return { recommendation: recommendation?.en_recommendation || "", status: recommendation?.en_status || "" };
+  };
+
+  const buildAirQualityData = (geoContext: GeoContextType, projectedCoordinate: number[] | null): AirQualityData => {
+    const recommendation = findRecommendation(Number(geoContext.value));
+    return {
+      aqi_index: geoContext.value ?? 0,
+      pm_25: geoContext.value ?? 0,
+      status: recommendation.status,
+      time,
+      name: geoContext.location,
+      location: projectedCoordinate ? [String(projectedCoordinate[0]), String(projectedCoordinate[1])] : ["--", "--"],
+      recommendation: recommendation.recommendation,
+    };
+  };
+
+  const updateData = () => {
+    const projectedCoordinate = getProjectedCoordinates(geoContext);
+    if (geoContext.type === 0 && !projectedCoordinate) return;
+
+    const updatedData = buildAirQualityData(geoContext, projectedCoordinate);
+    setData((prev) => ({ ...prev, ...updatedData }));
+  };
+
+  return { data, updateData };
+};
+
+export default useAirQualityData;

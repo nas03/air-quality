@@ -35,7 +35,9 @@ User Systems & Rankings:
 
 Data Integration & Notifications:
 
-- [ ] Integrate data from moitruongthudo.vn
-- [ ] Add PM2.5 data collection from CEM
 - [x] Set up automated email warning system for users
-- [ ] 
+
+## Week 5 (Feb 10-16, 2025)
+- [ ] Add PM2.5 data collection from CEM
+- [ ] Integrate data from moitruongthudo.vn
+-

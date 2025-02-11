@@ -1,6 +1,6 @@
 import { LineChartProps } from "@mui/x-charts";
 
-const color = ["#009966", "#ffd033", "#eb5c33", "#8f0070", "#70006a", "#7e0023"];
+const color = ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"];
 const colorConfig: { [key: number]: { label: string; color: { min: number; max: number }[] } } = {
   0: {
     label: "AQI",
@@ -48,9 +48,18 @@ export const averageLineChartConfig: { [key: string]: Pick<LineChartProps, "view
 
 export const getStyleRankTable = (aqi_index: number) => {
   if (aqi_index < 50) return { status: "Good", color: "#009966" };
-  else if (aqi_index < 100) return { status: "Moderate", color: "#ffd033" };
-  else if (aqi_index < 150) return { status: "Unhealthy for Sensitive Groups", color: "#eb5c33" };
-  else if (aqi_index < 200) return { status: "Unhealthy", color: "#8f0070" };
+  else if (aqi_index < 100) return { status: "Moderate", color: "#FFFF00" };
+  else if (aqi_index < 150) return { status: "Unhealthy for Sensitive Groups", color: "#ff9b57" };
+  else if (aqi_index < 200) return { status: "Unhealthy", color: "#fe6a6" };
   else if (aqi_index < 300) return { status: "Very Unhealthy", color: "#70006a" };
   else return { status: "Hazardous", color: "#7e0023" };
+};
+
+export const getSvgAndColorByAQI = (aqi_index: number) => {
+  if (aqi_index < 50) return { icon: "ic-face-green.svg", color: "#009966" };
+  else if (aqi_index < 100) return { icon: "ic-face-yellow.svg", color: "#facf39" };
+  else if (aqi_index < 150) return { icon: "ic-face-orange.svg", color: "#ea7643" };
+  else if (aqi_index < 200) return { icon: "ic-face-red.svg", color: "#f65e5f" };
+  else if (aqi_index < 300) return { icon: "ic-face-purple.svg", color: "#a97abc" };
+  else return { icon: "ic-face-purple.svg", color: "#a97abc" };
 };

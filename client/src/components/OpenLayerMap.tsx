@@ -1,6 +1,7 @@
 import { IPropsOpenLayerMap } from "@/components/types";
 import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
+import { MarkData } from "@/types";
 import { Feature, Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { defaults as defaultControls } from "ol/control/defaults.js";
@@ -16,14 +17,15 @@ import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
 import { Icon, Style } from "ol/style";
 import React, { useContext, useEffect, useRef } from "react";
+
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const layersRef = useRef<TileLayer | null>(null);
   const markerRef = useRef<VectorLayer | null>(null);
   const mapRef = useRef<Map | null>(null);
+
   const { time } = useContext(TimeContext);
   const key = import.meta.env.VITE_PUBLIC_MAPTILER_KEY;
   const configContext = useContext(ConfigContext);
-
   const styleUrl = `https://api.maptiler.com/maps/7d9ee8e1-7abf-4591-ac75-85518e48ba38/style.json?key=${key}`;
   // Initialize map configuration
   const initializeMap = () => {
@@ -105,7 +107,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       source: new VectorSource({
         features: [
           new Feature({
-            geometry: new Point(fromLonLat([105.852, 21.229])),
+            geometry: new Point(fromLonLat([105.871, 21])),
           }),
         ],
       }),
@@ -137,9 +139,11 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       FEATURE_COUNT: 50,
     });
 
-    if (url) {
-      fetchLocationData(url, coordinate, props.setMarkData);
+    if (!url) {
+      console.log("error fetch mark data");
+      return;
     }
+    fetchLocationData(url, coordinate, props.setMarkData);
   };
   const handleMapClick = (map: Map, layers: (TileLayer | VectorLayer)[]) => {
     map.on("singleclick", function (evt) {
@@ -148,7 +152,11 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     });
   };
 
-  const fetchLocationData = async (url: string, coordinate: number[], setMarkData: Function) => {
+  const fetchLocationData = async (
+    url: string,
+    coordinate: number[],
+    setMarkData: React.Dispatch<React.SetStateAction<MarkData>>,
+  ) => {
     try {
       const response = await fetch(url);
       const text = await response.text();
@@ -157,7 +165,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
       if (!data.features?.length) return;
 
-      const processStationData = (features: FeatureObject[]) => {
+      const processStationData = (features: FeatureObject[]): Omit<MarkData, "recommendation"> | null => {
         const stationFeature = features.find((feature) => String(feature.id).includes("stations_point_map"));
 
         if (!stationFeature?.properties) return null;
@@ -171,12 +179,12 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
         };
       };
 
-      const processModelData = (features: FeatureObject[]) => {
+      const processModelData = (features: FeatureObject[]): Omit<MarkData, "recommendation"> | null => {
         const [aqiFeature, locationFeature] = features;
 
         return {
           type: 0,
-          coordinate: coordinate.map(Number),
+          coordinate: [coordinate[0], coordinate[1]],
           value: Number(aqiFeature.properties?.GRAY_INDEX),
           location: locationFeature.properties?.NAME_2
             ? `${[locationFeature.properties?.TYPE_2, locationFeature.properties?.NAME_2].join(" ")}, ${locationFeature.properties?.NAME_1}`
@@ -194,7 +202,8 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       }
 
       if (configContext.layer.model) {
-        setMarkData(processModelData(data.features));
+        const modelData = processModelData(data.features);
+        if (modelData) setMarkData(modelData);
       }
     } catch (error) {
       console.error("Error fetching location data:", error);
@@ -212,6 +221,10 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       handleMapClick(map, layers);
     };
 
+    // Auto update location data at first run
+    const initialCoordinate = fromLonLat([105.871, 21]);
+    handleMarkerChange(initialCoordinate);
+    handleUpdateLocationData(map, layers, initialCoordinate);
     setupMap();
     mapRef.current = map;
 

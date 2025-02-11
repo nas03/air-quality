@@ -60,11 +60,13 @@ export interface MDistricts {
 
 export interface MRecommendation {
   color: string;
+  en_recommendation: string;
+  en_status: string;
   id: Generated<number>;
   max_threshold: number;
   min_threshold: number;
-  recommendation: string;
-  status: string;
+  vn_recommendation: string | null;
+  vn_status: string | null;
 }
 
 export interface SpatialRefSys {
@@ -76,12 +78,14 @@ export interface SpatialRefSys {
 }
 
 export interface Stations {
+  address: string | null;
   aqi_index: number;
   color: string;
   geom: string | null;
   lat: number;
   lng: number;
   station_id: string;
+  station_name: string | null;
   status: string;
   timestamp: Timestamp | null;
 }

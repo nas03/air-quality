@@ -4,6 +4,7 @@ import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
 import authRouter from "@/domain/routes/authRoute";
 import districtRouter from "@/domain/routes/districtRoutes";
+import recommendationRouter from "@/domain/routes/mRecommendationRoute";
 import stationsRouter from "@/domain/routes/stationsRoute";
 import statisticRouter from "@/domain/routes/statisticRoutes";
 import notificationRouter from "@/domain/routes/userNotificationRoute";
@@ -17,6 +18,7 @@ const routes = [
   ...stationsRouter,
   ...authRouter,
   ...notificationRouter,
+  ...recommendationRouter,
 ];
 
 const userRepository = new UserRepository();

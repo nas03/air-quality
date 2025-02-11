@@ -14,7 +14,8 @@ export class UserNotificationRepository implements IUserNotificationRepository {
         "un.user_id",
         "un.location_id",
         "un.id",
-        "mr.recommendation",
+        "mr.en_recommendation",
+        "mr.vn_recommendation",
         "mr.color",
       ])
       .where("un.user_id", "=", user_id)
@@ -94,7 +95,8 @@ export class UserNotificationRepository implements IUserNotificationRepository {
         "users.email",
         "un.location_id",
         "un.id",
-        "mr.recommendation",
+        "mr.en_recommendation",
+        "mr.vn_recommendation",
         "mr.color",
       ])
       .where("timestamp", "=", date)
