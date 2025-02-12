@@ -1,4 +1,3 @@
-
 export interface TimeContextType {
   timeList: string[];
   time: string;
@@ -7,7 +6,8 @@ export interface TimeContextType {
 export interface GeoContextType {
   type: 0 | 1;
   coordinate: [number, number] | undefined;
-  value: number | undefined;
+  aqi_index: number | null;
+  pm_25: number | null;
   location: string;
 }
 

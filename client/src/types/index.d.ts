@@ -1,4 +1,6 @@
-export type MarkData = OmitGeoContextType & { time: string };
+import { GeoContextType } from "@/types/contexts";
+
+export type MarkData = GeoContextType & { time: string };
 export interface AirQualityData {
   aqi_index: number;
   pm_25: number;

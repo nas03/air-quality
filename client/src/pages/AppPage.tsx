@@ -15,7 +15,8 @@ const AppPage = () => {
   const [markData, setMarkData] = useState<MarkData>({
     type: 0,
     coordinate: undefined,
-    value: undefined,
+    aqi_index: null,
+    pm_25: null,
     location: "",
     time: time,
   });
@@ -37,7 +38,8 @@ const AppPage = () => {
             value={{
               type: markData.type,
               coordinate: markData.coordinate,
-              value: markData.value,
+              aqi_index: markData.aqi_index,
+              pm_25: markData.pm_25,
               location: markData.location,
             }}
           >

@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from io import StringIO
+from pydoc import text
 
 import numpy as np
 import pandas as pd
@@ -37,6 +38,20 @@ def fetch_station_data():
     return response.json()["stations"]
 
 
+def fetch_station_details(station_id):
+    """Fetch detailed data for a specific station"""
+    URL = "https://envisoft.gov.vn/eos/services/call/json/qi_detail"
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Origin": "https://cem.gov.vn",
+        "Referer": "https://cem.gov.vn/",
+    }
+    response = requests.post(URL, data={"station_id": station_id}, headers=headers)
+    response.raise_for_status()
+    return response.json()["res"]
+
+
 def prepare_dataframe(data):
     """Process raw data into a formatted DataFrame"""
     df = pd.read_json(StringIO(json.dumps(data, ensure_ascii=False)), dtype={"id": str})
@@ -55,16 +70,45 @@ def prepare_dataframe(data):
         }
     )
 
+    # Fetch details for each station
+    pm25DF = pd.DataFrame(columns=["station_id", "pm25"])
+    for station_id in df["station_id"]:
+        try:
+            stationData = fetch_station_details(station_id)
+            # Extract only the numeric values from the PM2.5 data
+            pm25_values = [
+                float(list(item.keys())[0]) for item in stationData["PM-2-5"]["values"]
+            ]
+            pm25Data = np.mean(pm25_values) if pm25_values else None
+        except (requests.exceptions.RequestException, KeyError, ValueError) as e:
+            logger.error(
+                f"Error fetching/processing details for station {station_id}: {e}"
+            )
+            pm25Data = None
+        finally:
+            pm25DF = pd.concat(
+                [
+                    pm25DF,
+                    pd.DataFrame({"station_id": [station_id], "pm25": [pm25Data]}),
+                ],
+                ignore_index=True,
+            )
+
+    # Add details to dataframe (you can process the details as needed)
+    # df["details"] = details
+    # Merge pm25 data with main dataframe
+    df = df.merge(pm25DF, on="station_id", how="left")
     # Format data
-    df["timestamp"] = df["timestamp"].astype(str) + "+07"
+    df["pm25"] = df["pm25"].replace({np.nan: None})
+    df["timestamp"] = df["timestamp"].astype(str)
     df["aqi_index"] = round(df["aqi_index"]).astype(int)
     df["station_name"] = df["station_name"].str.replace("(KK)", "").str.strip()
 
-    # Convert types
+    # Convert types and handle NaN values
     df["station_id"] = df["station_id"].astype(str)
     df["aqi_index"] = df["aqi_index"].astype(int)
-    df["lat"] = df["lat"].astype(float)
-    df["lng"] = df["lng"].astype(float)
+    df["lat"] = df["lat"].replace({np.nan: None})
+    df["lng"] = df["lng"].replace({np.nan: None})
 
     # Add geometry
     df["geom"] = df.apply(
@@ -93,6 +137,7 @@ def insert_data(df, conn):
     """Insert DataFrame into database"""
     records = df[
         [
+            "pm25",
             "address",
             "station_name",
             "station_id",
@@ -108,7 +153,7 @@ def insert_data(df, conn):
     values = [tuple(r) for r in records]
 
     insert_query = """
-    INSERT INTO stations (address, station_name, station_id, aqi_index, status, color, timestamp, lat, lng, geom)
+    INSERT INTO stations (pm25, address, station_name, station_id, aqi_index, status, color, timestamp, lat, lng, geom)
     VALUES %s
     ON CONFLICT (station_id) DO UPDATE SET
         aqi_index = EXCLUDED.aqi_index,
@@ -119,7 +164,8 @@ def insert_data(df, conn):
         lng = EXCLUDED.lng,
         geom = EXCLUDED.geom,
         station_name = EXCLUDED.station_name,
-        address = EXCLUDED.address;
+        address = EXCLUDED.address,
+        pm25 = EXCLUDED.pm25;
     """
 
     with conn.cursor() as cur:

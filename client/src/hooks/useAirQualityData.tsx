@@ -34,10 +34,10 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
   };
 
   const buildAirQualityData = (geoContext: GeoContextType, projectedCoordinate: number[] | null): AirQualityData => {
-    const recommendation = findRecommendation(Number(geoContext.value));
+    const recommendation = findRecommendation(Number(geoContext.aqi_index));
     return {
-      aqi_index: geoContext.value ?? 0,
-      pm_25: geoContext.value ?? 0,
+      aqi_index: geoContext.aqi_index ?? 0,
+      pm_25: geoContext.pm_25 ?? 0,
       status: recommendation.status,
       time,
       name: geoContext.location,
