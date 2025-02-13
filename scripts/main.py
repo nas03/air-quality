@@ -2,7 +2,7 @@ import logging
 
 from jobs.calculate_aqi import export_data
 from jobs.calculate_avg import uploadData
-from jobs.scraper import scrape
+from scripts.jobs.scraping import scrape_all
 from jobs.send_notifications import sendNotification
 
 # Configure logging
@@ -18,7 +18,7 @@ if __name__ == "__main__":
         logger.info("Starting raster conversion process")
         export_data()
         logger.info("Starting scraping conversion process")
-        scrape()
+        scrape_all()
         logger.info("Send Notifications")
         sendNotification()
     except Exception as e:
