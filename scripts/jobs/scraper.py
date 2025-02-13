@@ -11,13 +11,13 @@ import psycopg2.extras
 import requests
 from dotenv import load_dotenv
 
-# Configure logging
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
-# Register adapters for numpy data types
+
 psycopg2.extensions.register_adapter(np.int64, psycopg2._psycopg.AsIs)
 psycopg2.extensions.register_adapter(np.float64, psycopg2._psycopg.AsIs)
 
@@ -75,7 +75,7 @@ def prepare_dataframe(data):
     for station_id in df["station_id"]:
         try:
             stationData = fetch_station_details(station_id)
-            # Extract only the numeric values from the PM2.5 data
+
             pm25_values = [
                 float(list(item.keys())[0]) for item in stationData["PM-2-5"]["values"]
             ]
@@ -94,23 +94,19 @@ def prepare_dataframe(data):
                 ignore_index=True,
             )
 
-    # Add details to dataframe (you can process the details as needed)
     # df["details"] = details
-    # Merge pm25 data with main dataframe
     df = df.merge(pm25DF, on="station_id", how="left")
-    # Format data
+
     df["pm25"] = df["pm25"].replace({np.nan: None})
     df["timestamp"] = df["timestamp"].astype(str)
     df["aqi_index"] = round(df["aqi_index"]).astype(int)
     df["station_name"] = df["station_name"].str.replace("(KK)", "").str.strip()
 
-    # Convert types and handle NaN values
     df["station_id"] = df["station_id"].astype(str)
     df["aqi_index"] = df["aqi_index"].astype(int)
     df["lat"] = df["lat"].replace({np.nan: None})
     df["lng"] = df["lng"].replace({np.nan: None})
 
-    # Add geometry
     df["geom"] = df.apply(
         lambda row: f"SRID=4326;POINT({row['lng']} {row['lat']})", axis=1
     )
