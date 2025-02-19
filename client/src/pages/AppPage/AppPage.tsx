@@ -1,9 +1,15 @@
 import { getTimeList } from "@/api";
-import { GradientBar, LayerToggle, Notifications, OpenLayerMap, SideBar, TimeSlider, UserMenu } from "@/components";
 import { ConfigContext, GeoContext, TimeContext } from "@/context";
-import { MarkData } from "@/types";
+import { MarkData } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import GradientBar from "./components/GradientBar";
+import LayerToggle from "./components/LayerToggle";
+import Notifications from "./components/Notifications";
+import OpenLayerMap from "./components/OpenLayerMap/OpenLayerMap";
+import SideBar from "./components/SideBar/SideBar";
+import TimeSlider from "./components/TimeSlider";
+import UserMenu from "./components/UserMenu/UserMenu";
 
 const AppPage = () => {
   const { data: timeList, isSuccess } = useQuery({

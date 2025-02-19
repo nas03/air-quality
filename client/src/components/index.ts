@@ -1,10 +1,4 @@
-import SigninPage from "../pages/SigninPage";
-import GradientBar from "./GradientBar";
-import LayerToggle from "./LayerToggle";
+import AuthenticationProvider from "./AuthenticationProvider";
 import Loading from "./Loading";
-import Notifications from "./Notifications";
-import OpenLayerMap from "./OpenLayerMap/OpenLayerMap";
-import SideBar from "./SideBar/SideBar";
-import TimeSlider from "./TimeSlider";
-import UserMenu from "./UserMenu/UserMenu";
-export { GradientBar, LayerToggle, Loading, Notifications, OpenLayerMap, SideBar, SigninPage, TimeSlider, UserMenu };
+
+export { AuthenticationProvider, Loading };

@@ -50,7 +50,7 @@ export const createStationsLayer = () =>
       params: {
         LAYERS: "air:stations_point_map",
         TILED: true,
-        TIME: "2025-02-12T4:00:00Z",
+        TIME: "2025-02-13T19:00:00Z",
       },
 
       serverType: "geoserver",

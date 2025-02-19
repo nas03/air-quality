@@ -1,7 +1,7 @@
 import { getRecommendationDefinition } from "@/api";
 import { convertCoordinate } from "@/lib/utils";
-import { AirQualityData } from "@/types";
 import { GeoContextType } from "@/types/contexts";
+import { AirQualityData } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 

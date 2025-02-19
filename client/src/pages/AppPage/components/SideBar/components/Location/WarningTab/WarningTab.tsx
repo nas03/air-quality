@@ -1,5 +1,6 @@
 import { GeoContext, TimeContext } from "@/context";
 import useAirQualityData from "@/hooks/useAirQualityData";
+import { MonitoringData } from "@/types/consts";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
 import { useContext, useEffect, useState } from "react";
@@ -12,8 +13,8 @@ interface WarningTabProps {
 type DataType = 0 | 1;
 
 const CHART_OPTIONS = [
-  { label: "Mô hình", value: 0 },
-  { label: "Trạm", value: 1 },
+  { label: "Mô hình", value: MonitoringData.INPUT.MODEL },
+  { label: "Trạm", value: MonitoringData.INPUT.STATION },
 ] as const;
 
 const LayerSelector = ({ selectedValue }: { selectedValue: DataType }) => (

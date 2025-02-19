@@ -1,4 +1,4 @@
-import { AdminPage, AppPage, SigninPage, SignupPage } from "@/pages";
+import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
 
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 
@@ -28,6 +28,12 @@ const adminRoute = createRoute({
   path: "/admin",
   component: AdminPage,
 });
+
+const analyticsRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "/analytics",
+  component: AnalyticsDashboard,
+});
 /* PUBLIC ROUTE */
 const signInRoute = createRoute({
   getParentRoute: () => publicRoute,
@@ -49,7 +55,7 @@ const homeRoute = createRoute({
 
 /* ROUTE TREE */
 const protectedRouteTree = protectedRoute.addChildren([adminRoute]);
-const publicRouteTree = publicRoute.addChildren([signInRoute, homeRoute, signUpRoute]);
+const publicRouteTree = publicRoute.addChildren([signInRoute, homeRoute, signUpRoute, analyticsRoute]);
 
 const routeTree = rootRoute.addChildren([protectedRouteTree, publicRouteTree]);
 

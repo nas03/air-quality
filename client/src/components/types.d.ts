@@ -1,4 +1,4 @@
-import { MarkData } from "@/types";
+import { MarkData } from "@/types/types";
 
 /* TimeSlider */
 export interface IPropsTimeSlider {

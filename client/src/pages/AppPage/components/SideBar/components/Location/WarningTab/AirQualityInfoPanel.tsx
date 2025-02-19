@@ -1,7 +1,7 @@
-import { WarningTabInfoCards } from "@/components/SideBar/components/Location/WarningTab/WarningTabInfoCards";
-import { getSvgAndColorByAQI } from "@/components/SideBar/utils";
 import { TimeContext } from "@/context";
 import { useContext } from "react";
+import { getSvgAndColorByAQI } from "../../../utils";
+import { WarningTabInfoCards } from "./WarningTabInfoCards";
 
 export interface IPropsAirQualityInfoPanel {
   district_id: string;

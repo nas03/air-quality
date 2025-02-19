@@ -1,8 +1,8 @@
 import Loading from "@/components/Loading";
-import { getStyleRankTable } from "@/components/SideBar/utils";
 import { RankData } from "@/hooks/useRankMutation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { getStyleRankTable } from "../utils";
 
 interface RankTableProps {
   className?: string;

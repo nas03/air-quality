@@ -23,7 +23,66 @@ const colorConfig: { [key: number]: { label: string; color: { min: number; max: 
     ],
   },
 };
-
+export const getGradient = (data: number[]) => {
+  const value = Math.max(...data);
+  if (value <= 50)
+    return (
+      <>
+        <defs>
+          <linearGradient id="header-shape-gradient" x2="0" y2="1">
+            <stop offset="0%" stopColor="#009966" />
+            <stop offset="100%" stopColor="#009966" />
+          </linearGradient>
+        </defs>
+      </>
+    );
+  else if (value <= 100)
+    return (
+      <>
+        <defs>
+          <linearGradient id="header-shape-gradient" x2="0" y2="1">
+            <stop offset="0%" stopColor="#facf39" />
+            <stop offset="100%" stopColor="#009966" />
+          </linearGradient>
+        </defs>
+      </>
+    );
+  else if (value <= 150)
+    return (
+      <defs>
+        <linearGradient id="header-shape-gradient" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ea7643" />
+          <stop offset="66.7%" stopColor="#facf39" />
+          <stop offset="100%" stopColor="#009966" />
+        </linearGradient>
+      </defs>
+    );
+  else if (value <= 200)
+    return (
+      <defs>
+        <linearGradient id="header-shape-gradient" x2="0" y2="1">
+          <stop offset="0%" stopColor="#fe6a6a" />
+          <stop offset="50%" stopColor="#ea7643" />
+          <stop offset="75%" stopColor="#facf39" />
+          <stop offset="100%" stopColor="#009966" />
+        </linearGradient>
+      </defs>
+    );
+  else if (value <= 500)
+    return (
+      <defs>
+        <linearGradient id="header-shape-gradient" x2="0" y2="1">
+          <stop offset="0%" stopColor="#7e0023" />
+          <stop offset="20%" stopColor="#70006a" />
+          <stop offset="40%" stopColor="#fe6a6a" />
+          <stop offset="60%" stopColor="#ea7643" />
+          <stop offset="80%" stopColor="#facf39" />
+          <stop offset="100%" stopColor="#009966" />
+        </linearGradient>
+      </defs>
+    );
+  return null;
+};
 export const averageLineChartConfig: { [key: string]: Pick<LineChartProps, "viewBox" | "width" | "height" | "yAxis"> } =
   Object.fromEntries(
     Object.entries(colorConfig).map((entry) => {

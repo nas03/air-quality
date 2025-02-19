@@ -1,10 +1,11 @@
 import { getStatisticHistoryByDistrict } from "@/api";
-import TemplateCard, { ChartOptions } from "@/components/SideBar/components/Location/LineChart/TemplateCard";
-import { averageLineChartConfig } from "@/components/SideBar/utils";
 
+import { MonitoringData } from "@/types/consts";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
+import { averageLineChartConfig, getGradient } from "../../../utils";
+import TemplateCard, { ChartOptions } from "./TemplateCard";
 
 interface ChartDataType {
   aqi: number[];
@@ -63,8 +64,8 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
   const chartOptions: ChartOptions[] = useMemo(
     () =>
       [
-        { label: "AQI", chartType: "aqi" as const, value: 0 as const },
-        { label: "PM2.5", chartType: "pm25" as const, value: 1 as const },
+        { label: "AQI", chartType: "aqi" as const, value: MonitoringData.OUTPUT.AQI },
+        { label: "PM2.5", chartType: "pm25" as const, value: MonitoringData.OUTPUT.PM25 },
       ].map((config) => ({
         label: config.label,
         value: config.value,
@@ -72,6 +73,11 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
           <LineChart
             {...averageLineChartConfig[config.value]}
             grid={{ horizontal: true, vertical: true }}
+            sx={{
+              ".css-10pepo8-MuiAreaElement-root": {
+                fill: "url(#header-shape-gradient)",
+              },
+            }}
             series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
             xAxis={[
               {
@@ -84,7 +90,9 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
                 },
               },
             ]}
-          />
+          >
+            {getGradient(chartData[config.chartType])}
+          </LineChart>
         ),
       })),
     [chartData],

@@ -1,3 +1,5 @@
+import { AnalyticData, MonitoringOutputDataType } from "./types";
+
 export interface TimeContextType {
   timeList: string[];
   time: string;
@@ -34,4 +36,11 @@ export interface AuthContextType {
   token?: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+}
+
+export interface AnalyticContextType {
+  setAnalyticData: React.Dispatch<React.SetStateAction<AnalyticData>>;
+  dateRange: string[];
+  location: string;
+  dataType: MonitoringOutputDataType;
 }

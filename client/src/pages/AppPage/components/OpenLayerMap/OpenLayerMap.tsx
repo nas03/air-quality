@@ -1,10 +1,3 @@
-import { fetchLocationData, getWMSFeatureInfo } from "@/components/OpenLayerMap/functions";
-import {
-  createAQILayer,
-  createMarkerLayer,
-  createStationsLayer,
-  createVietnamBoundaryLayer,
-} from "@/components/OpenLayerMap/layers";
 import { IPropsOpenLayerMap } from "@/components/types";
 import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
@@ -19,6 +12,8 @@ import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import React, { useContext, useEffect, useRef } from "react";
+import { fetchLocationData, getWMSFeatureInfo } from "./functions";
+import { createAQILayer, createMarkerLayer, createStationsLayer, createVietnamBoundaryLayer } from "./layers";
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const layersRef = useRef<TileLayer | null>(null);
@@ -80,7 +75,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       stationLayers,
       stationLayers,
       coordinate,
-      "2025-02-12T4:00:00Z",
+      "2025-02-13T19:00:00Z",
     );
 
     if (!modelURL || !stationURL) {

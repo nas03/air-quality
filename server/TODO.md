@@ -2,9 +2,9 @@
 
 ## Main Tasks
 
-- [ ] Setup CI/CD Pipeline
+- [x] Setup CI/CD Pipeline
   - [x] Create docker container
-  - [ ] Auto deploy container
+  - [x] Auto deploy container
 
 ## Week 1 (Jan 1-5, 2025)
 
@@ -38,6 +38,13 @@ Data Integration & Notifications:
 - [x] Set up automated email warning system for users
 
 ## Week 5 (Feb 10-16, 2025)
-- [ ] Add PM2.5 data collection from CEM
-- [ ] Integrate data from moitruongthudo.vn
--
+
+Data Integration & Dashboard:
+
+- [x] Add PM2.5 data collection from CEM
+- [x] Integrate data from moitruongthudo.vn
+- [ ] Implement analytics dashboard
+  - [x] Layout
+  - [ ] Data controller
+  - [ ] Data fetch
+  - [ ] 

@@ -1,7 +1,6 @@
-import { parseWMSResponse } from "@/components/OpenLayerMap/utils";
 import "@/css/open.css";
-import { MarkData } from "@/types";
 import { ConfigContextType } from "@/types/contexts";
+import { MarkData } from "@/types/types";
 import { Map } from "ol";
 import { Coordinate } from "ol/coordinate";
 import { FeatureObject } from "ol/format/Feature";
@@ -10,6 +9,7 @@ import VectorLayer from "ol/layer/Vector";
 import "ol/ol.css";
 import { TileWMS } from "ol/source";
 import React from "react";
+import { parseWMSResponse } from "./utils";
 
 export const fetchLocationData = async (
   stationURL: string,

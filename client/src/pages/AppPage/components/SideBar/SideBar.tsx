@@ -1,5 +1,4 @@
 import { getAllDistricts } from "@/api/districts";
-import TabContent from "@/components/SideBar/components/TabContent";
 import { IPropsSideBar } from "@/components/types";
 import { TimeContext } from "@/context";
 import useRankMutation from "@/hooks/useRankMutation";
@@ -12,6 +11,7 @@ import WarningTab from "./components/Location/WarningTab/WarningTab";
 import RankTable from "./components/RankTable";
 import SearchBar from "./components/SearchBar";
 import TabButton, { IPropsTabButton } from "./components/TabButton";
+import TabContent from "./components/TabContent";
 
 const DEFAULT_DISTRICT = "VNM.27.12_1";
 

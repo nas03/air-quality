@@ -1,9 +1,9 @@
-import ProfileConfig from "@/components/UserMenu/components/ProfileConfig";
-import SettingConfig from "@/components/UserMenu/components/SettingConfig";
 import { NotificationOutlined, ProfileOutlined, SettingOutlined } from "@ant-design/icons";
 import { Modal, Tabs, type TabPaneProps } from "antd";
 import React from "react";
 import "./menu.css";
+import ProfileConfig from "./ProfileConfig";
+import SettingConfig from "./SettingConfig";
 
 interface IPropsSettingModal {
   openModal: boolean;

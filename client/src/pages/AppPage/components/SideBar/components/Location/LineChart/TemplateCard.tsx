@@ -1,14 +1,15 @@
+
+import { MonitoringOutputDataType } from "@/types/types";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
 
 export interface ChartOptions {
   label: string;
-  value: 0 | 1;
+  value: MonitoringOutputDataType;
   disabled?: boolean;
   default?: number;
   content: React.ReactNode;
 }
-
 interface IPropsTemplateCard {
   className?: string;
   title?: string;

@@ -1,10 +1,10 @@
-import SettingModal from "@/components/UserMenu/components/SettingModal";
-import { IPropsUserMenu } from "@/components/UserMenu/types";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginOutlined, MailOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "@tanstack/react-router";
 import { Avatar, Button, Dropdown, MenuProps } from "antd";
 import { useState } from "react";
+import SettingModal from "./components/SettingModal";
+import { IPropsUserMenu } from "./types";
 
 const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
   const { user } = useAuth();
