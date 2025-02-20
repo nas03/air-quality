@@ -1,11 +1,13 @@
+import { aqiThresholds, colorMap, gradientMap, MonitoringData, pm25Thresholds } from "@/types/consts";
+import { MonitoringOutputDataType } from "@/types/types";
 import { LineChartProps } from "@mui/x-charts";
 
-interface ColorConfigProps {
+/* interface ColorConfigProps {
   label: string;
   color: { min: number; max: number }[];
-}
+} */
 
-export const color = ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"];
+/* export const color = ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"];
 export const colorConfig: { [key: number]: ColorConfigProps } = {
   0: {
     label: "AQI",
@@ -27,23 +29,69 @@ export const colorConfig: { [key: number]: ColorConfigProps } = {
       { min: 150, max: 200 },
     ],
   },
+}; */
+
+export const getGradientLinearMap = (data: number[], chartType: MonitoringOutputDataType) => {
+  const value = Math.max(...data);
+  const configs = {
+    [MonitoringData.OUTPUT.AQI]: {
+      thresholds: [50, 100, 150, 200, 500],
+    },
+    [MonitoringData.OUTPUT.PM25]: {
+      thresholds: [12, 36, 56, 150, 200],
+    },
+  };
+  const gradientIndex = configs[chartType].thresholds.findIndex((d) => value <= d);
+  return gradientMap[gradientIndex];
 };
 
-export const dataLineChartConfig: { [key: string]: Pick<LineChartProps, "viewBox" | "width" | "height" | "yAxis"> } =
-  Object.fromEntries(
-    Object.entries(colorConfig).map((entry) => {
-      const [key, value] = entry;
-      const data: Pick<LineChartProps, "viewBox" | "width" | "height" | "yAxis"> = {
-        yAxis: value.color.map((d, index) => ({
-          label: value.label,
-          colorMap: {
-            type: "continuous",
-            min: d.min,
-            max: d.max,
-            color: [color[index], color[index + 1]],
-          },
-        })),
+export const yAxisConfig: { [key: string]: Pick<LineChartProps, "yAxis"> } = Object.fromEntries(
+  Object.entries(MonitoringData.OUTPUT).map(([_key, value]) => {
+    const isAQI = value === MonitoringData.OUTPUT.AQI;
+    const thresholds = isAQI ? aqiThresholds : pm25Thresholds;
+
+    const getDomainLimit = (minValue: number, maxValue: number) => {
+      const minDomain = minValue < thresholds[0] ? minValue : thresholds.find((d) => minValue >= d);
+      const maxDomain = thresholds.find((d) => maxValue <= d);
+
+      return {
+        min: Number(minDomain),
+        max: Number(maxDomain),
       };
-      return [key, data];
-    }),
-  );
+    };
+
+    const axisConfig: Pick<LineChartProps, "yAxis"> = {
+      yAxis: [
+        {
+          domainLimit: getDomainLimit,
+          colorMap: {
+            type: "piecewise",
+            thresholds,
+            colors: colorMap,
+          },
+        },
+      ],
+    };
+
+    return [value, axisConfig];
+  }),
+);
+
+export type ChartType = "aqi" | "pm25";
+export type ChartConfig = {
+  label: string;
+  chartType: ChartType;
+  value: MonitoringOutputDataType;
+};
+export const CHART_CONFIGS = {
+  [MonitoringData.OUTPUT.AQI]: {
+    label: "AQI",
+    chartType: "aqi" as ChartType,
+    value: MonitoringData.OUTPUT.AQI,
+  },
+  [MonitoringData.OUTPUT.PM25]: {
+    label: "PM2.5",
+    chartType: "pm25" as ChartType,
+    value: MonitoringData.OUTPUT.PM25,
+  },
+} as const;

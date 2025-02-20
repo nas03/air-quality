@@ -1,10 +1,10 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 
-import { MonitoringData } from "@/types/consts";
+import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { averageLineChartConfig, getGradient } from "../../../utils";
+import { getGradient } from "../../../config";
 import TemplateCard, { ChartOptions } from "./TemplateCard";
 
 interface ChartDataType {
@@ -71,8 +71,20 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
         value: config.value,
         content: (
           <LineChart
-            {...averageLineChartConfig[config.value]}
+            viewBox={{ height: 370, width: 300, x: 0, y: 12 }}
+            width={300}
+            height={360}
             grid={{ horizontal: true, vertical: true }}
+            yAxis={[
+              {
+                label: config.label,
+                colorMap: {
+                  type: "piecewise",
+                  thresholds: config.value === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
+                  colors: colorMap,
+                },
+              },
+            ]}
             sx={{
               ".css-10pepo8-MuiAreaElement-root": {
                 fill: "url(#header-shape-gradient)",
@@ -91,7 +103,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
               },
             ]}
           >
-            {getGradient(chartData[config.chartType])}
+            {getGradient(chartData[config.chartType], config.value)}
           </LineChart>
         ),
       })),

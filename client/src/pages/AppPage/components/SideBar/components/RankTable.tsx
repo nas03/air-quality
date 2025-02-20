@@ -2,7 +2,7 @@ import Loading from "@/components/Loading";
 import { RankData } from "@/hooks/useRankMutation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { getStyleRankTable } from "../utils";
+import { getStyleRankTable } from "../config";
 
 interface RankTableProps {
   className?: string;

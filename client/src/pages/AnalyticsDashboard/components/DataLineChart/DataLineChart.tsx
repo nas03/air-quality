@@ -1,34 +1,14 @@
 import { AnalyticContext } from "@/context";
 import { cn } from "@/lib/utils";
+import { getGradient } from "@/pages/AppPage/components/SideBar/config";
 import { MonitoringData } from "@/types/consts";
-import { MonitoringOutputDataType } from "@/types/types";
 import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
-import { dataLineChartConfig } from "./config";
-type ChartType = "aqi" | "pm25";
-
-interface ChartConfig {
-  label: string;
-  chartType: ChartType;
-  value: MonitoringOutputDataType;
-}
+import { CHART_CONFIGS, ChartConfig } from "./config";
 
 interface DataLineChartProps extends React.ComponentPropsWithoutRef<"div"> {
   data?: unknown[];
 }
-
-const CHART_CONFIGS = {
-  [MonitoringData.OUTPUT.AQI]: {
-    label: "AQI",
-    chartType: "aqi" as ChartType,
-    value: MonitoringData.OUTPUT.AQI,
-  },
-  [MonitoringData.OUTPUT.PM25]: {
-    label: "PM2.5",
-    chartType: "pm25" as ChartType,
-    value: MonitoringData.OUTPUT.PM25,
-  },
-} as const;
 
 const DataLineChart: React.FC<DataLineChartProps> = ({ className }) => {
   const { dataType, dateRange } = useContext(AnalyticContext);
@@ -43,12 +23,24 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className }) => {
     <div className={cn("flex flex-row justify-center border-2", className)}>
       <div className="h-full w-full p-5">
         <LineChart
-          {...dataLineChartConfig[config.value]}
-          grid={{ horizontal: true, vertical: true }}
-          margin={{
-            bottom: 60,
-            left: 60,
+          sx={{
+            ".css-10pepo8-MuiAreaElement-root": {
+              fill: "url(#header-shape-gradient)",
+            },
           }}
+          grid={{ horizontal: true, vertical: true }}
+          margin={{ bottom: 60, left: 60 }}
+          yAxis={[
+            {
+              label: config.label,
+              colorMap: {
+                type: "piecewise",
+                thresholds:
+                  config.value === MonitoringData.OUTPUT.AQI ? [50, 100, 150, 200, 500] : [12, 36, 56, 150, 200],
+                colors: ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"],
+              },
+            },
+          ]}
           series={[
             {
               id: config.label,
@@ -67,7 +59,9 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className }) => {
               },
             },
           ]}
-        />
+        >
+          {getGradient([], config.value)}
+        </LineChart>
       </div>
     </div>
   );

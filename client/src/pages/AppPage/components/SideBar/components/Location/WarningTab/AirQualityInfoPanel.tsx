@@ -1,6 +1,6 @@
 import { TimeContext } from "@/context";
 import { useContext } from "react";
-import { getSvgAndColorByAQI } from "../../../utils";
+import { getSvgAndColorByAQI } from "../../../config";
 import { WarningTabInfoCards } from "./WarningTabInfoCards";
 
 export interface IPropsAirQualityInfoPanel {
