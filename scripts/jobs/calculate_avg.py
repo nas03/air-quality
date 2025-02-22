@@ -29,7 +29,7 @@ DIST_PATH = "assets/data/VN_districts_100m.tif"
 TEMP_FILE = "temp.tif"
 NODATA_VALUE = -9999
 DIST_NODATA = 65535
-
+OUTPUT_FOLDER = r"assets/output"
 # Load district data
 meta = pd.read_excel(META_PATH)
 dist_ds = gdal.Open(DIST_PATH, gdal.GA_ReadOnly)
@@ -107,6 +107,57 @@ def process_geotiff(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
     return new_data[mask], new_dist[mask]
 
 
+def createAQIRasterFile(filepath: str):
+    _, filename = os.path.split(filepath)
+    output_file = os.path.join(OUTPUT_FOLDER, filename.replace("PM25", "AQI"))
+
+    logger.info(f"Processing file: {filepath}")
+
+    # Process the input file
+    gdal.Warp(
+        TEMP_FILE,
+        filepath,
+        format="GTiff",
+        dstSRS="+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs",
+        xRes=100,
+        yRes=-100,
+        outputBounds=(ulx, lry, lrx, uly),
+        resampleAlg="near",
+        creationOptions=["COMPRESS=LZW"],
+    )
+
+    data = gdal.Open(TEMP_FILE, gdal.GA_ReadOnly).ReadAsArray()
+    rows, cols = data.shape
+
+    # Create output array with same shape as input
+    output_array = np.full((rows, cols), NODATA_VALUE, dtype=np.float32)
+
+    # Calculate AQI for all valid values
+    mask = data != NODATA_VALUE
+    output_array[mask] = np.vectorize(calculate_aqi)(data[mask])
+
+    # Create output raster
+    driver = gdal.GetDriverByName("GTiff")
+    out_ds = driver.Create(
+        output_file, dist_ds.RasterXSize, dist_ds.RasterYSize, 1, gdal.GDT_Float32
+    )
+
+    # Set the same geotransform and projection as the district raster
+    out_ds.SetGeoTransform(dist_ds.GetGeoTransform())
+    out_ds.SetProjection(dist_ds.GetProjection())
+
+    # Write data
+    out_band = out_ds.GetRasterBand(1)
+    out_band.WriteArray(output_array)
+    out_band.SetNoDataValue(NODATA_VALUE)
+    out_band.FlushCache()
+
+    # Cleanup
+    out_ds = None
+    logger.info(f"Successfully created output file: {output_file}")
+    return True
+
+
 def create_dataframe(
     data: np.ndarray, dist_data: np.ndarray, time_info: datetime.datetime
 ) -> pd.DataFrame:
@@ -176,13 +227,14 @@ def uploadData() -> None:
     try:
         logger.info("Starting data scraping process")
         conn = get_db_connection()
-        log = []
+        # log = []
         for filepath in glob.iglob(os.path.join(FOLDER_GEOTIFF_PATH, "*.tif")):
-            df = prepare_dataframe(filepath=filepath)
-            log.append(df)
-        df = pd.concat(log)
-        insert_data(df, conn)
-        conn.commit()
+            createAQIRasterFile(filepath=filepath)
+            # df = prepare_dataframe(filepath=filepath)
+            # log.append(df)
+        # df = pd.concat(log)
+        # insert_data(df, conn)
+        # conn.commit()
         conn.close()
 
         logger.info("Successfully inserted data into database")

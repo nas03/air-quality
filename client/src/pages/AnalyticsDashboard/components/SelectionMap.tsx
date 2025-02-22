@@ -1,90 +1,80 @@
+import { AnalyticContext } from "@/context";
+import useMapData from "@/hooks/useMapData";
+import useProvinceData from "@/hooks/useProvinceData";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+import { createMarkerLayer } from "@/pages/AppPage/components/OpenLayerMap/layers";
 import { Map, View } from "ol";
-import { getBottomLeft } from "ol/extent";
+import { Coordinate } from "ol/coordinate";
 import GeoJSON from "ol/format/GeoJSON";
-import { MultiPolygon } from "ol/geom";
-import TileLayer from "ol/layer/Tile";
-import { TileWMS } from "ol/source";
-import { useEffect, useRef } from "react";
+import { MultiPolygon, Point } from "ol/geom";
+import VectorLayer from "ol/layer/Vector";
+import { useContext, useEffect, useRef } from "react";
+import { createProvinceBoundaryLayer } from "./mapLayers";
 
 interface IPropsSelectionMap extends React.ComponentPropsWithoutRef<"div"> {}
-const SelectionMap: React.FC<IPropsSelectionMap> = ({ className }) => {
+
+const SelectionMap = ({ className }: IPropsSelectionMap) => {
   const mapRef = useRef<Map | null>(null);
-  const createVietnamBoundaryLayer = (map: Map) =>
-    new TileLayer({
-      source: new TileWMS({
-        url: "http://localhost:8080/geoserver/air/wms",
-        params: {
-          LAYERS: "air:gadm41_VNM",
-          FORMAT: "image/png",
-          TILED: true,
-          CQL_FILTER: "NAME_1='Hà Nội'",
-          tilesorigin: getBottomLeft(map.getView().getProjection().getExtent()).toString(),
-          EXCEPTIONS: "application/vnd.ogc.se_inimage",
-        },
-        serverType: "geoserver",
-        cacheSize: 4096,
-      }),
-      opacity: 1,
-    });
-  const createLayers = (map: Map) => {
-    const layers = [createVietnamBoundaryLayer(map)];
-    return layers;
-  };
+  const markerRef = useRef<VectorLayer | null>(null);
+  const analyticContext = useContext(AnalyticContext);
+  const mapQuery = useMapData(analyticContext.province_id);
+  const provinceMutation = useProvinceData(analyticContext.province_id, analyticContext.dateRange);
 
   const initializeMap = () => {
     return new Map({
       target: "selection-map",
       view: new View({
-        zoom: 10, // increased zoom for better view of Hanoi
+        zoom: 11,
+        minZoom: 9,
+        maxZoom: 14,
         constrainResolution: true,
         projection: "EPSG:3857",
       }),
     });
   };
 
-  const getGeometryCenter = async (map: Map) => {
-    const response = await axios.get("http://localhost:8080/geoserver/wfs", {
-      params: {
-        SERVICE: "WFS",
-        version: "2.0.0",
-        REQUEST: "GetFeature",
-        typename: "air:gadm41_VNM_2",
-        CQL_FILTER: "NAME_1='Hà Nội'",
-        outputFormat: "text/javascript",
-        srsname: "EPSG:3857",
-      },
+  const handleMarkerChange = (coordinate: Coordinate) => {
+    const markerFeature = markerRef.current?.getSource()?.getFeatures().at(0);
+    if (markerFeature) {
+      markerFeature.setGeometry(new Point(coordinate));
+    }
+    const features = mapRef.current?.getFeaturesAtPixel(mapRef.current.getPixelFromCoordinate(coordinate), {
+      layerFilter: (layer) => layer instanceof VectorLayer && layer !== markerRef.current,
     });
-    const jsonStartIndex = response.data.indexOf("{");
-    const jsonEndIndex = response.data.lastIndexOf("}") + 1;
-    const data = JSON.parse(response.data.slice(jsonStartIndex, jsonEndIndex));
-    const format = new GeoJSON();
-    const features = format.readFeatures(data.features[0]);
-    const geometry = features[0].getGeometry() as MultiPolygon;
+    if (features?.length) {
+      analyticContext.setAnalyticData((prev) => ({ ...prev, selectedDistrict: features[0].getProperties()["GID_2"] }));
+    }
+  };
 
+  const centerMap = (map: Map) => {
+    const format = new GeoJSON();
+    const features = format.readFeatures(mapQuery.data.features[0]);
+    const geometry = features[0].getGeometry() as MultiPolygon;
     const size = map.getSize();
-    if (!size) return;
-    const coordinates = geometry.getCoordinates()[0][0][0];
-    map.getView().centerOn(coordinates, size, [size[0] / 2, size[1] / 2]);
+    if (size) {
+      const coordinates = geometry.getCoordinates()[0][0][0];
+      map.getView().centerOn(coordinates, size, [size[0] / 2, size[1] / 2]);
+    }
   };
 
   useEffect(() => {
-    const map = initializeMap();
-    const layers = createLayers(map);
+    if (!mapQuery.data || !provinceMutation.data?.districtsData.length) return;
 
-    map.getLayers().extend(layers);
-    getGeometryCenter(map);
+    const map = initializeMap();
+    const vietnamBoundaryLayer = createProvinceBoundaryLayer(mapQuery.data, provinceMutation.data.districtsData);
+    const markerLayer = createMarkerLayer([]);
+
+    map.getLayers().extend([vietnamBoundaryLayer, markerLayer]);
+    centerMap(map);
+    markerRef.current = markerLayer;
     mapRef.current = map;
 
-    return () => map.dispose();
-  }, []);
+    map.on("singleclick", (evt) => handleMarkerChange(evt.coordinate));
 
-  return (
-    <>
-      <div id="selection-map" className={cn("bg-white", className)} />
-    </>
-  );
+    return () => map.dispose();
+  }, [mapQuery.data, provinceMutation.data?.districtsData]);
+
+  return <div id="selection-map" className={cn("bg-white", className)} />;
 };
 
 export default SelectionMap;

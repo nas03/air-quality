@@ -11,7 +11,10 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
     const queries = req.query as unknown as {
       date?: Date;
     };
-    const data = await this.statisticInteractor.getByDistrictID(params["district_id"], queries.date);
+    const data = await this.statisticInteractor.getByDistrictID(
+      params["district_id"],
+      queries.date
+    );
     return res.status(200).json({
       status: "success",
       data,
@@ -55,6 +58,30 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
     return res.status(200).json({
       status: "success",
       data: result,
+    });
+  };
+
+  onGetAQIStatisticsByProvince = async (req: Request, res: Response) => {
+    const params = req.params as {
+      province_id: string;
+    };
+    const queries = req.query as unknown as {
+      start_date: Date;
+      end_date: Date;
+    };
+
+    const { districtsData, provinceData } =
+      await this.statisticInteractor.getAQIStatisticsByProvince(
+        params.province_id,
+        queries.start_date,
+        queries.end_date
+      );
+    return res.status(200).json({
+      status: "success",
+      data: {
+        districtsData,
+        provinceData,
+      },
     });
   };
 }

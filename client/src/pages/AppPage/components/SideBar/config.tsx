@@ -1,9 +1,9 @@
-import { aqiThresholds, colorMap, gradientMap, MonitoringData, pm25Thresholds } from "@/types/consts";
+import { aqiThresholds, colorMap, getGradientDefs, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { MonitoringOutputDataType } from "@/types/types";
 
 // const _color = ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"];
 
-export const getGradient = (data: number[], chartType: MonitoringOutputDataType) => {
+export const getGradient = (id: string, data: number[], chartType: MonitoringOutputDataType) => {
   const value = Math.max(...data);
   const configs = {
     [MonitoringData.OUTPUT.AQI]: {
@@ -14,7 +14,7 @@ export const getGradient = (data: number[], chartType: MonitoringOutputDataType)
     },
   };
   const gradientIndex = configs[chartType].thresholds.findIndex((d) => value <= d);
-  return gradientMap[gradientIndex];
+  return getGradientDefs(id)[gradientIndex];
 };
 
 export const getStyleRankTable = (aqi_index: number) => {

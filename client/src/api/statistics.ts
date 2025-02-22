@@ -49,3 +49,19 @@ export const getRankByDate = async (date: string) => {
   });
   return response.data.data;
 };
+
+export type DistrictsData = Pick<Statistic, "aqi_index"> & MDistrict;
+export type ProvinceData = Pick<Statistic, "aqi_index" | "time"> & Pick<MDistrict, "province_id" | "vn_province">;
+export type ProvinceAverageData = {
+  districtsData: DistrictsData[];
+  provinceData: ProvinceData[];
+};
+export const getProvinceAverage = async (province_id: string, start_date: Date, end_date: Date) => {
+  const response = await api.get<APIResponse<ProvinceAverageData>>(`/statistics/average/${province_id}`, {
+    params: {
+      start_date: start_date,
+      end_date: end_date,
+    },
+  });
+  return response.data.data;
+};

@@ -49,7 +49,8 @@ export const AuthenticationContext = createContext<AuthContextType>({
 
 export const AnalyticContext = createContext<AnalyticContextType>({
   dateRange: [],
-  location: "",
+  province_id: "",
+  selectedDistrict: "",
   dataType: MonitoringData.OUTPUT.AQI,
   setAnalyticData: () => null,
 });

@@ -1,8 +1,8 @@
 import ControlBar from "./ControlBar";
+import DataBarChart from "./DataChart/DataBarChart";
+import DataLineChart from "./DataChart/DataLineChart";
 import DataDescriptionCard from "./DataDescriptionCard";
-import DataBarChart from "./DataLineChart/DataBarChart";
-import DataLineChart from "./DataLineChart/DataLineChart";
+import OverviewCards from "./OverviewCards";
 import SelectionMap from "./SelectionMap";
 
-export { ControlBar, DataBarChart, DataDescriptionCard, DataLineChart, SelectionMap };
-
+export { ControlBar, DataBarChart, DataDescriptionCard, DataLineChart, OverviewCards, SelectionMap };

@@ -53,34 +53,75 @@ def calculate_aqi(pm25):
         return 500
 
 
+DIST_PATH = "assets/data/VN_districts_100m.tif"
+dist_ds = gdal.Open(DIST_PATH, gdal.GA_ReadOnly)
+ulx, xres, xskew, uly, yskew, yres = dist_ds.GetGeoTransform()
+lrx = ulx + (dist_ds.RasterXSize * xres)
+lry = uly + (dist_ds.RasterYSize * yres)
+TEMP_FILE = "temp.tif"
+dist = dist_ds.ReadAsArray()
+NODATA_VALUE = -9999
+DIST_NODATA = 65535
+
+
 def process_raster(input_path, output_path):
     """Process a single raster file converting PM2.5 to AQI."""
     try:
-        ds = gdal.Open(input_path)
-        if not ds:
-            logger.error(f"Failed to open raster file: {input_path}")
-            return False
+        gdal.Warp(
+            TEMP_FILE,
+            input_path,
+            format="GTiff",
+            dstSRS="+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs",
+            xRes=100,
+            yRes=-100,
+            outputBounds=(ulx, lry, lrx, uly),
+            resampleAlg="near",
+            creationOptions=["COMPRESS=LZW"],
+        )
+        ds = gdal.Open(TEMP_FILE, gdal.GA_ReadOnly)
+        data = ds.GetRasterBand(1).ReadAsArray()
+        print(data)
+        rows, cols = data.shape
+        new_data = np.reshape(data, rows * cols)
+        new_dist = np.reshape(dist, rows * cols)
+        mask = (new_data != NODATA_VALUE) & (new_dist != DIST_NODATA)
 
-        band = ds.GetRasterBand(1)
-        pm25_data = band.ReadAsArray()
-        aqi_data = np.vectorize(calculate_aqi)(pm25_data)
+        # Create a feature dictionary mapping district IDs to PM2.5 values
+        feature_dict = {}
+        for dist_id, pm25_value in zip(new_dist[mask], new_data[mask]):
+            if dist_id not in feature_dict:
+                feature_dict[dist_id] = []
+            feature_dict[dist_id].append(pm25_value)
+
+        # Calculate average PM2.5 for each district
+        for dist_id in feature_dict:
+            avg_value = np.mean(feature_dict[dist_id])
+            new_data[new_dist == dist_id] = avg_value
+
+        print(new_data[mask])
 
         # Create output raster
         driver = gdal.GetDriverByName("GTiff")
         out_ds = driver.Create(
-            output_path, ds.RasterXSize, ds.RasterYSize, 1, gdal.GDT_Float32
+            output_path,
+            ds.RasterXSize,
+            ds.RasterYSize,
+            1,
+            gdal.GDT_Float32,
         )
         out_ds.SetGeoTransform(ds.GetGeoTransform())
         out_ds.SetProjection(ds.GetProjection())
 
+        # Reshape new_data back to 2D array
+        new_data = np.reshape(new_data, (rows, cols))
+
         # Write data
         out_band = out_ds.GetRasterBand(1)
-        out_band.WriteArray(aqi_data)
+        out_band.WriteArray(new_data)
         out_band.SetNoDataValue(-9999)
         out_band.FlushCache()
 
         # Cleanup
-        ds = None
         out_ds = None
 
         logger.info(f"Successfully processed: {output_path}")

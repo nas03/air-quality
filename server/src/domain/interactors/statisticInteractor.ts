@@ -11,6 +11,22 @@ export class StatisticInteractor implements IStatisticInteractor {
     this.statisticRepository = statisticRepository;
     this.cacheService = new CacheService();
   }
+  getAQIStatisticsByProvince = async (province_id: string, start_date: Date, end_date: Date) => {
+    const districtsData = await this.statisticRepository.getAQIStatisticsByProvince(
+      province_id,
+      start_date,
+      end_date
+    );
+    const provinceData = await this.statisticRepository.getAverageStatisticsByProvince(
+      province_id,
+      start_date,
+      end_date
+    );
+    return {
+      districtsData: districtsData,
+      provinceData,
+    };
+  };
 
   getByDistrictID = async (district_id: string, date?: Date) => {
     let hashKey = ["statistics", district_id, "date", date].join(":");

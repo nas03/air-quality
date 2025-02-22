@@ -16,6 +16,7 @@ export type MonitoringOutputDataType = (typeof MonitoringData.OUTPUT)[keyof type
 export type MonitoringInputDataType = (typeof MonitoringData.INPUT)[keyof typeof MonitoringData.INPUT];
 export type AnalyticData = {
   dateRange: string[];
-  location: string;
+  province_id: string;
   dataType: MonitoringOutputDataType;
+  selectedDistrict: string;
 };

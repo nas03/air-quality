@@ -1,4 +1,5 @@
 import { AnalyticContext } from "@/context";
+import useAllProvinces from "@/hooks/useDistrictsData";
 import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AnalyticData, MonitoringOutputDataType } from "@/types/types";
@@ -14,14 +15,13 @@ interface IPropsControlBar extends React.ComponentPropsWithoutRef<"div"> {}
 type DayJsTimeRange = [dayjs.Dayjs | null, dayjs.Dayjs | null] | null;
 
 const DEFAULT_DATE_RANGE: DayJsTimeRange = [dayjs("2024-11-01"), dayjs("2024-11-06")];
-const LOCATION_OPTIONS = [{ value: "Hanoi", label: "Hà Nội" }];
 const DATA_TYPE_OPTIONS = [
   { value: MonitoringData.OUTPUT.AQI, label: "AQI" },
   { value: MonitoringData.OUTPUT.PM25, label: "PM 2.5" },
 ];
 const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
   const { setAnalyticData } = useContext(AnalyticContext);
-
+  const provincesData = useAllProvinces();
   const getDateRange = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs): string[] => {
     const dates: string[] = [];
     let currentDate = startDate.clone();
@@ -49,22 +49,22 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
   };
 
   const handleLocationChange = (location: string) => {
-    setAnalyticData((prev) => ({ ...prev, location }));
+    setAnalyticData((prev) => ({ ...prev, province_id: location }));
   };
 
   useEffect(() => {
     handleTimeRangeChange(DEFAULT_DATE_RANGE);
     handleDataTypeChange(0);
-    handleLocationChange("Hanoi");
+    handleLocationChange("VNM.27_1");
   }, []);
   return (
     <div className={cn(className, "flex flex-row items-center justify-between bg-[#0A192F] px-5 py-3")}>
       <img src="logo.svg" alt="logo" className="h-full" />
       <div className="flex flex-row items-center gap-5">
         <Select
-          className="w-[5.5rem]"
-          defaultValue="Hanoi"
-          options={LOCATION_OPTIONS}
+          className="w-[8rem]"
+          defaultValue="VNM.27_1"
+          options={provincesData.data}
           onSelect={handleLocationChange}
         />
         <DatePicker.RangePicker

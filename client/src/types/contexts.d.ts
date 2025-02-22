@@ -41,6 +41,7 @@ export interface AuthContextType {
 export interface AnalyticContextType {
   setAnalyticData: React.Dispatch<React.SetStateAction<AnalyticData>>;
   dateRange: string[];
-  location: string;
+  province_id: string;
   dataType: MonitoringOutputDataType;
+  selectedDistrict: string;
 }

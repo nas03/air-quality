@@ -2,8 +2,58 @@ import { flag } from "@/config/constant";
 import { db } from "@/config/db";
 import { MDistrict, Statistic } from "@/entities";
 import { IStatisticRepository } from "@/interfaces";
+import { sql } from "kysely";
 
 export class StatisticRepository implements IStatisticRepository {
+  async getAQIStatisticsByProvince(province_id: string, start_date: Date, end_date: Date) {
+    const getAverageQuery = db
+      .selectFrom("statistics as s")
+      .leftJoin("m_districts as md", "md.district_id", "s.district_id")
+      .select([sql<number>`avg(aqi_index)`.as("aqi_index"), "s.district_id"])
+      .groupBy("s.district_id")
+      .where((eb) =>
+        eb.and([eb.between("time", start_date, end_date), eb("md.province_id", "=", province_id)])
+      )
+      .as("st");
+
+    const query = db
+      .selectFrom(getAverageQuery)
+      .leftJoin("m_districts as md", "st.district_id", "md.district_id")
+      .select([
+        "st.aqi_index",
+        "md.district_id",
+        "md.province_id",
+        "md.vn_province",
+        "md.vn_district",
+        "md.eng_district",
+        "md.vn_type",
+        "md.eng_type",
+      ]);
+
+    return await query.execute();
+  }
+
+  getAverageStatisticsByProvince = async (
+    province_id: string,
+    start_date: Date,
+    end_date: Date
+  ) => {
+    const query = db
+      .selectFrom("statistics as s")
+      .leftJoin("m_districts as md", "md.district_id", "s.district_id")
+      .select([
+        sql<number>`avg(s.aqi_index)`.as("aqi_index"),
+        "md.province_id",
+        "md.vn_province",
+        "s.time",
+      ])
+      .where((eb) =>
+        eb.and([eb.between("time", start_date, end_date), eb("md.province_id", "=", province_id)])
+      )
+      .groupBy(["md.province_id", "md.vn_province", "time"]);
+
+    return await query.execute();
+  };
   async getByDistrictID(
     district_id: string,
     date?: Date

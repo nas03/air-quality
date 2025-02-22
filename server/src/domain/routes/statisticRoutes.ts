@@ -33,6 +33,12 @@ const statisticRouter: Route[] = [
     controller: statisticController.onGetTimeList.bind(statisticController),
     role: "",
   },
+  {
+    path: "/statistics/average/:province_id",
+    method: "GET",
+    controller: statisticController.onGetAQIStatisticsByProvince.bind(statisticController),
+    role: "",
+  },
 ];
 
 export default statisticRouter;

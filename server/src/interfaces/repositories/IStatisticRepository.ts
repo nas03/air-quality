@@ -2,6 +2,12 @@ import { MDistrict, Statistic } from "@/entities";
 
 export interface IStatisticRepository {
   getByDistrictID(district_id: string, time?: Date): Promise<(Statistic & MDistrict)[] | null>;
+  getAQIStatisticsByProvince(
+    province_id: string,
+    start_date: Date,
+    end_date: Date
+  ): Promise<(Pick<Statistic, "aqi_index"> & MDistrict)[]>;
+  getAverageStatisticsByProvince(province_id: string, start_date: Date, end_date: Date);
   getDistrictHistory(
     district_id: string,
     start_date: Date,

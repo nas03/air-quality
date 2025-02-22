@@ -86,8 +86,8 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
               },
             ]}
             sx={{
-              ".css-10pepo8-MuiAreaElement-root": {
-                fill: "url(#header-shape-gradient)",
+              "& .MuiAreaElement-root": {
+                fill: "url(#gradient-aqi)",
               },
             }}
             series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
@@ -103,7 +103,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
               },
             ]}
           >
-            {getGradient(chartData[config.chartType], config.value)}
+            {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
           </LineChart>
         ),
       })),
