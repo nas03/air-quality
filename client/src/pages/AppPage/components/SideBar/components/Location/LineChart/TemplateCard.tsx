@@ -1,4 +1,3 @@
-
 import { MonitoringOutputDataType } from "@/types/types";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
@@ -26,43 +25,38 @@ const TemplateCard: React.FC<IPropsTemplateCard> = ({
   onValueChange,
   descriptionText,
 }) => {
+  const Header = () => {
+    return (
+      <div className="flex w-full flex-row items-center gap-3">
+        <AreaChartOutlined className="text-3xl text-blue-600" />
+        <div className="flex w-full flex-wrap items-center gap-2">
+          <p className="text-xs font-semibold">{descriptionText}</p>
+          <div className="flex flex-row gap-3 text-xs text-white">
+            {chartOptions.map((option: ChartOptions) => (
+              <button
+                key={option.value}
+                className={`rounded-full ${selectedValue === option.value ? "bg-blue-500" : "bg-slate-400"} px-4 py-1`}
+                disabled={option.disabled && true}
+                onClick={() => onValueChange(option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className={className}>
       <Collapse
         expandIconPosition="end"
         defaultActiveKey={["1"]}
-        className="relative h-fit w-full rounded-md p-0"
+        className="relative h-full w-full rounded-md p-0"
         bordered={false}
         collapsible="icon"
       >
-        <Collapse.Panel
-          key={1}
-          header={
-            <>
-              <div className="flex w-full flex-row items-center gap-3">
-                <AreaChartOutlined className="text-3xl text-blue-600" />
-                <div className="flex w-full flex-wrap items-center gap-2">
-                  <p className="text-xs font-semibold">{descriptionText}</p>
-                  <div className="flex flex-row gap-3 text-xs text-white">
-                    {chartOptions.map((option: ChartOptions) => (
-                      <button
-                        key={option.value}
-                        className={`rounded-full ${
-                          selectedValue === option.value ? "bg-blue-500" : "bg-slate-400"
-                        } px-4 py-1`}
-                        disabled={option.disabled && true}
-                        onClick={() => onValueChange(option.value)}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </>
-          }
-          className="w-full rounded-md bg-white p-0 first:p-0"
-        >
+        <Collapse.Panel key={1} header={<Header />} className="h-full w-full rounded-md bg-white p-0 first:p-0">
           {chartOptions.find((option: ChartOptions) => option.value === selectedValue)?.content}
         </Collapse.Panel>
       </Collapse>
