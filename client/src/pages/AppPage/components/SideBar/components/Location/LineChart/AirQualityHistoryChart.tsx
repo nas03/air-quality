@@ -1,11 +1,13 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 
+import { cn } from "@/lib/utils";
+import { CHART_CONFIGS, ChartConfig } from "@/pages/AnalyticsDashboard/components/DataChart/config";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
+import { MonitoringOutputDataType } from "@/types/types";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getGradient } from "../../../config";
-import TemplateCard, { ChartOptions } from "./TemplateCard";
 
 interface ChartDataType {
   aqi: number[];
@@ -17,6 +19,8 @@ interface ChartDataType {
 interface IPropsAirQualityHistoryChart {
   className?: string;
   district_id: string;
+  dataType: MonitoringOutputDataType;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const formatDate = (dateString: string) => dateString.split("T")[0].replace(/-/g, "/");
@@ -28,14 +32,24 @@ const formatLocation = (data: any) => {
   return `${vn_type} ${vn_district}, ${vn_province}`;
 };
 
-const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ className, district_id }) => {
-  const [selectedValue, setSelectedValue] = useState<0 | 1>(0);
+const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
+  className,
+  district_id,
+  dataType,
+  setLocation,
+}) => {
+  const [config, setConfig] = useState<ChartConfig>(CHART_CONFIGS[MonitoringData.OUTPUT.AQI]);
   const [chartData, setChartData] = useState<ChartDataType>({
     aqi: [],
     pm25: [],
     labels: [],
     location: "",
   });
+
+  useEffect(() => {
+    console.log(dataType);
+    setConfig(CHART_CONFIGS[dataType]);
+  }, [dataType]);
 
   const mutation = useMutation({
     mutationKey: ["district"],
@@ -47,7 +61,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
           pm25: el.pm_25,
           date: formatDate(el.time.toString()),
         })) ?? [];
-
+      setLocation(formatLocation(data));
       setChartData({
         aqi: formattedData.map(({ aqi }) => aqi),
         pm25: formattedData.map(({ pm25 }) => pm25),
@@ -61,63 +75,42 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({ classN
     mutation.mutate(district_id);
   }, [district_id]);
 
-  const chartOptions: ChartOptions[] = useMemo(
-    () =>
-      [
-        { label: "AQI", chartType: "aqi" as const, value: MonitoringData.OUTPUT.AQI },
-        { label: "PM2.5", chartType: "pm25" as const, value: MonitoringData.OUTPUT.PM25 },
-      ].map((config) => ({
-        label: config.label,
-        value: config.value,
-        content: (
-          <LineChart
-            viewBox={{ height: 370, width: 300, x: 0, y: 12 }}
-            width={300}
-            height={360}
-            grid={{ horizontal: true, vertical: true }}
-            yAxis={[
-              {
-                label: config.label,
-                colorMap: {
-                  type: "piecewise",
-                  thresholds: config.value === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
-                  colors: colorMap,
-                },
-              },
-            ]}
-            sx={{
-              "& .MuiAreaElement-root": {
-                fill: "url(#gradient-aqi)",
-              },
-            }}
-            series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
-            xAxis={[
-              {
-                scaleType: "point",
-                data: chartData.labels,
-                tickLabelStyle: {
-                  angle: -45,
-                  textAnchor: "end",
-                  fontSize: 13,
-                },
-              },
-            ]}
-          >
-            {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
-          </LineChart>
-        ),
-      })),
-    [chartData],
-  );
-
   return (
-    <TemplateCard
-      className={className}
-      chartOptions={chartOptions}
-      selectedValue={selectedValue}
-      onValueChange={setSelectedValue}
-      descriptionText={`Diễn biến AQI và PM2.5 trung bình ngày của ${chartData.location}`}
-    />
+    <div className={cn(className, "h-[23rem]")}>
+      <LineChart
+        grid={{ horizontal: true, vertical: true }}
+        margin={{ bottom: 70, top: 50 }}
+        yAxis={[
+          {
+            label: config.label,
+            colorMap: {
+              type: "piecewise",
+              thresholds: dataType === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
+              colors: colorMap,
+            },
+          },
+        ]}
+        sx={{
+          "& .MuiAreaElement-root": {
+            fill: "url(#gradient-aqi)",
+          },
+        }}
+        series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
+        xAxis={[
+          {
+            scaleType: "point",
+            data: chartData.labels,
+            tickLabelStyle: {
+              angle: -45,
+              textAnchor: "end",
+              fontSize: 13,
+            },
+          },
+        ]}
+      >
+        {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
+      </LineChart>
+    </div>
   );
 };
 

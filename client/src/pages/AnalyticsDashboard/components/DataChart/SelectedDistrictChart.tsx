@@ -1,3 +1,4 @@
+import { DistrictsData } from "@/api";
 import { AnalyticContext } from "@/context";
 import useGetDistrictData from "@/hooks/useGetDistrictData";
 import { cn } from "@/lib/utils";
@@ -5,6 +6,7 @@ import { getGradient } from "@/pages/AppPage/components/SideBar/config";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
+import { SlLocationPin } from "react-icons/sl";
 import { CHART_CONFIGS, ChartConfig } from "./config";
 
 interface DataLineChartProps extends React.ComponentPropsWithoutRef<"div"> {
@@ -19,20 +21,26 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
   const analyticContext = useContext(AnalyticContext);
   const selectedDistrictData = useGetDistrictData(analyticContext.selectedDistrict, analyticContext.dateRange);
   useEffect(() => {
-    console.log(dataType);
     setConfig(CHART_CONFIGS[dataType]);
   }, [dataType]);
 
   useEffect(() => {
     if (selectedDistrictData.data) {
-      const data = selectedDistrictData.data?.flatMap((d: any) => Math.ceil(d.aqi_index)) ?? [];
+      let data: number[] = [];
+      if (config.value === MonitoringData.OUTPUT.AQI)
+        data = selectedDistrictData.data?.flatMap((d: DistrictsData) => Math.ceil(d.aqi_index)) ?? [];
+      else data = selectedDistrictData.data?.flatMap((d: DistrictsData) => Number(d.pm_25.toFixed(2))) ?? [];
       setValues(data);
     }
-  }, [selectedDistrictData.data]);
+  }, [selectedDistrictData.data, config.value]);
 
   return (
-    <div className={cn("flex flex-row justify-center", className)}>
-      <div className="h-full w-full p-5">
+    <div className={cn("flex flex-col justify-center py-5", className)}>
+      <div className="flex flex-row items-center gap-2 pl-5 font-semibold">
+        <SlLocationPin />
+        <p>{String(selectedDistrictData.isSuccess ? selectedDistrictData.data?.[0]?.vn_district : "Loading...")}</p>
+      </div>
+      <div className="h-[90%] w-full">
         <LineChart
           grid={{ horizontal: true, vertical: true }}
           margin={{ bottom: 60, left: 60 }}
@@ -68,8 +76,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
                 fontSize: 13,
               },
             },
-          ]}
-        >
+          ]}>
           {getGradient(props.chartID.toString(), values, config.value)}
         </LineChart>
       </div>

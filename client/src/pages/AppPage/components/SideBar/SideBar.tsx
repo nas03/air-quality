@@ -6,7 +6,7 @@ import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Collapse, CollapseProps } from "antd";
 import { useContext, useEffect, useState } from "react";
-import AirQualityHistoryChart from "./components/Location/LineChart/AirQualityHistoryChart";
+import LocationDataCard from "./components/Location/LineChart/LocationDataCard";
 import WarningTab from "./components/Location/WarningTab/WarningTab";
 import RankTable from "./components/RankTable";
 import SearchBar from "./components/SearchBar";
@@ -55,8 +55,8 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded }) => {
     {
       component: (
         <TabContent title="Điểm đang chọn" className="scrollbar overflow-y-auto scroll-smooth">
-          <WarningTab district_id={targetDistrictID} />
-          <AirQualityHistoryChart className="w-full" district_id={targetDistrictID} />
+          <WarningTab className="" district_id={targetDistrictID} />
+          <LocationDataCard className="h-1/2 w-full" district_id={targetDistrictID} />
         </TabContent>
       ),
     },

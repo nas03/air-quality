@@ -9,7 +9,11 @@ export class StatisticRepository implements IStatisticRepository {
     const getAverageQuery = db
       .selectFrom("statistics as s")
       .leftJoin("m_districts as md", "md.district_id", "s.district_id")
-      .select([sql<number>`avg(aqi_index)`.as("aqi_index"), "s.district_id"])
+      .select([
+        sql<number>`avg(aqi_index)`.as("aqi_index"),
+        sql<number>`avg(pm_25)`.as("pm_25"),
+        "s.district_id",
+      ])
       .groupBy("s.district_id")
       .where((eb) =>
         eb.and([eb.between("time", start_date, end_date), eb("md.province_id", "=", province_id)])
@@ -21,6 +25,7 @@ export class StatisticRepository implements IStatisticRepository {
       .leftJoin("m_districts as md", "st.district_id", "md.district_id")
       .select([
         "st.aqi_index",
+        "st.pm_25",
         "md.district_id",
         "md.province_id",
         "md.vn_province",
@@ -43,6 +48,7 @@ export class StatisticRepository implements IStatisticRepository {
       .leftJoin("m_districts as md", "md.district_id", "s.district_id")
       .select([
         sql<number>`avg(s.aqi_index)`.as("aqi_index"),
+        sql<number>`avg(s.pm_25)`.as("pm_25"),
         "md.province_id",
         "md.vn_province",
         "s.time",

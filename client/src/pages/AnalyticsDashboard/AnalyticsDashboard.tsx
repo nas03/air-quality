@@ -26,14 +26,14 @@ const AnalyticsDashboard: React.FC<IPropsAnalyticsBoard> = () => {
     >
       <div className="h-screen w-screen">
         <ControlBar className="h-[5%] w-full" />
-        <div className="flex h-[95%] w-full flex-col gap-5 bg-[#f4f4f4] px-5 pt-5">
-          <OverviewCards />
-          <div className="flex h-[85%] flex-col gap-3">
-            <div className="flex h-1/2 w-full flex-row gap-3">
+        <div className="flex h-[95%] w-full flex-col gap-5 bg-[#f4f4f4] px-0 pt-5 lg:px-5">
+          <OverviewCards className="flex-shrink" />
+          <div className="flex flex-grow flex-col gap-3">
+            <div className="flex h-[49%] w-full flex-row gap-3">
               <DataLineChart key={1} chartID={1} className="h-full w-[30%] rounded-md bg-white" />
               <SelectionMap className="h-full w-[70%] rounded-md" />
             </div>
-            <div className="flex h-1/2 w-full flex-row gap-3">
+            <div className="flex h-[49%] w-full flex-row gap-3">
               <SelectedDistrictChart key={2} chartID={2} className="h-full w-[30%] rounded-md bg-white" />
               <DataBarChart className="h-full w-[70%] rounded-md bg-white" />
             </div>

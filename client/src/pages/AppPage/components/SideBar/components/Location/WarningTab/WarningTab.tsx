@@ -1,12 +1,13 @@
 import { GeoContext, TimeContext } from "@/context";
 import useAirQualityData from "@/hooks/useAirQualityData";
+import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
 import { useContext, useEffect, useState } from "react";
 import AirQualityInfoPanel from "./AirQualityInfoPanel";
 
-interface WarningTabProps {
+interface WarningTabProps extends React.ComponentPropsWithRef<"div"> {
   district_id: string;
 }
 
@@ -37,7 +38,7 @@ const LayerSelector = ({ selectedValue }: { selectedValue: DataType }) => (
   </div>
 );
 
-const WarningTab: React.FC<WarningTabProps> = ({ district_id }) => {
+const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
   const [selectedValue, setSelectedValue] = useState<DataType>(0);
   const { time } = useContext(TimeContext);
   const geoContext = useContext(GeoContext);
@@ -52,32 +53,30 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id }) => {
   }, [geoContext.type]);
 
   return (
-    <div>
-      <Collapse
-        expandIconPosition="end"
-        defaultActiveKey={["1"]}
-        className="relative h-fit w-full rounded-md p-0"
-        bordered={false}
-        collapsible="icon"
+    <Collapse
+      expandIconPosition="end"
+      defaultActiveKey={["1"]}
+      className={cn("relative h-fit w-full rounded-md p-0", className)}
+      bordered={false}
+      collapsible="icon"
+    >
+      <Collapse.Panel
+        key={1}
+        header={<LayerSelector selectedValue={selectedValue} />}
+        className="w-full rounded-md bg-white p-0 first:p-0"
       >
-        <Collapse.Panel
-          key={1}
-          header={<LayerSelector selectedValue={selectedValue} />}
-          className="w-full rounded-md bg-white p-0 first:p-0"
-        >
-          <AirQualityInfoPanel
-            aqi_index={data?.aqi_index ? String(data?.aqi_index) : "--"}
-            district_id={district_id}
-            name={data?.name || ""}
-            location={data?.location}
-            pm_25={data?.pm_25 ? String(data?.pm_25.toFixed(2)) : "--"}
-            recommendation={data.recommendation}
-            type={selectedValue === 0 ? "model" : "station"}
-            status={data.status}
-          />
-        </Collapse.Panel>
-      </Collapse>
-    </div>
+        <AirQualityInfoPanel
+          aqi_index={data?.aqi_index ? String(data?.aqi_index) : "--"}
+          district_id={district_id}
+          name={data?.name || ""}
+          location={data?.location}
+          pm_25={data?.pm_25 ? String(data?.pm_25.toFixed(2)) : "--"}
+          recommendation={data.recommendation}
+          type={selectedValue === 0 ? "model" : "station"}
+          status={data.status}
+        />
+      </Collapse.Panel>
+    </Collapse>
   );
 };
 

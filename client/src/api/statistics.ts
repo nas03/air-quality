@@ -50,8 +50,9 @@ export const getRankByDate = async (date: string) => {
   return response.data.data;
 };
 
-export type DistrictsData = Pick<Statistic, "aqi_index"> & MDistrict;
-export type ProvinceData = Pick<Statistic, "aqi_index" | "time"> & Pick<MDistrict, "province_id" | "vn_province">;
+export type DistrictsData = Pick<Statistic, "aqi_index" | "pm_25"> & MDistrict;
+export type ProvinceData = Pick<Statistic, "aqi_index" | "time" | "pm_25"> &
+  Pick<MDistrict, "province_id" | "vn_province">;
 export type ProvinceAverageData = {
   districtsData: DistrictsData[];
   provinceData: ProvinceData[];
