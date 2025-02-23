@@ -3,6 +3,7 @@ import useAllProvinces from "@/hooks/useDistrictsData";
 import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AnalyticData, MonitoringOutputDataType } from "@/types/types";
+import { Link } from "@tanstack/react-router";
 import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -59,7 +60,9 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
   }, []);
   return (
     <div className={cn(className, "flex flex-row items-center justify-between bg-[#0A192F] px-5 py-3")}>
-      <img src="logo.svg" alt="logo" className="h-full" />
+      <Link to="/">
+        <img src="logo.svg" alt="logo" className="h-full" /* onClick={}  */ />
+      </Link>
       <div className="flex flex-row items-center gap-5">
         <Select
           className="w-[8rem]"

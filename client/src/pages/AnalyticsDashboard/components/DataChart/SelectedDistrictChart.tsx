@@ -38,7 +38,9 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
     <div className={cn("flex flex-col justify-center py-5", className)}>
       <div className="flex flex-row items-center gap-2 pl-5 font-semibold">
         <SlLocationPin />
-        <p>{String(selectedDistrictData.isSuccess ? selectedDistrictData.data?.[0]?.vn_district : "Loading...")}</p>
+        <p>
+          {selectedDistrictData.isSuccess ? String(selectedDistrictData.data?.[0]?.vn_district || "") : "Loading..."}
+        </p>
       </div>
       <div className="h-[90%] w-full">
         <LineChart

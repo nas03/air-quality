@@ -61,7 +61,11 @@ const SelectionMap = ({ className }: IPropsSelectionMap) => {
     if (!mapQuery.data || !provinceMutation.data?.districtsData.length) return;
 
     const map = initializeMap();
-    const vietnamBoundaryLayer = createProvinceBoundaryLayer(mapQuery.data, provinceMutation.data.districtsData);
+    const vietnamBoundaryLayer = createProvinceBoundaryLayer(
+      mapQuery.data,
+      provinceMutation.data.districtsData,
+      analyticContext.dataType,
+    );
     const markerLayer = createMarkerLayer([]);
 
     map.getLayers().extend([vietnamBoundaryLayer, markerLayer]);
@@ -72,7 +76,7 @@ const SelectionMap = ({ className }: IPropsSelectionMap) => {
     map.on("singleclick", (evt) => handleMarkerChange(evt.coordinate));
 
     return () => map.dispose();
-  }, [mapQuery.data, provinceMutation.data?.districtsData]);
+  }, [mapQuery.data, provinceMutation.data?.districtsData, analyticContext.dataType]);
 
   return <div id="selection-map" className={cn("bg-white", className)} />;
 };

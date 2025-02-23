@@ -79,7 +79,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
     <div className={cn(className, "h-[23rem]")}>
       <LineChart
         grid={{ horizontal: true, vertical: true }}
-        margin={{ bottom: 70, top: 50 }}
+        margin={{ bottom: 70, top: 20, right: 20, left: 50 }}
         yAxis={[
           {
             label: config.label,
@@ -106,8 +106,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
               fontSize: 13,
             },
           },
-        ]}
-      >
+        ]}>
         {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
       </LineChart>
     </div>

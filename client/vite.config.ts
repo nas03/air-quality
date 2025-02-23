@@ -22,6 +22,7 @@ export default defineConfig({
           "react-vendor": ["react", "react-dom"],
           "tanstack-vendor": ["@tanstack/react-query", "@tanstack/react-router"],
           "antd-vendor": ["antd", "@ant-design/icons"],
+          "mui-vender": ["@mui/x-charts"],
         },
       },
     },
