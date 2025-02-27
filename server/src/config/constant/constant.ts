@@ -7,6 +7,7 @@ export const resMessage = Object.freeze({
   user_existed: "User is existed",
   user_not_authorized: "User is not authorized",
   token_invalid: "Token is invalid",
+  wrong_old_password: 'Your old password is invalid'
 });
 
 export const statusCode = Object.freeze({

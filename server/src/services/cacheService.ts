@@ -97,4 +97,24 @@ export class CacheService implements ICacheService {
       console.error("Error deleting key:", error);
     }
   }
+  async cache<T>(key: string, func: Function): Promise<T | null> {
+    try {
+      const cache = await this.redisClient.get(key);
+      if (cache) return JSON.parse(cache);
+
+      const data = await func();
+      if (data) {
+        const serializedData = JSON.stringify(data);
+        await this.redisClient.setex(key, cacheTime.DEFAULT, serializedData);
+        return data;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error in cache function:", error);
+      return null;
+    }
+  }
+  generateRedisKey = (objectType: string, objectId: string | number, field: string | "*" = "*") => {
+    return `${objectType}:${objectId}:${field}`;
+  };
 }

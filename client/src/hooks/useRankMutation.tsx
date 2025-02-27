@@ -11,19 +11,24 @@ export interface RankData {
 const useRankMutation = (time: string) => {
   const [tableData, setTableData] = useState<RankData[]>([]);
 
+  const processRankData = (data: (Statistic & MDistrict)[] | null): RankData[] => {
+    return (
+      data
+        ?.map(({ vn_district, aqi_index }) => ({ vn_district, aqi_index }))
+        .sort((a, b) => b.aqi_index - a.aqi_index) ?? []
+    );
+  };
+
   const mutation = useMutation({
     mutationKey: ["rank", time],
     mutationFn: (date: string) => getRankByDate(date),
     networkMode: "offlineFirst",
     onSuccess: (data: (Statistic & MDistrict)[] | null) => {
-      const resultData =
-        data
-          ?.map(({ vn_district, aqi_index }) => ({ vn_district, aqi_index }))
-          .sort((a, b) => b.aqi_index - a.aqi_index) ?? [];
-      setTableData(resultData);
+      setTableData(processRankData(data));
     },
   });
 
   return { mutation, tableData };
 };
+
 export default useRankMutation;

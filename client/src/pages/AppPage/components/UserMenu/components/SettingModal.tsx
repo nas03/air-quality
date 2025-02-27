@@ -21,17 +21,26 @@ const SETTING_TABS: Tab[] = [
     label: "Profile Settings",
     icon: <ProfileOutlined />,
     children: <ProfileConfig />,
+    style: {
+      height: "100%",
+    },
   },
   {
     key: "notifications",
     label: "Notifications Settings",
     icon: <NotificationOutlined />,
     children: <SettingConfig />,
+    style: {
+      height: "100%",
+    },
   },
   {
     key: "others",
     label: "Others",
     icon: <SettingOutlined />,
+    style: {
+      height: "100%",
+    },
   },
 ];
 
@@ -39,14 +48,14 @@ const SettingModal: React.FC<IPropsSettingModal> = ({ openModal, setOpenModal })
   const handleCancel = () => setOpenModal(false);
 
   return (
-    <Modal open={openModal} onCancel={handleCancel} okText="Save Changes" className="min-w-[35rem]">
+    <Modal open={openModal} onCancel={handleCancel} okText="Save Changes" className="min-w-[calc(100vw/3.5)]">
       <h2 className="mb-5 text-center text-lg font-bold">Welcome, Nguyen Anh Son</h2>
       <Tabs
         defaultActiveKey="profile"
         tabPosition="left"
         items={SETTING_TABS}
         tabBarStyle={{ padding: 0 }}
-        className="h-[30rem]"
+        className="h-[30rem] w-full scroll-smooth"
       />
     </Modal>
   );

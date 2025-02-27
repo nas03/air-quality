@@ -37,7 +37,7 @@ const AppPage = () => {
   }, [isSuccess]);
 
   return (
-    <div className="h-screen w-screen">
+    <div className="flex h-screen w-screen flex-col">
       <ConfigContext.Provider value={{ setLayer, layer: layer }}>
         <TimeContext.Provider value={{ timeList: timeList || [], time }}>
           <GeoContext.Provider
@@ -47,8 +47,7 @@ const AppPage = () => {
               aqi_index: markData.aqi_index,
               pm_25: markData.pm_25,
               location: markData.location,
-            }}
-          >
+            }}>
             <OpenLayerMap setMarkData={setMarkData} />
             <div id="overlay-layer" className="z-[1000]">
               <div className="absolute right-3 mt-[1.5rem] flex flex-row items-center gap-5">

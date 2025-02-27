@@ -2,6 +2,7 @@ import "@/css/open.css";
 import { ConfigContextType } from "@/types/contexts";
 import { MarkData } from "@/types/types";
 import { Map } from "ol";
+import { WindLayer } from "ol-wind";
 import { Coordinate } from "ol/coordinate";
 import { FeatureObject } from "ol/format/Feature";
 import TileLayer from "ol/layer/Tile";
@@ -69,7 +70,7 @@ export const fetchLocationData = async (
 
 export const getWMSFeatureInfo = (
   map: Map,
-  mapLayers: (TileLayer | VectorLayer)[],
+  mapLayers: (TileLayer | VectorLayer | WindLayer)[],
   layers: string[],
   queryLayers: string[],
   coordinate: Coordinate,

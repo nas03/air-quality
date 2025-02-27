@@ -8,7 +8,6 @@ const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);
 const userController = new UserController(userInteractor);
 const userMiddleware = new UserMiddleware(userInteractor);
-// const userRouter = Router();
 
 const userRouter: Route[] = [
   {
@@ -17,6 +16,18 @@ const userRouter: Route[] = [
     controller: userController.onCreateUser.bind(userController),
     role: "",
     middleware: [userMiddleware.validateCreateUser],
+  },
+  {
+    path: "/user/update-info",
+    method: "PUT",
+    controller: userController.onUpdateUserBasicData.bind(userController),
+    role: "user",
+  },
+  {
+    path: "/user/update-password",
+    method: "PUT",
+    controller: userController.onUpdateUserPassword.bind(userController),
+    role: "user",
   },
 ];
 

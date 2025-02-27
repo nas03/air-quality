@@ -7,7 +7,11 @@ export interface IStatisticRepository {
     start_date: Date,
     end_date: Date
   ): Promise<(Pick<Statistic, "aqi_index"> & MDistrict)[]>;
-  getAverageStatisticsByProvince(province_id: string, start_date: Date, end_date: Date);
+  getAverageStatisticsByProvince(
+    province_id: string,
+    start_date: Date,
+    end_date: Date
+  ): Promise<(Omit<Statistic, "district_id"> & Pick<MDistrict, "province_id" | "vn_province">)[]>;
   getDistrictHistory(
     district_id: string,
     start_date: Date,

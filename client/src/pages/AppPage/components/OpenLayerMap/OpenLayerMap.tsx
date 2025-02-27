@@ -3,6 +3,7 @@ import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
+import { WindLayer } from "ol-wind";
 import { defaults as defaultControls } from "ol/control/defaults.js";
 import { Coordinate } from "ol/coordinate";
 import { Point } from "ol/geom";
@@ -13,7 +14,13 @@ import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import React, { useContext, useEffect, useRef } from "react";
 import { fetchLocationData, getWMSFeatureInfo } from "./functions";
-import { createAQILayer, createMarkerLayer, createStationsLayer, createVietnamBoundaryLayer } from "./layers";
+import {
+  createAQILayer,
+  createMarkerLayer,
+  createStationsLayer,
+  createVietnamBoundaryLayer,
+  createWindyLayer,
+} from "./layers";
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const layersRef = useRef<TileLayer | null>(null);
@@ -34,6 +41,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
         constrainResolution: true,
         projection: "EPSG:3857",
         center: fromLonLat([105.97, 17.9459]),
+        minZoom: 6
       }),
       controls: defaultControls({
         zoomOptions: {
@@ -45,12 +53,13 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     });
   };
 
-  const createLayers = (map: Map) => {
+  const createLayers = async (map: Map) => {
     const layers = [
       createAQILayer(time),
       createVietnamBoundaryLayer(map),
       createStationsLayer(),
       createMarkerLayer(INITIAL_COORDINATE),
+      await createWindyLayer(),
     ];
     layersRef.current = layers[0] as TileLayer;
     markerRef.current = layers[3] as VectorLayer;
@@ -64,7 +73,11 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     }
   };
 
-  const handleUpdateLocationData = (map: Map, mapLayers: (TileLayer | VectorLayer)[], coordinate: Coordinate) => {
+  const handleUpdateLocationData = (
+    map: Map,
+    mapLayers: (TileLayer | VectorLayer | WindLayer)[],
+    coordinate: Coordinate,
+  ) => {
     const modelLayers = ["air:AQI", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
     const stationLayers = ["air:stations_point_map"];
 
@@ -86,7 +99,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     fetchLocationData(stationURL, modelURL, coordinate, props.setMarkData, configContext);
   };
 
-  const handleMapClick = (map: Map, layers: (TileLayer | VectorLayer)[]) => {
+  const handleMapClick = (map: Map, layers: (TileLayer<TileWMS> | VectorLayer | WindLayer)[]) => {
     map.on("singleclick", function (evt) {
       handleMarkerChange(evt.coordinate);
       handleUpdateLocationData(map, layers, evt.coordinate);
@@ -95,19 +108,18 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
   useEffect(() => {
     const map = initializeMap();
-    const layers = createLayers(map);
-
     const setupMap = async () => {
+      const layers = await createLayers(map);
       await apply(map, styleUrl);
       map.getLayers().extend(layers);
       handleMapClick(map, layers);
+      const initialCoordinate = fromLonLat(INITIAL_COORDINATE);
+      handleMarkerChange(initialCoordinate);
+      handleUpdateLocationData(map, layers, initialCoordinate);
     };
 
-    const initialCoordinate = fromLonLat(INITIAL_COORDINATE);
-    handleMarkerChange(initialCoordinate);
-    handleUpdateLocationData(map, layers, initialCoordinate);
-    setupMap();
     mapRef.current = map;
+    setupMap();
 
     return () => map.dispose();
   }, []);

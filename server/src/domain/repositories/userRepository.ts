@@ -4,17 +4,19 @@ import { User } from "@/entities";
 import { IUserRepository } from "@/interfaces";
 
 export class UserRepository implements IUserRepository {
-  createUser = async (data: User) => {
-    const query = await db
-      .insertInto("users")
-      .values(data)
-      .returning(["user_id", "username"])
-      .executeTakeFirst();
+  createUser = async (data: Omit<User, "user_id">) => {
+    const query = await db.insertInto("users").values(data).returningAll().executeTakeFirst();
     return query ?? null;
   };
 
-  updateUser = async (user_id: number) => {
-    throw new Error("Method is not implemented");
+  updateUser = async (user_id: number, payload: Partial<Omit<User, "role" | "user_id">>) => {
+    let query = await db
+      .updateTable("users")
+      .set(payload)
+      .where("user_id", "=", user_id)
+      .returningAll()
+      .executeTakeFirst();
+    return query ?? null;
   };
 
   findUser = async (input: { user_id?: number; email?: string; username?: string }) => {
