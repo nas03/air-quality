@@ -49,15 +49,15 @@ const AppPage = () => {
               location: markData.location,
             }}>
             <OpenLayerMap setMarkData={setMarkData} />
-            <div id="overlay-layer" className="z-[1000]">
-              <div className="absolute right-3 mt-[1.5rem] flex flex-row items-center gap-5">
+            <div id="overlay-layer" className="absolute z-[1000]">
+              <div className="fixed right-3 mt-[1.5rem] flex flex-row items-center gap-5">
                 <Notifications className="" />
                 <UserMenu className="" />
               </div>
               <SideBar setExpanded={setExpanded} />
               <LayerToggle className="ml-[29rem] pt-[1.5rem]" />
               <TimeSlider expanded={expanded} className="" setTime={setTime} />
-              <GradientBar className="absolute bottom-0 right-5" />
+              <GradientBar className="fixed bottom-0 right-5" />
             </div>
           </GeoContext.Provider>
         </TimeContext.Provider>

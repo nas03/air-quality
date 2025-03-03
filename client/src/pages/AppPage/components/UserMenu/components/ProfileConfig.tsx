@@ -67,21 +67,24 @@ const AvatarUpload = ({
   imageUrl: string;
   loading: boolean;
   onChangeImage: UploadProps["onChange"];
-}) => (
-  <Upload
-    name="avatar"
-    listType="picture-circle"
-    className="avatar-uploader"
-    showUploadList={false}
-    action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-    beforeUpload={beforeUpload}
-    onChange={onChangeImage}>
-    <div className="relative">
-      <Avatar className="h-full w-full" src={imageUrl} />
-      <Avatar className="absolute inset-0 h-full w-full opacity-0 hover:opacity-70">Upload</Avatar>
-    </div>
-  </Upload>
-);
+}) => {
+  console.log(loading);
+  return (
+    <Upload
+      name="avatar"
+      listType="picture-circle"
+      className="avatar-uploader"
+      showUploadList={false}
+      action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+      beforeUpload={beforeUpload}
+      onChange={onChangeImage}>
+      <div className="relative">
+        <Avatar className="h-full w-full" src={imageUrl} />
+        <Avatar className="absolute inset-0 h-full w-full opacity-0 hover:opacity-70">Upload</Avatar>
+      </div>
+    </Upload>
+  );
+};
 
 const ProfileConfig = () => {
   const [loading, setLoading] = useState(false);

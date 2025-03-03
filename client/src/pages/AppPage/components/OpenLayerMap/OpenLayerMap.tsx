@@ -41,7 +41,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
         constrainResolution: true,
         projection: "EPSG:3857",
         center: fromLonLat([105.97, 17.9459]),
-        minZoom: 6
+        minZoom: 6,
       }),
       controls: defaultControls({
         zoomOptions: {
@@ -133,7 +133,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     const map = mapRef.current;
     if (!map) return;
 
-    const [, , aqiLayer, boundaryLayer, stationsLayer] = map.getLayers().getArray();
+    const [, , aqiLayer, boundaryLayer, stationsLayer, , windLayer] = map.getLayers().getArray();
 
     const updateLayerVisibility = (layer: any, isVisible: boolean) => {
       layer?.setVisible(isVisible);
@@ -142,6 +142,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     updateLayerVisibility(aqiLayer, configContext.layer.model);
     updateLayerVisibility(boundaryLayer, configContext.layer.model);
     updateLayerVisibility(stationsLayer, configContext.layer.station);
+    updateLayerVisibility(windLayer, configContext.layer.model);
   }, [configContext.layer]);
 
   return (

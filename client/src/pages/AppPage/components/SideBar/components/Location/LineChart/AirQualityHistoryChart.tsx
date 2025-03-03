@@ -47,7 +47,6 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
   });
 
   useEffect(() => {
-    console.log(dataType);
     setConfig(CHART_CONFIGS[dataType]);
   }, [dataType]);
 
@@ -63,8 +62,8 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
         })) ?? [];
       setLocation(formatLocation(data));
       setChartData({
-        aqi: formattedData.map(({ aqi }) => aqi),
-        pm25: formattedData.map(({ pm25 }) => pm25),
+        aqi: formattedData.map(({ aqi }) => (aqi ? aqi : 0)),
+        pm25: formattedData.map(({ pm25 }) => (pm25 ? pm25 : 0)),
         labels: formattedData.map(({ date }) => date),
         location: formatLocation(data),
       });
@@ -77,38 +76,44 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
 
   return (
     <div className={cn(className, "h-[23rem]")}>
-      <LineChart
-        grid={{ horizontal: true, vertical: true }}
-        margin={{ bottom: 70, top: 20, right: 20, left: 50 }}
-        yAxis={[
-          {
-            label: config.label,
-            colorMap: {
-              type: "piecewise",
-              thresholds: dataType === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
-              colors: colorMap,
+      {chartData && chartData[config.chartType] && chartData[config.chartType].length > 0 ? (
+        <LineChart
+          grid={{ horizontal: true, vertical: true }}
+          margin={{ bottom: 70, top: 20, right: 20, left: 50 }}
+          yAxis={[
+            {
+              label: config.label,
+              colorMap: {
+                type: "piecewise",
+                thresholds: dataType === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
+                colors: colorMap,
+              },
             },
-          },
-        ]}
-        sx={{
-          "& .MuiAreaElement-root": {
-            fill: "url(#gradient-aqi)",
-          },
-        }}
-        series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
-        xAxis={[
-          {
-            scaleType: "point",
-            data: chartData.labels,
-            tickLabelStyle: {
-              angle: -45,
-              textAnchor: "end",
-              fontSize: 13,
+          ]}
+          sx={{
+            "& .MuiAreaElement-root": {
+              fill: "url(#gradient-aqi)",
             },
-          },
-        ]}>
-        {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
-      </LineChart>
+          }}
+          series={[{ id: config.label, data: chartData[config.chartType], area: true }]}
+          xAxis={[
+            {
+              scaleType: "point",
+              data: chartData.labels,
+              tickLabelStyle: {
+                angle: -45,
+                textAnchor: "end",
+                fontSize: 13,
+              },
+            },
+          ]}>
+          {getGradient("gradient-aqi", chartData[config.chartType], config.value)}
+        </LineChart>
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <p className="text-gray-500">Loading chart data...</p>
+        </div>
+      )}
     </div>
   );
 };
