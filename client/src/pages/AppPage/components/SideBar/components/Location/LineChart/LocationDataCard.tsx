@@ -1,7 +1,7 @@
 import { CHART_CONFIGS } from "@/pages/AnalyticsDashboard/components/DataChart/config";
 import { MonitoringOutputDataType } from "@/types/types";
 import { AreaChartOutlined } from "@ant-design/icons";
-import { Collapse } from "antd";
+import { Collapse, CollapseProps } from "antd";
 import { useState } from "react";
 import AirQualityHistoryChart from "./AirQualityHistoryChart";
 
@@ -36,8 +36,7 @@ const Header: React.FC<IPropsHeader> = ({ chartOptions, descriptionText, selecte
               key={option.value}
               className={`rounded-full ${selectedValue === option.value ? "bg-blue-500" : "bg-slate-400"} px-4 py-1`}
               disabled={option.disabled && true}
-              onClick={() => onValueChange(option.value)}
-            >
+              onClick={() => onValueChange(option.value)}>
               {option.label}
             </button>
           ))}
@@ -50,6 +49,28 @@ const Header: React.FC<IPropsHeader> = ({ chartOptions, descriptionText, selecte
 const LocationDataCard: React.FC<IPropsTemplateCard> = ({ className, district_id }) => {
   const [dataType, setDataType] = useState<MonitoringOutputDataType>(0);
   const [location, setLocation] = useState<string>("");
+  const items: CollapseProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <Header
+          chartOptions={Object.values(CHART_CONFIGS)}
+          descriptionText={`Diễn biến AQI và PM2.5 trung bình ngày của ${location}`}
+          selectedValue={dataType}
+          onValueChange={setDataType}
+        />
+      ),
+      className: "h-full w-full rounded-md bg-white p-0",
+      children: (
+        <AirQualityHistoryChart
+          className="w-full"
+          setLocation={setLocation}
+          dataType={dataType}
+          district_id={district_id}
+        />
+      ),
+    },
+  ];
   return (
     <div className={className}>
       <Collapse
@@ -58,27 +79,8 @@ const LocationDataCard: React.FC<IPropsTemplateCard> = ({ className, district_id
         className="relative h-full w-full rounded-md p-0"
         bordered={false}
         collapsible="icon"
-      >
-        <Collapse.Panel
-          key={1}
-          header={
-            <Header
-              chartOptions={Object.values(CHART_CONFIGS)}
-              descriptionText={`Diễn biến AQI và PM2.5 trung bình ngày của ${location}`}
-              selectedValue={dataType}
-              onValueChange={setDataType}
-            />
-          }
-          className="h-full w-full rounded-md bg-white p-0"
-        >
-          <AirQualityHistoryChart
-            className="w-full"
-            setLocation={setLocation}
-            dataType={dataType}
-            district_id={district_id}
-          />
-        </Collapse.Panel>
-      </Collapse>
+        items={items}
+      />
     </div>
   );
 };

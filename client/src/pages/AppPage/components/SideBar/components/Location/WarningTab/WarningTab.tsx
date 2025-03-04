@@ -3,7 +3,7 @@ import useAirQualityData from "@/hooks/useAirQualityData";
 import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AreaChartOutlined } from "@ant-design/icons";
-import { Collapse } from "antd";
+import { Collapse, CollapseProps } from "antd";
 import { useContext, useEffect, useState } from "react";
 import AirQualityInfoPanel from "./AirQualityInfoPanel";
 
@@ -28,8 +28,7 @@ const LayerSelector = ({ selectedValue }: { selectedValue: DataType }) => (
           <button
             disabled
             key={value}
-            className={`rounded-full ${selectedValue === value ? "bg-blue-500" : "bg-slate-400"} px-4 py-1`}
-          >
+            className={`rounded-full ${selectedValue === value ? "bg-blue-500" : "bg-slate-400"} px-4 py-1`}>
             {label}
           </button>
         ))}
@@ -51,20 +50,12 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
   useEffect(() => {
     setSelectedValue(geoContext.type);
   }, [geoContext.type]);
-
-  return (
-    <Collapse
-      expandIconPosition="end"
-      defaultActiveKey={["1"]}
-      className={cn("relative h-fit w-full rounded-md p-0", className)}
-      bordered={false}
-      collapsible="icon"
-    >
-      <Collapse.Panel
-        key={1}
-        header={<LayerSelector selectedValue={selectedValue} />}
-        className="w-full rounded-md bg-white p-0 first:p-0"
-      >
+  const items: CollapseProps["items"] = [
+    {
+      key: "1",
+      label: <LayerSelector selectedValue={selectedValue} />,
+      className: "w-full rounded-md bg-white p-0 first:p-0",
+      children: (
         <AirQualityInfoPanel
           aqi_index={data?.aqi_index ? String(data?.aqi_index) : "--"}
           district_id={district_id}
@@ -75,8 +66,18 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
           type={selectedValue === 0 ? "model" : "station"}
           status={data.status}
         />
-      </Collapse.Panel>
-    </Collapse>
+      ),
+    },
+  ];
+  return (
+    <Collapse
+      expandIconPosition="end"
+      defaultActiveKey={["1"]}
+      className={cn("relative h-fit w-full rounded-md p-0", className)}
+      bordered={false}
+      collapsible="icon"
+      items={items}
+    />
   );
 };
 

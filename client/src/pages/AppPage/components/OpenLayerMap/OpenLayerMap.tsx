@@ -32,7 +32,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const key = import.meta.env.VITE_PUBLIC_MAPTILER_KEY;
   const styleUrl = `https://api.maptiler.com/maps/7d9ee8e1-7abf-4591-ac75-85518e48ba38/style.json?key=${key}`;
   const INITIAL_COORDINATE = [105.871, 21];
-
+  const DEFAULT_STATION_TIME = "2025-02-13T19:00:00Z";
   const initializeMap = () => {
     return new Map({
       target: "map",
@@ -57,7 +57,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     const layers = [
       createAQILayer(time),
       createVietnamBoundaryLayer(map),
-      createStationsLayer(),
+      createStationsLayer(DEFAULT_STATION_TIME),
       createMarkerLayer(INITIAL_COORDINATE),
       await createWindyLayer(),
     ];
@@ -96,7 +96,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       return;
     }
 
-    fetchLocationData(stationURL, modelURL, coordinate, props.setMarkData, configContext);
+    fetchLocationData(modelURL, coordinate, props.setMarkData, configContext, mapRef, markerRef);
   };
 
   const handleMapClick = (map: Map, layers: (TileLayer<TileWMS> | VectorLayer | WindLayer)[]) => {

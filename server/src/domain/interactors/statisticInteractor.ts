@@ -1,4 +1,5 @@
 import { cacheTime } from "@/config/constant";
+import { STATISTICS_KEY } from "@/config/redisKeys";
 import { StatisticRepository } from "@/domain/repositories";
 import { MDistrict, Statistic } from "@/entities";
 import { IStatisticInteractor } from "@/interfaces";
@@ -41,19 +42,15 @@ export class StatisticInteractor implements IStatisticInteractor {
     return data;
   };
 
-  getDistrictHistory = async (district_id: string, start_date: Date, end_date: Date) => {
-    let hashKey = ["statistics", district_id, "history", start_date, end_date].join(":");
-    const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
-    if (cache) return cache;
-
-    const data = await this.statisticRepository.getDistrictHistory(
-      district_id,
-      start_date,
-      end_date
+  getDistrictHistory = async (
+    district_id: string,
+    start_date: Date,
+    end_date: Date
+  ): Promise<(Statistic & MDistrict)[] | null> => {
+    const hashKey = STATISTICS_KEY.DISTRICT_HISTORY_KEY(district_id, start_date, end_date);
+    const data = await this.cacheService.cache<(Statistic & MDistrict)[] | null>(hashKey, () =>
+      this.statisticRepository.getDistrictHistory(district_id, start_date, end_date)
     );
-    if (data) {
-      await this.cacheService.set(hashKey, data, cacheTime.DEV);
-    }
     return data;
   };
 

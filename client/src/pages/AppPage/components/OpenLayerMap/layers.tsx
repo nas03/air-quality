@@ -4,6 +4,7 @@ import { Feature, Map } from "ol";
 import { WindLayer } from "ol-wind";
 import { Coordinate } from "ol/coordinate";
 import { getBottomLeft } from "ol/extent";
+import GeoJSON from "ol/format/GeoJSON";
 import { Point } from "ol/geom";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
@@ -11,7 +12,7 @@ import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
-import { Icon, Style } from "ol/style";
+import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 
 export const createAQILayer = (time: string) =>
   new TileLayer({
@@ -45,20 +46,39 @@ export const createVietnamBoundaryLayer = (map: Map) =>
     opacity: 1,
   });
 
-export const createStationsLayer = () =>
-  new TileLayer({
-    source: new TileWMS({
-      url: "http://localhost:8080/geoserver/air/wms",
-      params: {
-        LAYERS: "air:stations_point_map",
-        TILED: true,
-        TIME: "2025-02-13T19:00:00Z",
-      },
-
-      serverType: "geoserver",
-      cacheSize: 4096,
-      crossOrigin: "anonymous",
+export const createStationsLayer = (time: string) =>
+  new VectorLayer({
+    source: new VectorSource({
+      url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&time=${time}`,
+      format: new GeoJSON(),
     }),
+    style: (feature) => {
+      const color = feature.get("color");
+      const aqiIndex = feature.get("aqi_index");
+
+      return new Style({
+        image: new Circle({
+          radius: 17.5,
+          fill: new Fill({
+            color: color || "rgba(0, 0, 255, 0.7)",
+          }),
+          stroke: new Stroke({
+            color: "#FFFFFF",
+            width: 4,
+          }),
+        }),
+        text: new Text({
+          text: aqiIndex,
+          font: "Bold 10px sans-serif",
+          // stroke: new Stroke({ color: "#fff", width: 2 }),
+          fill: new Fill({
+            color: color === "#ffff00" ? "#333333" : "#FFFFFF",
+          }),
+          textAlign: "center",
+          textBaseline: "middle",
+        }),
+      });
+    },
     opacity: 1,
   });
 
