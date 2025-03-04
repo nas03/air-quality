@@ -58,9 +58,11 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
         if (prev.sliderValue < SLIDER_MAX) {
           setTime(timeList[prev.sliderValue + 1]);
           return { ...prev, sliderValue: prev.sliderValue + 1 };
+        } else {
+          stopAnimation();
+
+          return { ...prev, isPlaying: false };
         }
-        stopAnimation();
-        return prev;
       });
     }, ANIMATION_INTERVAL);
 
