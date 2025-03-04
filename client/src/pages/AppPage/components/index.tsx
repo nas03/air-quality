@@ -1,3 +1,5 @@
+import AppMenu from "./AppMenu/AppMenu";
+import MenuDrawer from "./AppMenu/MenuDrawer";
 import GradientBar from "./GradientBar";
 import LayerToggle from "./LayerToggle";
 import Navigator from "./Navigator";
@@ -7,4 +9,5 @@ import SideBar from "./SideBar/SideBar";
 import TimeSlider from "./TimeSlider";
 import UserMenu from "./UserMenu/UserMenu";
 
-export { GradientBar, LayerToggle, Navigator, Notifications, OpenLayerMap, SideBar, TimeSlider, UserMenu };
+export { AppMenu, GradientBar, LayerToggle, MenuDrawer, Navigator, Notifications, OpenLayerMap, SideBar, TimeSlider, UserMenu };
+

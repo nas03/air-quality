@@ -4,7 +4,7 @@ import { cn, getRelativeTime } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Badge, Popover } from "antd";
 import { useEffect, useState } from "react";
-import { AiOutlineBell } from "react-icons/ai";
+import { AiFillBell } from "react-icons/ai";
 type NotificationContent = { aqi_index: string; recommendation: string; timestamp: string };
 
 const NotificationBox = ({ notifications }: { notifications: NotificationContent[] }) => {
@@ -19,8 +19,7 @@ const NotificationBox = ({ notifications }: { notifications: NotificationContent
             className="scrollbar mb-3 mt-5 h-[20rem] overflow-y-auto px-6"
             style={{
               msScrollbarTrackColor: "white",
-            }}
-          >
+            }}>
             {notifications.map((el, index) => (
               <div key={index} className="relative mx-auto mb-6 flex w-full max-w-full md:pt-[unset]">
                 <div className="me-4 mt-1 h-2 w-2 rounded-full bg-blue-500"></div>
@@ -72,14 +71,14 @@ const Notifications = ({ className }: React.ComponentPropsWithoutRef<"div">) => 
         overlayInnerStyle={{
           padding: 0,
         }}
-      >
+        className="flex cursor-pointer flex-row items-center gap-1">
         <Badge
           count={notifications.length}
           onClick={() => console.log("show notification")}
-          className="cursor-pointer hover:opacity-80"
-        >
-          <AiOutlineBell size={35} className="rounded-full bg-white p-2" />
+          className="cursor-pointer hover:opacity-80">
+          <AiFillBell size={35} className="rounded-full bg-white p-2" />
         </Badge>
+        <p>Notifications</p>
       </Popover>
     </div>
   );

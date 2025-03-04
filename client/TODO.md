@@ -48,3 +48,8 @@ Data Integration & Feature Toggle
 
 - [x] Turn on/off visibility of layers
 - [x] Fill data of stations layer to warning tab
+
+## Week 6 (Mar 3-9, 2025)
+
+- Set cronjob and add real-time data to station map
+- [x] Re-design the homepage layout

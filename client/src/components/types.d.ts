@@ -7,11 +7,11 @@ export interface IPropsTimeSlider {
   className?: string;
 }
 /* SideBar */
-export interface IPropsSideBar {
+export interface IPropsSideBar extends React.ComponentPropsWithoutRef<"div"> {
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 /* OpenLayerMap */
-export interface IPropsOpenLayerMap {
+export interface IPropsOpenLayerMap extends React.ComponentPropsWithoutRef<"div"> {
   setMarkData: React.Dispatch<React.SetStateAction<MarkData>>;
 }
 

@@ -37,6 +37,7 @@ export const ConfigContext = createContext<ConfigContextType>({
   layer: {
     station: true,
     model: true,
+    wind: true,
   },
 });
 

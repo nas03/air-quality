@@ -2,6 +2,7 @@ import { getAllDistricts } from "@/api/districts";
 import { IPropsSideBar } from "@/components/types";
 import { TimeContext } from "@/context";
 import useRankMutation from "@/hooks/useRankMutation";
+import { cn } from "@/lib/utils";
 import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Collapse, CollapseProps } from "antd";
@@ -35,7 +36,7 @@ const getCollapseItems = (
   },
 ];
 
-const SideBar: React.FC<IPropsSideBar> = ({ setExpanded }) => {
+const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
   const [targetDistrictID, setTargetDistrictID] = useState<string>(DEFAULT_DISTRICT);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -72,7 +73,7 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded }) => {
   const items = getCollapseItems(tabIndex, TabButton, tabComponents, setTabIndex);
 
   return (
-    <div className="absolute ml-[3rem] mt-[1rem] flex max-h-screen w-[23rem] flex-col gap-5">
+    <div className={cn("flex flex-col gap-5", className)}>
       <SearchBar districts={districts} setTargetDistrict={setTargetDistrictID} className="relative" />
       <Collapse
         onChange={() => setExpanded((prev) => !prev)}

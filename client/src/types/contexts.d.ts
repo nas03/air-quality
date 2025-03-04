@@ -18,11 +18,13 @@ export interface ConfigContextType {
     React.SetStateAction<{
       station: boolean;
       model: boolean;
+      wind: boolean;
     }>
   >;
   layer: {
     station: boolean;
     model: boolean;
+    wind: boolean;
   };
 }
 

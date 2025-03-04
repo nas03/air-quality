@@ -1,23 +1,20 @@
 import { getTimeList } from "@/api";
 import { ConfigContext, GeoContext, TimeContext } from "@/context";
+import { cn } from "@/lib/utils";
 import { MarkData } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import GradientBar from "./components/GradientBar";
-import LayerToggle from "./components/LayerToggle";
-import Notifications from "./components/Notifications";
+import { AppMenu, GradientBar, LayerToggle, MenuDrawer, SideBar, TimeSlider } from "./components";
 import OpenLayerMap from "./components/OpenLayerMap/OpenLayerMap";
-import SideBar from "./components/SideBar/SideBar";
-import TimeSlider from "./components/TimeSlider";
-import UserMenu from "./components/UserMenu/UserMenu";
 
 const AppPage = () => {
   const { data: timeList, isSuccess } = useQuery({
     queryKey: ["time"],
     queryFn: getTimeList,
   });
-
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [time, setTime] = useState("");
+  const [expanded, setExpanded] = useState(true);
   const [markData, setMarkData] = useState<MarkData>({
     type: 0,
     coordinate: undefined,
@@ -29,16 +26,16 @@ const AppPage = () => {
   const [layer, setLayer] = useState({
     station: true,
     model: true,
+    wind: true,
   });
-  const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     if (isSuccess) setTime(timeList[0]);
   }, [isSuccess]);
 
   return (
-    <div className="flex h-screen w-screen flex-col">
-      <ConfigContext.Provider value={{ setLayer, layer: layer }}>
+    <div className="h-screen w-full">
+      <ConfigContext.Provider value={{ setLayer, layer }}>
         <TimeContext.Provider value={{ timeList: timeList || [], time }}>
           <GeoContext.Provider
             value={{
@@ -48,17 +45,27 @@ const AppPage = () => {
               pm_25: markData.pm_25,
               location: markData.location,
             }}>
-            <OpenLayerMap setMarkData={setMarkData} />
-            <div id="overlay-layer" className="absolute z-[1000]">
-              <div className="fixed right-3 mt-[1.5rem] flex flex-row items-center gap-5">
-                <Notifications className="" />
-                <UserMenu className="" />
+            <div className={cn("absolute h-screen transition-all duration-500", openDrawer ? "w-[82vw]" : "w-full")}>
+              <OpenLayerMap className="h-full w-full" setMarkData={setMarkData} />
+              <div className="z-[1000]">
+                <SideBar className="absolute left-12 top-4 max-h-screen w-96" setExpanded={setExpanded} />
+                <LayerToggle className="absolute right-3 top-[13rem] h-fit" />
+
+                <AppMenu
+                  openDrawer={openDrawer}
+                  setOpenDrawer={setOpenDrawer}
+                  className="absolute right-3 top-0 mt-[1.5rem] flex flex-row items-center gap-5"
+                />
+
+                <div className="absolute bottom-0 left-0 flex w-full flex-row items-end gap-10 pr-3">
+                  <TimeSlider expanded={expanded} className="" setTime={setTime} />
+                  <GradientBar
+                    className={cn("relative transition-all duration-500", openDrawer && "-translate-x-3 transform")}
+                  />
+                </div>
               </div>
-              <SideBar setExpanded={setExpanded} />
-              <LayerToggle className="ml-[29rem] pt-[1.5rem]" />
-              <TimeSlider expanded={expanded} className="" setTime={setTime} />
-              <GradientBar className="fixed bottom-0 right-5" />
             </div>
+            <MenuDrawer className={cn()} open={openDrawer} />
           </GeoContext.Provider>
         </TimeContext.Provider>
       </ConfigContext.Provider>

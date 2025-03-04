@@ -2,7 +2,9 @@ import { cn } from "@/lib/utils";
 
 const GradientBar = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) => {
   return (
-    <div className={cn("relative flex h-40 items-center bg-white/50 backdrop-blur-md py-3 px-5 rounded-lg", className)} {...props}>
+    <div
+      className={cn("flex h-40 items-center rounded-lg bg-white/50 px-5 py-3 backdrop-blur-md", className)}
+      {...props}>
       <div className="h-full w-1 bg-gradient-to-b from-green-500 via-orange-500 via-red-500 via-yellow-500 to-purple-500"></div>
       <div className="ml-4 flex h-full flex-col justify-between text-xs">
         <span className="top-0">0</span>

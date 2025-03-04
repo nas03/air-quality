@@ -1,6 +1,7 @@
 import { IPropsOpenLayerMap } from "@/components/types";
 import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
+import { cn } from "@/lib/utils";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { WindLayer } from "ol-wind";
@@ -142,12 +143,12 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     updateLayerVisibility(aqiLayer, configContext.layer.model);
     updateLayerVisibility(boundaryLayer, configContext.layer.model);
     updateLayerVisibility(stationsLayer, configContext.layer.station);
-    updateLayerVisibility(windLayer, configContext.layer.model);
+    updateLayerVisibility(windLayer, configContext.layer.wind);
   }, [configContext.layer]);
 
   return (
     <>
-      <div id="map" className="absolute bottom-0 top-0 h-full w-full" />
+      <div id="map" className={cn("", props.className)} />
     </>
   );
 };

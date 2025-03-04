@@ -25,7 +25,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
         fontWeight: 600,
         ...(isLast && { color: "red" }),
       },
-      label: time.split("-").reverse().join('.'),
+      label: time.split("-").reverse().join("."),
     }),
     [],
   );
@@ -87,8 +87,8 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
     <div
       className={cn(
         className,
-        expanded ? "ml-[28rem] w-[calc(100vw-35rem)]" : "w-[calc(100vw-7rem)]",
-        "bg-3 fixed bottom-0 flex h-fit flex-row items-center gap-16 rounded-md bg-white/50 pb-2 pl-10 pr-16 pt-5 font-roboto backdrop-blur-md transition-all duration-150",
+        expanded && "ml-[28rem]",
+        "bg-3 flex h-fit w-full flex-row items-center gap-16 rounded-md bg-white/50 pb-2 pl-10 pr-16 pt-5 font-roboto backdrop-blur-md transition-all duration-150",
       )}>
       <button className="shrink-0 rounded-full text-4xl" onClick={handlePlayPause}>
         {!state.isPlaying ? <GoPlay /> : <AiOutlinePauseCircle />}
