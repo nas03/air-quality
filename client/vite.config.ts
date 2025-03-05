@@ -23,6 +23,7 @@ export default defineConfig({
           "tanstack-vendor": ["@tanstack/react-query", "@tanstack/react-router"],
           "antd-vendor": ["antd", "@ant-design/icons"],
           "mui-vender": ["@mui/x-charts"],
+          "framer-motion-vender": ["motion"],
         },
       },
     },

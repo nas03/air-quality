@@ -63,3 +63,4 @@ UI/UX Improvements & Feature Completion:
   - [ ] Create favorite locations feature
   - [ ] Enhance ranking board visualization
   - [ ] Search Bar for each tab
+  - [ ] Return button for analytics page

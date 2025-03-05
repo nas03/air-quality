@@ -33,6 +33,10 @@ const AppPage = () => {
     if (isSuccess) setTime(timeList[0]);
   }, [isSuccess]);
 
+  // Framer Motion
+  const transition = { type: "tween", duration: 0.3 };
+  const animate = openDrawer ? "open" : "close";
+
   return (
     <div className="h-full w-full" style={{ height: "100vh" }}>
       <ConfigContext.Provider value={{ setLayer, layer }}>
@@ -46,51 +50,76 @@ const AppPage = () => {
               location: markData.location,
             }}>
             <motion.div
-              animate={openDrawer ? "open" : "close"}
+              animate={animate}
               variants={{
                 open: { width: "var(--main-width)" },
                 close: { width: "100%" },
               }}
-              transition={{ type: "tween", duration: 0.65 }}
-              className="absolute h-full [--main-width:82vw] max-2xl:[--main-width:75vw]"
-              style={{ width: openDrawer ? "var(--main-width)" : "100%" }}>
+              transition={transition}
+              className={cn(
+                "absolute h-full [--main-width:82vw] max-2xl:[--main-width:75vw]",
+                openDrawer ? "var(--main-width)" : "w-full",
+              )}>
               <OpenLayerMap className="h-full w-full" setMarkData={setMarkData} />
               <div className="pointer-events-none fixed inset-0 z-[1000]">
                 <SideBar
                   className="transition-[width, height] pointer-events-auto fixed left-3 top-4 h-[calc(100vh-1rem)] max-2xl:w-[21rem] 2xl:w-96"
                   setExpanded={setExpanded}
                 />
-                <LayerToggle
+                <motion.div
                   className={cn(
-                    "pointer-events-auto fixed right-3 top-[13rem] h-fit transition-transform duration-700",
-                    openDrawer && "-translate-x-[calc(25vw-6px)] 2xl:-translate-x-[calc(18vw-6px)]",
+                    "pointer-events-auto fixed right-3 top-[13rem] h-fit [--layer-toggle-translate:calc(6px-25vw)] 2xl:[--layer-toggle-translate:calc(6px-18vw)]",
                   )}
-                />
-
-                <AppMenu
-                  openDrawer={openDrawer}
-                  setOpenDrawer={setOpenDrawer}
+                  animate={animate}
+                  variants={{
+                    open: { translateX: "var(--layer-toggle-translate)" },
+                    close: { translateX: "0" },
+                  }}
+                  transition={transition}>
+                  <LayerToggle />
+                </motion.div>
+                <motion.div
                   className={cn(
-                    "pointer-events-auto fixed right-3 top-0 mt-[1.5rem] flex flex-row items-center gap-5 transition-transform duration-700",
-                    openDrawer && "-translate-x-[calc(25vw-6px)] 2xl:-translate-x-[calc(18vw-6px)]",
+                    "pointer-events-auto fixed right-3 top-0 mt-[1.5rem] [--app-menu-translate:calc(6px-25vw)] 2xl:[--app-menu-translate:calc(6px-18vw)]",
                   )}
-                />
+                  animate={animate}
+                  variants={{
+                    open: { translateX: "var(--app-menu-translate)", right: "1rem" },
+                    close: { translateX: "0", right: "0.75rem" },
+                  }}
+                  transition={transition}>
+                  <AppMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} className={cn("")} />
+                </motion.div>
 
-                <div
-                  className={cn(
-                    "pointer-events-auto fixed bottom-0 left-0 flex w-full flex-row items-end gap-5 pr-3 transition-all duration-700",
-                    openDrawer ? "max-2xl:w-[75vw] 2xl:w-[82vw]" : "w-full",
-                  )}>
+                <motion.div
+                  className={cn("pointer-events-auto fixed bottom-3 left-0 flex w-full flex-row items-end gap-5 pr-3")}
+                  animate={animate}
+                  variants={{
+                    open: { width: "var(--main-width)" },
+                    close: { width: "100%" },
+                  }}
+                  transition={transition}>
                   <TimeSlider
                     openDrawer={openDrawer}
                     className={cn(
-                      "w-full transition-all duration-700",
+                      "w-full transition-all duration-300",
                       expanded ? "max-2xl:ml-[23rem] 2xl:ml-[26rem]" : "",
                     )}
                     setTime={setTime}
                   />
-                  <GradientBar className={cn("relative transition-all duration-700")} />
-                </div>
+                  <GradientBar className={cn("relative")} />
+                </motion.div>
+                {/* <motion.div
+                  className={cn(
+                    "fixed bottom-0 left-0 h-6 w-full bg-white blur",
+                    expanded ? "max-2xl:ml-[23rem] 2xl:ml-[26rem]" : "",
+                  )}
+                  animate={animate}
+                  variants={{
+                    open: { width: "var(--main-width)" },
+                    close: { width: "100%" },
+                  }}
+                  transition={transition}></motion.div> */}
               </div>
             </motion.div>
             <MenuDrawer className={cn()} open={openDrawer} />

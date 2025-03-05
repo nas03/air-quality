@@ -51,4 +51,4 @@ Data Integration & Dashboard:
 ## Week 6 (Mar 3-9, 2025)
 
 - [ ] Check if user enabled notifications API
-- [ ] 
+- [ ] Check redisKeys for API

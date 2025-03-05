@@ -58,15 +58,15 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
     { label: "My Favorites", key: 1, icon: <MdFavorite size={35} className="p-2" /> },
     {
       label: "Analytics Page",
-      key: 3,
+      key: 2,
       type: "link",
       path: "/analytics",
       icon: <MdAnalytics size={35} className="p-2" />,
     },
-    { label: "Profile", key: 4, icon: <AiFillProfile size={35} className="p-2" />, children: <ProfileTab /> },
+    { label: "Profile", key: 3, icon: <AiFillProfile size={35} className="p-2" />, children: <ProfileTab /> },
     {
       label: "Settings",
-      key: 5,
+      key: 4,
       icon: <IoMdSettings size={35} className="p-2" />,
       children: <SettingsTab className="mt-6 px-6" />,
     },
@@ -84,7 +84,7 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
         }}
         transition={{
           type: "tween",
-          duration: 0.7,
+          duration: 0.3,
         }}
         className={cn(
           "fixed right-0 top-0 h-full [--menu-width:18vw] max-2xl:[--menu-width:25vw]",
@@ -92,7 +92,7 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
           className,
         )}>
         <div className="flex w-full flex-row items-end justify-between px-10 pt-[1rem]">
-          <UserMenu className="w-full" />
+          <UserMenu className="h-full w-full" />
         </div>
         <div className="mt-8 flex w-full items-center justify-center">
           <div
