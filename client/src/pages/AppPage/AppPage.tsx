@@ -15,6 +15,11 @@ const AppPage = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [time, setTime] = useState("");
   const [expanded, setExpanded] = useState(true);
+  const [layer, setLayer] = useState({
+    station: true,
+    model: true,
+    wind: true,
+  });
   const [markData, setMarkData] = useState<MarkData>({
     type: 0,
     coordinate: undefined,
@@ -22,11 +27,6 @@ const AppPage = () => {
     pm_25: null,
     location: "",
     time: time,
-  });
-  const [layer, setLayer] = useState({
-    station: true,
-    model: true,
-    wind: true,
   });
 
   useEffect(() => {
@@ -46,11 +46,15 @@ const AppPage = () => {
               location: markData.location,
             }}>
             <motion.div
-              className={cn(
-                "transition-[width, height] absolute h-full duration-500",
-                openDrawer ? "max-2xl:w-[75vw] 2xl:w-[82vw]" : "w-full",
-              )}>
-              <OpenLayerMap className={cn("h-full w-full")} setMarkData={setMarkData} />
+              animate={openDrawer ? "open" : "close"}
+              variants={{
+                open: { width: "var(--main-width)" },
+                close: { width: "100%" },
+              }}
+              transition={{ type: "tween", duration: 0.65 }}
+              className="absolute h-full [--main-width:82vw] max-2xl:[--main-width:75vw]"
+              style={{ width: openDrawer ? "var(--main-width)" : "100%" }}>
+              <OpenLayerMap className="h-full w-full" setMarkData={setMarkData} />
               <div className="pointer-events-none fixed inset-0 z-[1000]">
                 <SideBar
                   className="transition-[width, height] pointer-events-auto fixed left-3 top-4 h-[calc(100vh-1rem)] max-2xl:w-[21rem] 2xl:w-96"
@@ -58,7 +62,7 @@ const AppPage = () => {
                 />
                 <LayerToggle
                   className={cn(
-                    "pointer-events-auto fixed right-3 top-[13rem] h-fit transition-transform duration-500",
+                    "pointer-events-auto fixed right-3 top-[13rem] h-fit transition-transform duration-700",
                     openDrawer && "-translate-x-[calc(25vw-6px)] 2xl:-translate-x-[calc(18vw-6px)]",
                   )}
                 />
@@ -67,26 +71,25 @@ const AppPage = () => {
                   openDrawer={openDrawer}
                   setOpenDrawer={setOpenDrawer}
                   className={cn(
-                    "pointer-events-auto fixed right-3 top-0 mt-[1.5rem] flex flex-row items-center gap-5 transition-transform duration-500",
+                    "pointer-events-auto fixed right-3 top-0 mt-[1.5rem] flex flex-row items-center gap-5 transition-transform duration-700",
                     openDrawer && "-translate-x-[calc(25vw-6px)] 2xl:-translate-x-[calc(18vw-6px)]",
                   )}
                 />
 
                 <div
                   className={cn(
-                    "pointer-events-auto fixed bottom-0 left-0 flex w-full flex-row items-end gap-5 pr-3 transition-all duration-500",
-                    /* openDrawer && "-translate-x-[calc(25vw-6px)] 2xl:-translate-x-[calc(18vw-6px)]", */
+                    "pointer-events-auto fixed bottom-0 left-0 flex w-full flex-row items-end gap-5 pr-3 transition-all duration-700",
                     openDrawer ? "max-2xl:w-[75vw] 2xl:w-[82vw]" : "w-full",
                   )}>
                   <TimeSlider
                     openDrawer={openDrawer}
                     className={cn(
-                      "w-full transition-all duration-500",
+                      "w-full transition-all duration-700",
                       expanded ? "max-2xl:ml-[23rem] 2xl:ml-[26rem]" : "",
                     )}
                     setTime={setTime}
                   />
-                  <GradientBar className={cn("relative transition-all duration-500")} />
+                  <GradientBar className={cn("relative transition-all duration-700")} />
                 </div>
               </div>
             </motion.div>

@@ -8,6 +8,9 @@ module.exports = {
       fontFamily: {
         roboto: ["Roboto"],
       },
+      transitionDuration: {
+        400: '450ms',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
