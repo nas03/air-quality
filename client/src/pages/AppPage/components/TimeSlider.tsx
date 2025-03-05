@@ -9,7 +9,7 @@ import { GoPlay } from "react-icons/go";
 const SLIDER_MAX = 5;
 const ANIMATION_INTERVAL = 2000;
 
-const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }) => {
+const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer }) => {
   const timeList = useTimeList();
   const intervalRef = React.useRef<NodeJS.Timeout>();
   const [state, setState] = useState({
@@ -19,23 +19,25 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
   });
 
   const formatTimeLabel = useCallback(
-    (time: string, isLast: boolean) => ({
+    (time: string, isLast: boolean, open: boolean) => ({
       style: {
         fontSize: 14,
         fontWeight: 600,
         ...(isLast && { color: "red" }),
       },
-      label: time.split("-").reverse().join("."),
+      label: open ? time.split("-").reverse().splice(0, 2).join(".") : time.split("-").reverse().join("."),
     }),
     [],
   );
 
   useEffect(() => {
     const marks = Object.fromEntries(
-      timeList.slice(0, SLIDER_MAX + 1).map((time, index) => [index, formatTimeLabel(time, index === SLIDER_MAX)]),
+      timeList
+        .slice(0, SLIDER_MAX + 1)
+        .map((time, index) => [index, formatTimeLabel(time, index === SLIDER_MAX, openDrawer)]),
     );
     setState((prev) => ({ ...prev, marks }));
-  }, [timeList, formatTimeLabel]);
+  }, [timeList, formatTimeLabel, openDrawer]);
 
   const updateSliderValue = useCallback(
     (newValue: number) => {
@@ -89,8 +91,8 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, expanded }
     <div
       className={cn(
         className,
-        expanded && "ml-[28rem]",
-        "bg-3 flex h-fit w-full flex-row items-center gap-16 rounded-md bg-white/50 pb-2 pl-10 pr-16 pt-5 font-roboto backdrop-blur-md transition-all duration-150",
+
+        "bg-3 flex h-fit flex-row items-center gap-16 rounded-md bg-white/50 pb-2 pl-10 pr-16 pt-5 font-roboto backdrop-blur-md",
       )}>
       <button className="shrink-0 rounded-full text-4xl" onClick={handlePlayPause}>
         {!state.isPlaying ? <GoPlay /> : <AiOutlinePauseCircle />}

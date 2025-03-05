@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { AiFillBell, AiFillProfile } from "react-icons/ai";
 import { IoMdSettings } from "react-icons/io";
@@ -25,17 +26,14 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
   ];
   return (
     <>
-      <div
+      <motion.div
         className={cn(
-          "fixed right-0 top-0 h-full w-0 transition-all duration-500",
-          open ? "w-[18vw]" : "w-0",
+          "transition-[width, height] fixed right-0 top-0 h-full duration-500",
+          open ? "max-2xl:w-[25vw] 2xl:w-[18vw]" : "w-0",
           className,
         )}>
         <div className="flex w-full flex-row items-end justify-between px-10 pt-[1rem]">
-          <p className="line-clamp-1 text-base font-extrabold uppercase text-zinc-950 dark:text-white md:text-xl">
-            Hello, Nguyen Anh Son
-          </p>
-          <UserMenu className="" />
+          <UserMenu className="w-full" />
         </div>
         <div className="mt-8 flex w-full items-center justify-center">
           <div
@@ -71,7 +69,7 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
           {items[selectedTab].label}
         </h3>
         <div className="scrollbar h-[80%] w-full overflow-y-auto">{items[selectedTab].children}</div>
-      </div>
+      </motion.div>
     </>
   );
 };

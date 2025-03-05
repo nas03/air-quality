@@ -40,6 +40,22 @@ const NotificationBox = ({ notifications }: { notifications: NotificationContent
     </>
   );
 };
+
+/* const CreateNotification = () => {
+  const items: StepsProps["items"] = [
+    {
+      title: "Choose your location",
+    },
+    {
+      title: "Choose your receiving method: SMS/Email/Both",
+    },
+  ];
+  return (
+    <>
+      <Steps items={items} />
+    </>
+  );
+}; */
 const NotificationTab: React.FC<IPropsNotificationTab> = () => {
   const [notifications, setNotifications] = useState<NotificationContent[]>([]);
   const auth = useAuth();

@@ -1,3 +1,5 @@
+import { UserSetting } from "@/entities";
+
 type UserEmailNotification = {
   user_id: number;
   email: string;
@@ -6,4 +8,5 @@ type UserEmailNotification = {
 
 export interface IUserSettingRepository {
   userEmailNotificationSettings(): Promise<UserEmailNotification[]>;
+  getUserSetting(user_id: number): Promise<UserSetting | null>;
 }

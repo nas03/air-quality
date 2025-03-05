@@ -3,7 +3,7 @@ import { MarkData } from "@/types/types";
 /* TimeSlider */
 export interface IPropsTimeSlider {
   setTime: (value: string | ((prevState: string) => string)) => void;
-  expanded: boolean;
+  openDrawer: boolean;
   className?: string;
 }
 /* SideBar */

@@ -51,5 +51,15 @@ Data Integration & Feature Toggle
 
 ## Week 6 (Mar 3-9, 2025)
 
-- Set cronjob and add real-time data to station map
+UI/UX Improvements & Feature Completion:
+
 - [x] Re-design the homepage layout
+- [ ] Complete core features:
+  - [x] Implement signout functionality
+  - [ ] Integrate wind data collection
+  - [ ] Configure cronjob for real-time station data updates
+  - [ ] Add multi-language support (Vietnamese/English)
+  - [ ] Implement notification preference system
+  - [ ] Create favorite locations feature
+  - [ ] Enhance ranking board visualization
+  - [ ] Search Bar for each tab

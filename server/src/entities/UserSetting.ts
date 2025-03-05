@@ -1,12 +1,11 @@
 export class UserSetting {
   public constructor(
-    public id: number,
-    public user_id: number,
-    public profile_url: string,
-    public user_location: string /* Ref to district_id */,
-    public email_notification: boolean,
-    public phone_notification: boolean,
-    public deleted?: number,
+    public id: number | null,
+    public user_id: number | null,
+    public profile_url: string | null,
+    public user_location: string | null /* Ref to district_id */,
+    public receive_notifications: number | null,
+    public deleted?: number | null,
     public updated_at?: Date | null,
     public created_at?: Date | null
   ) {}

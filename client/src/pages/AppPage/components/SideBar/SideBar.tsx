@@ -1,7 +1,7 @@
 import { getAllDistricts } from "@/api/districts";
 import { IPropsSideBar } from "@/components/types";
 import { TimeContext } from "@/context";
-import useRankMutation from "@/hooks/useRankMutation";
+import useDistrictRanking from "@/hooks/useDistrictRanking";
 import { cn } from "@/lib/utils";
 import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -46,7 +46,7 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
   });
 
   const { time } = useContext(TimeContext);
-  const { mutation, tableData } = useRankMutation(time);
+  const { mutation, tableData } = useDistrictRanking(time);
 
   useEffect(() => {
     mutation.mutate(time);

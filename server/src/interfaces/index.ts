@@ -4,6 +4,7 @@ export * from "./interactors/IStationsInteractor";
 export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
 export * from "./interactors/IUserNotificationInteractor";
+export * from "./interactors/IUserSettingInteractor";
 
 export * from "./repositories/IDistrictRepository";
 export * from "./repositories/IMailRepository";

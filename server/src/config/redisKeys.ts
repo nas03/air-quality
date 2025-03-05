@@ -8,3 +8,7 @@ export const STATISTICS_KEY = Object.freeze({
   DISTRICT_HISTORY_KEY: (district_id: string, start_date: Date, end_date: Date) =>
     `statistics:${district_id}:history:${start_date.toString()}:${end_date.toString()}`,
 });
+
+export const USER_SETTING_KEY = Object.freeze({
+  SETTING_ALL_KEY: (user_id: number) => `users_setting:${user_id}:*`,
+});

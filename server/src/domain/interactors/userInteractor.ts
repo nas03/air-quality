@@ -44,7 +44,7 @@ export class UserInteractor implements IUserInteractor {
 
   findUser = async (accountIdentifier: string | number): Promise<User | null> => {
     const { key, redisKey } = this.getSearchCriteria(accountIdentifier);
-    return this.cacheService.cache(redisKey, () =>
+    return await this.cacheService.cache(redisKey, () =>
       this.userRepository.findUser({ [key]: accountIdentifier })
     );
   };

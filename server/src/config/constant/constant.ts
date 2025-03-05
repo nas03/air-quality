@@ -7,7 +7,7 @@ export const resMessage = Object.freeze({
   user_existed: "User is existed",
   user_not_authorized: "User is not authorized",
   token_invalid: "Token is invalid",
-  wrong_old_password: 'Your old password is invalid'
+  wrong_old_password: "Your old password is invalid",
 });
 
 export const statusCode = Object.freeze({
@@ -44,4 +44,11 @@ export const AUTHENTICATION = Object.freeze({
     USER: 1,
     ADMIN: 2,
   }),
+});
+
+export const receiveNotification = Object.freeze({
+  DISABLED: 0,
+  EMAIL_NOTIFICATION: 1,
+  SMS_NOTIFICATION: 2,
+  BOTH: 3,
 });

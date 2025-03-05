@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { RankData } from "@/hooks/useRankMutation";
+import { RankData } from "@/hooks/useDistrictRanking";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { getStyleRankTable } from "../config";

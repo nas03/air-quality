@@ -8,7 +8,7 @@ export interface RankData {
   aqi_index: number;
 }
 
-const useRankMutation = (time: string) => {
+const useDistrictRanking = (time: string) => {
   const [tableData, setTableData] = useState<RankData[]>([]);
 
   const processRankData = (data: (Statistic & MDistrict)[] | null): RankData[] => {
@@ -31,4 +31,4 @@ const useRankMutation = (time: string) => {
   return { mutation, tableData };
 };
 
-export default useRankMutation;
+export default useDistrictRanking;

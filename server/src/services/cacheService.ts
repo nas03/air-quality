@@ -97,7 +97,7 @@ export class CacheService implements ICacheService {
       console.error("Error deleting key:", error);
     }
   }
-  async cache<T>(key: string, func: Function): Promise<T | null> {
+  async cache<T>(key: string, func: () => Promise<T>): Promise<T | null> {
     try {
       const cache = await this.redisClient.get(key);
       if (cache) return JSON.parse(cache);

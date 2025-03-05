@@ -1,3 +1,4 @@
+import { receiveNotification } from "@/config/constant";
 import { db } from "@/config/db";
 import { IUserNotificationRepository } from "@/interfaces/repositories/IUserNotificationRepository";
 
@@ -100,7 +101,7 @@ export class UserNotificationRepository implements IUserNotificationRepository {
         "mr.color",
       ])
       .where("timestamp", "=", date)
-      .where("email_notification", "=", true)
+      .where("receive_notifications", "=", receiveNotification.EMAIL_NOTIFICATION)
       .execute();
     return query;
   }

@@ -38,6 +38,6 @@ export interface ICacheService {
    * Get multiple values from cache
    */
   mget(keys: string[]): Promise<(string | null)[]>;
-  cache<T>(key: string, func: Function): Promise<T | null>;
+  cache<T>(key: string, func: () => Promise<T>): Promise<T | null>;
   generateRedisKey(objectType: string, objectId: string | number, field: string | "*"): string;
 }

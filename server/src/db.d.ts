@@ -84,6 +84,7 @@ export interface Stations {
   geom: string | null;
   lat: number;
   lng: number;
+  pm25: number | null;
   station_id: string;
   station_name: string | null;
   status: string;
@@ -137,10 +138,9 @@ export interface UsersSession {
 export interface UsersSetting {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
-  email_notification: Generated<boolean | null>;
   id: number;
   profile_url: string | null;
-  sms_notification: Generated<boolean | null>;
+  receive_notifications: Generated<number | null>;
   updated_at: Generated<Timestamp | null>;
   user_id: number | null;
   user_location: string | null;

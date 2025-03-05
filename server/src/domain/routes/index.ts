@@ -10,6 +10,7 @@ import statisticRouter from "@/domain/routes/statisticRoutes";
 import notificationRouter from "@/domain/routes/userNotificationRoute";
 import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
+import userSettingRouter from "./userSettingRoute";
 
 const routes = [
   ...userRouter,
@@ -19,6 +20,7 @@ const routes = [
   ...authRouter,
   ...notificationRouter,
   ...recommendationRouter,
+  ...userSettingRouter,
 ];
 
 const userRepository = new UserRepository();

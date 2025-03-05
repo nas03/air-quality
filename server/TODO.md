@@ -43,8 +43,12 @@ Data Integration & Dashboard:
 
 - [x] Add PM2.5 data collection from CEM
 - [x] Integrate data from moitruongthudo.vn
-- [ ] Implement analytics dashboard
+- [x] Implement analytics dashboard
   - [x] Layout
-  - [ ] Data controller
-  - [ ] Data fetch
-  - [ ] 
+  - [x] Data controller
+  - [x] Data fetch
+
+## Week 6 (Mar 3-9, 2025)
+
+- [ ] Check if user enabled notifications API
+- [ ] 

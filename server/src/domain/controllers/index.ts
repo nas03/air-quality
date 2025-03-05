@@ -5,4 +5,5 @@ export * from "./notificationController";
 export * from "./stationsController";
 export * from "./statisticController";
 export * from "./userController";
+export * from "./userSettingController";
 
