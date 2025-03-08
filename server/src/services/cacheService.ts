@@ -97,12 +97,18 @@ export class CacheService implements ICacheService {
       console.error("Error deleting key:", error);
     }
   }
-  async cache<T>(key: string, func: () => Promise<T>): Promise<T | null> {
+  async cache<T>(key: string, func: (() => Promise<T>) | T): Promise<T | null> {
     try {
       const cache = await this.redisClient.get(key);
       if (cache) return JSON.parse(cache);
 
-      const data = await func();
+      let data: T;
+      if (typeof func === "function") {
+        data = await (func as () => Promise<T>)();
+      } else {
+        data = func as T;
+      }
+
       if (data) {
         const serializedData = JSON.stringify(data);
         await this.redisClient.setex(key, cacheTime.DEFAULT, serializedData);

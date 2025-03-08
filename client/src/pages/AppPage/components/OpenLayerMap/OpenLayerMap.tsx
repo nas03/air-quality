@@ -24,7 +24,8 @@ import {
 } from "./layers";
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
-  const layersRef = useRef<TileLayer | null>(null);
+  const aqiLayerRef = useRef<TileLayer | null>(null);
+  const layersRef = useRef<Array<TileLayer | VectorLayer | WindLayer> | null>(null);
   const markerRef = useRef<VectorLayer | null>(null);
   const mapRef = useRef<Map | null>(null);
   const { time } = useContext(TimeContext);
@@ -62,8 +63,9 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       createMarkerLayer(INITIAL_COORDINATE),
       await createWindyLayer(),
     ];
-    layersRef.current = layers[0] as TileLayer;
+    aqiLayerRef.current = layers[0] as TileLayer;
     markerRef.current = layers[3] as VectorLayer;
+    configContext.setMarker(markerRef.current);
     return layers;
   };
 
@@ -82,15 +84,8 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     const modelLayers = ["air:AQI", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
     const stationLayers = ["air:stations_point_map"];
 
-    const modelURL = getWMSFeatureInfo(map, mapLayers, modelLayers, modelLayers, coordinate);
-    const stationURL = getWMSFeatureInfo(
-      map,
-      mapLayers,
-      stationLayers,
-      stationLayers,
-      coordinate,
-      "2025-02-13T19:00:00Z",
-    );
+    const modelURL = getWMSFeatureInfo(map, mapLayers, modelLayers, coordinate);
+    const stationURL = getWMSFeatureInfo(map, mapLayers, stationLayers, coordinate, "2025-02-13T19:00:00Z");
 
     if (!modelURL || !stationURL) {
       console.error("Failed to generate WMS URLs for location data");
@@ -108,9 +103,27 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   };
 
   useEffect(() => {
+    const map = mapRef.current;
+    const marker = configContext.markerRef?.current;
+
+    if (!map || !marker) return;
+
+    const markerFeature = marker.getSource()?.getFeatures()[0];
+    if (!markerFeature) return;
+
+    const coordinate = markerFeature.getGeometry()?.getCoordinates();
+    if (!coordinate) return;
+
+    if (map && layersRef.current) {
+      handleUpdateLocationData(map, layersRef.current, coordinate);
+    }
+  }, [configContext.currentCoordinate]);
+
+  useEffect(() => {
     const map = initializeMap();
     const setupMap = async () => {
       const layers = await createLayers(map);
+      layersRef.current = layers;
       await apply(map, styleUrl);
       map.getLayers().extend(layers);
       handleMapClick(map, layers);
@@ -120,13 +133,14 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     };
 
     mapRef.current = map;
+    configContext.setMap(map);
     setupMap();
 
     return () => map.dispose();
   }, []);
 
   useEffect(() => {
-    const source = layersRef.current?.getSource() as TileWMS;
+    const source = aqiLayerRef.current?.getSource() as TileWMS;
     source?.updateParams({ TIME: time });
   }, [time]);
 

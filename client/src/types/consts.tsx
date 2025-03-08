@@ -52,3 +52,10 @@ export const getGradientDefs = (id: string) => {
     </defs>,
   ];
 };
+
+export const receiveNotification = Object.freeze({
+  DISABLED: 0,
+  EMAIL_NOTIFICATION: 1,
+  SMS_NOTIFICATION: 2,
+  BOTH: 3,
+});

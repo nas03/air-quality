@@ -9,4 +9,5 @@ type UserEmailNotification = {
 export interface IUserSettingRepository {
   userEmailNotificationSettings(): Promise<UserEmailNotification[]>;
   getUserSetting(user_id: number): Promise<UserSetting | null>;
+  createUserSetting(userSetting: Omit<UserSetting, "id">): Promise<UserSetting | null>;
 }

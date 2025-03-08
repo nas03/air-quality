@@ -1,4 +1,5 @@
 import {
+  AlertRegistrationContextType,
   AnalyticContextType,
   AuthContextType,
   ConfigContextType,
@@ -39,6 +40,12 @@ export const ConfigContext = createContext<ConfigContextType>({
     model: true,
     wind: true,
   },
+  mapRef: { current: null },
+  markerRef: { current: null },
+  setMarker: () => {},
+  setMap: () => {},
+  currentCoordinate: [0, 0],
+  setCurrentCoordinate: () => {},
 });
 
 export const AuthenticationContext = createContext<AuthContextType>({
@@ -54,4 +61,11 @@ export const AnalyticContext = createContext<AnalyticContextType>({
   selectedDistrict: "",
   dataType: MonitoringData.OUTPUT.AQI,
   setAnalyticData: () => null,
+});
+
+export const AlertRegistrationContext = createContext<AlertRegistrationContextType>({
+  currentStep: 0,
+  setCurrentStep: () => {},
+  maxStep: 3,
+  registrationLoading: false,
 });

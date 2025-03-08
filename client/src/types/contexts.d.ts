@@ -1,3 +1,7 @@
+import { Map } from "ol";
+import { Coordinate } from "ol/coordinate";
+import VectorLayer from "ol/layer/Vector";
+import { SetStateAction } from "react";
 import { AnalyticData, MonitoringOutputDataType } from "./types";
 
 export interface TimeContextType {
@@ -26,6 +30,12 @@ export interface ConfigContextType {
     model: boolean;
     wind: boolean;
   };
+  currentCoordinate: Coordinate;
+  setCurrentCoordinate: React.Dispatch<SetStateAction<Coordinate>>;
+  setMap: (map: Map) => void;
+  mapRef: React.MutableRefObject<Map | null>;
+  setMarker: (marker) => void;
+  markerRef: React.MutableRefObject<VectorLayer | null>;
 }
 
 export type AuthUser = {
@@ -46,4 +56,11 @@ export interface AnalyticContextType {
   province_id: string;
   dataType: MonitoringOutputDataType;
   selectedDistrict: string;
+}
+
+export interface AlertRegistrationContextType {
+  currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  maxStep: number;
+  registrationLoading: boolean;
 }

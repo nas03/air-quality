@@ -61,7 +61,8 @@ const SigninPage = ({ className, ...props }: React.ComponentPropsWithoutRef<"div
   const navigate = useNavigate();
 
   const handleSignin = async (data: SigninFormData) => {
-    await auth.login(data.email, data.password);
+    const status = await auth.login(data.email, data.password);
+    if (!status) return;
     navigate({ to: "/" });
   };
 

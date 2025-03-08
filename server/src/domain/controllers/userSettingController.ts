@@ -20,4 +20,30 @@ export class UserSettingController extends BaseController<[UserSettingInteractor
       data: userSetting,
     });
   };
+
+  onCreateUserSetting = async (req: Request, res: Response) => {
+    const body = req.body as {
+      user_id: number;
+      user_location: string;
+      receive_notifications: number;
+      profile_url: string | null;
+    };
+    const newUserSetting = await this.userSettingInteractor.createUserSetting({
+      user_id: body.user_id,
+      profile_url: body.profile_url,
+      receive_notifications: body.receive_notifications,
+      user_location: body.user_location,
+    });
+
+    if (!newUserSetting) {
+      return res.status(statusCode.BAD_REQUEST).json({
+        status: "error",
+        message: resMessage.server_error,
+      });
+    }
+    return res.status(statusCode.SUCCESS).json({
+      status: "success",
+      data: newUserSetting,
+    });
+  };
 }

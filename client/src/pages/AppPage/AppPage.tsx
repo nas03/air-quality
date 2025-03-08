@@ -4,14 +4,27 @@ import { cn } from "@/lib/utils";
 import { MarkData } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { Map } from "ol";
+import { Coordinate } from "ol/coordinate";
+import VectorLayer from "ol/layer/Vector";
+import { useEffect, useRef, useState } from "react";
 import { AppMenu, GradientBar, LayerToggle, MenuDrawer, SideBar, TimeSlider } from "./components";
+import CurrentLocationData from "./components/CurrentLocationData";
 import OpenLayerMap from "./components/OpenLayerMap/OpenLayerMap";
 const AppPage = () => {
   const { data: timeList, isSuccess } = useQuery({
     queryKey: ["time"],
     queryFn: getTimeList,
   });
+  const mapRef = useRef<Map | null>(null);
+  const markerRef = useRef<VectorLayer | null>(null);
+  const [currentCoordinate, setCurrentCoordinate] = useState<Coordinate>([]);
+  const updateMap = (map: Map) => {
+    mapRef.current = map;
+  };
+  const updateMarker = (marker: VectorLayer) => {
+    markerRef.current = marker;
+  };
   const [openDrawer, setOpenDrawer] = useState(false);
   const [time, setTime] = useState("");
   const [expanded, setExpanded] = useState(true);
@@ -39,7 +52,17 @@ const AppPage = () => {
 
   return (
     <div className="h-full w-full" style={{ height: "100vh" }}>
-      <ConfigContext.Provider value={{ setLayer, layer }}>
+      <ConfigContext.Provider
+        value={{
+          setLayer,
+          layer,
+          mapRef,
+          setMap: updateMap,
+          markerRef,
+          setMarker: updateMarker,
+          currentCoordinate,
+          setCurrentCoordinate,
+        }}>
         <TimeContext.Provider value={{ timeList: timeList || [], time }}>
           <GeoContext.Provider
             value={{
@@ -66,6 +89,18 @@ const AppPage = () => {
                   className="transition-[width, height] pointer-events-auto fixed left-3 top-4 h-[calc(100vh-1rem)] max-2xl:w-[21rem] 2xl:w-96"
                   setExpanded={setExpanded}
                 />
+                <motion.div
+                  className={cn(
+                    "pointer-events-auto fixed bottom-[15vh] right-3 h-fit cursor-pointer [--layer-toggle-translate:calc(6px-25vw)] 2xl:[--layer-toggle-translate:calc(6px-18vw)]",
+                  )}
+                  animate={animate}
+                  variants={{
+                    open: { translateX: "var(--layer-toggle-translate)" },
+                    close: { translateX: "0" },
+                  }}
+                  transition={transition}>
+                  <CurrentLocationData />
+                </motion.div>
                 <motion.div
                   className={cn(
                     "pointer-events-auto fixed right-3 top-[13rem] h-fit [--layer-toggle-translate:calc(6px-25vw)] 2xl:[--layer-toggle-translate:calc(6px-18vw)]",
@@ -109,17 +144,6 @@ const AppPage = () => {
                   />
                   <GradientBar className={cn("relative")} />
                 </motion.div>
-                {/* <motion.div
-                  className={cn(
-                    "fixed bottom-0 left-0 h-6 w-full bg-white blur",
-                    expanded ? "max-2xl:ml-[23rem] 2xl:ml-[26rem]" : "",
-                  )}
-                  animate={animate}
-                  variants={{
-                    open: { width: "var(--main-width)" },
-                    close: { width: "100%" },
-                  }}
-                  transition={transition}></motion.div> */}
               </div>
             </motion.div>
             <MenuDrawer className={cn()} open={openDrawer} />

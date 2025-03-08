@@ -1,5 +1,5 @@
 import { AnalyticContext } from "@/context";
-import useAllProvinces from "@/hooks/useDistrictsData";
+import useGetAllDistricts from "@/hooks/useGetAllDistricts";
 import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AnalyticData, MonitoringOutputDataType } from "@/types/types";
@@ -22,7 +22,7 @@ const DATA_TYPE_OPTIONS = [
 ];
 const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
   const { setAnalyticData } = useContext(AnalyticContext);
-  const provincesData = useAllProvinces();
+  const provincesData = useGetAllDistricts();
   const getDateRange = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs): string[] => {
     const dates: string[] = [];
     let currentDate = startDate.clone();
@@ -67,7 +67,15 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
         <Select
           className="w-[8rem]"
           defaultValue="VNM.27_1"
-          options={provincesData.data}
+          options={
+            provincesData.data
+              ? Array.from(
+                  new Map(
+                    provincesData.data.map((d: any) => [d.province_id, { value: d.province_id, label: d.vn_province }]),
+                  ).values(),
+                )
+              : []
+          }
           onSelect={handleLocationChange}
         />
         <DatePicker.RangePicker

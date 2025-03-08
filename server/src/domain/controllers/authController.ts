@@ -65,7 +65,8 @@ export class AuthController extends BaseController<[UserInteractor]> {
     if (
       cookies &&
       cookies["REFRESH_TOKEN"] &&
-      securityService.verifyToken(cookies["REFRESH_TOKEN"]) === AUTHENTICATION.TOKEN_VERIFICATION.VALID
+      securityService.verifyToken(cookies["REFRESH_TOKEN"]) ===
+        AUTHENTICATION.TOKEN_VERIFICATION.VALID
     ) {
       const decodedToken = securityService.decodeToken<UserToken>(cookies["REFRESH_TOKEN"]);
       const access_token = securityService.createToken(
@@ -86,7 +87,7 @@ export class AuthController extends BaseController<[UserInteractor]> {
     const { accountIdentifier, password } = req.body;
 
     const isUserExists = await this.userInteractor.findUser(accountIdentifier);
-
+    console.log(isUserExists, accountIdentifier, password);
     if (!isUserExists) {
       return res.status(statusCode.SUCCESS).json({
         status: "success",
@@ -96,7 +97,7 @@ export class AuthController extends BaseController<[UserInteractor]> {
     }
 
     const validatePassword = await securityService.compareString(password, isUserExists.password);
-
+    console.log(validatePassword, password, isUserExists.password);
     if (!validatePassword) {
       return res.status(statusCode.SUCCESS).json({
         status: "success",

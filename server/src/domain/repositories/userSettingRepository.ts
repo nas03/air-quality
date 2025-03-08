@@ -1,5 +1,6 @@
 import { flag, receiveNotification } from "@/config/constant";
 import { db } from "@/config/db";
+import { UserSetting } from "@/entities";
 import { IUserSettingRepository } from "@/interfaces";
 
 export class UserSettingRepository implements IUserSettingRepository {
@@ -20,6 +21,20 @@ export class UserSettingRepository implements IUserSettingRepository {
       .selectAll()
       .where("user_id", "=", user_id)
       .where("deleted", "=", flag.FALSE)
+      .executeTakeFirst();
+    return query ?? null;
+  };
+
+  createUserSetting = async (userSetting: Omit<UserSetting, "id">) => {
+    const query = await db
+      .insertInto("users_setting")
+      .values({
+        profile_url: userSetting.profile_url || null,
+        receive_notifications: userSetting.receive_notifications,
+        user_id: userSetting.user_id,
+        user_location: userSetting.user_location,
+      })
+      .returningAll()
       .executeTakeFirst();
     return query ?? null;
   };

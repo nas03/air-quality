@@ -17,4 +17,10 @@ export class UserSettingInteractor implements IUserSettingInteractor {
       this.userSettingRepository.getUserSetting(user_id)
     );
   }
+  createUserSetting = async (payload: Omit<UserSetting, "id">) => {
+    const data = await this.userSettingRepository.createUserSetting(payload);
+    if (!data) return null;
+    const key = USER_SETTING_KEY.SETTING_ALL_KEY(Number(data.user_id));
+    return await this.cacheService.cache(key, data);
+  };
 }

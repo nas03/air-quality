@@ -138,7 +138,7 @@ export interface UsersSession {
 export interface UsersSetting {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
-  id: number;
+  id: Generated<number>;
   profile_url: string | null;
   receive_notifications: Generated<number | null>;
   updated_at: Generated<Timestamp | null>;

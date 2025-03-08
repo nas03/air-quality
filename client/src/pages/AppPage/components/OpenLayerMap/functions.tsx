@@ -14,7 +14,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
   const stationFeature = map.getFeaturesAtPixel(map.getPixelFromCoordinate(coordinates as Coordinate), {
     layerFilter: (layer) => layer instanceof VectorLayer && layer !== markerLayer,
   });
-  console.log(stationFeature);
+
   const stationProperties = stationFeature?.at(0)?.getProperties();
 
   if (!stationProperties) return null;
@@ -80,7 +80,6 @@ export const getWMSFeatureInfo = (
   map: Map,
   mapLayers: (TileLayer | VectorLayer | WindLayer)[],
   layers: string[],
-  queryLayers: string[],
   coordinate: Coordinate,
   time?: string,
 ) => {
@@ -92,13 +91,12 @@ export const getWMSFeatureInfo = (
     SRS: "EPSG:3857",
     FEATURE_COUNT: 50,
   }; */
-
   return wmsSource?.getFeatureInfoUrl(coordinate, Number(viewResolution), "EPSG:3857", {
     INFO_FORMAT: "text/javascript",
     SRS: "EPSG:3857",
     FEATURE_COUNT: 50,
     LAYERS: layers.join(","),
-    QUERY_LAYERS: queryLayers.join(","),
+    QUERY_LAYERS: layers.join(","),
     ...(time && { TIME: time }),
   });
 };

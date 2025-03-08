@@ -6,7 +6,7 @@ import { AiFillBell, AiFillProfile } from "react-icons/ai";
 import { IoMdSettings } from "react-icons/io";
 import { MdAnalytics, MdFavorite } from "react-icons/md";
 import UserMenu from "../UserMenu/UserMenu";
-import NotificationTab from "./NotificationTab";
+import AlertTab from "./AlertTab/AlertTab";
 import ProfileTab from "./ProfileTab";
 import SettingsTab from "./SettingsTab";
 type MenuItemType = {
@@ -54,7 +54,7 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, setSelectedTab }) => {
 const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const items: MenuItemType[] = [
-    { label: "Notifications", key: 0, icon: <AiFillBell size={35} className="p-2" />, children: <NotificationTab /> },
+    { label: "My Alerts", key: 0, icon: <AiFillBell size={35} className="p-2" />, children: <AlertTab /> },
     { label: "My Favorites", key: 1, icon: <MdFavorite size={35} className="p-2" /> },
     {
       label: "Analytics Page",

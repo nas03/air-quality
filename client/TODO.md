@@ -64,3 +64,12 @@ UI/UX Improvements & Feature Completion:
   - [ ] Enhance ranking board visualization
   - [ ] Search Bar for each tab
   - [ ] Return button for analytics page
+  - [ ] Change Sign in/Sign out to a modal
+  - [ ] Delete Alert
+  - [ ] Data of current location
+  - [x] Create alert
+    - [x] Guidance 
+    - [x] Access user location
+    - [x] Register Form
+    - [x] Test
+  - [ ] Signin Notification

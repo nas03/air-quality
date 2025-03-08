@@ -11,7 +11,7 @@ export interface IPropsSideBar extends React.ComponentPropsWithoutRef<"div"> {
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 /* OpenLayerMap */
-export interface IPropsOpenLayerMap extends React.ComponentPropsWithoutRef<"div"> {
+export interface IPropsOpenLayerMap extends React.ComponentPropsWithRef<"div"> {
   setMarkData: React.Dispatch<React.SetStateAction<MarkData>>;
 }
 

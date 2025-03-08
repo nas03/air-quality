@@ -94,7 +94,7 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
     style: new Style({
       image: new Icon({
         anchor: [0.5, 1],
-        scale: 1.3,
+        scale: 1.4,
         crossOrigin: "anonymous",
         src: "marker.png",
       }),

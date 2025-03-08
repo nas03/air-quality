@@ -52,3 +52,14 @@ export type MRecommendation = {
   en_status: string;
   vn_status: string;
 };
+
+export type UserSetting = {
+  id: number;
+  user_id: number;
+  user_location: string /* Ref to district_id */;
+  profile_url: string;
+  receive_notifications: number;
+  deleted?: number;
+  updated_at?: Date;
+  created_at?: Date;
+};

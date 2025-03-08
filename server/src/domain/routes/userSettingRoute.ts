@@ -12,7 +12,13 @@ const userSettingRouter: Route[] = [
     path: "/user/:user_id/settings",
     controller: userSettingController.onGetUserSetting.bind(userSettingController),
     method: "GET",
-    role: "",
+    role: "user",
+  },
+  {
+    path: "/user/settings",
+    controller: userSettingController.onCreateUserSetting.bind(userSettingController),
+    method: "POST",
+    role: "user",
   },
 ];
 
