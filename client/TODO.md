@@ -62,7 +62,7 @@ UI/UX Improvements & Feature Completion:
   - [ ] Implement notification preference system
   - [ ] Create favorite locations feature
   - [x] Enhance ranking board visualization
-  - [ ] Search Bar for each tab
+  - [x] Search Bar for each tab
   - [ ] Return button for analytics page
   - [ ] Change Sign in/Sign out to a modal
   - [x] Data of current location
@@ -70,8 +70,24 @@ UI/UX Improvements & Feature Completion:
   - [x] Add Custom Alert
   - [ ] Export Excel Data Analytics page
   - [x] Create alert by user location
-    - [x] Guidance 
+    - [x] Guidance
     - [x] Access user location
     - [x] Register Form
     - [x] Test
   - [x] Signin Notification
+
+## Week 7 (Mar 10-16, 2025)
+
+- [ ] Complete core features:
+
+  - [ ] Integrate wind data collection
+  - [ ] Configure cronjob for real-time station data updates
+  - [ ] Add multi-language support (Vietnamese/English)
+  - [ ] Implement notification preference system
+  - [ ] Create favorite locations feature
+  - [ ] Return button for analytics page
+  - [ ] Change Sign in/Sign out to a modal
+  - [ ] Export Excel Data Analytics page
+  - [x] Update user profile
+  - [ ] Pm2.5 data geoserver
+  - [ ] Fix Email

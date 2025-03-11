@@ -7,6 +7,7 @@ import { getStyleRankTable } from "../config";
 interface RankTableProps {
   className?: string;
   tableData?: RankData[];
+  loading: boolean;
 }
 
 const TableRow = ({ data, isLast, num }: { data: RankData; isLast: boolean; num: number }) => {
@@ -19,9 +20,7 @@ const TableRow = ({ data, isLast, num }: { data: RankData; isLast: boolean; num:
           {num}
         </div>
       </div>
-      <p className="col-span-2 flex items-center justify-start overflow-hidden truncate pl-3 pr-2 font-medium">
-        {data.vn_district}
-      </p>
+      <p className="col-span-2 flex items-center justify-start truncate pl-3 pr-2 font-medium">{data.vn_district}</p>
       <div className="flex flex-row items-center justify-center text-white">
         <p
           className="flex h-2/3 items-center rounded-full px-4 py-1.5 text-sm font-medium transition-all"
@@ -29,19 +28,18 @@ const TableRow = ({ data, isLast, num }: { data: RankData; isLast: boolean; num:
           {data.aqi_index}
         </p>
       </div>
-      <p className="col-span-3 overflow-hidden px-1 text-center text-sm">{style.status}</p>
+      <p className="col-span-3 px-1 text-center text-sm">{style.status}</p>
       {!isLast && <div className="col-span-7 my-2 border-b border-gray-100" />}
     </>
   );
 };
 
-const RankTable: React.FC<RankTableProps> = ({ className, tableData }) => {
+const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) => {
   const [data, setData] = useState<RankData[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>("");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc"); // Default to descending
-  const [sortField, setSortField] = useState<string>("aqi_index"); // Default to sorting by AQI
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [sortField, setSortField] = useState<string>("aqi_index");
 
-  // Simplified province extraction with proper deduplication
   const provinces = useMemo(() => {
     if (!tableData || !tableData.length) return [];
 
@@ -90,7 +88,7 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData }) => {
   }, [tableData, selectedProvince, sortField, sortDirection]);
 
   return (
-    <Loading loading={!data} className="h-[95%]">
+    <Loading loading={!data || loading} className="h-[95%]">
       <div className={cn(className, "mt-3 h-full rounded-md font-sans shadow-sm")}>
         <div className="mb-2 flex flex-row items-center gap-3 px-2.5">
           <label htmlFor="province-select" className="mb-1 block text-sm font-semibold tracking-tight text-gray-600">

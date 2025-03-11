@@ -1,5 +1,6 @@
 import api from "@/config/api";
 import { APIResponse, SignInResponse, VerifyTokenResponse } from "@/types/api";
+import { User } from "@/types/db";
 
 export const signin = async (email: string, password: string): Promise<SignInResponse | false> => {
   const response = await api.post<APIResponse<SignInResponse>>("/auth/signin", {
@@ -36,4 +37,11 @@ export const createUser = async (payload: CreateUserParams) => {
     throw Error("Error creating new user");
   }
   return null;
+};
+
+export const getUserInfoByUserId = async (user_id: number | undefined) => {
+  if (!user_id) return null;
+  const response = await api.get<APIResponse<User | null>>(`/user/${user_id}`);
+
+  return response.data.data;
 };

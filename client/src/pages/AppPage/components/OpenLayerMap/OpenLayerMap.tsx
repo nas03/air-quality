@@ -82,12 +82,12 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     coordinate: Coordinate,
   ) => {
     const modelLayers = ["air:AQI", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
-    const stationLayers = ["air:stations_point_map"];
-
     const modelURL = getWMSFeatureInfo(map, mapLayers, modelLayers, coordinate);
-    const stationURL = getWMSFeatureInfo(map, mapLayers, stationLayers, coordinate, "2025-02-13T19:00:00Z");
+    // const stationLayers = ["air:stations_point_map"];
 
-    if (!modelURL || !stationURL) {
+    /* const stationURL = getWMSFeatureInfo(map, mapLayers, stationLayers, coordinate, "2025-02-13T19:00:00Z"); */
+
+    if (!modelURL) {
       console.error("Failed to generate WMS URLs for location data");
       return;
     }

@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 
 export class UserController extends BaseController<[UserInteractor]> {
   private userInteractor = this.interactors[0];
+
   onCreateUser = async (req: Request, res: Response) => {
     const body = req.body as {
       username: string;
@@ -100,6 +101,23 @@ export class UserController extends BaseController<[UserInteractor]> {
     return res.status(statusCode.SUCCESS).json({
       status: "success",
       data: null,
+    });
+  };
+
+  onGetUserInfo = async (req: Request, res: Response) => {
+    const { user_id } = req.params;
+    if (!user_id)
+      return res.status(statusCode.BAD_REQUEST).json({
+        status: "fail",
+        message: resMessage.field_invalid,
+        data: null,
+      });
+
+    const userInfo = await this.userInteractor.findUser(Number(user_id));
+
+    return res.status(statusCode.SUCCESS).json({
+      status: "success",
+      data: userInfo,
     });
   };
 }

@@ -99,7 +99,7 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
           AQI VN Index Forecast
         </Typography.Text>
         <div className="overflow-x-auto">
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-start gap-2">
             {values.labels.map((day, index) => (
               <Tooltip key={index} title={getAqiLabel(values.data[index])}>
                 <div className="flex flex-col items-center px-1" style={{ width: `${100 / values.labels.length}%` }}>

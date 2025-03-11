@@ -10,6 +10,7 @@ import "ol/ol.css";
 import { TileWMS } from "ol/source";
 import React from "react";
 import { parseWMSResponse } from "./utils";
+
 const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLayer | null): MarkData | null => {
   const stationFeature = map.getFeaturesAtPixel(map.getPixelFromCoordinate(coordinates as Coordinate), {
     layerFilter: (layer) => layer instanceof VectorLayer && layer !== markerLayer,
@@ -26,9 +27,18 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
     pm_25: stationProperties.pm25 ? Number(stationProperties.pm25) : null,
     location: stationProperties.station_name,
     time: stationProperties.timestamp,
+    wind_speed: null,
   };
 };
 
+const fetchWindData = (map: Map, coordinate: number[]) => {
+  const windFeature = map
+    .getLayers()
+    .getArray()
+    .find((layer) => layer instanceof WindLayer);
+  const value = windFeature?.getData()?.valueAt(coordinate[0], coordinate[1])?.magnitude();
+  return value ?? null;
+};
 const fetchModelData = async (url: string, coordinate: Coordinate): Promise<MarkData | null> => {
   const modelData = await fetch(url).then(parseWMSResponse);
 
@@ -46,6 +56,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
     pm_25: Number(aqiFeature.properties?.GRAY_INDEX),
     location,
     time: modelData.timeStamp.split("T")[0].split("-").reverse().join("/"),
+    wind_speed: null,
   };
 };
 export const fetchLocationData = async (
@@ -57,10 +68,16 @@ export const fetchLocationData = async (
   markerRef: React.RefObject<VectorLayer>,
 ) => {
   try {
+    let wind_speed: number | null = null;
+    if (mapRef.current) {
+      wind_speed = fetchWindData(mapRef.current, coordinate);
+    }
+
     if (configContext.layer.station && mapRef.current) {
       const stationData = fetchStationData(mapRef.current, coordinate, markerRef.current);
+
       if (stationData) {
-        setMarkData(stationData);
+        setMarkData({ ...stationData, wind_speed: wind_speed });
         return;
       }
     }
@@ -68,7 +85,7 @@ export const fetchLocationData = async (
     if (configContext.layer.model) {
       const modelData = await fetchModelData(modelURL, coordinate);
       if (modelData) {
-        setMarkData(modelData);
+        setMarkData({ ...modelData, wind_speed });
       }
     }
   } catch (error) {

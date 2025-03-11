@@ -1,4 +1,8 @@
+import { getUserInfoByUserId } from "@/api";
+import { Loading } from "@/components";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Avatar, Button, Divider, GetProp, message, Upload, UploadProps } from "antd";
 import { useState } from "react";
 
@@ -35,7 +39,7 @@ const beforeUpload = (file: FileType) => {
 const EditableField = ({ label, value, name, type = "text", isEditing, onEdit, onCancel }: EditableFieldProps) => (
   <div className="grid grid-cols-7 border-b-2 border-slate-100 pb-3">
     <p className="col-span-2 flex flex-row items-start py-1 font-medium">{label}</p>
-    <div className="col-span-4 flex flex-col justify-start gap-3">
+    <div className="col-span-4 flex flex-col justify-center gap-3">
       <input
         name={name}
         type={type}
@@ -91,6 +95,12 @@ const ProfileTab = () => {
   const [imageUrl, setImageUrl] = useState<string>("/avatar.jpg");
   const [editEmail, setEditEmail] = useState(false);
   const [editPhoneNumber, setEditPhoneNumber] = useState(false);
+  const { user } = useAuth();
+
+  const userInfoQuery = useQuery({
+    queryKey: ["user", user?.user_id],
+    queryFn: () => getUserInfoByUserId(user?.user_id),
+  });
 
   const handleChange: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
@@ -106,7 +116,7 @@ const ProfileTab = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-5 overflow-y-auto pl-6 pr-3">
+    <Loading loading={userInfoQuery.isLoading} className={cn("flex flex-col gap-5 overflow-y-auto pl-6 pr-3")}>
       <div>
         <div className="flex justify-center">
           <AvatarUpload imageUrl={imageUrl} loading={loading} onChangeImage={handleChange} />
@@ -116,7 +126,7 @@ const ProfileTab = () => {
       <div className="grid gap-3">
         <EditableField
           label="Username"
-          value="sonanhnguyen003"
+          value={userInfoQuery.data?.username || ""}
           name="username"
           isEditing={false}
           onEdit={() => {}}
@@ -124,7 +134,7 @@ const ProfileTab = () => {
         />
         <EditableField
           label="Email"
-          value="sonanhnguyen003@gmail.com"
+          value={userInfoQuery.data?.email || ""}
           name="email"
           type="email"
           isEditing={editEmail}
@@ -133,7 +143,7 @@ const ProfileTab = () => {
         />
         <EditableField
           label="Phone Number"
-          value="0916308089"
+          value={userInfoQuery.data?.phone_number || ""}
           name="phone_number"
           type="tel"
           isEditing={editPhoneNumber}
@@ -147,7 +157,7 @@ const ProfileTab = () => {
         <Divider className="mt-3" />
         <Button>Update Password</Button>
       </div>
-    </div>
+    </Loading>
   );
 };
 

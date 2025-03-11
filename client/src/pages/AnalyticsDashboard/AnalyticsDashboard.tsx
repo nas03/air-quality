@@ -25,7 +25,7 @@ const AnalyticsDashboard: React.FC<IPropsAnalyticsBoard> = () => {
       }}
     >
       <div className="h-screen w-screen">
-        <ControlBar className="h-[5%] w-full" />
+        <ControlBar className="h-[6%] w-full" />
         <div className="flex h-[95%] w-full flex-col gap-5 bg-[#f4f4f4] px-0 pt-5 lg:px-5">
           <OverviewCards className="flex-shrink" />
           <div className="flex flex-grow flex-col gap-3">

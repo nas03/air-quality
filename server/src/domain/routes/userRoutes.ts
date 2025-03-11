@@ -29,6 +29,12 @@ const userRouter: Route[] = [
     controller: userController.onUpdateUserPassword.bind(userController),
     role: "user",
   },
+  {
+    path: "/user/:user_id",
+    method: "GET",
+    controller: userController.onGetUserInfo.bind(userController),
+    role: "user",
+  },
 ];
 
 export default userRouter;

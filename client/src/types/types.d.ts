@@ -1,7 +1,7 @@
 import { GeoContextType } from "@/types/contexts";
 import { MonitoringData } from "./consts";
 
-export type MarkData = GeoContextType & { time: string };
+export type MarkData = GeoContextType & { time: string; wind_speed: number | null };
 export interface AirQualityData {
   aqi_index: number;
   pm_25: number;

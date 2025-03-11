@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils";
 import { colorMap } from "@/types/consts";
 import { AimOutlined, FieldTimeOutlined, HeartOutlined } from "@ant-design/icons";
+import { Card } from "antd";
 import React from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { IoCloudy } from "react-icons/io5";
 
 interface DataSourceCardProps {
   source: string;
@@ -22,6 +24,17 @@ interface AirQualityCardProps {
 
 interface HealthRecommendationCardProps {
   recommendation: string;
+}
+
+interface IPropsWeatherInfoCard extends React.ComponentPropsWithRef<"div"> {
+  // coordinate: number[];
+  wind_speed: number;
+  temperature: {
+    min: number;
+    max: number;
+    avg: number;
+  };
+  weather: string;
 }
 
 const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location }) => {
@@ -135,8 +148,31 @@ const HealthRecommendationCard: React.FC<HealthRecommendationCardProps> = ({ rec
   </div>
 );
 
+const WeatherInfoCard: React.FC<IPropsWeatherInfoCard> = ({ className, ...props }) => {
+  return (
+    <>
+      <Card className={cn("w-full rounded-lg hover:shadow-md", className)} {...props}>
+        <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex h-full flex-col">
+            <p className="text-4xl font-bold text-gray-800">{props.temperature.avg}&#8451;</p>
+            <p className="mt-1 text-sm text-gray-600">Wind: {props.wind_speed}m/s</p>
+          </div>
+          <div className="flex h-full flex-col items-center">
+            <IoCloudy size={32} className="mb-1 text-blue-500" />
+            <p className="text-sm font-medium">{props.weather}</p>
+            <div className="mt-1 flex flex-row gap-2">
+              <p className="text-xs text-orange-500">H: {props.temperature.max}&#8451;</p>
+              <p className="text-xs text-blue-400">L: {props.temperature.min}&#8451;</p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+};
 export const WarningTabInfoCards = {
   HealthRecommendationCard,
   DataSourceCard,
   AirQualityCard,
+  WeatherInfoCard,
 };

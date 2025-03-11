@@ -39,6 +39,7 @@ const getCollapseItems = (
 const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
   const [targetDistrictID, setTargetDistrictID] = useState<string>(DEFAULT_DISTRICT);
   const [tabIndex, setTabIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const { data: districts = [] } = useQuery({
     queryKey: ["districts:*"],
@@ -64,7 +65,7 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
     {
       component: (
         <TabContent title="Bảng xếp hạng">
-          <RankTable tableData={tableData} />
+          <RankTable tableData={tableData} loading={!mutation.isSuccess} />
         </TabContent>
       ),
     },

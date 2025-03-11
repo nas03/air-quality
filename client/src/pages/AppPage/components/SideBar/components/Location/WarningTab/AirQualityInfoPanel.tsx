@@ -20,6 +20,15 @@ const AirQualityInfoPanel: React.FC<IPropsAirQualityInfoPanel> = (props) => {
 
   return (
     <div className="flex w-full flex-col gap-3">
+      <WarningTabInfoCards.WeatherInfoCard
+        temperature={{
+          max: 18,
+          min: 14,
+          avg: 16,
+        }}
+        weather="Cloudy"
+        wind_speed={1}
+      />
       <WarningTabInfoCards.DataSourceCard
         name={props.name}
         location={props.location}
