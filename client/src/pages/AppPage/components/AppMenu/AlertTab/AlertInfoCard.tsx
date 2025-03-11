@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { AlertSetting } from "@/types/db";
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import { Card, Tooltip, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoCloudy } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -57,6 +57,7 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
     data: data.map(() => 0),
   };
   const currentWeatherData = data.find((item) => item.date && isToday(new Date(item.date)));
+  const deleteIconRef = useRef(null);
 
   const handleDelete = async () => {
     try {
@@ -73,8 +74,10 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
         <Typography.Title level={5} className="">
           {currentWeatherData?.location}
         </Typography.Title>
-        <Tooltip title={'Delete this alert'}>
-          <MdDeleteOutline onClick={handleDelete} size={30} className="cursor-pointer p-1 text-red-500" />
+        <Tooltip title={"Delete this alert"} getPopupContainer={() => document.body}>
+          <div ref={deleteIconRef}>
+            <MdDeleteOutline onClick={handleDelete} size={30} className="cursor-pointer p-1 text-red-500" />
+          </div>
         </Tooltip>
       </div>
       <div className="flex w-full flex-row items-center justify-between">

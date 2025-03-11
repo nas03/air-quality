@@ -93,7 +93,7 @@ const AirQualityCard: React.FC<AirQualityCardProps> = ({ status, time, aqi_index
         </div>
 
         <div className="rounded-lg bg-white/10 p-2 text-center">
-          <p className="font-semibold tracking-wide">{status}</p>
+          <p className="font-semibold tracking-wide">{String(status)}</p>
         </div>
 
         <div className="flex items-center justify-between">
