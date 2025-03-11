@@ -20,15 +20,17 @@ const CHART_OPTIONS = [
 
 const LayerSelector = ({ selectedValue }: { selectedValue: DataType }) => (
   <div className="flex w-full flex-row items-center gap-3">
-    <AreaChartOutlined className="text-3xl text-blue-600" />
+    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-200">
+      <AreaChartOutlined className="text-xl" />
+    </div>
     <div className="flex w-full flex-wrap items-center gap-2">
-      <p className="text-xs font-semibold">Loại dữ liệu</p>
+      <p className="text-xs font-semibold dark:text-slate-200">Loại dữ liệu</p>
       <div className="flex flex-row gap-3 text-xs text-white">
         {CHART_OPTIONS.map(({ label, value }) => (
           <button
             disabled
             key={value}
-            className={`rounded-full ${selectedValue === value ? "bg-blue-500" : "bg-slate-400"} px-4 py-1`}>
+            className={`rounded-full ${selectedValue === value ? "bg-blue-500 dark:bg-blue-600" : "bg-slate-400 dark:bg-slate-600"} px-4 py-1`}>
             {label}
           </button>
         ))}
@@ -54,7 +56,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
     {
       key: "1",
       label: <LayerSelector selectedValue={selectedValue} />,
-      className: "w-full rounded-md bg-white p-0 first:p-0",
+      className: "w-full rounded-md bg-white p-0 first:p-0 dark:bg-slate-900",
       children: (
         <AirQualityInfoPanel
           aqi_index={data?.aqi_index ? String(data?.aqi_index) : "--"}
@@ -73,7 +75,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
     <Collapse
       expandIconPosition="end"
       defaultActiveKey={["1"]}
-      className={cn("relative h-fit w-full rounded-md p-0", className)}
+      className={cn("relative h-fit w-full rounded-md border-slate-200 dark:border-slate-700 shadow-sm", className)}
       bordered={false}
       collapsible="icon"
       items={items}

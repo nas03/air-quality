@@ -43,7 +43,7 @@ const AppPage = () => {
   });
 
   useEffect(() => {
-    if (isSuccess) setTime(timeList[0]);
+    if (isSuccess) setTime(timeList[2]);
   }, [isSuccess]);
 
   // Framer Motion

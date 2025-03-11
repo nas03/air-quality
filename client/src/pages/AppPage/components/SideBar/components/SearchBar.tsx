@@ -1,4 +1,5 @@
 import { GeoContext } from "@/context";
+import { cn } from "@/lib/utils";
 import { MDistrict } from "@/types/db";
 import { SearchOutlined } from "@ant-design/icons";
 import { AutoComplete, AutoCompleteProps } from "antd";
@@ -56,8 +57,13 @@ const SearchBar: React.FC<IPropsSearchBar> = ({ className, districts, setTargetD
     if (geoContext.location) handleSelect(geoContext.location);
   }, [geoContext.location]);
   return (
-    <div className={`${className} flex h-12 max-w-full flex-row gap-3 rounded-md bg-white px-2 py-2`}>
-      <SearchOutlined className="h-full shrink-0 cursor-pointer rounded-md px-2 py-2 hover:bg-blue-100" />
+    <div className={cn(
+      "flex h-12 max-w-full flex-row gap-3 rounded-md bg-white border border-slate-200 shadow-sm dark:bg-slate-900 dark:border-slate-700 px-2 py-2",
+      className
+    )}>
+      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+        <SearchOutlined className="h-5 w-5" />
+      </div>
       <AutoComplete
         className="h-full min-w-[6rem] flex-1 rounded-md p-0"
         onSearch={handleSearch}

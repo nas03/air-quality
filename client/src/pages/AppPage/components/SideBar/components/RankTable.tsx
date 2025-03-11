@@ -59,7 +59,7 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData }) => {
             scrollbarColor: "#cbd5e1 #f8fafc",
           }}>
           {data.map((d, index) => (
-            <TableRow key={d.vn_district} data={d} num={index + 1} isLast={index === data.length - 1} />
+            <TableRow key={index} data={d} num={index + 1} isLast={index === data.length - 1} />
           ))}
         </div>
       </div>

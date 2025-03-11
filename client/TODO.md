@@ -61,7 +61,7 @@ UI/UX Improvements & Feature Completion:
   - [ ] Add multi-language support (Vietnamese/English)
   - [ ] Implement notification preference system
   - [ ] Create favorite locations feature
-  - [ ] Enhance ranking board visualization
+  - [x] Enhance ranking board visualization
   - [ ] Search Bar for each tab
   - [ ] Return button for analytics page
   - [ ] Change Sign in/Sign out to a modal
