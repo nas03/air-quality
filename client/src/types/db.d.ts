@@ -63,3 +63,14 @@ export type UserSetting = {
   updated_at?: Date;
   created_at?: Date;
 };
+
+export type AlertSetting = {
+  aqi_index: boolean;
+  district_id: string;
+  id: number;
+  pm_25: boolean;
+  temperature: boolean;
+  user_id: number;
+  weather: boolean;
+  wind_speed: boolean;
+};

@@ -1,98 +1,62 @@
-import { getUserNotification, getUserSetting } from "@/api";
+import { getUserAlertSetting } from "@/api/alertSetting";
 import { useAuth } from "@/hooks/useAuth";
-import { getRelativeTime } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import AlertBox from "./AlertBox";
+import AlertInfoCards from "./AlertInfoCard";
 import AlertRegistration from "./AlertRegistration";
 import SignInNotification from "./SignInNotification";
-import { AlertContent } from "./types";
 
 interface AlertTabProps extends React.ComponentPropsWithoutRef<"div"> {}
 
-const LoadingAlert = () => (
-  <div className="flex h-full items-center justify-center">
-    <div className="text-center">
-      <div className="mx-auto mb-2 h-6 w-6 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
-      <p>Loading alerts...</p>
-    </div>
-  </div>
-);
-
-const LoadingFailed = () => (
-  <div className="flex h-full items-center justify-center">
-    <p className="text-red-500">Failed to load alerts</p>
-  </div>
-);
-
 const AlertTab: React.FC<AlertTabProps> = () => {
-  const [alerts, setAlerts] = useState<AlertContent[]>([]);
+  const [addAlert, setAddAlert] = useState(false);
   const [refetchNotification, setRefetchNotification] = useState(false);
   const { user } = useAuth();
   const userId = user?.user_id ? Number(user.user_id) : undefined;
 
-  const { data: userSettingData, refetch: refetchUserSettings } = useQuery({
-    queryKey: ["setting", userId],
-    queryFn: () => getUserSetting(userId as number),
+  const { data: alertSettingData = [], refetch: refetchAlertSetting } = useQuery<any[]>({
+    queryKey: ["alert_setting", userId],
+    queryFn: () => getUserAlertSetting(userId as number),
     enabled: !!userId,
-  });
-
-  const {
-    data: notificationsData,
-    isLoading: isNotificationsLoading,
-    isError: isNotificationsError,
-    refetch: refetchNotifications,
-  } = useQuery({
-    queryKey: ["alerts", userId],
-    queryFn: () => getUserNotification(userId as number),
-    enabled: !!userId && !!userSettingData?.user_id,
   });
 
   useEffect(() => {
     if (refetchNotification) {
-      refetchNotifications();
-      refetchUserSettings();
+      refetchAlertSetting();
       setRefetchNotification(false);
     }
-  }, [refetchNotification, refetchNotifications, refetchUserSettings]);
-
-  useEffect(() => {
-    if (!notificationsData) return;
-
-    const formattedAlerts = notificationsData.map((notification) => ({
-      aqi_index: String(notification.aqi_index) ?? "--",
-      recommendation: notification.en_recommendation,
-      timestamp: getRelativeTime(notification.timestamp),
-    }));
-
-    setAlerts(formattedAlerts);
-  }, [notificationsData]);
+  }, [refetchNotification, refetchAlertSetting]);
 
   const renderContent = () => {
     if (!user) {
       return <SignInNotification />;
     }
 
-    if (!userSettingData) {
-      return <AlertRegistration setRefetchNotification={setRefetchNotification} />;
+    if (!alertSettingData?.length || addAlert) {
+      return (
+        <AlertRegistration
+          setAddAlert={setAddAlert}
+          setRefetchNotification={setRefetchNotification}
+          alertSettingData={alertSettingData}
+        />
+      );
     }
 
-    if (isNotificationsLoading) {
-      return <LoadingAlert />;
-    }
-
-    if (isNotificationsError) {
-      return <LoadingFailed />;
-    }
-
-    return <AlertBox alerts={alerts} />;
+    return <AlertInfoCards alertSettingData={alertSettingData} />;
   };
 
   return (
     <div className="relative flex h-full w-full flex-col pt-[20px] md:pt-0">
       {user && (
-        <div className="flex items-end justify-end px-6 text-blue-500">
-          <div className="cursor-pointer hover:underline hover:underline-offset-1">All Alerts</div>
+        <div className="flex items-end justify-end px-6">
+          <button
+            onClick={() => setAddAlert(true)}
+            className="flex items-center gap-1.5 rounded-md border border-blue-500 bg-white px-3 py-1.5 text-sm font-medium text-blue-500 shadow-sm transition hover:bg-blue-50 active:bg-blue-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            Add Alert
+          </button>
         </div>
       )}
       <div className="scrollbar mb-3 mt-5 h-full overflow-y-auto px-6" style={{ msScrollbarTrackColor: "white" }}>

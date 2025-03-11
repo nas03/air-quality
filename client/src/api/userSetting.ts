@@ -11,6 +11,7 @@ export const getUserSetting = async (user_id: number) => {
     return null;
   }
 };
+
 export type AlertInfoType = {
   district_id: string;
   province_id: string;

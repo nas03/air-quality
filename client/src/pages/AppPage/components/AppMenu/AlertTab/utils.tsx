@@ -56,7 +56,6 @@ export const getCurrentLocation = (
               district_vn: locationProperty["NAME_2"],
               vn_type: locationProperty["TYPE_2"],
             };
-            /* localStorage.setItem("alert_registration", JSON.stringify({ ...locationData, step: 0 })); */
             setRegistrationData({ ...locationData, step: 0 });
           }
         };

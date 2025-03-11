@@ -1,3 +1,4 @@
+export * from "./alertSettingController";
 export * from "./authController";
 export * from "./districtController";
 export * from "./mRecommendationController";

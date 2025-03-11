@@ -1,3 +1,4 @@
+export * from './AlertSetting';
 export * from "./Mail";
 export * from "./MDistrict";
 export * from "./MRecommendation";

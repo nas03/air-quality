@@ -12,3 +12,8 @@ export const STATISTICS_KEY = Object.freeze({
 export const USER_SETTING_KEY = Object.freeze({
   SETTING_ALL_KEY: (user_id: number) => `users_setting:${user_id}:*`,
 });
+
+export const ALERT_SETTING_KEY = Object.freeze({
+  USER_KEY: (user_id: number) => `alert_setting:user_id:${user_id}`,
+  ID_KEY: (id: number) => `alert_setting:${id}:*`
+});

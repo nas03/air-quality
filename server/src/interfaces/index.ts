@@ -1,3 +1,4 @@
+export * from "./interactors/IAlertSettingInteractor";
 export * from "./interactors/IDistrictInteractor";
 export * from "./interactors/IMRecomendationInteractor";
 export * from "./interactors/IStationsInteractor";
@@ -6,6 +7,7 @@ export * from "./interactors/IUserInteractor";
 export * from "./interactors/IUserNotificationInteractor";
 export * from "./interactors/IUserSettingInteractor";
 
+export * from "./repositories/IAlertSettingRepository";
 export * from "./repositories/IDistrictRepository";
 export * from "./repositories/IMailRepository";
 export * from "./repositories/IMRecommendationRepository";

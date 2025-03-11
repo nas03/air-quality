@@ -68,4 +68,6 @@ export const AlertRegistrationContext = createContext<AlertRegistrationContextTy
   setCurrentStep: () => {},
   maxStep: 3,
   registrationLoading: false,
+  setRegistrationLoading: () => {},
+  registerAlert: async () => {},
 });

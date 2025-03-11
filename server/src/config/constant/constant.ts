@@ -8,6 +8,7 @@ export const resMessage = Object.freeze({
   user_not_authorized: "User is not authorized",
   token_invalid: "Token is invalid",
   wrong_old_password: "Your old password is invalid",
+  not_found: "Data not found",
 });
 
 export const statusCode = Object.freeze({
@@ -18,6 +19,7 @@ export const statusCode = Object.freeze({
   FORBIDDEN: 403,
   METHOD_NOT_ALLOWED: 405,
   ERROR: 500,
+  NOT_FOUND: 404,
 });
 
 export const flag = Object.freeze({

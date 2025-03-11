@@ -65,11 +65,13 @@ UI/UX Improvements & Feature Completion:
   - [ ] Search Bar for each tab
   - [ ] Return button for analytics page
   - [ ] Change Sign in/Sign out to a modal
-  - [ ] Delete Alert
-  - [ ] Data of current location
-  - [x] Create alert
+  - [x] Data of current location
+  - [x] Delete Alert
+  - [x] Add Custom Alert
+  - [ ] Export Excel Data Analytics page
+  - [x] Create alert by user location
     - [x] Guidance 
     - [x] Access user location
     - [x] Register Form
     - [x] Test
-  - [ ] Signin Notification
+  - [x] Signin Notification

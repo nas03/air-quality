@@ -11,6 +11,17 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export interface AlertsSetting {
+  aqi_index: Generated<boolean>;
+  district_id: string;
+  id: Generated<number>;
+  pm_25: Generated<boolean>;
+  temperature: Generated<boolean>;
+  user_id: number;
+  weather: Generated<boolean>;
+  wind_speed: Generated<boolean>;
+}
+
 export interface AQISupa {
   elevation: number | null;
   fid: Generated<number>;
@@ -147,6 +158,7 @@ export interface UsersSetting {
 }
 
 export interface DB {
+  alerts_setting: AlertsSetting;
   AQI_Supa: AQISupa;
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;

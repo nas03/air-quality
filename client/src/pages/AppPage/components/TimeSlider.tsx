@@ -13,28 +13,30 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer
   const timeList = useTimeList();
   const intervalRef = React.useRef<NodeJS.Timeout>();
   const [state, setState] = useState({
-    sliderValue: 0,
+    sliderValue: 2,
     marks: {} as SliderSingleProps["marks"],
     isPlaying: false,
   });
 
   const formatTimeLabel = useCallback(
-    (time: string, isLast: boolean, open: boolean) => ({
+    (time: string, isThird: boolean, open: boolean) => ({
       style: {
         fontSize: 14,
         fontWeight: 600,
-        ...(isLast && { color: "red" }),
+        ...(!isThird && { color: "red" }),
       },
-      label: open ? time.split("-").reverse().splice(0, 2).join(".") : time.split("-").reverse().join("."),
+      label: isThird
+        ? "Today"
+        : open
+          ? time.split("-").reverse().splice(0, 2).join(".")
+          : time.split("-").reverse().join("."),
     }),
     [],
   );
 
   useEffect(() => {
     const marks = Object.fromEntries(
-      timeList
-        .slice(0, SLIDER_MAX + 1)
-        .map((time, index) => [index, formatTimeLabel(time, index === SLIDER_MAX, openDrawer)]),
+      timeList.slice(0, SLIDER_MAX + 1).map((time, index) => [index, formatTimeLabel(time, index === 2, openDrawer)]),
     );
     setState((prev) => ({ ...prev, marks }));
   }, [timeList, formatTimeLabel, openDrawer]);

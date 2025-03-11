@@ -1,29 +1,30 @@
 import { AlertRegistrationContext } from "@/context";
-import useRegistrationState from "@/hooks/useRegistrationState";
 import { Button } from "antd";
 import React, { useCallback, useContext } from "react";
 
 interface IPropsStepControl extends React.ComponentPropsWithRef<"div"> {}
 
 const StepControl: React.FC<IPropsStepControl> = () => {
-  const { currentStep, setCurrentStep, maxStep, registrationLoading } = useContext(AlertRegistrationContext);
-  const { updateRegistrationStep } = useRegistrationState();
+  const { 
+    currentStep, 
+    setCurrentStep, 
+    maxStep, 
+    registrationLoading, 
+    registerAlert 
+  } = useContext(AlertRegistrationContext);
 
   const handlePrevious = useCallback(() => {
-    setCurrentStep((prev) => {
-      const step = Math.max(0, prev - 1);
-      updateRegistrationStep(step);
-      return step;
-    });
-  }, [setCurrentStep, updateRegistrationStep]);
+    setCurrentStep((prev) => Math.max(0, prev - 1));
+  }, [setCurrentStep]);
 
   const handleNext = useCallback(() => {
-    setCurrentStep((prev) => {
-      const step = Math.min(maxStep, prev + 1);
-      updateRegistrationStep(step);
-      return step;
-    });
-  }, [setCurrentStep, updateRegistrationStep, maxStep]);
+    setCurrentStep((prev) => Math.min(maxStep, prev + 1));
+  }, [setCurrentStep, maxStep]);
+
+  const handleFinish = useCallback(() => {
+    setCurrentStep(maxStep);
+    registerAlert();
+  }, [setCurrentStep, maxStep, registerAlert]);
 
   const isLastStep = currentStep >= maxStep - 1;
 
@@ -40,12 +41,14 @@ const StepControl: React.FC<IPropsStepControl> = () => {
         </>
       ) : (
         <>
-          {/* {currentStep !== maxStep && ( */}
-            <Button type="default" onClick={handlePrevious}>
-              Previous
-            </Button>
-          {/* )} */}
-          <Button type="primary" loading={registrationLoading} onClick={handleNext}>
+          <Button type="default" onClick={handlePrevious}>
+            Previous
+          </Button>
+
+          <Button
+            type="primary"
+            loading={registrationLoading}
+            onClick={handleFinish}>
             Finish
           </Button>
         </>

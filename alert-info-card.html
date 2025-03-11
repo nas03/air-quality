@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Alert Info Card</title>
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+					'Helvetica Neue', Arial, sans-serif;
+			}
+
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				background-color: #f0f2f5;
+				padding: 20px;
+			}
+
+			.card {
+				width: 100%;
+				max-width: 500px;
+				background-color: #fff;
+				border-radius: 8px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				padding: 24px;
+			}
+
+			.title {
+				font-size: 16px;
+				font-weight: 600;
+				color: #202020;
+				margin-bottom: 12px;
+			}
+
+			.weather-container {
+				display: flex;
+				width: 100%;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.temp-info {
+				display: flex;
+				height: 100%;
+				flex-direction: column;
+			}
+
+			.current-temp {
+				font-size: 36px;
+				font-weight: 700;
+				color: #1f2937;
+			}
+
+			.wind-info {
+				margin-top: 4px;
+				font-size: 14px;
+				color: #4b5563;
+			}
+
+			.weather-details {
+				display: flex;
+				height: 100%;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.cloud-icon {
+				width: auto;
+				height: 32px;
+				margin-bottom: 4px;
+				color: #3b82f6;
+				position: relative;
+			}
+
+			.cloud-icon:before {
+				content: '';
+				position: absolute;
+				background: #3b82f6;
+				border-radius: 50%;
+				width: 18px;
+				height: 18px;
+				top: 4px;
+				left: 2px;
+			}
+
+			.cloud-icon:after {
+				content: '';
+				position: absolute;
+				background: #3b82f6;
+				border-radius: 8px;
+				width: 28px;
+				height: 12px;
+				bottom: 6px;
+				left: 2px;
+			}
+
+			.weather-condition {
+				font-size: 14px;
+				font-weight: 500;
+			}
+
+			.temp-range {
+				margin-top: 4px;
+				display: flex;
+				flex-direction: row;
+				gap: 8px;
+			}
+
+			.temp-high {
+				font-size: 12px;
+				color: #f59e0b;
+			}
+
+			.temp-low {
+				font-size: 12px;
+				color: #60a5fa;
+			}
+
+			.divider {
+				margin-top: 16px;
+				width: 100%;
+				border-top: 1px solid #e5e7eb;
+				padding-top: 12px;
+			}
+
+			.aqi-title {
+				font-size: 14px;
+				font-weight: 600;
+				color: #4b5563;
+				display: flex;
+				width: 100%;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 8px;
+			}
+
+			.aqi-container {
+				overflow-x: auto;
+			}
+
+			.aqi-days {
+				display: flex;
+				width: 100%;
+				justify-content: space-between;
+			}
+
+			.day-item {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 0 4px;
+				position: relative;
+				cursor: pointer;
+			}
+
+			.day-label {
+				margin-bottom: 4px;
+				font-size: 12px;
+				font-weight: 500;
+				color: #4b5563;
+			}
+
+			.aqi-value {
+				display: flex;
+				height: 40px;
+				width: 40px;
+				align-items: center;
+				justify-content: center;
+				border-radius: 50%;
+				font-size: 12px;
+				font-weight: 600;
+				color: white;
+			}
+
+			.good {
+				background-color: #22c55e;
+			}
+
+			.moderate {
+				background-color: #eab308;
+			}
+
+			.poor {
+				background-color: #f97316;
+			}
+
+			.bad {
+				background-color: #ef4444;
+			}
+
+			.tooltip {
+				display: none;
+			}
+
+			.aqi-info-table {
+				margin-top: 16px;
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 12px;
+			}
+
+			.aqi-info-table th {
+				background-color: #f3f4f6;
+				padding: 8px;
+				text-align: left;
+				font-weight: 600;
+				color: #374151;
+				border-bottom: 1px solid #e5e7eb;
+			}
+
+			.aqi-info-table td {
+				padding: 8px;
+				border-bottom: 1px solid #e5e7eb;
+				color: #4b5563;
+			}
+
+			.aqi-info-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.aqi-category-indicator {
+				display: inline-block;
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				margin-right: 6px;
+				vertical-align: middle;
+			}
+
+			.aqi-range-wrapper {
+				display: flex;
+				align-items: center;
+				white-space: nowrap;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<h2 class="title">Nam Từ Liêm, Hà Nội</h2>
+			<div class="weather-container">
+				<div class="temp-info">
+					<p class="current-temp">18&#8451;</p>
+					<p class="wind-info">Wind: 18km/h</p>
+				</div>
+				<div class="weather-details">
+					<div class="cloud-icon"></div>
+					<p class="weather-condition">Partly Cloudy</p>
+					<div class="temp-range">
+						<p class="temp-high">H: 19&#8451;</p>
+						<p class="temp-low">L: 14&#8451;</p>
+					</div>
+				</div>
+			</div>
+			<div class="divider">
+				<p class="aqi-title">AQI VN Index</p>
+				<div class="aqi-container">
+					<div class="aqi-days" id="aqi-days-container">
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Mon</span>
+							<div class="aqi-value good">45</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Tue</span>
+							<div class="aqi-value moderate">52</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Wed</span>
+							<div class="aqi-value good">38</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Thu</span>
+							<div class="aqi-value poor">120</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Fri</span>
+							<div class="aqi-value moderate">80</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Sat</span>
+							<div class="aqi-value moderate">63</div>
+						</div>
+						<div class="day-item" style="width: 14.285714285714286%">
+							<span class="day-label">Sun</span>
+							<div class="aqi-value good">47</div>
+						</div>
+					</div>
+
+					<!-- Add AQI Information Table -->
+					<table class="aqi-info-table">
+						<thead>
+							<tr>
+								<th>AQI Range</th>
+								<th>Category</th>
+								<th>Health Implications</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="aqi-range-wrapper">
+										<span class="aqi-category-indicator good"></span>
+										0-50
+									</div>
+								</td>
+								<td>Good</td>
+								<td>
+									Air quality is considered satisfactory, and air pollution
+									poses little or no risk.
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="aqi-range-wrapper">
+										<span class="aqi-category-indicator moderate"></span>
+										51-100
+									</div>
+								</td>
+								<td>Moderate</td>
+								<td>
+									Air quality is acceptable; however, some pollutants may be of
+									concern for a very small number of people.
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="aqi-range-wrapper">
+										<span class="aqi-category-indicator poor"></span>
+										101-150
+									</div>
+								</td>
+								<td>Poor</td>
+								<td>
+									Members of sensitive groups may experience health effects. The
+									general public is less likely to be affected.
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="aqi-range-wrapper">
+										<span class="aqi-category-indicator bad"></span>
+										151+
+									</div>
+								</td>
+								<td>Bad</td>
+								<td>
+									Health alert: everyone may experience more serious health
+									effects. Avoid outdoor activities.
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

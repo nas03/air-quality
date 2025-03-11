@@ -8,13 +8,13 @@ interface IPropsRegisterAlertInfo extends React.ComponentPropsWithRef<"div"> {}
 const RegisterAlertInfo: React.FC<IPropsRegisterAlertInfo> = () => {
   const { currentStep } = useContext(AlertRegistrationContext);
   return (
-    <>
+    <div className="flex flex-col items-start gap-5 mt-3">
       <div className="flex flex-row items-center gap-4">
         <div className="flex flex-row items-center gap-1">
           <FaCloud size={20} />
           <Typography.Text className="text-base font-normal">Air Quality Data</Typography.Text>
         </div>
-        <Form.Item initialValue={true} name={"aqi_index"} valuePropName="checked" className="">
+        <Form.Item initialValue={true} name={"aqi_index"} valuePropName="checked" className="mb-0">
           <Switch disabled={currentStep !== 1} />
         </Form.Item>
       </div>
@@ -23,7 +23,7 @@ const RegisterAlertInfo: React.FC<IPropsRegisterAlertInfo> = () => {
           <FaTemperatureFull size={20} />
           <Typography.Text className="text-base font-normal">Temperature Data</Typography.Text>
         </div>
-        <Form.Item initialValue={true} name={"temperature"} valuePropName="checked" className="">
+        <Form.Item initialValue={true} name={"temperature"} valuePropName="checked" className="mb-0">
           <Switch disabled={currentStep !== 1} />
         </Form.Item>
       </div>
@@ -32,12 +32,12 @@ const RegisterAlertInfo: React.FC<IPropsRegisterAlertInfo> = () => {
           <FiWind size={20} />
           <Typography.Text className="text-base font-normal">Wind Data</Typography.Text>
         </div>
-        <Form.Item initialValue={true} name={"wind"} valuePropName="checked" className="">
+        <Form.Item initialValue={true} name={"wind"} valuePropName="checked" className="mb-0">
           <Switch disabled={currentStep !== 1} />
         </Form.Item>
       </div>
       {currentStep === 1 && <StepControl />}
-    </>
+    </div>
   );
 };
 

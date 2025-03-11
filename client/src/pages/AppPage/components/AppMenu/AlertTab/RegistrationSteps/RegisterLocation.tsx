@@ -2,44 +2,64 @@ import { AlertRegistrationContext } from "@/context";
 import useGetAllDistricts from "@/hooks/useGetAllDistricts";
 import { MDistrict } from "@/types/db";
 import { Form, Select } from "antd";
-import { useContext, useEffect, useState } from "react";
-interface IPropsVerifyLocationForm extends React.ComponentPropsWithRef<"div"> {}
-const RegisterLocation: React.FC<IPropsVerifyLocationForm> = () => {
-  const district = useGetAllDistricts();
-  const [allDistricts, setAllDistricts] = useState<MDistrict[]>([]);
-  const [allProvinces, setAllProvinces] = useState<Pick<MDistrict, "province_id" | "vn_province">[]>([]);
+import { useContext, useEffect, useMemo, useState } from "react";
+import { RegistrationDataType } from "../types";
+
+interface IPropsVerifyLocationForm extends React.ComponentPropsWithRef<"div"> {
+  registrationData: RegistrationDataType | null;
+}
+
+const RegisterLocation: React.FC<IPropsVerifyLocationForm> = ({ registrationData }) => {
+  const { data: districts = [] } = useGetAllDistricts();
+  const [selectedProvinceId, setSelectedProvinceId] = useState<string | undefined>();
   const { currentStep } = useContext(AlertRegistrationContext);
-  useEffect(() => {
-    if (!district.data.length) return;
-    setAllDistricts(district.data);
-    const allProvincesData = [
+
+  const allProvinces = useMemo(() => {
+    if (!districts.length) return [];
+
+    return [
       ...new Map(
-        district.data.map((d: MDistrict) => [
-          d.province_id,
-          { province_id: d.province_id, vn_province: d.vn_province },
-        ]),
+        districts.map((d: MDistrict) => [d.province_id, { province_id: d.province_id, vn_province: d.vn_province }]),
       ).values(),
     ];
+  }, [districts]);
+  useEffect(() => {
+    if (registrationData) {
+      setSelectedProvinceId(registrationData.province_id);
+    }
+  }, [registrationData]);
+  const filteredDistricts = useMemo(() => {
+    if (!selectedProvinceId) return districts;
+    return districts.filter((el) => el.province_id === selectedProvinceId);
+  }, [districts, selectedProvinceId]);
 
-    setAllProvinces(allProvincesData);
-  }, [district.data]);
+  const handleProvinceChange = (provinceId: string) => {
+    setSelectedProvinceId(provinceId);
+  };
+
+  const isDisabled = currentStep !== 0;
 
   return (
     <>
-      <Form.Item name="district_id" label="Quận/Huyện" rules={[{ required: true }]}>
-        <Select placeholder="Quận/Huyện" disabled={currentStep !== 0}>
-          {allDistricts.map((el) => (
-            <Select.Option key={el.district_id} value={el.district_id}>
-              {el.vn_district}
+      <Form.Item className="mb-0" name="province_id" label="Tỉnh/Thành phố" rules={[{ required: true }]}>
+        <Select
+          placeholder="Tỉnh/Thành phố"
+          disabled={isDisabled}
+          value={selectedProvinceId}
+          onChange={handleProvinceChange}>
+          {allProvinces.map((province) => (
+            <Select.Option key={province.province_id} value={province.province_id}>
+              {province.vn_province}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item className="mb-0" name="province_id" label="Tỉnh/Thành phố" rules={[{ required: true }]}>
-        <Select placeholder="Tỉnh/Thành phố" disabled={currentStep !== 0}>
-          {allProvinces.map((el) => (
-            <Select.Option key={el.province_id} value={el.province_id}>
-              {el.vn_province}
+
+      <Form.Item name="district_id" label="Quận/Huyện" rules={[{ required: true }]}>
+        <Select placeholder="Quận/Huyện" disabled={isDisabled}>
+          {filteredDistricts.map((district) => (
+            <Select.Option key={district.district_id} value={district.district_id}>
+              {district.vn_district}
             </Select.Option>
           ))}
         </Select>

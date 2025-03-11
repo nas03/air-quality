@@ -1,7 +1,7 @@
 import { Map } from "ol";
 import { Coordinate } from "ol/coordinate";
 import VectorLayer from "ol/layer/Vector";
-import { SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 import { AnalyticData, MonitoringOutputDataType } from "./types";
 
 export interface TimeContextType {
@@ -63,4 +63,6 @@ export interface AlertRegistrationContextType {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   maxStep: number;
   registrationLoading: boolean;
+  setRegistrationLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  registerAlert: () => Promise<void>;
 }
