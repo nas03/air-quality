@@ -1,4 +1,5 @@
 import { getUserAlertSetting } from "@/api/alertSetting";
+import { Loading } from "@/components";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -14,7 +15,11 @@ const AlertTab: React.FC<AlertTabProps> = () => {
   const { user } = useAuth();
   const userId = user?.user_id ? Number(user.user_id) : undefined;
 
-  const { data: alertSettingData = [], refetch: refetchAlertSetting } = useQuery<any[]>({
+  const {
+    data: alertSettingData = [],
+    refetch: refetchAlertSetting,
+    isLoading,
+  } = useQuery<any[]>({
     queryKey: ["alert_setting", userId],
     queryFn: () => getUserAlertSetting(userId as number),
     enabled: !!userId,
@@ -32,7 +37,7 @@ const AlertTab: React.FC<AlertTabProps> = () => {
       return <SignInNotification />;
     }
 
-    if (!alertSettingData?.length || addAlert) {
+    if (addAlert) {
       return (
         <AlertRegistration
           setAddAlert={setAddAlert}
@@ -46,7 +51,7 @@ const AlertTab: React.FC<AlertTabProps> = () => {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col pt-[20px] md:pt-0">
+    <Loading loading={isLoading} className="relative flex h-full w-full flex-col pt-[20px] md:pt-0">
       {user && (
         <div className="flex items-end justify-end px-6">
           <button
@@ -59,10 +64,10 @@ const AlertTab: React.FC<AlertTabProps> = () => {
           </button>
         </div>
       )}
-      <div className="scrollbar mb-3 mt-5 h-full overflow-y-auto px-6" style={{ msScrollbarTrackColor: "white" }}>
+      <div className="scrollbar mb-3 mt-5 h-full overflow-y-auto px-3" style={{ msScrollbarTrackColor: "white" }}>
         {renderContent()}
       </div>
-    </div>
+    </Loading>
   );
 };
 

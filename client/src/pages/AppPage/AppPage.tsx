@@ -40,6 +40,7 @@ const AppPage = () => {
     pm_25: null,
     location: "",
     time: time,
+    wind_speed: 0,
   });
 
   useEffect(() => {
@@ -71,6 +72,7 @@ const AppPage = () => {
               aqi_index: markData.aqi_index,
               pm_25: markData.pm_25,
               location: markData.location,
+              wind_speed: markData.wind_speed,
             }}>
             <motion.div
               animate={animate}
@@ -91,7 +93,7 @@ const AppPage = () => {
                 />
                 <motion.div
                   className={cn(
-                    "pointer-events-auto fixed bottom-[15vh] right-3 h-fit cursor-pointer [--layer-toggle-translate:calc(6px-25vw)] 2xl:[--layer-toggle-translate:calc(6px-18vw)]",
+                    "pointer-events-auto fixed bottom-[20vh] right-3 h-fit cursor-pointer [--layer-toggle-translate:calc(6px-25vw)] 2xl:[--layer-toggle-translate:calc(6px-18vw)]",
                   )}
                   animate={animate}
                   variants={{

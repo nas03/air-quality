@@ -89,5 +89,12 @@ UI/UX Improvements & Feature Completion:
   - [ ] Change Sign in/Sign out to a modal
   - [ ] Export Excel Data Analytics page
   - [x] Update user profile
+  - [ ] Weather Card data
   - [ ] Pm2.5 data geoserver
   - [ ] Fix Email
+  - [ ] https://nomads.ncep.noaa.gov/gribfilter.php?ds=gfs_0p25_1hr -> cronjob
+
+
+Feedback
+- Increase zoom requirement for layer VNM_2
+- change text font to be more visible

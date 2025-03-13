@@ -20,6 +20,7 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
     name: "",
     location: "",
     recommendation: "",
+    wind_speed: 0,
   });
 
   const { data: recommendations } = useQuery({
@@ -41,8 +42,11 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
       status: recommendation.status,
       time,
       name: geoContext.location,
-      location: projectedCoordinate ? [String(projectedCoordinate[0]), String(projectedCoordinate[1])] : ["--", "--"],
+      location: projectedCoordinate
+        ? [String(projectedCoordinate[0].toFixed(2)), String(projectedCoordinate[1].toFixed(2))]
+        : ["--", "--"],
       recommendation: recommendation.recommendation,
+      wind_speed: geoContext.wind_speed ? Number(geoContext.wind_speed.toPrecision(2)) : 0,
     };
   };
 

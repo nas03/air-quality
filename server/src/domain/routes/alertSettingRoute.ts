@@ -1,11 +1,17 @@
 import { Route } from "@/config/constant";
 import { AlertSettingController } from "../controllers";
-import { AlertSettingInteractor } from "../interactors";
-import { AlertSettingRepository } from "../repositories";
+import { AlertSettingInteractor, DistrictInteractor } from "../interactors";
+import { AlertSettingRepository, DistrictRepository } from "../repositories";
 
 const alertSettingRepository = new AlertSettingRepository();
 const alertSettingInteractor = new AlertSettingInteractor(alertSettingRepository);
-const alertSettingController = new AlertSettingController(alertSettingInteractor);
+const districtRepository = new DistrictRepository();
+const districtInteractor = new DistrictInteractor(districtRepository);
+
+const alertSettingController = new AlertSettingController(
+  alertSettingInteractor,
+  districtInteractor
+);
 
 const alertSettingRouter: Route[] = [
   {
@@ -33,10 +39,16 @@ const alertSettingRouter: Route[] = [
     role: "user",
   },
   {
-    path: "/alert-settings/:user_id",
+    path: "/alert-settings/user/:user_id",
     controller: alertSettingController.onGetUserAlertByDistrict.bind(alertSettingController),
     method: "GET",
     role: "user",
+  },
+  {
+    path: "/alert-settings/district/:district_id",
+    controller: alertSettingController.onGetWeatherDataByDistrict.bind(alertSettingController),
+    method: "GET",
+    role: "",
   },
 ];
 

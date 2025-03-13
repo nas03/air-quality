@@ -92,7 +92,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer
   return (
     <div
       className={cn(
-        "bg-3 flex h-fit flex-row items-center gap-16 rounded-md bg-white/70 pb-5 pl-10 pr-16 pt-5 font-roboto backdrop-blur-md",
+        "bg-3 flex h-fit flex-row items-center gap-16 rounded-md bg-white/70 pb-5 pl-10 pr-16 pt-5 font-roboto shadow-2xl shadow-white/50 backdrop-blur-md",
         className,
       )}>
       <button className="shrink-0 rounded-full text-4xl" onClick={handlePlayPause}>

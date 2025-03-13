@@ -15,6 +15,7 @@ export interface GeoContextType {
   aqi_index: number | null;
   pm_25: number | null;
   location: string;
+  wind_speed: number;
 }
 
 export interface ConfigContextType {

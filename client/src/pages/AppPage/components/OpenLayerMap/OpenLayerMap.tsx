@@ -39,11 +39,11 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     return new Map({
       target: "map",
       view: new View({
-        zoom: 8,
+        zoom: 9,
         constrainResolution: true,
         projection: "EPSG:3857",
-        center: fromLonLat([105.97, 17.9459]),
-        minZoom: 6,
+        center: fromLonLat(INITIAL_COORDINATE),
+        minZoom: 7,
       }),
       controls: defaultControls({
         zoomOptions: {
@@ -83,9 +83,6 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   ) => {
     const modelLayers = ["air:AQI", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
     const modelURL = getWMSFeatureInfo(map, mapLayers, modelLayers, coordinate);
-    // const stationLayers = ["air:stations_point_map"];
-
-    /* const stationURL = getWMSFeatureInfo(map, mapLayers, stationLayers, coordinate, "2025-02-13T19:00:00Z"); */
 
     if (!modelURL) {
       console.error("Failed to generate WMS URLs for location data");

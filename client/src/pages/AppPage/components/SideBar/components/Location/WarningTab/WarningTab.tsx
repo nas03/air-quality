@@ -1,8 +1,10 @@
+import { getWeatherByDistrict } from "@/api/alertSetting";
 import { GeoContext, TimeContext } from "@/context";
 import useAirQualityData from "@/hooks/useAirQualityData";
 import { cn } from "@/lib/utils";
 import { MonitoringData } from "@/types/consts";
 import { AreaChartOutlined } from "@ant-design/icons";
+import { useMutation } from "@tanstack/react-query";
 import { Collapse, CollapseProps } from "antd";
 import { useContext, useEffect, useState } from "react";
 import AirQualityInfoPanel from "./AirQualityInfoPanel";
@@ -52,6 +54,16 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
   useEffect(() => {
     setSelectedValue(geoContext.type);
   }, [geoContext.type]);
+
+  const weatherData = useMutation({
+    mutationKey: ["weather", district_id],
+    mutationFn: (district_id: string) => getWeatherByDistrict(district_id),
+  });
+
+  useEffect(() => {
+    weatherData.mutate(district_id);
+  }, [district_id]);
+
   const items: CollapseProps["items"] = [
     {
       key: "1",
@@ -67,6 +79,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
           recommendation={data.recommendation}
           type={selectedValue === 0 ? "model" : "station"}
           status={data.status}
+          weatherData={weatherData.data || null}
         />
       ),
     },
@@ -75,7 +88,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
     <Collapse
       expandIconPosition="end"
       defaultActiveKey={["1"]}
-      className={cn("relative h-fit w-full rounded-md border-slate-200 dark:border-slate-700 shadow-sm", className)}
+      className={cn("relative h-fit w-full rounded-md border-slate-200 shadow-sm dark:border-slate-700", className)}
       bordered={false}
       collapsible="icon"
       items={items}

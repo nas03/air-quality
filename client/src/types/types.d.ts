@@ -10,6 +10,7 @@ export interface AirQualityData {
   name: string;
   location: string | string[];
   recommendation: string;
+  wind_speed: number;
 }
 
 export type MonitoringOutputDataType = (typeof MonitoringData.OUTPUT)[keyof typeof MonitoringData.OUTPUT];

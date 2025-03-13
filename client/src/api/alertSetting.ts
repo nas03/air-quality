@@ -37,7 +37,7 @@ export type UserAlert = {
 };
 export const getUserAlertByDistrict = async (user_id: number, district_id: string) => {
   try {
-    const response = await api.get<APIResponse<UserAlert[]>>(`/alert-settings/${user_id}`, {
+    const response = await api.get<APIResponse<UserAlert[]>>(`/alert-settings/user/${user_id}`, {
       params: {
         district_id: district_id,
       },
@@ -52,4 +52,12 @@ export const deleteUserAlertById = async (id: number) => {
   const response = await api.delete<APIResponse<null>>(`/alert-settings/${id}`);
   if (response.status === 200) return true;
   return false;
+};
+
+export const getWeatherByDistrict = async (district_id: string) => {
+  const response = await api.get<APIResponse<Omit<UserAlert, "id" | "aqi_index">>>(
+    `/alert-settings/district/${district_id}`,
+  );
+  console.log(response.data.data);
+  return response.data.data;
 };

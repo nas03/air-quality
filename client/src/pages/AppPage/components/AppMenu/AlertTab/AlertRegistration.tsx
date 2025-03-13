@@ -3,9 +3,8 @@ import { AlertInfoType } from "@/api/userSetting";
 import { AlertRegistrationContext } from "@/context";
 import { useAuth } from "@/hooks/useAuth";
 import useRegistrationState from "@/hooks/useRegistrationState";
-import { cn } from "@/lib/utils";
 import { AlertSetting } from "@/types/db";
-import { Button, Form } from "antd";
+import { Form } from "antd";
 import React, { SetStateAction, useCallback, useEffect, useMemo } from "react";
 import RegistrationSteps from "./RegistrationSteps/RegistrationSteps";
 
@@ -16,9 +15,9 @@ interface IPropsAlertRegistration extends React.ComponentPropsWithoutRef<"div"> 
 }
 
 const MAX_STEP = 3;
-const INITIAL_STEP = -1;
+const INITIAL_STEP = 0;
 
-const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ className, setRefetchNotification, setAddAlert }) => {
+const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotification, setAddAlert }) => {
   const { registrationData, setRegistrationData } = useRegistrationState();
   const [form] = Form.useForm<AlertInfoType>();
   const { user } = useAuth();
@@ -46,6 +45,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ className, setRe
 
       await createUserAlertSetting(payload);
       setRefetchNotification(true);
+      setAddAlert(false);
     } catch (error) {
       console.error("Error registering alert:", error);
     } finally {
@@ -76,7 +76,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ className, setRe
     [currentStep, registrationLoading, handleRegisterAlert],
   );
 
-  if (!registrationData && currentStep === INITIAL_STEP) {
+  /* if (!registrationData && currentStep === INITIAL_STEP) {
     return (
       <div className={cn("bg-white px-3 pt-3", className)}>
         <p className="mb-4 text-base font-normal text-zinc-800">
@@ -93,7 +93,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ className, setRe
         </div>
       </div>
     );
-  }
+  } */
 
   // Render registration steps
   return (

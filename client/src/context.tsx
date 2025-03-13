@@ -31,6 +31,7 @@ export const GeoContext = createContext<GeoContextType>({
   aqi_index: null,
   pm_25: null,
   location: "",
+  wind_speed: 0,
 });
 
 export const ConfigContext = createContext<ConfigContextType>({

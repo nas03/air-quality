@@ -5,44 +5,19 @@ import { Card } from "antd";
 import React from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { IoCloudy } from "react-icons/io5";
-
-interface DataSourceCardProps {
-  source: string;
-  name: string;
-  location: string | string[];
-  type?: string;
-}
-
-interface AirQualityCardProps {
-  status: string;
-  time: string;
-  aqi_index: string;
-  pm_25: string;
-  color: string;
-  icon: string;
-}
-
-interface HealthRecommendationCardProps {
-  recommendation: string;
-}
-
-interface IPropsWeatherInfoCard extends React.ComponentPropsWithRef<"div"> {
-  // coordinate: number[];
-  wind_speed: number;
-  temperature: {
-    min: number;
-    max: number;
-    avg: number;
-  };
-  weather: string;
-}
+import {
+  AirQualityCardProps,
+  DataSourceCardProps,
+  HealthRecommendationCardProps,
+  IPropsWeatherInfoCard,
+} from "./types";
 
 const DataSourceCard: React.FC<DataSourceCardProps> = ({ source, name, location }) => {
   const isModelSource = source === "Mô hình";
 
   const renderLocation = () => {
     return (
-      <div className="grid grid-cols-2 gap-1">
+      <div className="grid grid-cols-2">
         <p className="text-xs">
           <span className="font-semibold text-gray-600">Vĩ độ: </span>
           <span className="font-medium">{location[0]}</span>
@@ -151,7 +126,7 @@ const HealthRecommendationCard: React.FC<HealthRecommendationCardProps> = ({ rec
 const WeatherInfoCard: React.FC<IPropsWeatherInfoCard> = ({ className, ...props }) => {
   return (
     <>
-      <Card className={cn("w-full rounded-lg hover:shadow-md", className)} {...props}>
+      <Card className={cn("w-full rounded-lg border border-gray-200 hover:shadow-md", className)} {...props}>
         <div className="flex w-full flex-row items-center justify-between">
           <div className="flex h-full flex-col">
             <p className="text-4xl font-bold text-gray-800">{props.temperature.avg}&#8451;</p>
