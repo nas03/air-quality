@@ -1,3 +1,4 @@
+from datetime import date
 import json
 import logging
 import os
@@ -10,6 +11,7 @@ import psycopg2
 import psycopg2.extras
 import requests
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 # Configure logging
 logging.basicConfig(
@@ -38,7 +40,18 @@ def fetch_hanoi_station_details(station_id: str) -> Optional[float]:
         response = requests.get(URL)
         response.raise_for_status()
         data = response.json()["PM2.5"]
-        pm25_values = [np.float64(item["value"]) for item in data]
+        validData = []
+        # Convert now to GMT+7
+        now_utc = datetime.utcnow()
+        now_gmt7 = now_utc + timedelta(hours=7)
+        today_gmt7 = now_gmt7.date()
+
+        for item in data:
+            item_time = datetime.strptime(item["time"], "%Y-%m-%d %H:%M")
+            if item_time.date() == today_gmt7:
+                validData.append(item)
+
+        pm25_values = [np.float64(item["value"]) for item in validData]
         return float(np.mean(pm25_values)) if pm25_values else None
     except (requests.exceptions.RequestException, KeyError, ValueError) as e:
         logger.error(f"Error fetching details for Hanoi station {station_id}: {e}")
@@ -99,7 +112,7 @@ def process_hanoi_data(data: List[Dict[str, Any]]) -> pd.DataFrame:
     df["station_name"] = df["station_name"].str.replace('"', "", regex=False)
     df["address"] = df["address"].str.replace('"', "", regex=False)
     df["station_id"] = df["station_id"].astype(str).str.replace(".0", "")
-
+    df["timestamp"] = pd.to_datetime(df["timestamp"]).dt.date.astype(str)
     return df
 
 
@@ -118,18 +131,41 @@ def process_envisoft_data(data: List[Dict[str, Any]]) -> pd.DataFrame:
 
     df["station_name"] = df["station_name"].str.replace("(KK)", "").str.strip()
     df["station_id"] = df["station_id"].astype(str)
-
+    df["timestamp"] = pd.to_datetime(df["timestamp"]).dt.date.astype(str)
     return df
 
 
 def prepare_common_data(df: pd.DataFrame) -> pd.DataFrame:
     """Apply common data processing steps"""
-    df["timestamp"] = df["timestamp"].astype(str)
-    df["aqi_index"] = round(df["aqi_index"]).astype(int)
+    # Record the initial row count
+    initial_row_count = len(df)
+
+    # Handle NaT values in timestamp before converting to string
+    df["timestamp"] = df["timestamp"].replace({pd.NaT: None})
+
+    # Convert aqi_index to numeric, coercing non-numeric values to NaN
+    df["aqi_index"] = pd.to_numeric(df["aqi_index"], errors="coerce")
+
+    # Before dropping rows, apply other transformations
     df["pm25"] = df["pm25"].replace({np.nan: None})
     df["lat"] = df["lat"].replace({np.nan: None})
     df["lng"] = df["lng"].replace({np.nan: None})
-    df["geom"] = df.apply(
+
+    # Drop rows with any NaN, None, or NaT values in important columns
+    columns_to_check = ["station_id", "timestamp", "aqi_index", "lat", "lng"]
+    df = df.dropna(subset=columns_to_check).copy()  # Create an explicit copy here
+
+    # Log how many rows were removed
+    rows_removed = initial_row_count - len(df)
+    if rows_removed > 0:
+        logger.info(f"Removed {rows_removed} rows with missing values")
+
+    # Continue with transformations on the filtered data using .loc
+    df.loc[:, "timestamp"] = df["timestamp"].astype(str).replace({"None": None})
+    df.loc[:, "aqi_index"] = round(df["aqi_index"]).astype(int)
+
+    # Create geom column using .loc
+    df.loc[:, "geom"] = df.apply(
         lambda row: f"SRID=4326;POINT({row['lng']} {row['lat']})", axis=1
     )
     return df

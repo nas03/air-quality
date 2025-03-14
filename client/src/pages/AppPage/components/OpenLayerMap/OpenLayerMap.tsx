@@ -34,7 +34,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const key = import.meta.env.VITE_PUBLIC_MAPTILER_KEY;
   const styleUrl = `https://api.maptiler.com/maps/7d9ee8e1-7abf-4591-ac75-85518e48ba38/style.json?key=${key}`;
   const INITIAL_COORDINATE = [105.871, 21];
-  const DEFAULT_STATION_TIME = "2025-02-13T19:00:00Z";
+  // const DEFAULT_STATION_TIME = "2025-02-13T19:00:00Z";
   const initializeMap = () => {
     return new Map({
       target: "map",
@@ -56,10 +56,19 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   };
 
   const createLayers = async (map: Map) => {
+    // Adjust current date to GMT+7
+    const now = new Date();
+    const utcOffset = now.getTimezoneOffset();
+    const gmt7Date = new Date(now.getTime() + utcOffset * 60000 + 7 * 60 * 60000);
+    const currentDay = gmt7Date.getDate().toString();
+    const currentMonth = gmt7Date.getMonth().toString();
+    const currentYear = gmt7Date.getFullYear().toString();
+    const currentData = `${currentYear}-${currentMonth}-${currentDay}`;
+    console.log(currentData);
     const layers = [
       createAQILayer(time),
       createVietnamBoundaryLayer(map),
-      createStationsLayer(DEFAULT_STATION_TIME),
+      createStationsLayer(currentData),
       createMarkerLayer(INITIAL_COORDINATE),
       await createWindyLayer(),
     ];

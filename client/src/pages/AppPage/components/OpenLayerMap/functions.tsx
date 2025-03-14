@@ -19,7 +19,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
   const stationProperties = stationFeature?.at(0)?.getProperties();
 
   if (!stationProperties) return null;
-
+  console.log({ stationTime: stationProperties.timestamp });
   return {
     type: 1,
     coordinate: [stationProperties.lat, stationProperties.lng],
@@ -27,7 +27,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
     pm_25: stationProperties.pm25 ? Number(stationProperties.pm25) : null,
     location: stationProperties.station_name,
     time: stationProperties.timestamp,
-    wind_speed: null,
+    wind_speed: 0,
   };
 };
 
@@ -56,7 +56,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
     pm_25: Number(aqiFeature.properties?.GRAY_INDEX),
     location,
     time: modelData.timeStamp.split("T")[0].split("-").reverse().join("/"),
-    wind_speed: null,
+    wind_speed: 0,
   };
 };
 export const fetchLocationData = async (
@@ -77,7 +77,7 @@ export const fetchLocationData = async (
       const stationData = fetchStationData(mapRef.current, coordinate, markerRef.current);
 
       if (stationData) {
-        setMarkData({ ...stationData, wind_speed: wind_speed });
+        setMarkData({ ...stationData, wind_speed: wind_speed ?? 0 });
         return;
       }
     }
@@ -85,7 +85,7 @@ export const fetchLocationData = async (
     if (configContext.layer.model) {
       const modelData = await fetchModelData(modelURL, coordinate);
       if (modelData) {
-        setMarkData({ ...modelData, wind_speed });
+        setMarkData({ ...modelData, wind_speed: wind_speed ?? 0 });
       }
     }
   } catch (error) {
