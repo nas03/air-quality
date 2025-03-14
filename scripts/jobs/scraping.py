@@ -174,6 +174,10 @@ def prepare_common_data(df: pd.DataFrame) -> pd.DataFrame:
 def get_db_connection():
     """Create database connection using environment variables"""
     load_dotenv(".env")
+    # Try to load .env file, but don't fail if it doesn't exist
+    load_dotenv(".env", override=True)
+
+    # Get connection parameters with fallbacks and error checking
     conn_params = {
         "dbname": os.getenv("SUPABASE_DB_NAME"),
         "user": os.getenv("SUPABASE_DB_USER"),
@@ -181,6 +185,16 @@ def get_db_connection():
         "host": os.getenv("SUPABASE_DB_HOST"),
         "port": os.getenv("SUPABASE_DB_PORT"),
     }
+
+    # Check if any required parameters are missing
+    missing_params = [k for k, v in conn_params.items() if v is None]
+    if missing_params:
+        error_msg = (
+            f"Missing database connection parameters: {', '.join(missing_params)}"
+        )
+        logger.error(error_msg)
+        logger.info("Ensure environment variables are set or .env file exists")
+        raise ValueError(error_msg)
     log_params = dict(conn_params)
     log_params["password"] = "********" if conn_params["password"] else None
     logger.info(f"Database connection parameters: {log_params}")
