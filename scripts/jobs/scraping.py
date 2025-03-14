@@ -181,6 +181,9 @@ def get_db_connection():
         "host": os.getenv("SUPABASE_DB_HOST"),
         "port": os.getenv("SUPABASE_DB_PORT"),
     }
+    log_params = dict(conn_params)
+    log_params["password"] = "********" if conn_params["password"] else None
+    logger.info(f"Database connection parameters: {log_params}")
     return psycopg2.connect(**conn_params)
 
 
