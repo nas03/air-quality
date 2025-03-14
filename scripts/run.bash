@@ -4,5 +4,5 @@
 # source venv/bin/activate
 
 echo "Running cron jobs"
-python scripts/main.py
+python jobs/scraping.py
 echo "Done!"
