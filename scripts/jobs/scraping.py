@@ -173,7 +173,7 @@ def prepare_common_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def get_db_connection():
     """Create database connection using environment variables"""
-    load_dotenv()
+    load_dotenv(".env")
     conn_params = {
         "dbname": os.getenv("SUPABASE_DB_NAME"),
         "user": os.getenv("SUPABASE_DB_USER"),
