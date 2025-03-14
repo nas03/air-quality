@@ -4,5 +4,6 @@
 # source venv/bin/activate
 
 echo "Running cron jobs"
+cd ~/air-quality/scripts
 python jobs/scraping.py
 echo "Done!"
