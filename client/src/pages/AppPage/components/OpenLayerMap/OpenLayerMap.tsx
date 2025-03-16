@@ -56,19 +56,14 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   };
 
   const createLayers = async (map: Map) => {
-    // Adjust current date to GMT+7
     const now = new Date();
-    const utcOffset = now.getTimezoneOffset();
-    const gmt7Date = new Date(now.getTime() + utcOffset * 60000 + 7 * 60 * 60000);
-    const currentDay = gmt7Date.getDate().toString();
-    const currentMonth = gmt7Date.getMonth().toString();
-    const currentYear = gmt7Date.getFullYear().toString();
-    const currentData = `${currentYear}-${currentMonth}-${currentDay}`;
-    console.log(currentData);
+    const currentDate = new Date(new Date(now.getTime()).setHours(0, 0, 0, 0)).toISOString();
+
+    console.log({ currentDate });
     const layers = [
       createAQILayer(time),
       createVietnamBoundaryLayer(map),
-      createStationsLayer(currentData),
+      createStationsLayer(currentDate),
       createMarkerLayer(INITIAL_COORDINATE),
       await createWindyLayer(),
     ];

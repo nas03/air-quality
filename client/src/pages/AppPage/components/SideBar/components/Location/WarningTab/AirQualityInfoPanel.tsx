@@ -1,6 +1,4 @@
 import { UserAlert } from "@/api/alertSetting";
-import { TimeContext } from "@/context";
-import { useContext } from "react";
 import { getSvgAndColorByAQI } from "../../../config";
 import { WarningTabInfoCards } from "./WarningTabInfoCards";
 
@@ -23,10 +21,11 @@ export type AirQualityCardType = {
 
 export interface IPropsAirQualityInfoPanel extends DataSourceCardType, WeatherInfoCardType, AirQualityCardType {
   district_id: string;
+  time: string;
 }
 
 const AirQualityInfoPanel: React.FC<IPropsAirQualityInfoPanel> = (props) => {
-  const { time } = useContext(TimeContext);
+  // const { time } = useContext(TimeContext);
   const format = getSvgAndColorByAQI(Number(props.aqi_index));
 
   return (
@@ -51,7 +50,7 @@ const AirQualityInfoPanel: React.FC<IPropsAirQualityInfoPanel> = (props) => {
         aqi_index={props.aqi_index}
         pm_25={props.pm_25}
         status={props.status}
-        time={time}
+        time={props.time}
         color={format.color}
         icon={format.icon}
       />

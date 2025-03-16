@@ -16,7 +16,7 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
     aqi_index: 0,
     pm_25: 0,
     status: "string",
-    time,
+    time: time,
     name: "",
     location: "",
     recommendation: "",
@@ -36,11 +36,27 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
 
   const buildAirQualityData = (geoContext: GeoContextType, projectedCoordinate: number[] | null): AirQualityData => {
     const recommendation = findRecommendation(Number(geoContext.aqi_index));
+    let timeString = time;
+    if (geoContext.time) {
+      console.log(geoContext.time);
+      if (new Date(geoContext.time).toString() !== "Invalid Date") {
+        const date = new Date(geoContext.time)
+          .toLocaleDateString(undefined, {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+          .split("/");
+        timeString = [date[1], date[0], date[2]].join("/");
+      } else {
+        timeString = geoContext.time;
+      }
+    }
     return {
       aqi_index: geoContext.aqi_index ?? 0,
       pm_25: geoContext.pm_25 ?? 0,
       status: recommendation.status,
-      time,
+      time: timeString,
       name: geoContext.location,
       location: projectedCoordinate
         ? [String(projectedCoordinate[0].toFixed(2)), String(projectedCoordinate[1].toFixed(2))]

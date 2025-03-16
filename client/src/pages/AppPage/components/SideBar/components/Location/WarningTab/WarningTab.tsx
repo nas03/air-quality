@@ -80,6 +80,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
           type={selectedValue === 0 ? "model" : "station"}
           status={data.status}
           weatherData={weatherData.data || null}
+          time={data.time}
         />
       ),
     },

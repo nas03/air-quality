@@ -39,7 +39,6 @@ const getCollapseItems = (
 const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
   const [targetDistrictID, setTargetDistrictID] = useState<string>(DEFAULT_DISTRICT);
   const [tabIndex, setTabIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
 
   const { data: districts = [] } = useQuery({
     queryKey: ["districts:*"],

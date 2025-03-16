@@ -73,6 +73,7 @@ const AppPage = () => {
               pm_25: markData.pm_25,
               location: markData.location,
               wind_speed: markData.wind_speed,
+              time: markData.time,
             }}>
             <motion.div
               animate={animate}

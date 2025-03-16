@@ -40,8 +40,6 @@ export const createVietnamBoundaryLayer = (map: Map) =>
         TILED: true,
         tilesorigin: getBottomLeft(map.getView().getProjection().getExtent()).toString(),
       },
-      serverType: "geoserver",
-      cacheSize: 4096,
     }),
     opacity: 1,
   });
@@ -49,7 +47,7 @@ export const createVietnamBoundaryLayer = (map: Map) =>
 export const createStationsLayer = (time: string) =>
   new VectorLayer({
     source: new VectorSource({
-      url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&time=${time}`,
+      url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${time}'`,
       format: new GeoJSON(),
     }),
     style: (feature) => {
@@ -70,7 +68,6 @@ export const createStationsLayer = (time: string) =>
         text: new Text({
           text: aqiIndex,
           font: "Bold 10px sans-serif",
-          // stroke: new Stroke({ color: "#fff", width: 2 }),
           fill: new Fill({
             color: color === "#ffff00" ? "#333333" : "#FFFFFF",
           }),
@@ -103,17 +100,13 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
   });
 
 export const createWindyLayer = async () => {
-  const windData = await axios.get("/gfs.json");
+  const windData = await axios.get("/gft.json");
   const data = windData.data;
-  // Fetch wind data from local JSON file
-  /*  const response = await fetch("/gfs.json");
-  const data = await response.json(); */
+
   return new WindLayer(data, {
     windOptions: {
-      // colorScale: scale,
       velocityScale: 1 / 500,
       paths: 2000,
-      // eslint-disable-next-line no-unused-vars
       colorScale: [
         "rgb(0, 0, 75)", // Deep blue (slow)
         "rgb(0, 0, 130)",
@@ -132,18 +125,12 @@ export const createWindyLayer = async () => {
         "rgb(230, 0, 0)", // Red (fast)
       ],
       lineWidth: 2,
-      // colorScale: scale,
+
       generateParticleOption: false,
     },
     fieldOptions: {
       flipY: true,
       wrappedX: true,
-      /* xmin: 101.8,
-      xmax: 110.3,
-      ymin: 8,
-      ymax: 24, */
-      //   deltaX:0.25,
-      // deltaY:0.25,
     },
   });
 };

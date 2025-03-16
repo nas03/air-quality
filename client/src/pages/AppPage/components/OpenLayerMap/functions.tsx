@@ -48,14 +48,14 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
   const location = locationFeature.properties?.NAME_2
     ? `${locationFeature.properties.TYPE_2} ${locationFeature.properties.NAME_2}, ${locationFeature.properties.NAME_1}`
     : locationFeature.properties?.NAME_1;
-
+  console.log(modelData);
   return {
     type: 0,
     coordinate: coordinate as [number, number],
     aqi_index: Number(aqiFeature.properties?.GRAY_INDEX),
     pm_25: Number(aqiFeature.properties?.GRAY_INDEX),
     location,
-    time: modelData.timeStamp.split("T")[0].split("-").reverse().join("/"),
+    time: "",
     wind_speed: 0,
   };
 };
