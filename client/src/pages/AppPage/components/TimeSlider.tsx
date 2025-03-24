@@ -6,14 +6,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlinePauseCircle } from "react-icons/ai";
 import { GoPlay } from "react-icons/go";
 
-const SLIDER_MAX = 5;
+const SLIDER_MAX = 10;
 const ANIMATION_INTERVAL = 2000;
-
+const SLIDER_DATA_DEFAULT_IDX = 4
 const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer }) => {
   const timeList = useTimeList();
   const intervalRef = React.useRef<NodeJS.Timeout>();
   const [state, setState] = useState({
-    sliderValue: 2,
+    sliderValue: SLIDER_DATA_DEFAULT_IDX,
     marks: {} as SliderSingleProps["marks"],
     isPlaying: false,
   });
@@ -25,18 +25,14 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer
         fontWeight: 600,
         ...(!isThird && { color: "red" }),
       },
-      label: isThird
-        ? "Today"
-        : open
-          ? time.split("-").reverse().splice(0, 2).join(".")
-          : time.split("-").reverse().join("."),
+      label: open ? time.split("-").reverse().splice(0, 2).join(".") : time.split("-").reverse().join("."),
     }),
     [],
   );
 
   useEffect(() => {
     const marks = Object.fromEntries(
-      timeList.slice(0, SLIDER_MAX + 1).map((time, index) => [index, formatTimeLabel(time, index === 2, openDrawer)]),
+      timeList.slice(0, SLIDER_MAX + 1).map((time, index) => [index, formatTimeLabel(time, index === SLIDER_DATA_DEFAULT_IDX, openDrawer)]),
     );
     setState((prev) => ({ ...prev, marks }));
   }, [timeList, formatTimeLabel, openDrawer]);

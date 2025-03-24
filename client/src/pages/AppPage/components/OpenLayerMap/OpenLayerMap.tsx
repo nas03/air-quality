@@ -34,7 +34,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const key = import.meta.env.VITE_PUBLIC_MAPTILER_KEY;
   const styleUrl = `https://api.maptiler.com/maps/7d9ee8e1-7abf-4591-ac75-85518e48ba38/style.json?key=${key}`;
   const INITIAL_COORDINATE = [105.871, 21];
-  // const DEFAULT_STATION_TIME = "2025-02-13T19:00:00Z";
+
   const initializeMap = () => {
     return new Map({
       target: "map",
@@ -85,7 +85,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     mapLayers: (TileLayer | VectorLayer | WindLayer)[],
     coordinate: Coordinate,
   ) => {
-    const modelLayers = ["air:AQI", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
+    const modelLayers = ["air:aqi_map", "air:gadm41_VNM_2", "air:gadm41_VNM_1", "air:gadm41_VNM_3"];
     const modelURL = getWMSFeatureInfo(map, mapLayers, modelLayers, coordinate);
 
     if (!modelURL) {
@@ -95,12 +95,21 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
     fetchLocationData(modelURL, coordinate, props.setMarkData, configContext, mapRef, markerRef);
   };
-
+  const tempRemoveWindLayer = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    const [, , , , , , windLayer] = map.getLayers().getArray();
+    if (windLayer) {
+      document.getElementById("map")?.addEventListener("pointerdown", () => windLayer.setVisible(false));
+      document.getElementById("map")?.addEventListener("pointerup", () => windLayer.setVisible(true));
+    }
+  };
   const handleMapClick = (map: Map, layers: (TileLayer<TileWMS> | VectorLayer | WindLayer)[]) => {
     map.on("singleclick", function (evt) {
       handleMarkerChange(evt.coordinate);
       handleUpdateLocationData(map, layers, evt.coordinate);
     });
+    tempRemoveWindLayer();
   };
 
   useEffect(() => {

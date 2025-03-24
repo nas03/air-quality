@@ -1,5 +1,5 @@
+import api from "@/config/api";
 import "@/css/open.css";
-import axios from "axios";
 import { Feature, Map } from "ol";
 import { WindLayer } from "ol-wind";
 import { Coordinate } from "ol/coordinate";
@@ -19,7 +19,7 @@ export const createAQILayer = (time: string) =>
     source: new TileWMS({
       url: "http://localhost:8080/geoserver/air/wms",
       params: {
-        LAYERS: "air:AQI",
+        LAYERS: "air:aqi_map",
         TIME: time,
         FORMAT: "image/png",
         TILED: true,
@@ -100,33 +100,16 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
   });
 
 export const createWindyLayer = async () => {
-  const windData = await axios.get("/gft.json");
-  const data = windData.data;
+  const windData = await api.get("/wind-data?timestamp=2025-03-17T07:00:00");
+  const data = windData.data.data;
 
   return new WindLayer(data, {
     windOptions: {
-      velocityScale: 1 / 500,
+      velocityScale: 1 / 700,
       paths: 2000,
-      colorScale: [
-        "rgb(0, 0, 75)", // Deep blue (slow)
-        "rgb(0, 0, 130)",
-        "rgb(0, 50, 170)",
-        "rgb(0, 90, 200)",
-        "rgb(0, 130, 230)", // Light blue
-        "rgb(0, 170, 255)",
-        "rgb(80, 180, 250)",
-        "rgb(130, 210, 255)",
-        "rgb(160, 240, 255)", // Cyan
-        "rgb(200, 255, 170)", // Light green
-        "rgb(255, 255, 0)", // Yellow
-        "rgb(255, 200, 0)", // Orange
-        "rgb(255, 150, 0)",
-        "rgb(255, 80, 0)", // Reddish orange
-        "rgb(230, 0, 0)", // Red (fast)
-      ],
+      colorScale: ["rgba(255, 255, 255, 0.7)"],
       lineWidth: 2,
-
-      generateParticleOption: false,
+      globalAlpha: 0.8,
     },
     fieldOptions: {
       flipY: true,

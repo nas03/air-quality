@@ -80,8 +80,8 @@ UI/UX Improvements & Feature Completion:
 
 - [ ] Complete core features:
 
-  - [ ] Integrate wind data collection
-  - [ ] Configure cronjob for real-time station data updates
+  - [x] Integrate wind data collection
+  - [x] Configure cronjob for real-time station data updates
   - [ ] Add multi-language support (Vietnamese/English)
   - [ ] Implement notification preference system
   - [ ] Create favorite locations feature
@@ -93,8 +93,6 @@ UI/UX Improvements & Feature Completion:
   - [ ] Pm2.5 data geoserver
   - [ ] Fix Email
   - [ ] https://nomads.ncep.noaa.gov/gribfilter.php?ds=gfs_0p25_1hr -> cronjob
-
-
-Feedback
-- Increase zoom requirement for layer VNM_2
-- change text font to be more visible
+  - [ ] Get wind data by cycle (nearest cycle available)
+  - [ ] Trang quản lý pipeline: Force rerun, check cronjob nào hoàn thành, ... (Quản lý dữ liệu indra.eweather.gov.vn)
+  - [x] near real-time aqi 
