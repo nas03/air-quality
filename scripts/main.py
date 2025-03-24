@@ -1,9 +1,8 @@
 import logging
 
-from jobs.calculate_aqi import export_data
-from jobs.calculate_avg import uploadData
-from scripts.jobs.scraping import scrape_all
-from jobs.send_notifications import sendNotification
+from jobs.aqi_raster_data import scrape_aqi_data
+from jobs.stations_data import scrape_stations_data
+from jobs.wind_data import scrape_wind_data
 
 # Configure logging
 logging.basicConfig(
@@ -13,14 +12,12 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     try:
-        logger.info("Starting uploading data to database")
-        uploadData()
-        logger.info("Starting raster conversion process")
-        export_data()
-        logger.info("Starting scraping conversion process")
-        scrape_all()
-        logger.info("Send Notifications")
-        sendNotification()
+        logger.info("Starting scraping aqi_data")
+        scrape_aqi_data()
+        logger.info("Starting scraping station_data")
+        scrape_stations_data()
+        logger.info("Starting scraping wind_data")
+        scrape_wind_data()
     except Exception as e:
         logger.error(f"An error occurred in main process: {e}")
         raise
