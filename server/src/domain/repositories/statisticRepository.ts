@@ -153,7 +153,8 @@ export class StatisticRepository implements IStatisticRepository {
       .selectFrom("statistics")
       .select("time")
       .groupBy("time")
-      .orderBy("time", "asc")
+      .orderBy("time", "desc")
+      .limit(10)
       .execute();
     return query;
   }

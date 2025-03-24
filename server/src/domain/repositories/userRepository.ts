@@ -37,9 +37,9 @@ export class UserRepository implements IUserRepository {
         .with("deleteUserAndFavorite", (qb) =>
           qb.updateTable("users_setting").where("user_id", "=", user_id).set("deleted", flag.TRUE)
         )
-        .with("deleteUserAndSession", (qb) =>
+        /* .with("deleteUserAndSession", (qb) =>
           qb.updateTable("users_session").where("user_id", "=", user_id).set("deleted", flag.TRUE)
-        )
+        ) */
         .updateTable("users")
         .where("user_id", "=", user_id)
         .set("deleted", flag.TRUE)

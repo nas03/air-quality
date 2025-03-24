@@ -22,12 +22,15 @@ export interface AlertsSetting {
   wind_speed: Generated<boolean>;
 }
 
-export interface AQISupa {
-  elevation: number | null;
-  fid: Generated<number>;
-  ingestion: Timestamp | null;
-  location: string | null;
-  the_geom: string | null;
+export interface CronjobMonitor {
+  id: Generated<number>;
+  raster_data_status: number;
+  raster_data_timestamp: Timestamp;
+  station_data_status: number;
+  station_data_timestamp: Timestamp;
+  timestamp: Timestamp;
+  wind_data_status: number;
+  wind_data_timestamp: Timestamp;
 }
 
 export interface GeographyColumns {
@@ -78,6 +81,38 @@ export interface MRecommendation {
   min_threshold: number;
   vn_recommendation: string | null;
   vn_status: string | null;
+}
+
+export interface RasterColumns {
+  blocksize_x: number | null;
+  blocksize_y: number | null;
+  extent: string | null;
+  nodata_values: number[] | null;
+  num_bands: number | null;
+  out_db: boolean[] | null;
+  pixel_types: string[] | null;
+  r_raster_column: string | null;
+  r_table_catalog: string | null;
+  r_table_name: string | null;
+  r_table_schema: string | null;
+  regular_blocking: boolean | null;
+  same_alignment: boolean | null;
+  scale_x: number | null;
+  scale_y: number | null;
+  spatial_index: boolean | null;
+  srid: number | null;
+}
+
+export interface RasterOverviews {
+  o_raster_column: string | null;
+  o_table_catalog: string | null;
+  o_table_name: string | null;
+  o_table_schema: string | null;
+  overview_factor: number | null;
+  r_raster_column: string | null;
+  r_table_catalog: string | null;
+  r_table_name: string | null;
+  r_table_schema: string | null;
 }
 
 export interface SpatialRefSys {
@@ -135,17 +170,6 @@ export interface UsersNotification {
   user_id: number | null;
 }
 
-export interface UsersSession {
-  access_token: string;
-  created_at: Generated<Timestamp | null>;
-  deleted: number | null;
-  id: Generated<number>;
-  refresh_token: string | null;
-  session_id: string;
-  updated_at: Generated<Timestamp | null>;
-  user_id: number;
-}
-
 export interface UsersSetting {
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
@@ -157,19 +181,28 @@ export interface UsersSetting {
   user_location: string | null;
 }
 
+export interface WindData {
+  id: Generated<number>;
+  timestamp: Timestamp;
+  ugrid_data: number[];
+  vgrid_data: number[];
+}
+
 export interface DB {
   alerts_setting: AlertsSetting;
-  AQI_Supa: AQISupa;
+  cronjob_monitor: CronjobMonitor;
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   m_districts: MDistricts;
   m_recommendation: MRecommendation;
   mail: Mail;
+  raster_columns: RasterColumns;
+  raster_overviews: RasterOverviews;
   spatial_ref_sys: SpatialRefSys;
   stations: Stations;
   statistics: Statistics;
   users: Users;
   users_notification: UsersNotification;
-  users_session: UsersSession;
   users_setting: UsersSetting;
+  wind_data: WindData;
 }
