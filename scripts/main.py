@@ -1,6 +1,6 @@
 import logging
 
-from jobs.aqi_raster_data import scrape_aqi_data
+# from jobs.aqi_raster_data import scrape_aqi_data
 from jobs.stations_data import scrape_stations_data
 from jobs.wind_data import scrape_wind_data
 
