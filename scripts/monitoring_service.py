@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-A simple API server that executes a cron job when called.
-No authentication required.
-"""
 import subprocess
 import logging
 from flask import Flask, jsonify
