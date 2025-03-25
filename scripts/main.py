@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     try:
-        logger.info("Starting scraping aqi_data")
-        scrape_aqi_data()
+        # logger.info("Starting scraping aqi_data")
+        # scrape_aqi_data()
         logger.info("Starting scraping station_data")
         scrape_stations_data()
         logger.info("Starting scraping wind_data")
