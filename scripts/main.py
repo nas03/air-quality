@@ -22,9 +22,9 @@ def send_notifications(station_data_log, wind_data_log):
         "station_data_log": station_data_log,
         "timestamp": datetime.datetime.now().isoformat(),
     }
-
+    # http://ec2-18-136-124-168.ap-southeast-1.compute.amazonaws.com:5500/api
     response = requests.post(
-        "http://localhost:5500/api/cronjob/record",
+        "http://ec2-18-136-124-168.ap-southeast-1.compute.amazonaws.com:5500/api/cronjob/record",
         data=data,
     )
     print(response.json())
