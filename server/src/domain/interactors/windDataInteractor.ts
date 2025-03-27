@@ -48,7 +48,8 @@ export class WindDataInteractor implements IWindDataInteractor {
   };
   async getWindData(timestamp: Date): Promise<[WindDataType, WindDataType] | null> {
     const windData = await this.windDataRepository.getWindData(timestamp);
-    if (!windData) return null;
+    if (!windData)
+      return this.constructHeader({ ugrid_data: [], vgrid_data: [], id: -1, timestamp: timestamp });
     return this.constructHeader(windData);
   }
 }

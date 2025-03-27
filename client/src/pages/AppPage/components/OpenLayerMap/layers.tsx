@@ -44,10 +44,11 @@ export const createVietnamBoundaryLayer = (map: Map) =>
     opacity: 1,
   });
 
-export const createStationsLayer = (time: string) =>
-  new VectorLayer({
+export const createStationsLayer = (time: string) => {
+  const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+  return new VectorLayer({
     source: new VectorSource({
-      url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${time}'`,
+      url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
       format: new GeoJSON(),
     }),
     style: (feature) => {
@@ -78,6 +79,7 @@ export const createStationsLayer = (time: string) =>
     },
     opacity: 1,
   });
+};
 
 export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
   new VectorLayer({
@@ -102,7 +104,7 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
 export const createWindyLayer = async (time: string) => {
   const windData = await api.get("/wind-data", {
     params: {
-      timestamp: time,
+      timestamp: new Date(time).toISOString(),
     },
   });
   const data = windData.data.data;
@@ -110,14 +112,48 @@ export const createWindyLayer = async (time: string) => {
   return new WindLayer(data, {
     windOptions: {
       velocityScale: 1 / 700,
-      paths: 2000,
+      paths: 800,
       colorScale: ["rgba(0, 0, 0, 0.7)"],
       lineWidth: 2.5,
-      globalAlpha: 0.95,
+      globalAlpha: 0.9,
     },
     fieldOptions: {
       flipY: true,
       wrappedX: true,
     },
   });
+};
+
+export const updateStationLayer = (stationSource: VectorSource, time: string) => {
+  const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+  try {
+    stationSource.setUrl(
+      `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
+    );
+    stationSource.refresh();
+  } catch (error) {
+    console.error("Failed to update station layer:", error);
+  }
+};
+
+export const updateAQILayer = (AQISource: TileWMS, time: string) => {
+  AQISource.updateParams({ TIME: time });
+};
+
+export const updateWindLayer = async (windLayer: WindLayer, time: string) => {
+  if (!windLayer) return;
+
+  try {
+    const windData = await api.get("/wind-data", {
+      params: { timestamp: time },
+    });
+
+    const data = windData.data.data;
+    windLayer.setData(data, {
+      flipY: true,
+      wrappedX: true,
+    });
+  } catch (error) {
+    console.error("Failed to update wind layer:", error);
+  }
 };

@@ -3,10 +3,8 @@ import { APIResponse } from "@/types/api";
 import { MDistrict, Statistic } from "@/types/db";
 
 export const getTimeList = (): string[] => {
-  // const query = await api.get<APIResponse<string[]>>("/statistics/time-list");
-  // Create timeList with dates: 3 days before today, today, and 7 days after today
   const today = new Date();
-  console.log(today);
+
   const timeList = [];
 
   for (let i = 3; i > 0; i--) {

@@ -1,9 +1,7 @@
 import { IPropsOpenLayerMap } from "@/components/types";
-import api from "@/config/api";
 import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
 import { cn } from "@/lib/utils";
-import console from "console";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { WindLayer } from "ol-wind";
@@ -12,9 +10,11 @@ import { Coordinate } from "ol/coordinate";
 import { Point } from "ol/geom";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
+import { unByKey } from "ol/Observable";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
+import VectorSource from "ol/source/Vector";
 import React, { useContext, useEffect, useRef } from "react";
 import { fetchLocationData, getWMSFeatureInfo } from "./functions";
 import {
@@ -23,6 +23,9 @@ import {
   createStationsLayer,
   createVietnamBoundaryLayer,
   createWindyLayer,
+  updateAQILayer,
+  updateStationLayer,
+  updateWindLayer,
 } from "./layers";
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
@@ -39,41 +42,44 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const INITIAL_COORDINATE = [105.871, 21];
 
   const initializeMap = () => {
+    const viewConfig = {
+      zoom: 9,
+      constrainResolution: true,
+      projection: "EPSG:3857",
+      center: fromLonLat(INITIAL_COORDINATE),
+      minZoom: 7,
+    };
+
+    const zoomControlStyles = {
+      className: "top-[5rem] right-3 rounded-full w-fit h-fit bg-white ",
+      zoomInClassName: "!rounded-full !w-fit !h-fit !py-4 !px-3 hover:bg-blue-100 !outline-blue-400",
+      zoomOutClassName: "!rounded-full !w-fit !h-fit !py-4 !px-3 hover:bg-blue-100 !outline-blue-400",
+    };
+
     return new Map({
       target: "map",
-      view: new View({
-        zoom: 9,
-        constrainResolution: true,
-        projection: "EPSG:3857",
-        center: fromLonLat(INITIAL_COORDINATE),
-        minZoom: 7,
-      }),
+      view: new View(viewConfig),
       controls: defaultControls({
-        zoomOptions: {
-          className: "top-[5rem] right-3 rounded-full w-fit h-fit bg-white ",
-          zoomInClassName: "!rounded-full !w-fit !h-fit !py-4 !px-3 hover:bg-blue-100 !outline-blue-400",
-          zoomOutClassName: "!rounded-full !w-fit !h-fit !py-4 !px-3 hover:bg-blue-100 !outline-blue-400",
-        },
+        zoomOptions: zoomControlStyles,
       }),
     });
   };
 
   const createLayers = async (map: Map) => {
-    const now = new Date();
-    const now7 = new Date(now.getTime() + 7 * 60 * 60 * 1000);
-    const windDate = new Date(new Date(now7.getTime()).setHours(7, 0, 0, 0)).toISOString();
-    const stationDate = new Date(new Date(now.getTime()).setHours(0, 0, 0, 0)).toISOString();
-    const layers = [
-      createAQILayer(time),
-      createVietnamBoundaryLayer(map),
-      createStationsLayer(stationDate),
-      createMarkerLayer(INITIAL_COORDINATE),
-      await createWindyLayer(windDate),
-    ];
-    aqiLayerRef.current = layers[0] as TileLayer;
-    windLayerRef.current = layers[4] as WindLayer;
-    markerRef.current = layers[3] as VectorLayer;
+    const aqiLayer = createAQILayer(time);
+    const boundaryLayer = createVietnamBoundaryLayer(map);
+    const stationsLayer = createStationsLayer(time);
+    const markerLayer = createMarkerLayer(INITIAL_COORDINATE);
+    const windyLayer = await createWindyLayer(time);
+
+    const layers = [aqiLayer, boundaryLayer, stationsLayer, markerLayer, windyLayer];
+
+    aqiLayerRef.current = aqiLayer as TileLayer;
+    windLayerRef.current = windyLayer as WindLayer;
+    markerRef.current = markerLayer as VectorLayer;
+
     configContext.setMarker(markerRef.current);
+
     return layers;
   };
 
@@ -99,36 +105,24 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
     fetchLocationData(modelURL, coordinate, props.setMarkData, configContext, mapRef, markerRef);
   };
-  const tempRemoveWindLayer = () => {
-    const map = mapRef.current;
-    if (!map) return;
-    const [, , , , , , windLayer] = map.getLayers().getArray();
-    if (windLayer) {
-      document.getElementById("map")?.addEventListener("pointerdown", () => windLayer.setVisible(false));
-      document.getElementById("map")?.addEventListener("pointerup", () => windLayer.setVisible(true));
-    }
-  };
+
   const handleMapClick = (map: Map, layers: (TileLayer<TileWMS> | VectorLayer | WindLayer)[]) => {
     map.on("singleclick", function (evt) {
       handleMarkerChange(evt.coordinate);
       handleUpdateLocationData(map, layers, evt.coordinate);
     });
-    tempRemoveWindLayer();
   };
 
   useEffect(() => {
     const map = mapRef.current;
     const marker = configContext.markerRef?.current;
-
-    if (!map || !marker) return;
+    if (!map || !marker || !layersRef.current) return;
 
     const markerFeature = marker.getSource()?.getFeatures()[0];
     if (!markerFeature) return;
 
     const coordinate = markerFeature.getGeometry()?.getCoordinates();
-    if (!coordinate) return;
-
-    if (map && layersRef.current) {
+    if (coordinate) {
       handleUpdateLocationData(map, layersRef.current, coordinate);
     }
   }, [configContext.currentCoordinate]);
@@ -154,45 +148,70 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   }, []);
 
   useEffect(() => {
+    const stationSource = layersRef.current?.at(2)?.getSource() as VectorSource;
     const AQISource = aqiLayerRef.current?.getSource() as TileWMS;
-
-    AQISource?.updateParams({ TIME: time });
-  }, [time]);
-  useEffect(() => {
     const windLayer = windLayerRef.current;
-    if (!windLayer) return;
-    const getWindData = async () => {
-      const windData = await api.get("/wind-data", {
-        params: {
-          timestamp: time,
-        },
-      });
-      return windData.data.data;
-    };
 
-    getWindData().then((data) => {
-      if (!data) return;
-      windLayer.setData(data, {
-        flipY: true,
-        wrappedX: true,
-      });
-    });
-  }, [windLayerRef.current, time]);
+    stationSource && updateStationLayer(stationSource, time);
+    AQISource && updateAQILayer(AQISource, time);
+    windLayer && updateWindLayer(windLayer, time);
+  }, [time]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    const [, , aqiLayer, boundaryLayer, stationsLayer, , windLayer] = map.getLayers().getArray();
+    const updateWindLayerVisibility = () => {
+      const zoom = map.getView().getZoom();
+      const windLayer = map.getLayers().getArray()[6];
+      if (!zoom || !windLayer) return;
 
-    const updateLayerVisibility = (layer: any, isVisible: boolean) => {
-      layer?.setVisible(isVisible);
+      if (zoom >= 11) {
+        windLayer.setVisible(false);
+      } else {
+        windLayer.setVisible(configContext.layer.wind);
+      }
     };
 
-    updateLayerVisibility(aqiLayer, configContext.layer.model);
-    updateLayerVisibility(boundaryLayer, configContext.layer.model);
-    updateLayerVisibility(stationsLayer, configContext.layer.station);
-    updateLayerVisibility(windLayer, configContext.layer.wind);
+    const handlePointerDown = () => {
+      const windLayer = map.getLayers().getArray()[6];
+      if (windLayer) windLayer.setVisible(false);
+    };
+
+    const handlePointerUp = () => {
+      const windLayer = map.getLayers().getArray()[6];
+      const zoom = map.getView().getZoom();
+      if (windLayer && zoom && zoom < 11) {
+        windLayer.setVisible(configContext.layer.wind);
+      }
+    };
+
+    const mapElement = document.getElementById("map");
+    mapElement?.addEventListener("pointerdown", handlePointerDown);
+    mapElement?.addEventListener("pointerup", handlePointerUp);
+
+    updateWindLayerVisibility();
+
+    const zoomListener = map.getView().on("change:resolution", updateWindLayerVisibility);
+
+    return () => {
+      unByKey(zoomListener);
+      mapElement?.removeEventListener("pointerdown", handlePointerDown);
+      mapElement?.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [configContext.layer.wind]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const [, , aqiLayer, boundaryLayer, stationsLayer, ,] = map.getLayers().getArray();
+
+    if (!aqiLayer || !boundaryLayer || !stationsLayer) return;
+
+    aqiLayer.setVisible(configContext.layer.model);
+    boundaryLayer.setVisible(configContext.layer.model);
+    stationsLayer.setVisible(configContext.layer.station);
   }, [configContext.layer]);
 
   return (

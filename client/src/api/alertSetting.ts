@@ -58,6 +58,5 @@ export const getWeatherByDistrict = async (district_id: string) => {
   const response = await api.get<APIResponse<Omit<UserAlert, "id" | "aqi_index">>>(
     `/alert-settings/district/${district_id}`,
   );
-  console.log(response.data.data);
   return response.data.data;
 };
