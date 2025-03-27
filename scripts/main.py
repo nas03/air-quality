@@ -1,3 +1,4 @@
+import datetime
 import logging
 import requests
 
@@ -12,8 +13,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def send_notifications():
-    requests.post()
+def send_notifications(station_data_log, wind_data_log):
+    data = {
+        "raster_data_status": 1,
+        "station_data_status": 1,
+        "wind_data_status": 1,
+        "wind_data_log": wind_data_log,
+        "station_data_log": station_data_log,
+        "timestamp": datetime.datetime.now().isoformat(),
+    }
+
+    response = requests.post(
+        "http://localhost:5500/api/cronjob/record",
+        data=data,
+    )
+    print(response.json())
 
 
 if __name__ == "__main__":
@@ -21,10 +35,10 @@ if __name__ == "__main__":
         # logger.info("Starting scraping aqi_data")
         # scrape_aqi_data()
         logger.info("Starting scraping station_data")
-        station_log = scrape_stations_data()
+        station_data_log = scrape_stations_data()
         logger.info("Starting scraping wind_data")
-        scrape_wind_data()
-
+        wind_data_log = scrape_wind_data()
+        send_notifications(station_data_log, wind_data_log)
     except Exception as e:
         logger.error(f"An error occurred in main process: {e}")
         raise

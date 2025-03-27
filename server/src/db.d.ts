@@ -25,12 +25,11 @@ export interface AlertsSetting {
 export interface CronjobMonitor {
   id: Generated<number>;
   raster_data_status: number;
-  raster_data_timestamp: Timestamp;
+  station_data_log: string;
   station_data_status: number;
-  station_data_timestamp: Timestamp;
   timestamp: Timestamp;
+  wind_data_log: string;
   wind_data_status: number;
-  wind_data_timestamp: Timestamp;
 }
 
 export interface GeographyColumns {

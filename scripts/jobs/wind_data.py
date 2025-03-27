@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
+from io import StringIO
 
 import numpy as np
 import pandas as pd
@@ -182,27 +183,55 @@ def scrape_wind_data(
 
     Args:
         ncep_url: Base URL for NCEP data
-        params: Request parameters (uses defaults if None)
         output_dir: Directory to save temporary and output files
 
     Returns:
-        Path to the generated JSON file or None if process failed
+        String containing logs of the scraping process
     """
-    params = get_default_params()
+    # Create string buffer to capture logs
+    log_capture_string = StringIO()
+    log_handler = logging.StreamHandler(log_capture_string)
+    log_handler.setLevel(logging.INFO)
+    log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    log_handler.setFormatter(log_formatter)
+    logger.addHandler(log_handler)
 
-    grib_file = download_grib_file(ncep_url, params, output_dir)
-    if not grib_file:
-        return None
+    try:
+        params = get_default_params()
 
-    df = process_grib_file(grib_file)
+        grib_file = download_grib_file(ncep_url, params, output_dir)
+        if not grib_file:
+            logger.error("Failed to download GRIB file")
+            return log_capture_string.getvalue()
 
-    conn = get_db_connection()
-    insert_data(df, conn)
-    conn.close()
-    cleanup_temp_file(grib_file)
+        logger.info(f"Successfully downloaded GRIB file to {grib_file}")
+        df = process_grib_file(grib_file)
+        logger.info("Successfully processed GRIB file data")
+
+        conn = get_db_connection()
+        insert_data(df, conn)
+        conn.close()
+        logger.info("Successfully inserted wind data into database")
+
+        cleanup_temp_file(grib_file)
+        logger.info("Cleaned up temporary files")
+
+        # Get log contents
+        log_handler.flush()
+        log_contents = log_capture_string.getvalue()
+
+        return log_contents
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
+        return log_capture_string.getvalue()
+    finally:
+        # Clean up
+        logger.removeHandler(log_handler)
+        log_capture_string.close()
 
 
 __all__ = ["scrape_wind_data"]
 
 if __name__ == "__main__":
-    scrape_wind_data()
+    logs = scrape_wind_data()
+    print(logs)
