@@ -287,22 +287,45 @@ def scrape_source(source: str):
         conn.close()
 
         logger.info("Successfully inserted data into database")
-
+        return True
     except requests.exceptions.RequestException as e:
         logger.error(f"Error fetching data: {e}")
+        return False
     except psycopg2.Error as e:
         logger.error(f"Database error: {e}")
+        return False
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
-        raise
+        return False
 
 
 def scrape_stations_data():
-    """Scrape data from all sources"""
-    for source in ["hanoi", "envisoft"]:
-        scrape_source(source)
+    """Scrape data from all sources and return logs"""
+    # Create string buffer to capture logs
+    log_capture_string = StringIO()
+    log_handler = logging.StreamHandler(log_capture_string)
+    log_handler.setLevel(logging.INFO)
+    log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    log_handler.setFormatter(log_formatter)
+    logger.addHandler(log_handler)
+
+    try:
+        # Run scraping for each source
+        for source in ["hanoi", "envisoft"]:
+            scrape_source(source)
+
+        # Get log contents
+        log_handler.flush()
+        log_contents = log_capture_string.getvalue()
+
+        return log_contents
+    finally:
+        # Clean up
+        logger.removeHandler(log_handler)
+        log_capture_string.close()
 
 
 __all__ = ["scrape_stations_data"]
 if __name__ == "__main__":
-    scrape_stations_data()
+    logs = scrape_stations_data()
+    print(logs)

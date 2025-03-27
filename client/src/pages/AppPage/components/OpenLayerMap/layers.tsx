@@ -99,17 +99,21 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
     }),
   });
 
-export const createWindyLayer = async () => {
-  const windData = await api.get("/wind-data?timestamp=2025-03-17T07:00:00");
+export const createWindyLayer = async (time: string) => {
+  const windData = await api.get("/wind-data", {
+    params: {
+      timestamp: time,
+    },
+  });
   const data = windData.data.data;
 
   return new WindLayer(data, {
     windOptions: {
       velocityScale: 1 / 700,
       paths: 2000,
-      colorScale: ["rgba(255, 255, 255, 0.7)"],
-      lineWidth: 2,
-      globalAlpha: 0.8,
+      colorScale: ["rgba(0, 0, 0, 0.7)"],
+      lineWidth: 2.5,
+      globalAlpha: 0.95,
     },
     fieldOptions: {
       flipY: true,

@@ -5,11 +5,7 @@ from flask import Flask, jsonify
 from datetime import datetime
 
 # Configure logging
-logging.basicConfig(
-    filename="api_server.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+
 
 app = Flask(__name__)
 
@@ -20,8 +16,6 @@ def execute_cron():
     Endpoint to execute the cron job.
     """
     try:
-        # Log the request
-        logging.info(f"Executing cron job at {datetime.now()}")
 
         # Execute the command
         result = subprocess.run(
@@ -33,7 +27,7 @@ def execute_cron():
 
         # Check if the command executed successfully
         if result.returncode == 0:
-            logging.info("Cron job executed successfully")
+
             return jsonify(
                 {
                     "status": "success",
@@ -42,7 +36,7 @@ def execute_cron():
                 }
             )
         else:
-            logging.error(f"Cron job failed with error: {result.stderr}")
+
             return (
                 jsonify(
                     {
@@ -56,7 +50,7 @@ def execute_cron():
             )
 
     except Exception as e:
-        logging.error(f"Exception occurred: {str(e)}")
+
         return (
             jsonify(
                 {

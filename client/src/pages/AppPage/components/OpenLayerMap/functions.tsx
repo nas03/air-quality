@@ -19,7 +19,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
   const stationProperties = stationFeature?.at(0)?.getProperties();
 
   if (!stationProperties) return null;
-  console.log({ stationTime: stationProperties.timestamp });
+
   return {
     type: 1,
     coordinate: [stationProperties.lat, stationProperties.lng],
@@ -48,7 +48,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
   const location = locationFeature.properties?.NAME_2
     ? `${locationFeature.properties.TYPE_2} ${locationFeature.properties.NAME_2}, ${locationFeature.properties.NAME_1}`
     : locationFeature.properties?.NAME_1;
-  console.log(modelData);
+
   return {
     type: 0,
     coordinate: coordinate as [number, number],

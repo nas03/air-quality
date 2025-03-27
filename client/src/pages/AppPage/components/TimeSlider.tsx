@@ -8,7 +8,7 @@ import { GoPlay } from "react-icons/go";
 
 const SLIDER_MAX = 10;
 const ANIMATION_INTERVAL = 2000;
-const SLIDER_DATA_DEFAULT_IDX = 4
+const SLIDER_DATA_DEFAULT_IDX = 3
 const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer }) => {
   const timeList = useTimeList();
   const intervalRef = React.useRef<NodeJS.Timeout>();

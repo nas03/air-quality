@@ -1,7 +1,9 @@
 import { IPropsOpenLayerMap } from "@/components/types";
+import api from "@/config/api";
 import { ConfigContext, TimeContext } from "@/context";
 import "@/css/open.css";
 import { cn } from "@/lib/utils";
+import console from "console";
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { WindLayer } from "ol-wind";
@@ -25,6 +27,7 @@ import {
 
 const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   const aqiLayerRef = useRef<TileLayer | null>(null);
+  const windLayerRef = useRef<WindLayer | null>(null);
   const layersRef = useRef<Array<TileLayer | VectorLayer | WindLayer> | null>(null);
   const markerRef = useRef<VectorLayer | null>(null);
   const mapRef = useRef<Map | null>(null);
@@ -57,17 +60,18 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
   const createLayers = async (map: Map) => {
     const now = new Date();
-    const currentDate = new Date(new Date(now.getTime()).setHours(0, 0, 0, 0)).toISOString();
-
-    console.log({ currentDate });
+    const now7 = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+    const windDate = new Date(new Date(now7.getTime()).setHours(7, 0, 0, 0)).toISOString();
+    const stationDate = new Date(new Date(now.getTime()).setHours(0, 0, 0, 0)).toISOString();
     const layers = [
       createAQILayer(time),
       createVietnamBoundaryLayer(map),
-      createStationsLayer(currentDate),
+      createStationsLayer(stationDate),
       createMarkerLayer(INITIAL_COORDINATE),
-      await createWindyLayer(),
+      await createWindyLayer(windDate),
     ];
     aqiLayerRef.current = layers[0] as TileLayer;
+    windLayerRef.current = layers[4] as WindLayer;
     markerRef.current = layers[3] as VectorLayer;
     configContext.setMarker(markerRef.current);
     return layers;
@@ -150,9 +154,30 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
   }, []);
 
   useEffect(() => {
-    const source = aqiLayerRef.current?.getSource() as TileWMS;
-    source?.updateParams({ TIME: time });
+    const AQISource = aqiLayerRef.current?.getSource() as TileWMS;
+
+    AQISource?.updateParams({ TIME: time });
   }, [time]);
+  useEffect(() => {
+    const windLayer = windLayerRef.current;
+    if (!windLayer) return;
+    const getWindData = async () => {
+      const windData = await api.get("/wind-data", {
+        params: {
+          timestamp: time,
+        },
+      });
+      return windData.data.data;
+    };
+
+    getWindData().then((data) => {
+      if (!data) return;
+      windLayer.setData(data, {
+        flipY: true,
+        wrappedX: true,
+      });
+    });
+  }, [windLayerRef.current, time]);
 
   useEffect(() => {
     const map = mapRef.current;
