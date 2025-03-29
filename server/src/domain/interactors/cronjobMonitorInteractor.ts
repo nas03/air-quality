@@ -9,14 +9,18 @@ export class CronjobMonitorInteractor implements ICronjobMonitorInteractor {
     this.cronjobMonitorRepository = cronjobMonitorRepository;
   }
 
-  async getCronjobRecord(date: Date): Promise<CronjobMonitor> {
+  async getCronjobRecord(date: string): Promise<CronjobMonitor> {
     const record = await this.cronjobMonitorRepository.getCronjobRecord(date);
     if (!record) {
-      throw new Error(`Cronjob record for date ${date.toISOString()} not found`);
+      throw new Error(`Cronjob record for date ${date} not found`);
     }
     return record;
   }
 
+  async getAllCronjobRecords() {
+    const records = await this.cronjobMonitorRepository.getAllCronjobRecords();
+    return records;
+  }
   async createNewCronjobRecord(payload: Omit<CronjobMonitor, "id">): Promise<CronjobMonitor> {
     return await this.cronjobMonitorRepository.createNewCronjobRecord(payload);
   }
@@ -32,3 +36,4 @@ export class CronjobMonitorInteractor implements ICronjobMonitorInteractor {
     return await this.cronjobMonitorRepository.updateCronjobRecord(adaptedPayload);
   }
 }
+

@@ -1,4 +1,4 @@
-import AdminPage from "./AdminPage";
+import AdminPage from "./AdminPage/AdminPage";
 import AnalyticsDashboard from "./AnalyticsDashboard/AnalyticsDashboard";
 import AppPage from "./AppPage/AppPage";
 import SigninPage from "./SigninPage";

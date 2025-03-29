@@ -16,6 +16,12 @@ const cronjobMonitorRoute: Route[] = [
     role: "",
   },
   {
+    path: "/cronjob/record/all",
+    method: "GET",
+    controller: cronjobMonitorController.onGetAllCronjobRecords.bind(cronjobMonitorController),
+    role: "",
+  },
+  {
     path: "/cronjob/record",
     method: "POST",
     controller: cronjobMonitorController.onCreateCronjobRecord.bind(cronjobMonitorController),

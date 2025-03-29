@@ -9,9 +9,17 @@ import { Map } from "ol";
 import { Coordinate } from "ol/coordinate";
 import VectorLayer from "ol/layer/Vector";
 import { useEffect, useRef, useState } from "react";
-import { AppMenu, GradientBar, LayerToggle, MenuDrawer, SideBar, TimeSlider } from "./components";
-import CurrentLocationData from "./components/CurrentLocationData";
-import OpenLayerMap from "./components/OpenLayerMap/OpenLayerMap";
+import {
+  AppMenu,
+  CurrentLocationData,
+  GradientBar,
+  LayerToggle,
+  MenuDrawer,
+  OpenLayerMap,
+  SideBar,
+  TimeSlider,
+} from "./components";
+
 const AppPage = () => {
   const { data: timeList, isSuccess } = useQuery({
     queryKey: ["time"],
@@ -51,11 +59,7 @@ const AppPage = () => {
   // Framer Motion
   const transition = { type: "tween", duration: 0.3 };
   const animate = openDrawer ? "open" : "close";
-  // const now = new Date();
-  // const now7 = new Date(now.getTime() + 7 * 60 * 60 * 1000);
-  // const windDate = new Date(new Date(now7.getTime()).setHours(7, 0, 0, 0)).toISOString();
-  // const stationDate = new Date(new Date(now.getTime()).setHours(0, 0, 0, 0)).toISOString();
-  
+
   return (
     <div className="h-screen w-screen">
       <Loading loading={!time} className="h-screen w-screen">

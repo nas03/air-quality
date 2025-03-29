@@ -1,17 +1,15 @@
 import datetime
 import logging
 import os
-from typing import List, Dict, Optional, Tuple, Any
 from functools import partial
-import requests
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
+import requests
+from districts_avg_data import scrape_district_avg_data  # type: ignore
 from dotenv import load_dotenv
 from minio import Minio  # type: ignore
 from osgeo import gdal  # type: ignore
-
-
-from districts_avg_data import scrape_district_avg_data  # type: ignore
-
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -255,7 +253,7 @@ def notify_geoserver(output_folder: str) -> None:
     geoserver_user = os.getenv("GEOSERVER_USER", "admin")
     geoserver_password = os.getenv("GEOSERVER_PASSWORD", "geoserver")
     geoserver_workspace = os.getenv("GEOSERVER_WORKSPACE", "air")
-    geoserver_store = os.getenv("GEOSERVER_STORE", "aqi_data")
+    geoserver_store = os.getenv("GEOSERVER_STORE", "aqi_map")
 
     url = f"http://{geoserver_host}/geoserver/rest/workspaces/{geoserver_workspace}/coveragestores/{geoserver_store}/external.imagemosaic"
     headers = {"Content-type": "text/plain"}

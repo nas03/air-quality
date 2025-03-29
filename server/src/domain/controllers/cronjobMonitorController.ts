@@ -22,7 +22,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
     }
 
     const date = new Date(dateStr);
-
+    console.log(date);
     if (isNaN(date.getTime())) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "fail",
@@ -32,7 +32,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
     }
 
     try {
-      const record = await this.cronjobMonitorInteractor.getCronjobRecord(date);
+      const record = await this.cronjobMonitorInteractor.getCronjobRecord(dateStr);
 
       return res.status(statusCode.SUCCESS).json({
         status: "success",
@@ -55,6 +55,13 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
     }
   };
 
+  onGetAllCronjobRecords = async (req: Request, res: Response) => {
+    const data = await this.cronjobMonitorInteractor.getAllCronjobRecords();
+    return res.status(statusCode.SUCCESS).json({
+      status: "success",
+      data: data,
+    });
+  };
   /**
    * Create a new cronjob monitor record
    */
