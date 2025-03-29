@@ -120,7 +120,7 @@ export class StatisticRepository implements IStatisticRepository {
 
     return await query.execute();
   }
-  async getRankByDate(date: Date): Promise<(Statistic & MDistrict)[] | null> {
+  async getRankByDate(date: Date) {
     const query = db
       .selectFrom("statistics")
       .leftJoin("m_districts", "m_districts.district_id", "statistics.district_id")
@@ -136,6 +136,13 @@ export class StatisticRepository implements IStatisticRepository {
         "m_districts.eng_district",
         "m_districts.eng_type",
         "m_districts.vn_province",
+        sql<number>`statistics.aqi_index - COALESCE((
+        SELECT s.aqi_index 
+        FROM statistics as s 
+        WHERE s.district_id = statistics.district_id 
+        AND s.time = ${new Date(new Date(date).getTime() - 24 * 60 * 60 * 1000)}
+        LIMIT 1
+      ), 0)`.as("aqi_change"),
       ])
       .where((eb) =>
         eb.and([

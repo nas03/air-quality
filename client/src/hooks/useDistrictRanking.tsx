@@ -3,7 +3,7 @@ import { MDistrict, Statistic } from "@/types/db";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
-export type RankData = Statistic & MDistrict;
+export type RankData = Statistic & MDistrict & { aqi_change: number };
 
 const useDistrictRanking = (time: string) => {
   const [tableData, setTableData] = useState<RankData[]>([]);
@@ -20,7 +20,7 @@ const useDistrictRanking = (time: string) => {
     mutationKey: ["rank", time],
     mutationFn: (date: string) => getRankByDate(date),
     networkMode: "offlineFirst",
-    onSuccess: (data: (Statistic & MDistrict)[] | null) => {
+    onSuccess: (data: (Statistic & MDistrict & { aqi_change: number })[] | null) => {
       setTableData(data || []);
     },
   });

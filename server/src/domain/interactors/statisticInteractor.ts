@@ -54,9 +54,13 @@ export class StatisticInteractor implements IStatisticInteractor {
     return data;
   };
 
-  getRankByDate = async (date: Date) => {
+  getRankByDate = async (
+    date: Date
+  ): Promise<(Statistic & MDistrict & { aqi_change: number })[] | null> => {
     let hashKey = ["statistics", "rank", "date", date].join(":");
-    const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
+    const cache = await this.cacheService.get<
+      (Statistic & MDistrict & { aqi_change: number })[] | null
+    >(hashKey);
     if (cache) return cache;
 
     const data = await this.statisticRepository.getRankByDate(date);

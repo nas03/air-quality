@@ -226,11 +226,10 @@ def insert_data(df: pd.DataFrame, conn):
         color, timestamp, lat, lng, geom
     )
     VALUES %s
-    ON CONFLICT (station_id) DO UPDATE SET
+    ON CONFLICT (station_id,timestamp) DO UPDATE SET
         aqi_index = EXCLUDED.aqi_index,
         status = EXCLUDED.status,
         color = EXCLUDED.color,
-        timestamp = EXCLUDED.timestamp,
         lat = EXCLUDED.lat,
         lng = EXCLUDED.lng,
         geom = EXCLUDED.geom,

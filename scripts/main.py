@@ -1,7 +1,7 @@
 import datetime
 import logging
-import requests
 
+import requests
 # from jobs.aqi_raster_data import scrape_aqi_data
 from jobs.stations_data import scrape_stations_data
 from jobs.wind_data import scrape_wind_data
@@ -22,7 +22,7 @@ def send_notifications(station_data_log, wind_data_log):
         "station_data_log": station_data_log,
         "timestamp": datetime.datetime.now().isoformat(),
     }
-    # http://ec2-18-136-124-168.ap-southeast-1.compute.amazonaws.com:5500/api
+    
     response = requests.post(
         "http://ec2-52-221-181-109.ap-southeast-1.compute.amazonaws.com:5500/api/cronjob/record",
         data=data,

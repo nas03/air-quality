@@ -60,9 +60,12 @@ export const getStatisticByDistrict = async (
 
 export const getRankByDate = async (date: string) => {
   if (!date) return [];
-  const response = await api.get<APIResponse<(Statistic & MDistrict)[] | null>>("/statistics/ranking", {
-    params: { date: date },
-  });
+  const response = await api.get<APIResponse<(Statistic & MDistrict & { aqi_change: number })[] | null>>(
+    "/statistics/ranking",
+    {
+      params: { date: date },
+    },
+  );
   return response.data.data;
 };
 
