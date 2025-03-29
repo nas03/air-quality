@@ -10,7 +10,7 @@ interface RankTableProps {
   loading: boolean;
 }
 
-const TableRow = ({ data, isLast, num }: { data: RankData; isLast: boolean; num: number }) => {
+const TableRow = ({ data, num }: { data: RankData; num: number }) => {
   const style = getStyleRankTable(data.aqi_index);
 
   return (
@@ -178,7 +178,9 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
           {data.length === 0 ? (
             <div className="py-8 text-center text-gray-500">Không có dữ liệu</div>
           ) : (
-            data.map((d, index) => <TableRow key={index} data={d} num={index + 1} isLast={index === data.length - 1} />)
+            data.map((d, index) => (
+              <TableRow key={index} data={d} num={index + 1} /* isLast={index === data.length - 1}  */ />
+            ))
           )}
         </div>
       </div>
