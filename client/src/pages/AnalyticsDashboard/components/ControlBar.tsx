@@ -20,6 +20,7 @@ const DATA_TYPE_OPTIONS = [
   { value: MonitoringData.OUTPUT.AQI, label: "AQI" },
   { value: MonitoringData.OUTPUT.PM25, label: "PM 2.5" },
 ];
+
 const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
   const { setAnalyticData } = useContext(AnalyticContext);
   const provincesData = useGetAllDistricts();
@@ -59,32 +60,64 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
     handleLocationChange("VNM.27_1");
   }, []);
   return (
-    <div className={cn(className, "flex flex-row items-center justify-between bg-[#0A192F] px-5 py-3")}>
-      <Link to="/">
-        <img src="logo.svg" alt="logo" className="h-full" /* onClick={}  */ />
-      </Link>
-      <div className="flex flex-row items-center gap-5">
-        <Select
-          className="w-[8rem]"
-          defaultValue="VNM.27_1"
-          options={
-            provincesData.data
-              ? Array.from(
-                  new Map(
-                    provincesData.data.map((d: any) => [d.province_id, { value: d.province_id, label: d.vn_province }]),
-                  ).values(),
-                )
-              : []
-          }
-          onSelect={handleLocationChange}
-        />
-        <DatePicker.RangePicker
-          placement="bottomRight"
-          defaultValue={DEFAULT_DATE_RANGE}
-          onChange={handleTimeRangeChange}
-        />
-        <Select className="w-[5.5rem]" defaultValue={0} options={DATA_TYPE_OPTIONS} onSelect={handleDataTypeChange} />
+    <div className={cn("relative flex flex-row items-center justify-between bg-gray-50 px-5 py-1.5", className)}>
+      <div className="flex items-center">
+        <Link to="/" className="mr-3">
+          <img src="/logo_no_text.png" alt="Air Quality Logo" className="h-10 w-auto" />
+        </Link>
+        <div>
+          <h1 className="bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-3xl font-bold leading-tight tracking-tight text-transparent">
+            Analytics Dashboard
+          </h1>
+          <p className="-mt-0.5 text-xs text-gray-500">Analyze and visualize air quality data</p>
+        </div>
       </div>
+
+      <div className="flex flex-row items-center gap-4 text-sm">
+        <div className="flex items-center gap-1.5">
+          <span className="font-medium text-gray-700">Province:</span>
+          <Select
+            className="w-[8rem]"
+            size="small"
+            defaultValue="VNM.27_1"
+            options={
+              provincesData.data
+                ? Array.from(
+                    new Map(
+                      provincesData.data.map((d: any) => [
+                        d.province_id,
+                        { value: d.province_id, label: d.vn_province },
+                      ]),
+                    ).values(),
+                  )
+                : []
+            }
+            onSelect={handleLocationChange}
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="font-medium text-gray-700">Date Range:</span>
+          <DatePicker.RangePicker
+            size="small"
+            placement="bottomRight"
+            defaultValue={DEFAULT_DATE_RANGE}
+            onChange={handleTimeRangeChange}
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="font-medium text-gray-700">Data Type:</span>
+          <Select
+            className="w-[5.5rem]"
+            size="small"
+            defaultValue={0}
+            options={DATA_TYPE_OPTIONS}
+            onSelect={handleDataTypeChange}
+          />
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/10 to-indigo-600/10"></div>
     </div>
   );
 };

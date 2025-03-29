@@ -22,11 +22,10 @@ const AnalyticsDashboard: React.FC<IPropsAnalyticsBoard> = () => {
         province_id: analyticData.province_id,
         dataType: analyticData.dataType,
         selectedDistrict: analyticData.selectedDistrict,
-      }}
-    >
+      }}>
       <div className="h-screen w-screen">
         <ControlBar className="h-[6%] w-full" />
-        <div className="flex h-[95%] w-full flex-col gap-5 bg-[#f4f4f4] px-0 pt-5 lg:px-5">
+        <div className="flex h-[94%] w-full flex-col gap-5 bg-[#f4f4f4] px-0 pt-5 lg:px-5">
           <OverviewCards className="flex-shrink" />
           <div className="flex flex-grow flex-col gap-3">
             <div className="flex h-[49%] w-full flex-row gap-3">
