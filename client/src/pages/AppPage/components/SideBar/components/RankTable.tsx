@@ -64,6 +64,14 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
         if (field === "aqi_index") {
           return newDirection === "desc" ? b.aqi_index - a.aqi_index : a.aqi_index - b.aqi_index;
         }
+        if (field === "vn_district") {
+          return newDirection === "desc"
+            ? b.vn_district.localeCompare(a.vn_district, "vi")
+            : a.vn_district.localeCompare(b.vn_district, "vi");
+        }
+        if (field === "aqi_change") {
+          return newDirection === "desc" ? b.aqi_change - a.aqi_change : a.aqi_change - b.aqi_change;
+        }
         return 0;
       });
       setData(sortedData);
@@ -82,6 +90,16 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
 
     if (sortField === "aqi_index" && sortDirection) {
       processedData.sort((a, b) => (sortDirection === "desc" ? b.aqi_index - a.aqi_index : a.aqi_index - b.aqi_index));
+    } else if (sortField === "vn_district" && sortDirection) {
+      processedData.sort((a, b) =>
+        sortDirection === "desc"
+          ? b.vn_district.localeCompare(a.vn_district, "vi")
+          : a.vn_district.localeCompare(b.vn_district, "vi"),
+      );
+    } else if (sortField === "aqi_change" && sortDirection) {
+      processedData.sort((a, b) =>
+        sortDirection === "desc" ? b.aqi_change - a.aqi_change : a.aqi_change - b.aqi_change,
+      );
     }
 
     setData(processedData);
@@ -123,7 +141,14 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
           className="grid grid-cols-8 items-center border-b border-gray-200 bg-gray-50 px-4 py-3 text-gray-600"
           id="table-header">
           <p className="text-center text-xs font-semibold">#</p>
-          <p className="col-span-3 text-start text-xs font-semibold">Địa điểm</p>
+          <p
+            className="col-span-3 flex cursor-pointer items-center text-start text-xs font-semibold transition-colors hover:text-gray-800"
+            onClick={() => toggleSort("vn_district")}>
+            Địa điểm
+            {sortField === "vn_district" && (
+              <span className="ml-1 text-blue-500">{sortDirection === "desc" ? "↓" : "↑"}</span>
+            )}
+          </p>
           <div
             className="col-span-1 flex cursor-pointer items-center justify-center gap-1 text-xs font-semibold transition-colors hover:text-gray-800"
             onClick={() => toggleSort("aqi_index")}>
@@ -132,7 +157,14 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
               <span className="ml-1 text-blue-500">{sortDirection === "desc" ? "↓" : "↑"}</span>
             )}
           </div>
-          <p className="col-span-3 text-center text-xs font-semibold">Hôm qua</p>
+          <p
+            className="col-span-3 flex cursor-pointer items-center justify-center text-center text-xs font-semibold transition-colors hover:text-gray-800"
+            onClick={() => toggleSort("aqi_change")}>
+            Hôm qua
+            {sortField === "aqi_change" && (
+              <span className="ml-1 text-blue-500">{sortDirection === "desc" ? "↓" : "↑"}</span>
+            )}
+          </p>
         </div>
 
         {/* Table body */}
