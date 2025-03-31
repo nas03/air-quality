@@ -1,13 +1,36 @@
 #!/usr/bin/env python3
+"""
+A simple API server that executes a cron job when called.
+Using console logging instead of file logging.
+"""
 import subprocess
 import logging
+import sys
 from flask import Flask, jsonify
 from datetime import datetime
 
-# Configure logging
-
+# Configure logging to console instead of file
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 
 app = Flask(__name__)
+
+
+@app.route("/ping", methods=["GET"])
+def ping():
+    """
+    Simple ping endpoint to test connectivity.
+    """
+    return jsonify(
+        {
+            "status": "success",
+            "message": "pong",
+            "timestamp": datetime.now().isoformat(),
+        }
+    )
 
 
 @app.route("/execute-cron", methods=["POST"])
@@ -16,6 +39,8 @@ def execute_cron():
     Endpoint to execute the cron job.
     """
     try:
+        # Log the request
+        logging.info(f"Executing cron job at {datetime.now()}")
 
         # Execute the command
         result = subprocess.run(
@@ -27,7 +52,7 @@ def execute_cron():
 
         # Check if the command executed successfully
         if result.returncode == 0:
-
+            logging.info("Cron job executed successfully")
             return jsonify(
                 {
                     "status": "success",
@@ -36,7 +61,7 @@ def execute_cron():
                 }
             )
         else:
-
+            logging.error(f"Cron job failed with error: {result.stderr}")
             return (
                 jsonify(
                     {
@@ -50,7 +75,7 @@ def execute_cron():
             )
 
     except Exception as e:
-
+        logging.exception(f"Exception occurred: {str(e)}")
         return (
             jsonify(
                 {
@@ -72,10 +97,13 @@ if __name__ == "__main__":
         "--port", type=int, default=5000, help="Port to run the server on"
     )
     parser.add_argument(
-        "--host", type=str, default="127.0.0.1", help="Host to run the server on"
+        "--host", type=str, default="0.0.0.0", help="Host to run the server on"
     )
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
 
     args = parser.parse_args()
 
-    logging.info(f"Starting server on {args.host}:{args.port}")
-    app.run(host=args.host, port=args.port)
+    logging.info(f"Starting server on {args.host}:{args.port} with debug={args.debug}")
+
+    # Set to 0.0.0.0 to bind to all network interfaces
+    app.run(host="0.0.0.0", port=args.port, debug=args.debug)

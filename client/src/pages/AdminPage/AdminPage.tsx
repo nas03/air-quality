@@ -1,29 +1,24 @@
+import { getAllCronjobs } from "@/api";
 import api from "@/config/api";
+import { CronjobMonitor } from "@/types/db";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CronjobDetail, CronjobTable, PageHeader } from "./components";
 
 // Define interfaces for the cronjob data
-interface Cronjob {
-  id: number;
-  raster_data_status: number;
-  wind_data_status: number;
-  station_data_status: number;
-  wind_data_log: string;
-  station_data_log: string;
-  timestamp: string;
-}
-
-interface CronjobResponse {
-  status: string;
-  data: Cronjob[];
-}
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState<"cron" | "data">("cron");
-  const [cronjobs, setCronjobs] = useState<Cronjob[]>([]);
-  const [selectedCronjob, setSelectedCronjob] = useState<Cronjob | null>(null);
+  const [cronjobs, setCronjobs] = useState<CronjobMonitor[]>([]);
+  const [selectedCronjob, setSelectedCronjob] = useState<CronjobMonitor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const useCronJobs = useQuery({
+    queryKey: ["cronjob_monitor", "*"],
+    queryFn: () => getAllCronjobs(),
+  });
+
   const [rerunStatus, setRerunStatus] = useState<{ loading: boolean; success: boolean; error: string | null }>({
     loading: false,
     success: false,
@@ -31,28 +26,16 @@ const AdminPage = () => {
   });
 
   useEffect(() => {
-    fetchCronjobs();
-  }, []);
+    setLoading(true);
+    if (useCronJobs.isError) setError("Failed to fetch cronjobs");
+    if (!useCronJobs.isSuccess) return;
+    if (!useCronJobs.data?.length) setError("No data found");
+    else setCronjobs(useCronJobs.data);
 
-  const fetchCronjobs = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get<CronjobResponse>(`/cronjob/record/all`);
+    setLoading(false);
+  }, [useCronJobs.data]);
 
-      if (response.data.status === "success") {
-        setCronjobs(response.data.data);
-      } else {
-        setError("Failed to fetch cronjobs");
-      }
-    } catch (err) {
-      setError("Error fetching cronjobs data");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCronjobClick = (cronjob: Cronjob) => {
+  const handleCronjobClick = (cronjob: CronjobMonitor) => {
     setSelectedCronjob(cronjob);
   };
 
@@ -65,17 +48,18 @@ const AdminPage = () => {
 
     try {
       setRerunStatus({ loading: true, success: false, error: null });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutes timeout
 
-      const response = await api.post(`/cronjob/rerun/${selectedCronjob.id}`);
+      const response = await api.post(`/cronjob/rerun`, {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
 
       if (response.data.status === "success") {
         setRerunStatus({ loading: false, success: true, error: null });
-
-        fetchCronjobs();
-
-        setTimeout(() => {
-          setRerunStatus((prev) => ({ ...prev, success: false }));
-        }, 3000);
+        useCronJobs.refetch();
       } else {
         setRerunStatus({ loading: false, success: false, error: "Failed to rerun cronjob" });
       }
@@ -130,11 +114,7 @@ const AdminPage = () => {
         onTabChange={setActiveTab}
       />
 
-      <div className="px-5 pb-5">
-     {/*    {loading && <div className="my-4 animate-pulse rounded-lg bg-white p-4 shadow-sm">Loading cronjobs...</div>}
-        {error && <div className="my-4 rounded-lg border-l-4 border-red-500 bg-red-50 p-4 text-red-700">{error}</div>} */}
-        {renderContent()}
-      </div>
+      <div className="px-5 pb-5">{renderContent()}</div>
     </div>
   );
 };

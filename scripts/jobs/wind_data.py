@@ -202,7 +202,7 @@ def scrape_wind_data(
         grib_file = download_grib_file(ncep_url, params, output_dir)
         if not grib_file:
             logger.error("Failed to download GRIB file")
-            return log_capture_string.getvalue()
+            return {"success": False, "log": log_capture_string.getvalue()}
 
         logger.info(f"Successfully downloaded GRIB file to {grib_file}")
         df = process_grib_file(grib_file)
@@ -220,10 +220,10 @@ def scrape_wind_data(
         log_handler.flush()
         log_contents = log_capture_string.getvalue()
 
-        return log_contents
+        return {"success": True, "log": log_contents}
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
-        return log_capture_string.getvalue()
+        return {"success": False, "log": log_capture_string.getvalue()}
     finally:
         # Clean up
         logger.removeHandler(log_handler)

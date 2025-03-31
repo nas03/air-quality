@@ -44,13 +44,13 @@ const CronjobTable = ({ cronjobs, loading, selectedCronjob, onSelectCronjob }: C
                   Timestamp
                 </th>
                 <th className="border-b-2 border-gray-200 bg-gray-50 p-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                  Raster
+                  Raster data
                 </th>
                 <th className="border-b-2 border-gray-200 bg-gray-50 p-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                  Wind
+                  Wind data
                 </th>
                 <th className="border-b-2 border-gray-200 bg-gray-50 p-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                  Station
+                  Station data
                 </th>
               </tr>
             </thead>

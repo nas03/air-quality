@@ -74,3 +74,13 @@ export type AlertSetting = {
   weather: boolean;
   wind_speed: boolean;
 };
+
+export type CronjobMonitor =  {
+  id: number;
+  raster_data_status: number;
+  wind_data_status: number;
+  station_data_status: number;
+  wind_data_log: string;
+  station_data_log: string;
+  timestamp: string;
+}

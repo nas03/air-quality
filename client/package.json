@@ -29,6 +29,7 @@
     "antd": "^5.22.7",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
+    "caniuse-lite": "^1.0.30001707",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

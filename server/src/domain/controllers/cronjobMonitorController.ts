@@ -1,5 +1,6 @@
 import { resMessage, statusCode } from "@/config/constant";
 import { CronjobMonitor } from "@/entities";
+import axios from "axios";
 import { Request, Response } from "express";
 import { CronjobMonitorInteractor } from "../interactors";
 import { BaseController } from "./baseController";
@@ -116,6 +117,40 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
         data: updatedRecord,
       });
     } catch (error: any) {
+      return res.status(statusCode.ERROR).json({
+        status: "error",
+        message: error.message || resMessage.server_error,
+        data: null,
+      });
+    }
+  };
+
+  onRerunCronjob = async (req: Request, res: Response) => {
+    try {
+      const TIMEOUT = 300000; // 5 minutes
+      // const controller = new AbortController();
+      // const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+
+      const request = await axios.post("http://13.213.59.37:5000/execute-cron", {
+        timeout: TIMEOUT, // Add axios timeout
+      });
+
+      // clearTimeout(timeoutId);
+
+      const result = request.data;
+      return res.status(statusCode.SUCCESS).json({
+        status: "success",
+        data: result,
+      });
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
+        return res.status(statusCode.ERROR).json({
+          status: "error",
+          message: "Request timed out after 5 minutes",
+          data: null,
+        });
+      }
+
       return res.status(statusCode.ERROR).json({
         status: "error",
         message: error.message || resMessage.server_error,

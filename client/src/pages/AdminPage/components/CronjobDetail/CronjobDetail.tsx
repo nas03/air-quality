@@ -78,8 +78,8 @@ const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetail
       {rerunStatus.success && (
         <StatusAlert
           type="success"
-          title="Cronjob rerun successfully triggered!"
-          message="The system is now processing your request."
+          title="Cronjob executed successfully!"
+          message="The data processing has been completed successfully."
         />
       )}
 
