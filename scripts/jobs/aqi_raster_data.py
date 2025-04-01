@@ -6,10 +6,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import requests
-from districts_avg_data import scrape_district_avg_data  # type: ignore
 from dotenv import load_dotenv
 from minio import Minio  # type: ignore
 from osgeo import gdal  # type: ignore
+
+from .districts_avg_data import scrape_district_avg_data  # type: ignore
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -144,6 +145,7 @@ def createAQIRasterFile(filepath: str, output_path: str):
 
         # Cleanup
         out_ds = None
+        os.remove(TEMP_FILE)
         logger.info(f"Successfully created output file: {output_path}")
         return True
     except Exception as e:
