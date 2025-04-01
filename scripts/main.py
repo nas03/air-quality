@@ -2,7 +2,6 @@ import datetime
 import logging
 
 import requests
-
 # from jobs.aqi_raster_data import scrape_aqi_data
 from jobs.stations_data import scrape_stations_data
 from jobs.wind_data import scrape_wind_data
@@ -15,12 +14,13 @@ logger = logging.getLogger(__name__)
 
 
 def send_notifications(station_data_log, wind_data_log):
+
     data = {
         "raster_data_status": 1,
-        "station_data_status": 1,
-        "wind_data_status": wind_data_log.success,
-        "wind_data_log": wind_data_log.log,
-        "station_data_log": station_data_log,
+        "station_data_status": 1 if station_data_log['success'] == True else 0,
+        "wind_data_status": 1 if wind_data_log['success'] == True else 0,
+        "wind_data_log": wind_data_log['log'],
+        "station_data_log": station_data_log['log'],
         "timestamp": datetime.datetime.now().isoformat(),
     }
 
