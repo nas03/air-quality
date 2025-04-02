@@ -1,7 +1,7 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 
 import { cn } from "@/lib/utils";
-import { CHART_CONFIGS, ChartConfig } from "@/pages/AnalyticsDashboard/components/DataChart/config";
+import { CHART_CONFIGS, ChartConfig } from "@/pages/AnalyticsPage/components/DataChart/config";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { MonitoringOutputDataType } from "@/types/types";
 import { LineChart } from "@mui/x-charts";

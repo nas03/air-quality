@@ -31,7 +31,7 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
   const findRecommendation = (value: number) => {
     if (!recommendations) return { recommendation: "", status: "" };
     const recommendation = recommendations.find((r) => value >= r.min_threshold && value <= r.max_threshold);
-    return { recommendation: recommendation?.en_recommendation || "", status: recommendation?.en_status || "" };
+    return { recommendation: recommendation?.vn_recommendation || "", status: recommendation?.vn_status || "" };
   };
 
   const buildAirQualityData = (geoContext: GeoContextType, projectedCoordinate: number[] | null): AirQualityData => {

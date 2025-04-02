@@ -1,4 +1,4 @@
-import { CHART_CONFIGS } from "@/pages/AnalyticsDashboard/components/DataChart/config";
+import { CHART_CONFIGS } from "@/pages/AnalyticsPage/components/DataChart/config";
 import { MonitoringOutputDataType } from "@/types/types";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse, CollapseProps } from "antd";
