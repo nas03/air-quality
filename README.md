@@ -4,7 +4,7 @@
 
 ## Air Quality Prediction System
 
-This repository contains the full implementation of my graduation dissertation project, Air Quality Prediction System. The system is designed to predict air quality levels by analyzing historical and real-time data, providing actionable insights to help mitigate pollution impacts.
+This repository contains the full implementation of my graduation dissertation project, Air Quality Prediction System. The system is designed to predict air quality levels by analyzing historical and near real-time data, providing actionable insights to help mitigate pollution impacts.
 
 ## Overview
 
@@ -12,7 +12,7 @@ The project aims to enhance the accuracy and responsiveness of air quality predi
 
 ## Key Features
     •	Accurate air quality predictions using advanced models
-    •	Real-time data processing and visualization
+    •	Near real-time data processing and visualization
     •	Scalable architecture with [mention any relevant scaling tech, like “containerized Docker deployment”]
 
 ## Setup and Installation
