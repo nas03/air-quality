@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from io import StringIO
 
@@ -100,12 +100,13 @@ def cleanup_temp_file(file_path: str) -> None:
 
 
 def get_default_params(
-    date_str: Optional[str] = None, cycle: Optional[str] = "00"
+    date_str: Optional[str] = None,
 ) -> Dict[str, str]:
     """Get default parameters for NCEP data request.
 
     Args:
         date_str: Date string in YYYYMMDD format (defaults to today)
+        cycle: GFS cycle hour (00, 06, 12, 18) - defaults to current UTC time cycle
 
     Returns:
         Dictionary of request parameters
@@ -113,8 +114,20 @@ def get_default_params(
     if not date_str:
         date_str = datetime.now().strftime("%Y%m%d")
 
+    cycle = "00"
+
+    current_hour = datetime.now(timezone.utc).hour
+    if 0 <= current_hour < 6:
+        cycle = "00"
+    elif 6 <= current_hour < 12:
+        cycle = "06"
+    elif 12 <= current_hour < 18:
+        cycle = "12"
+    else:
+        cycle = "18"
+
     return {
-        "dir": f"/gfs.{date_str}/00/atmos",
+        "dir": f"/gfs.{date_str}/{cycle}/atmos",
         "file": f"gfs.t{cycle}z.pgrb2.0p25.f000",
         "var_UGRD": "on",
         "var_VGRD": "on",
