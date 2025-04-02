@@ -229,7 +229,7 @@ export class AlertSettingController extends BaseController<
 
     return res.status(statusCode.SUCCESS).json({
       status: "success",
-      data: result,
+      data: result[0],
     });
   };
 }
