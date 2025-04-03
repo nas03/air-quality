@@ -71,14 +71,14 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
       className: "w-full rounded-md bg-white p-0 first:p-0 dark:bg-slate-900",
       children: (
         <AirQualityInfoPanel
-          aqi_index={data?.aqi_index ? String(data?.aqi_index) : "--"}
+          aqi_index={data?.aqi_index ? data?.aqi_index.toString() : "--"}
           district_id={district_id}
           name={data?.name || ""}
           location={data?.location}
-          pm_25={data?.pm_25 ? String(data?.pm_25.toFixed(2)) : "--"}
-          recommendation={data.recommendation}
+          pm_25={data?.pm_25 ? data?.pm_25.toFixed(1) : "--"}
+          recommendation={data.recommendation || ""}
           type={selectedValue === 0 ? "model" : "station"}
-          status={data.status}
+          status={data.status || ""}
           weatherData={weatherData.data || null}
           time={data.time}
         />

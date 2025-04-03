@@ -11,6 +11,40 @@ import { TileWMS } from "ol/source";
 import React from "react";
 import { parseWMSResponse } from "./utils";
 
+interface AQIRange {
+  aqiLow: number;
+  aqiHigh: number;
+  pm25Low: number;
+  pm25High: number;
+}
+
+const AQI_RANGES: AQIRange[] = [
+  { aqiLow: 0, aqiHigh: 50, pm25Low: 0.0, pm25High: 12.0 },
+  { aqiLow: 51, aqiHigh: 100, pm25Low: 12.1, pm25High: 35.4 },
+  { aqiLow: 101, aqiHigh: 150, pm25Low: 35.5, pm25High: 55.4 },
+  { aqiLow: 151, aqiHigh: 200, pm25Low: 55.5, pm25High: 150.4 },
+  { aqiLow: 201, aqiHigh: 300, pm25Low: 150.5, pm25High: 250.4 },
+  { aqiLow: 301, aqiHigh: 400, pm25Low: 250.5, pm25High: 350.4 },
+  { aqiLow: 401, aqiHigh: 500, pm25Low: 350.5, pm25High: 500.4 },
+];
+
+const lerp = (ylo: number, yhi: number, xlo: number, xhi: number, x: number): number => {
+  return ((x - xlo) / (xhi - xlo)) * (yhi - ylo) + ylo;
+};
+
+const aqi_pm25 = (aqi: number): number => {
+  if (aqi <= 0) return 0;
+  if (aqi > 500) return 500;
+
+  const range = AQI_RANGES.find((range) => aqi >= range.aqiLow && aqi <= range.aqiHigh);
+
+  if (!range) return 500;
+
+  const pm25 = lerp(range.pm25Low, range.pm25High, range.aqiLow, range.aqiHigh, aqi);
+
+  return Math.floor(pm25 * 10) / 10;
+};
+
 const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLayer | null): MarkData | null => {
   const stationFeature = map.getFeaturesAtPixel(map.getPixelFromCoordinate(coordinates as Coordinate), {
     layerFilter: (layer) => layer instanceof VectorLayer && layer !== markerLayer,
@@ -53,7 +87,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
     type: 0,
     coordinate: coordinate as [number, number],
     aqi_index: Number(aqiFeature.properties?.GRAY_INDEX),
-    pm_25: Number(aqiFeature.properties?.GRAY_INDEX),
+    pm_25: aqi_pm25(Number(aqiFeature.properties?.GRAY_INDEX)),
     location,
     time: "",
     wind_speed: 0,

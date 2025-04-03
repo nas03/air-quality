@@ -3,7 +3,7 @@ import os
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from io import StringIO
-
+import json
 import numpy as np
 import pandas as pd
 import psycopg2
@@ -37,6 +37,7 @@ def download_grib_file(
     os.makedirs(output_dir, exist_ok=True)
 
     response = rq.get(url, params=params, stream=True)
+    logger.info(f"URL:{response.request.url}")
     output_file = os.path.join(output_dir, params["file"])
 
     if response.status_code != 200:
@@ -211,7 +212,7 @@ def scrape_wind_data(
 
     try:
         params = get_default_params()
-
+        logger.info(f"Prepare URL parameters:\n{json.dumps(params, indent=2)}")
         grib_file = download_grib_file(ncep_url, params, output_dir)
         if not grib_file:
             logger.error("Failed to download GRIB file")
