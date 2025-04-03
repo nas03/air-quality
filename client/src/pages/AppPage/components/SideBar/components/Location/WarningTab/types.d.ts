@@ -1,8 +1,34 @@
-export interface DataSourceCardProps {
-  data: { source: string; name: string; location: string | string[]; type?: string };
+export interface DataSourceInfo {
+  name: string;
+  location: string | string[];
+  source: string;
 }
+
+export interface WeatherInfo {
+  temperature: {
+    min: number;
+    max: number;
+    avg: number;
+  };
+  weather: string;
+  wind_speed: number;
+}
+
+export interface AirQualityInfo {
+  aqi_index: string;
+  pm_25: string;
+  status: string;
+  time: string;
+  color: string;
+  icon: string;
+}
+
+export interface DataSourceCardProps {
+  data: DataSourceInfo;
+}
+
 export interface AirQualityCardProps {
-  data: { status: string; time: string; aqi_index: string; pm_25: string; color: string; icon: string };
+  data: AirQualityInfo;
 }
 
 export interface HealthRecommendationCardProps {
@@ -10,35 +36,9 @@ export interface HealthRecommendationCardProps {
 }
 
 export interface IPropsWeatherInfoCard extends React.ComponentPropsWithRef<"div"> {
-  data: {
-    wind_speed: number;
-    temperature: {
-      min: number;
-      max: number;
-      avg: number;
-    };
-    weather: string;
-  };
+  data: WeatherInfo;
 }
 
-export type DataSourceCardType = {
-  name: string;
-  location: string | string[];
-  type: "station" | "model";
-};
-
-export type WeatherInfoCardType = {
-  weatherData: Omit<UserAlert, "id" | "aqi_index"> | null;
-};
-
-export type AirQualityCardType = {
-  aqi_index: string;
-  pm_25: string;
-  status: string;
-  recommendation: string;
-};
-
-export interface IPropsAirQualityInfoPanel extends DataSourceCardType, WeatherInfoCardType, AirQualityCardType {
+export interface WarningTabProps extends React.ComponentPropsWithRef<"div"> {
   district_id: string;
-  time: string;
 }
