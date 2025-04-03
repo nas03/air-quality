@@ -19,7 +19,6 @@ const useDistrictRanking = (time: string) => {
   const mutation = useMutation({
     mutationKey: ["rank", time],
     mutationFn: (date: string) => getRankByDate(date),
-    networkMode: "offlineFirst",
     onSuccess: (data: (Statistic & MDistrict & { aqi_change: number })[] | null) => {
       setTableData(data || []);
     },

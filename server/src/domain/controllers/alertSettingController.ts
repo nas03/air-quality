@@ -2,17 +2,18 @@ import { resMessage, statusCode } from "@/config/constant";
 import axios from "axios";
 import dotenv from "dotenv";
 import { Request, Response } from "express";
-import { DistrictInteractor } from "../interactors";
+import { DistrictInteractor, StatisticInteractor } from "../interactors";
 import { AlertSettingInteractor } from "../interactors/alertSettingInteractor";
 import { BaseController } from "./baseController";
 import { OpenWeatherDataType } from "./types";
 dotenv.config();
 
 export class AlertSettingController extends BaseController<
-  [AlertSettingInteractor, DistrictInteractor]
+  [AlertSettingInteractor, DistrictInteractor, StatisticInteractor]
 > {
   private alertSettingInteractor = this.interactors[0];
   private districtInteractor = this.interactors[1];
+  private statisticInteractor = this.interactors[2];
   async onCreateAlertSetting(req: Request, res: Response) {
     try {
       const alertSettingData = req.body;
@@ -132,7 +133,7 @@ export class AlertSettingController extends BaseController<
 
     const setting = await this.alertSettingInteractor.getUserAlertByDistrict(district_id as string);
     const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
-
+    console.log(setting);
     const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
       params: {
         q: `${setting?.vn_province},VN`,
@@ -153,8 +154,10 @@ export class AlertSettingController extends BaseController<
         },
       }
     );
-
+    const dates: Date[] = [];
     const result = openWeatherData.data.list.map((data) => {
+      const date = new Date(data.dt * 1000);
+      dates.push(new Date(date.setHours(7, 0, 0, 0)));
       return {
         id: setting?.id,
         aqi_index: setting?.aqi_index || null,
@@ -172,9 +175,14 @@ export class AlertSettingController extends BaseController<
       };
     });
 
+    const forecast = await this.statisticInteractor.getDistrictHistory(
+      district_id as string,
+      dates[0],
+      dates[7]
+    );
     return res.status(statusCode.SUCCESS).json({
       status: "success",
-      data: result,
+      data: { weather: result, forecast: forecast?.flatMap((body) => body.aqi_index) || [] },
     });
   };
 

@@ -4,7 +4,7 @@ import { IAlertSettingRepository } from "@/interfaces";
 
 export class AlertSettingRepository implements IAlertSettingRepository {
   async getUserAlertByDistrict(district_id: string) {
-    const query = db
+    const query = await db
       .selectFrom("alerts_setting as as")
       .leftJoin("m_districts as md", "md.district_id", "as.district_id")
       .select([
@@ -20,8 +20,9 @@ export class AlertSettingRepository implements IAlertSettingRepository {
         "md.vn_province",
         "md.vn_type",
       ])
-      .where("as.district_id", "=", district_id);
-    return await query.executeTakeFirst();
+      .where("as.district_id", "=", district_id)
+      .executeTakeFirst();
+    return { ...query };
   }
 
   async updateAlertSetting(id: number, payload: Partial<Omit<AlertSetting, "id" | "user_id">>) {

@@ -1,4 +1,4 @@
-import { deleteUserAlertById, getUserAlertByDistrict, UserAlert } from "@/api/alertSetting";
+import { AlertInfo, deleteUserAlertById, getUserAlertByDistrict } from "@/api/alertSetting";
 import { cn } from "@/lib/utils";
 import { AlertSetting } from "@/types/db";
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
@@ -12,8 +12,8 @@ interface IPropsAlertInfoCards extends React.ComponentPropsWithRef<"div"> {
 }
 
 interface IPropsInfoCard extends React.ComponentPropsWithRef<"div"> {
-  query: UseQueryResult<UserAlert[], Error>;
-  data: UserAlert[];
+  query: UseQueryResult<AlertInfo, Error>;
+  data: AlertInfo;
   onDelete: () => void;
 }
 
@@ -52,11 +52,12 @@ const getAqiLabel = (value: number): string => {
 };
 
 const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...props }) => {
+  console.log({ data });
   const values = {
-    labels: data.map((item) => formatDate(item.date)),
-    data: data.map(() => 0),
+    labels: data.weather.map((item) => formatDate(item.date)),
+    data: data.forecast,
   };
-  const currentWeatherData = data.find((item) => item.date && isToday(new Date(item.date)));
+  const currentWeatherData = data.weather.find((item) => item.date && isToday(new Date(item.date)));
   const deleteIconRef = useRef(null);
 
   const handleDelete = async () => {
@@ -141,7 +142,12 @@ const AlertInfoCards: React.FC<IPropsAlertInfoCards> = ({ className, alertSettin
   return (
     <div className="flex h-full w-full flex-col gap-5" {...props}>
       {queries.map((query, index) => (
-        <InfoCard key={index} query={query} data={query.data || []} onDelete={() => handleDeleteCard(index)} />
+        <InfoCard
+          key={index}
+          query={query}
+          data={query.data || { weather: [], forecast: [] }}
+          onDelete={() => handleDeleteCard(index)}
+        />
       ))}
     </div>
   );

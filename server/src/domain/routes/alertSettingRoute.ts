@@ -1,16 +1,26 @@
 import { Route } from "@/config/constant";
 import { AlertSettingController } from "../controllers";
-import { AlertSettingInteractor, DistrictInteractor } from "../interactors";
-import { AlertSettingRepository, DistrictRepository } from "../repositories";
+import {
+  AlertSettingInteractor,
+  DistrictInteractor,
+  StatisticInteractor
+} from "../interactors";
+import {
+  AlertSettingRepository,
+  DistrictRepository,
+  StatisticRepository
+} from "../repositories";
 
 const alertSettingRepository = new AlertSettingRepository();
 const alertSettingInteractor = new AlertSettingInteractor(alertSettingRepository);
 const districtRepository = new DistrictRepository();
+const statisticRepository = new StatisticRepository();
 const districtInteractor = new DistrictInteractor(districtRepository);
-
+const statisticInteractor = new StatisticInteractor(statisticRepository);
 const alertSettingController = new AlertSettingController(
   alertSettingInteractor,
-  districtInteractor
+  districtInteractor,
+  statisticInteractor
 );
 
 const alertSettingRouter: Route[] = [

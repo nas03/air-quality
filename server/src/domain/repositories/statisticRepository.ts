@@ -112,7 +112,6 @@ export class StatisticRepository implements IStatisticRepository {
           .and([
             eb("statistics.district_id", "=", district_id),
             eb.between("statistics.time", start_date, end_date),
-            eb("statistics.district_id", "is not", null),
           ])
           .and("statistics.deleted", "=", flag.FALSE)
           .and("m_districts.deleted", "=", flag.FALSE)
