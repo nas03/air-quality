@@ -160,7 +160,9 @@ def insert_data(df: pd.DataFrame, conn: psycopg2.extensions.connection) -> None:
     insert_query = """
     INSERT INTO statistics (district_id, pm_25, aqi_index, time)
     VALUES %s
-    ON CONFLICT (district_id, pm_25, aqi_index, time) DO NOTHING
+    ON CONFLICT (district_id, time) DO UPDATE SET
+        pm_25 = EXCLUDED.pm_25,
+        aqi_index=EXCLUDED.aqi_index;
     """
 
     with conn.cursor() as cur:

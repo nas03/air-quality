@@ -53,8 +53,7 @@ def fetch_hanoi_station_details(station_id: str) -> Optional[float]:
         pm25_values = [np.float64(item["value"]) for item in validData]
         return float(np.mean(pm25_values)) if pm25_values else None
     except (requests.exceptions.RequestException, KeyError, ValueError) as e:
-        logger.error(
-            f"Error fetching details for Hanoi station {station_id}: {e}")
+        logger.error(f"Error fetching details for Hanoi station {station_id}: {e}")
         return None
 
 
@@ -85,23 +84,19 @@ def fetch_envisoft_station_details(station_id: str) -> Optional[float]:
         "Referer": "https://cem.gov.vn/",
     }
     try:
-        response = requests.post(
-            URL, data={"station_id": station_id}, headers=headers)
+        response = requests.post(URL, data={"station_id": station_id}, headers=headers)
         response.raise_for_status()
         data = response.json()["res"]
-        pm25_values = [float(list(item.keys())[0])
-                       for item in data["PM-2-5"]["values"]]
+        pm25_values = [float(list(item.keys())[0]) for item in data["PM-2-5"]["values"]]
         return float(np.mean(pm25_values)) if pm25_values else None
     except (requests.exceptions.RequestException, KeyError, ValueError) as e:
-        logger.error(
-            f"Error fetching details for Envisoft station {station_id}: {e}")
+        logger.error(f"Error fetching details for Envisoft station {station_id}: {e}")
         return None
 
 
 def process_hanoi_data(data: List[Dict[str, Any]]) -> pd.DataFrame:
     """Process raw data from Hanoi source into DataFrame"""
-    df = pd.read_json(
-        StringIO(json.dumps(data, ensure_ascii=False)), dtype={"id": str})
+    df = pd.read_json(StringIO(json.dumps(data, ensure_ascii=False)), dtype={"id": str})
     df = df.rename(
         columns={
             "id": "station_id",
@@ -122,8 +117,7 @@ def process_hanoi_data(data: List[Dict[str, Any]]) -> pd.DataFrame:
 
 def process_envisoft_data(data: List[Dict[str, Any]]) -> pd.DataFrame:
     """Process raw data from Envisoft source into DataFrame"""
-    df = pd.read_json(
-        StringIO(json.dumps(data, ensure_ascii=False)), dtype={"id": str})
+    df = pd.read_json(StringIO(json.dumps(data, ensure_ascii=False)), dtype={"id": str})
     df = df.rename(
         columns={
             "id": "station_id",
@@ -167,8 +161,7 @@ def prepare_common_data(df: pd.DataFrame) -> pd.DataFrame:
         logger.info(f"Removed {rows_removed} rows with missing values")
 
     # Continue with transformations on the filtered data using .loc
-    df.loc[:, "timestamp"] = df["timestamp"].astype(
-        str).replace({"None": None})
+    df.loc[:, "timestamp"] = df["timestamp"].astype(str).replace({"None": None})
     df.loc[:, "aqi_index"] = round(df["aqi_index"]).astype(int)
 
     # Create geom column using .loc
@@ -261,8 +254,7 @@ def collect_pm25_data(df: pd.DataFrame, source: str) -> pd.DataFrame:
             pm25_data = fetch_envisoft_station_details(station_id)
 
         pm25_df = pd.concat(
-            [pm25_df, pd.DataFrame(
-                {"station_id": [station_id], "pm25": [pm25_data]})],
+            [pm25_df, pd.DataFrame({"station_id": [station_id], "pm25": [pm25_data]})],
             ignore_index=True,
         )
 
@@ -312,8 +304,7 @@ def scrape_stations_data():
     log_capture_string = StringIO()
     log_handler = logging.StreamHandler(log_capture_string)
     log_handler.setLevel(logging.INFO)
-    log_formatter = logging.Formatter(
-        "%(asctime)s - %(levelname)s - %(message)s")
+    log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     log_handler.setFormatter(log_formatter)
     logger.addHandler(log_handler)
 
