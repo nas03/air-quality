@@ -37,6 +37,7 @@ export interface HealthRecommendationCardProps {
 
 export interface IPropsWeatherInfoCard extends React.ComponentPropsWithRef<"div"> {
   data: WeatherInfo;
+  loading?: boolean;
 }
 
 export interface WarningTabProps extends React.ComponentPropsWithRef<"div"> {

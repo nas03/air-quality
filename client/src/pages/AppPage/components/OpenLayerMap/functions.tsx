@@ -56,7 +56,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
 
   return {
     type: 1,
-    coordinate: [stationProperties.lat, stationProperties.lng],
+    coordinate: [stationProperties.lng, stationProperties.lat],
     aqi_index: Number(stationProperties.aqi_index),
     pm_25: stationProperties.pm25 ? Number(stationProperties.pm25) : null,
     location: stationProperties.station_name,
@@ -73,6 +73,7 @@ const fetchWindData = (map: Map, coordinate: number[]) => {
   const value = windFeature?.getData()?.valueAt(coordinate[0], coordinate[1])?.magnitude();
   return value ?? null;
 };
+
 const fetchModelData = async (url: string, coordinate: Coordinate): Promise<MarkData | null> => {
   const modelData = await fetch(url).then(parseWMSResponse);
 

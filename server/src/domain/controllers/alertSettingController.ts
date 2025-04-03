@@ -178,34 +178,40 @@ export class AlertSettingController extends BaseController<
     });
   };
 
-  onGetWeatherDataByDistrict = async (req: Request, res: Response) => {
-    const { district_id } = req.params;
+  onGetWeatherDataByLocation = async (req: Request, res: Response) => {
+    const { district_id, lat, lon } = req.query;
 
-    if (!district_id) {
+    if (!district_id && (!lat || !lon)) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "fail",
         message: resMessage.field_invalid,
         data: null,
       });
     }
-
-    const district = await this.districtInteractor.findDistrict(district_id as string);
+    const payload = { lat: 0, lon: 0, location: "" };
     const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 
-    const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
-      params: {
-        q: `${district?.vn_province},VN`,
-        appid: API_KEY,
-        limit: 1,
-      },
-    });
-
+    if (district_id) {
+      const district = await this.districtInteractor.findDistrict(district_id as string);
+      const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
+        params: {
+          q: `${district?.vn_province},VN`,
+          appid: API_KEY,
+          limit: 1,
+        },
+      });
+      payload.lat = geocodingAPI.data[0].lat;
+      payload.lon = geocodingAPI.data[0].lon;
+    } else {
+      payload.lat = Number(lat);
+      payload.lon = Number(lon);
+    }
     const openWeatherData = await axios.get<OpenWeatherDataType>(
       `http://api.openweathermap.org/data/2.5/forecast/daily`,
       {
         params: {
-          lat: geocodingAPI.data[0].lat,
-          lon: geocodingAPI.data[0].lon,
+          lat: payload.lat,
+          lon: payload.lon,
           cnt: 1,
           appid: API_KEY,
           units: "metric",
@@ -223,7 +229,6 @@ export class AlertSettingController extends BaseController<
         weather: data.weather[0].main,
         wind_speed: data.speed,
         date: new Date(data.dt * 1000),
-        location: `${district?.vn_district}, ${district?.vn_province}`,
       };
     });
 

@@ -45,8 +45,8 @@ const alertSettingRouter: Route[] = [
     role: "user",
   },
   {
-    path: "/alert-settings/district/:district_id",
-    controller: alertSettingController.onGetWeatherDataByDistrict.bind(alertSettingController),
+    path: "/alert-settings/location",
+    controller: alertSettingController.onGetWeatherDataByLocation.bind(alertSettingController),
     method: "GET",
     role: "",
   },

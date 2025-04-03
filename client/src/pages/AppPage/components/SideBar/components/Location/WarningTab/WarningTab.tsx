@@ -1,15 +1,21 @@
-import { getWeatherByDistrict } from "@/api/alertSetting";
-import { GeoContext, TimeContext } from "@/context";
-import useAirQualityData from "@/hooks/useAirQualityData";
-import { cn } from "@/lib/utils";
-import { MonitoringData } from "@/types/consts";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import { Collapse, CollapseProps } from "antd";
 import { useContext, useEffect, useState } from "react";
+
+import AirQualityCard from "./AirQualityCard";
+import DataSourceCard from "./DataSourceCard";
+import HealthRecommendationCard from "./HealthRecommendationCard";
+import WeatherInfoCard from "./WeatherInfoCard";
+
+import { getWeatherByDistrict } from "@/api/alertSetting";
+import useAirQualityData from "@/hooks/useAirQualityData";
+import { cn } from "@/lib/utils";
 import { getSvgAndColorByAQI } from "../../../config";
+
+import { GeoContext, TimeContext } from "@/context";
+import { MonitoringData } from "@/types/consts";
 import { AirQualityInfo, DataSourceInfo, WarningTabProps, WeatherInfo } from "./types";
-import { WarningTabInfoCards } from "./WarningTabInfoCards";
 
 type DataType = 0 | 1;
 
@@ -59,11 +65,11 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
   const [selectedValue, setSelectedValue] = useState<DataType>(0);
   const { time } = useContext(TimeContext);
   const geoContext = useContext(GeoContext);
-  const { data, updateData } = useAirQualityData(time, geoContext);
+  const { data, updateData, getProjectedCoordinates } = useAirQualityData(time, geoContext);
 
   const weatherQuery = useMutation({
-    mutationKey: ["weather", district_id],
-    mutationFn: (id: string) => getWeatherByDistrict(id),
+    mutationKey: ["weather", district_id, geoContext.coordinate],
+    mutationFn: (id: string | [number, number]) => getWeatherByDistrict(id),
   });
 
   useEffect(() => {
@@ -78,6 +84,12 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
     weatherQuery.mutate(district_id);
   }, [district_id]);
 
+  useEffect(() => {
+    const coordinate = getProjectedCoordinates(geoContext);
+    if (!coordinate) return;
+    const [lon, lat] = coordinate;
+    weatherQuery.mutate([lon, lat]);
+  }, [geoContext.coordinate]);
   const prepareAirQualityData = (): AirQualityInfo => {
     const aqi = data?.aqi_index ? data?.aqi_index.toString() : "--";
     const { color, icon } = getSvgAndColorByAQI(Number(aqi));
@@ -116,10 +128,10 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
         className: "w-full rounded-md bg-white p-0 first:p-0 dark:bg-slate-900",
         children: (
           <div className="flex w-full flex-col gap-3">
-            <WarningTabInfoCards.DataSourceCard data={prepareDataSourceInfo()} />
-            <WarningTabInfoCards.WeatherInfoCard data={prepareWeatherInfo()} />
-            <WarningTabInfoCards.AirQualityCard data={prepareAirQualityData()} />
-            <WarningTabInfoCards.HealthRecommendationCard data={data.recommendation || ""} />
+            <DataSourceCard data={prepareDataSourceInfo()} />
+            <WeatherInfoCard data={prepareWeatherInfo()} loading={weatherQuery.isPending} />
+            <AirQualityCard data={prepareAirQualityData()} />
+            <HealthRecommendationCard data={data.recommendation || ""} />
           </div>
         ),
       },

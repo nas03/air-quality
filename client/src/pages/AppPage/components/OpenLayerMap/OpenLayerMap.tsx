@@ -83,10 +83,14 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
     return layers;
   };
 
-  const handleMarkerChange = (coordinate: Coordinate) => {
-    const markerFeature = markerRef.current?.getSource()?.getFeatures().at(0);
+  const handleMarkerChange = (map: Map, coordinate: Coordinate) => {
+    const markerFeature = markerRef.current?.getSource()?.getFeatures()[0];
+    const [, , , , , markerLayer] = map.getLayers().getArray();
     if (markerFeature) {
       markerFeature.setGeometry(new Point(coordinate));
+    } else {
+      const feature = (markerLayer as VectorLayer).getSource()?.getFeatures()[0];
+      feature.setGeometry(new Point(coordinate));
     }
   };
 
@@ -108,7 +112,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
   const handleMapClick = (map: Map, layers: (TileLayer<TileWMS> | VectorLayer | WindLayer)[]) => {
     map.on("singleclick", function (evt) {
-      handleMarkerChange(evt.coordinate);
+      handleMarkerChange(map, evt.coordinate);
       handleUpdateLocationData(map, layers, evt.coordinate);
     });
   };
@@ -136,7 +140,7 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
       map.getLayers().extend(layers);
       handleMapClick(map, layers);
       const initialCoordinate = fromLonLat(INITIAL_COORDINATE);
-      handleMarkerChange(initialCoordinate);
+      handleMarkerChange(map, initialCoordinate);
       handleUpdateLocationData(map, layers, initialCoordinate);
     };
 

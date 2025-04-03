@@ -54,9 +54,22 @@ export const deleteUserAlertById = async (id: number) => {
   return false;
 };
 
-export const getWeatherByDistrict = async (district_id: string) => {
-  const response = await api.get<APIResponse<Omit<UserAlert, "id" | "aqi_index">>>(
-    `/alert-settings/district/${district_id}`,
+export const getWeatherByDistrict = async (location: string | number[]) => {
+  console.log({ location });
+  const params =
+    typeof location === "string"
+      ? {
+          district_id: location,
+        }
+      : {
+          lat: location[0],
+          lon: location[1],
+        };
+  const response = await api.get<APIResponse<Omit<UserAlert, "id" | "aqi_index" | "location">>>(
+    `/alert-settings/location`,
+    {
+      params: params,
+    },
   );
   return response.data.data;
 };

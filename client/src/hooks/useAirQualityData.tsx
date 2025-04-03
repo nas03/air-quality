@@ -88,7 +88,7 @@ const useAirQualityData = (time: string, geoContext: GeoContextType) => {
     setData((prev) => ({ ...prev, ...updatedData }));
   };
 
-  return { data, updateData };
+  return { data, updateData, getProjectedCoordinates };
 };
 
 export default useAirQualityData;
