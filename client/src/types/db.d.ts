@@ -73,6 +73,7 @@ export type AlertSetting = {
   user_id: number;
   weather: boolean;
   wind_speed: boolean;
+  receive_notifications: number;
 };
 
 export type CronjobMonitor =  {

@@ -10,7 +10,12 @@ export interface WeatherInfo {
     max: number;
     avg: number;
   };
-  weather: string;
+  weather: {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  };
   wind_speed: number;
 }
 

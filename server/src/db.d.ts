@@ -16,6 +16,7 @@ export interface AlertsSetting {
   district_id: string;
   id: Generated<number>;
   pm_25: Generated<boolean>;
+  receive_notifications: Generated<number>;
   temperature: Generated<boolean>;
   user_id: number;
   weather: Generated<boolean>;
@@ -127,6 +128,7 @@ export interface Stations {
   aqi_index: number;
   color: string;
   geom: string | null;
+  id: Generated<number>;
   lat: number;
   lng: number;
   pm25: number | null;
@@ -140,10 +142,10 @@ export interface Statistics {
   aqi_index: number;
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
-  district_id: string | null;
+  district_id: string;
   id: Generated<number>;
   pm_25: number;
-  time: Timestamp | null;
+  time: Timestamp;
   updated_at: Generated<Timestamp | null>;
 }
 

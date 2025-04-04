@@ -30,7 +30,12 @@ export type UserAlert = {
     min: number;
     avg: number;
   };
-  weather: string;
+  weather: {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  };
   wind_speed: number;
   date: string;
   location: string;
@@ -59,7 +64,6 @@ export const deleteUserAlertById = async (id: number) => {
 };
 
 export const getWeatherByDistrict = async (location: string | number[]) => {
-  console.log({ location });
   const params =
     typeof location === "string"
       ? {

@@ -78,4 +78,9 @@ export class StatisticInteractor implements IStatisticInteractor {
     if (data) await this.cacheService.set(hashKey, data, cacheTime.DEV);
     return data;
   };
+
+  getAllForecastAlert = async () => {
+    const data = await this.statisticRepository.getAllForecastAlert();
+    return data;
+  };
 }

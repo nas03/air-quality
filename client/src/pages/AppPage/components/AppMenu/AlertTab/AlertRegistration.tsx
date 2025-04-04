@@ -3,6 +3,7 @@ import { AlertInfoType } from "@/api/userSetting";
 import { AlertRegistrationContext } from "@/context";
 import { useAuth } from "@/hooks/useAuth";
 import useRegistrationState from "@/hooks/useRegistrationState";
+import { RECEIVE_NOTIFICATIONS } from "@/types/consts";
 import { AlertSetting } from "@/types/db";
 import { Form } from "antd";
 import React, { SetStateAction, useCallback, useEffect, useMemo } from "react";
@@ -33,6 +34,14 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
       setRegistrationLoading(true);
       const formData = form.getFieldsValue();
 
+      let receive_notifications = RECEIVE_NOTIFICATIONS.DISABLED;
+      if (formData.sms_notification && !formData.email_notification)
+        receive_notifications = RECEIVE_NOTIFICATIONS.SMS_NOTIFICATION;
+      else if (!formData.sms_notification && formData.email_notification)
+        receive_notifications = RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION;
+      else if (formData.sms_notification && formData.email_notification)
+        receive_notifications = RECEIVE_NOTIFICATIONS.BOTH;
+
       const payload: Omit<AlertSetting, "id"> = {
         user_id: userId,
         district_id: formData.district_id,
@@ -41,6 +50,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
         temperature: formData.temperature,
         wind_speed: formData.wind,
         weather: true,
+        receive_notifications,
       };
 
       await createUserAlertSetting(payload);
@@ -76,26 +86,6 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
     [currentStep, registrationLoading, handleRegisterAlert],
   );
 
-  /* if (!registrationData && currentStep === INITIAL_STEP) {
-    return (
-      <div className={cn("bg-white px-3 pt-3", className)}>
-        <p className="mb-4 text-base font-normal text-zinc-800">
-          Click <span className="font-medium text-blue-600">Get Started</span> to start receiving air quality alerts at
-          your designated location
-        </p>
-        <div className="flex flex-row justify-center pt-3">
-          <Button
-            onClick={() => setCurrentStep(0)}
-            className="h-10 px-6 font-medium transition-opacity hover:opacity-90"
-            type="primary">
-            Get Started
-          </Button>
-        </div>
-      </div>
-    );
-  } */
-
-  // Render registration steps
   return (
     <AlertRegistrationContext.Provider value={contextValue}>
       <Form form={form}>

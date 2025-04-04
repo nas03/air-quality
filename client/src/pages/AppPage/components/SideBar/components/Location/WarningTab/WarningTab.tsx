@@ -24,11 +24,8 @@ const CHART_OPTIONS = [
   { label: "Trạm", value: MonitoringData.INPUT.STATION },
 ] as const;
 
-const DEFAULT_TEMPERATURE = {
-  max: 0,
-  min: 0,
-  avg: 0,
-};
+const DEFAULT_TEMPERATURE = { max: 0, min: 0, avg: 0 };
+const DEFAULT_WEATHER = { id: 0, main: "", description: "", icon: "" };
 
 const DataTypeButton = ({ label, isSelected }: { label: string; isSelected: boolean }) => (
   <button
@@ -115,7 +112,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
   const prepareWeatherInfo = (): WeatherInfo => {
     return {
       temperature: weatherQuery.data?.temperature || DEFAULT_TEMPERATURE,
-      weather: weatherQuery.data?.weather || "",
+      weather: weatherQuery.data?.weather || DEFAULT_WEATHER,
       wind_speed: weatherQuery.data?.wind_speed || 0,
     };
   };

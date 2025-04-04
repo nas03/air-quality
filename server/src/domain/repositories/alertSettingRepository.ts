@@ -1,5 +1,5 @@
 import { db } from "@/config/db";
-import { AlertSetting } from "@/entities";
+import { AlertSetting, User } from "@/entities";
 import { IAlertSettingRepository } from "@/interfaces";
 
 export class AlertSettingRepository implements IAlertSettingRepository {
@@ -61,5 +61,31 @@ export class AlertSettingRepository implements IAlertSettingRepository {
       .returningAll()
       .executeTakeFirst();
     return result ?? null;
+  }
+
+  async getAllUserAlertSettings() {
+    const usersData = await db
+      .selectFrom("users as u")
+      .innerJoin(
+        (eb) => eb.selectFrom("alerts_setting").select("user_id").groupBy("user_id").as("a"),
+        (join) => join.onRef("a.user_id", "=", "u.user_id")
+      )
+      .select(["u.email", "u.user_id", "u.phone_number"])
+      .execute();
+    const userAlertSettingData = await db.selectFrom("alerts_setting").selectAll().execute();
+
+    const userDataMap = usersData.reduce(
+      (map, data) => map.set(data.user_id, data),
+      new Map<number, Pick<User, "email" | "user_id" | "phone_number">>()
+    );
+
+    const result = userAlertSettingData
+      .filter((data) => userDataMap.has(data.user_id))
+      .map((data) => ({
+        ...data,
+        ...usersData.find((user) => user.user_id === data.user_id),
+      }));
+
+    return result;
   }
 }

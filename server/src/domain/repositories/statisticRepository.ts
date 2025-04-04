@@ -66,7 +66,7 @@ export class StatisticRepository implements IStatisticRepository {
   ): Promise<(Statistic & MDistrict)[] | null> {
     let query = db
       .selectFrom("statistics")
-      .leftJoin("m_districts", "statistics.district_id", "m_districts.district_id")
+      .innerJoin("m_districts", "statistics.district_id", "m_districts.district_id")
       .select([
         "statistics.id",
         "statistics.pm_25",
@@ -163,5 +163,38 @@ export class StatisticRepository implements IStatisticRepository {
       .limit(10)
       .execute();
     return query;
+  }
+
+  async getAllForecastAlert() {
+    const getDate = await db
+      .selectFrom("statistics")
+      .select("time")
+      .groupBy("time")
+      .orderBy("time desc")
+      .limit(8)
+      .execute();
+    const query = await db
+      .selectFrom("statistics")
+      .innerJoin("m_districts as md", "md.district_id", "statistics.district_id")
+      .selectAll()
+      .where((eb) => eb.between("statistics.time", getDate[7].time, getDate[0].time))
+      .orderBy("time asc")
+      .execute();
+
+    const resultMap = query.reduce((map, data) => {
+      const item = map.get(data.district_id);
+      if (item)
+        return map.set(data.district_id, {
+          ...item,
+          forecast: [...item.forecast, { aqi_index: data.aqi_index, time: data.time }],
+        });
+      else
+        return map.set(data.district_id, {
+          ...data,
+          forecast: [{ aqi_index: data.aqi_index, time: data.time }],
+        });
+    }, new Map<string, MDistrict & { forecast: Pick<Statistic, "time" | "aqi_index">[] }>());
+
+    return Object.fromEntries(resultMap);
   }
 }

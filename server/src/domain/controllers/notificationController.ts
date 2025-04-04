@@ -5,10 +5,10 @@ import { UserNotificationInteractor } from "@/domain/interactors";
 import { Request, Response } from "express";
 export class NotificationController extends BaseController<[UserNotificationInteractor]> {
   private notificationInteractor = this.interactors[0];
+  
   onSendMail = async (req: Request, res: Response) => {
     const data = await this.notificationInteractor.sendEmailNotification();
     return res.status(statusCode.SUCCESS).json({
-      status: "success",
       data: data,
     });
   };

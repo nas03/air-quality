@@ -1,12 +1,13 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 
+import { TimeContext } from "@/context";
 import { cn } from "@/lib/utils";
 import { CHART_CONFIGS, ChartConfig } from "@/pages/AnalyticsPage/components/DataChart/config";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { MonitoringOutputDataType } from "@/types/types";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getGradient } from "../../../config";
 
 interface ChartDataType {
@@ -38,6 +39,7 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
   dataType,
   setLocation,
 }) => {
+  const { timeList } = useContext(TimeContext);
   const [config, setConfig] = useState<ChartConfig>(CHART_CONFIGS[MonitoringData.OUTPUT.AQI]);
   const [chartData, setChartData] = useState<ChartDataType>({
     aqi: [],
@@ -45,14 +47,13 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
     labels: [],
     location: "",
   });
-
   useEffect(() => {
     setConfig(CHART_CONFIGS[dataType]);
   }, [dataType]);
 
   const mutation = useMutation({
     mutationKey: ["district"],
-    mutationFn: (id: string) => getStatisticHistoryByDistrict(id, "2024-11-01", "2024-11-06"),
+    mutationFn: (id: string) => getStatisticHistoryByDistrict(id, timeList[0], timeList[timeList.length - 1]),
     onSuccess: (data) => {
       const formattedData =
         data?.map((el) => ({

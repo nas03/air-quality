@@ -11,6 +11,12 @@ export const MonitoringData = Object.freeze({
 export const aqiThresholds = [50, 100, 150, 200, 500];
 export const pm25Thresholds = [12, 36, 56, 150, 200];
 export const colorMap = ["#009966", "#facf39", "#ea7643", "#f65e5f", "#70006a", "#7e0023"];
+export const RECEIVE_NOTIFICATIONS = {
+  DISABLED: 0,
+  EMAIL_NOTIFICATION: 1,
+  SMS_NOTIFICATION: 2,
+  BOTH: 3,
+};
 export const getGradientDefs = (id: string) => {
   return [
     <defs key={`gradient-0-${id}`}>

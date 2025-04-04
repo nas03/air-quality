@@ -1,3 +1,39 @@
+export const emailTemplate = (
+  location: string,
+  exceededDays: string[],
+  aqiDays: {
+    time: string;
+    aqi_index: number;
+  }[]
+) => {
+  const getStatus = (value: number) => {
+    if (value <= 50) return "good";
+    else if (value <= 100) return "moderate";
+    else if (value <= 150) return "unhealthy-sensitive";
+    else if (value <= 200) return "unhealthy";
+    else if (value <= 300) return "very-unhealthy";
+    else return "hazardous";
+  };
+  let exceedDayList = "";
+  let firstAQIList = "";
+  let secondAQIList = "";
+  exceededDays.forEach((day) => {
+    exceedDayList += `<li>${day}</li>`;
+  });
+  aqiDays.forEach((item, index) => {
+    if (index < 4) {
+      firstAQIList += `<div class="day-item">
+							<span class="day-label">${item.time}</span>
+							<div class="aqi-value ${getStatus(item.aqi_index)}">${item.aqi_index}</div>
+				</div>`;
+    } else {
+      secondAQIList += `<div class="day-item">
+		<span class="day-label">${item.time}</span>
+		<div class="aqi-value ${getStatus(item.aqi_index)}">${item.aqi_index}</div>
+</div>`;
+    }
+  });
+  return `
 <!DOCTYPE html>
 <html lang="vi">
 	<head>
@@ -17,6 +53,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				min-width: 100vw;
 				min-height: 100vh;
 				background-color: #f0f2f5;
 				padding: 12px;
@@ -222,7 +259,7 @@
 				color: white;
 				margin: 0 auto;
 				border-radius: 50%;
-				line-height: 35px; /* Match the height */
+				line-height: 35px; /* Match the height for vertical centering */
 				text-align: center;
 			}
 
@@ -261,7 +298,7 @@
 				margin-top: 14px;
 				width: 100%;
 				border-collapse: collapse;
-				font-size: 14px;
+				font-size: 13px;
 			}
 
 			.aqi-info-table th {
@@ -310,42 +347,41 @@
 				align-items: center;
 				white-space: nowrap;
 			}
-
+			
 			/* Very small screens */
 			@media (max-width: 320px) {
 				.card {
 					padding: 10px;
 				}
-
+				
 				.day-item {
 					padding: 0 2px;
 				}
-
+				
 				.aqi-value {
 					height: 30px;
 					width: 30px;
-					font-size: 10px;
+					font-size: 11px;
 					line-height: 30px;
 				}
-
+				
 				.aqi-info-table th,
 				.aqi-info-table td {
 					padding: 4px 2px;
-					font-size: 10px;
+					font-size: 11px;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<div class="card">
-			<h2 class="title">Nam Từ Liêm, Hà Nội</h2>
+			<h2 class="title">${location}</h2>
 			<div class="notice-container">
 				<div class="notice-text">
 					<div class="alert-heading">Cảnh báo chất lượng không khí</div>
 					Những ngày có chỉ số AQI vượt ngưỡng cho phép:
 					<ul>
-						<li>Thứ 2</li>
-						<li>Thứ 3</li>
+						${exceedDayList}
 					</ul>
 				</div>
 			</div>
@@ -354,40 +390,10 @@
 				<div class="aqi-container">
 					<div class="aqi-days" id="aqi-days-container">
 						<div class="aqi-days-row">
-							<div class="day-item">
-								<span class="day-label">04/04</span>
-								<div class="aqi-value good">45</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">05/04</span>
-								<div class="aqi-value moderate">52</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">06/04</span>
-								<div class="aqi-value good">38</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">07/04</span>
-								<div class="aqi-value poor">120</div>
-							</div>
+							${firstAQIList}
 						</div>
 						<div class="aqi-days-row">
-							<div class="day-item">
-								<span class="day-label">08/04</span>
-								<div class="aqi-value moderate">80</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">09/04</span>
-								<div class="aqi-value moderate">63</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">10/04</span>
-								<div class="aqi-value good">47</div>
-							</div>
-							<div class="day-item">
-								<span class="day-label">11/04</span>
-								<div class="aqi-value good">47</div>
-							</div>
+							${secondAQIList}
 						</div>
 					</div>
 
@@ -488,3 +494,5 @@
 		</div>
 	</body>
 </html>
+`;
+};

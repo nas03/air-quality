@@ -6,6 +6,7 @@ import { AlertSettingRepository } from "../repositories";
 
 export class AlertSettingInteractor implements IAlertSettingInteractor {
   private readonly alertSettingRepository: AlertSettingRepository;
+
   private readonly cacheService: CacheService;
 
   constructor(alertSettingRepository: AlertSettingRepository) {
@@ -49,5 +50,10 @@ export class AlertSettingInteractor implements IAlertSettingInteractor {
     const userKey = ALERT_SETTING_KEY.USER_KEY(delAlert.user_id);
     await Promise.all([this.cacheService.delete(idKey), this.cacheService.delete(userKey)]);
     return true;
+  }
+
+  async getAllUserAlert() {
+    const allUserData = await this.alertSettingRepository.getAllUserAlertSettings();
+    return allUserData;
   }
 }

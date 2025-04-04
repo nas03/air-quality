@@ -7,6 +7,7 @@ export class AlertSetting {
     public aqi_index: boolean,
     public pm_25: boolean,
     public temperature: boolean,
-    public weather: boolean
+    public weather: boolean,
+    public receive_notifications: number
   ) {}
 }

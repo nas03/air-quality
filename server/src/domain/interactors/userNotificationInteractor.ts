@@ -21,28 +21,40 @@ export class UserNotificationInteractor implements IUserNotificationInteractor {
 
   async sendEmailNotification() {
     try {
-      const [notifications, mailTemplate] = await Promise.all([
-        this.userNotificationRepository.getAllEmailNotifications(new Date("2024-11-30")),
-        this.mailRepository.getMailFormat(1),
-      ]);
+      // const [notifications] = await Promise.all([
+      //   this.userNotificationRepository.getAllEmailNotifications(new Date("2024-11-30")),
+      // ]);
 
-      const emailPromises = notifications.map((notification) => {
-        if (!notification.email) return null;
+      // const sampleAqiData = {
+      //   exceededDays: ["Thứ 3", "Thứ 5"],
+      //   aqiDays: [
+      //     { label: "04/04", value: 45 },
+      //     { label: "04/04", value: 120 },
+      //     { label: "04/04", value: 52 },
+      //     { label: "04/04", value: 150 },
+      //     { label: "04/04", value: 38 },
+      //     { label: "04/04", value: 80 },
+      //     { label: "04/05", value: 63 },
+      //     { label: "04/05", value: 63 },
+      //   ],
+      // };
+      // const mailHTML = emailTemplate(sampleAqiData.exceededDays, sampleAqiData.aqiDays);
+      // // const emailPromises = notifications.map((notification) => {
+      // //   if (!notification.email) return null;
 
-        const html = this.transformEmailHTML(mailTemplate.html, notification, [
-          "recommendation",
-          "aqi_index",
-          "color",
-        ]);
+      // //   return this.mailService.sendMail({
+      // //     to: notification.email,
+      // //     subject: "⚠️ Air Quality Alert: AQI Levels Exceeded Safe Thresholds",
+      // //     html: mailHTML,
+      // //   });
+      // // });
 
-        return this.mailService.sendMail({
-          to: notification.email,
-          subject: "AQI Notification",
-          html: html,
-        });
-      });
-
-      await Promise.all(emailPromises);
+      // // await Promise.all(emailPromises);
+      // this.mailService.sendMail({
+      //   to: "sonanhnguyen003@gmail.com",
+      //   subject: "⚠️ Cảnh báo chất lượng không khí",
+      //   html: mailHTML,
+      // });
       return true;
     } catch (error) {
       console.error("Error sending email notifications:", error);

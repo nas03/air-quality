@@ -1,15 +1,7 @@
 import { Route } from "@/config/constant";
 import { AlertSettingController } from "../controllers";
-import {
-  AlertSettingInteractor,
-  DistrictInteractor,
-  StatisticInteractor
-} from "../interactors";
-import {
-  AlertSettingRepository,
-  DistrictRepository,
-  StatisticRepository
-} from "../repositories";
+import { AlertSettingInteractor, DistrictInteractor, StatisticInteractor } from "../interactors";
+import { AlertSettingRepository, DistrictRepository, StatisticRepository } from "../repositories";
 
 const alertSettingRepository = new AlertSettingRepository();
 const alertSettingInteractor = new AlertSettingInteractor(alertSettingRepository);
@@ -59,6 +51,12 @@ const alertSettingRouter: Route[] = [
     controller: alertSettingController.onGetWeatherDataByLocation.bind(alertSettingController),
     method: "GET",
     role: "",
+  },
+  {
+    path: "/send-alert",
+    controller: alertSettingController.onSendUserAlert.bind(alertSettingController),
+    method: "POST",
+    role: "user",
   },
 ];
 
