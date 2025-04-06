@@ -4,7 +4,7 @@ import { User } from "@/entities";
 import { IUserRepository } from "@/interfaces";
 
 export class UserRepository implements IUserRepository {
-  createUser = async (data: Omit<User, "user_id">) => {
+  createUser = async (data: Omit<User, "user_id" | 'account_status'>) => {
     const query = await db.insertInto("users").values(data).returningAll().executeTakeFirst();
     return query ?? null;
   };
@@ -34,16 +34,16 @@ export class UserRepository implements IUserRepository {
   deleteUser = async (user_id: number) => {
     const transaction = await db.transaction().execute(async (trx) => {
       const query = await trx
-        .with("deleteUserAndFavorite", (qb) =>
-          qb.updateTable("users_setting").where("user_id", "=", user_id).set("deleted", flag.TRUE)
-        )
+        // .with("deleteUserAndFavorite", (qb) =>
+        //   qb.updateTable("users_setting").where("user_id", "=", user_id).set("deleted", flag.TRUE)
+        // )
         /* .with("deleteUserAndSession", (qb) =>
           qb.updateTable("users_session").where("user_id", "=", user_id).set("deleted", flag.TRUE)
         ) */
         .updateTable("users")
         .where("user_id", "=", user_id)
         .set("deleted", flag.TRUE)
-        .returning(["email", "username", "password", "phone_number", "user_id", "role"])
+        .returningAll()
         .executeTakeFirst();
       return query ?? null;
     });

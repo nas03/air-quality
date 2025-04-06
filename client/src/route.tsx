@@ -1,6 +1,7 @@
 import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
 
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
+import CodeVerificationPage from "./pages/CodeVerificationPage/CodeVerificationPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 
 export const rootRoute = createRootRoute();
@@ -60,9 +61,22 @@ const landingRoute = createRoute({
   component: LandingPage,
 });
 
+const emailVerificationRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "/email-verification",
+  component: CodeVerificationPage,
+});
+
 /* ROUTE TREE */
 const protectedRouteTree = protectedRoute.addChildren([adminRoute]);
-const publicRouteTree = publicRoute.addChildren([signInRoute, homeRoute, signUpRoute, analyticsRoute, landingRoute]);
+const publicRouteTree = publicRoute.addChildren([
+  signInRoute,
+  homeRoute,
+  signUpRoute,
+  analyticsRoute,
+  landingRoute,
+  emailVerificationRoute,
+]);
 
 const routeTree = rootRoute.addChildren([protectedRouteTree, publicRouteTree]);
 

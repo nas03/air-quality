@@ -1,12 +1,19 @@
 import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
+import { emailVerificationTemplate } from "@/config/mailTemplate";
 import { BaseController } from "@/domain/controllers/baseController";
-import { UserInteractor } from "@/domain/interactors";
-import { SecurityService } from "@/services";
+import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
+import { MailService, SecurityService } from "@/services";
 import { Request, Response } from "express";
 
-export class UserController extends BaseController<[UserInteractor]> {
-  private userInteractor = this.interactors[0];
+export class UserController extends BaseController<[UserInteractor, VerificationCodeInteractor]> {
+  private readonly userInteractor = this.interactors[0];
+  private readonly verificationCodeInteractor = this.interactors[1];
+  private readonly mailService: MailService;
 
+  constructor(...interactors: [UserInteractor, VerificationCodeInteractor]) {
+    super(...interactors);
+    this.mailService = new MailService();
+  }
   onCreateUser = async (req: Request, res: Response) => {
     const body = req.body as {
       username: string;
@@ -39,6 +46,15 @@ export class UserController extends BaseController<[UserInteractor]> {
         message: "Error creating new user",
       });
 
+    const verificationCode = await this.verificationCodeInteractor.createVerificationCode(
+      newUser.user_id
+    );
+    const FE_URL = "http://localhost:5173/email-verification";
+    await this.mailService.sendMail({
+      to: newUser.email,
+      subject: "Xác nhận Email",
+      html: emailVerificationTemplate(`${FE_URL}?code=${verificationCode?.code}`, newUser.email),
+    });
     return res.status(200).json({
       status: "success",
       data: null,

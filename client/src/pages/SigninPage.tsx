@@ -4,15 +4,16 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
-import { Link, useNavigate } from "@tanstack/react-router";
-import React from "react";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import React, { useEffect, useState } from "react";
+import { FiCheck } from "react-icons/fi";
 
 interface SigninFormData {
   email: string;
   password: string;
 }
 
-const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) => {
+const SigninForm = ({ onSubmit, message }: { onSubmit: (data: SigninFormData) => void; message: string }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -57,12 +58,22 @@ const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) 
 };
 
 const SigninPage = ({ className, ...props }: React.ComponentPropsWithoutRef<"div">) => {
+  const [message, setMessage] = useState("");
   const auth = useAuth();
   const navigate = useNavigate();
+  const params: { message: string } | null = useSearch({ from: "/public/signin" });
 
+  useEffect(() => {
+    if (params && params["message"]) {
+      setMessage(params.message);
+    }
+  }, [params]);
   const handleSignin = async (data: SigninFormData) => {
     const status = await auth.login(data.email, data.password);
-    if (!status) return;
+    if (!status) {
+      setMessage("Invalid email or password");
+      return;
+    }
     navigate({ to: "/" });
   };
 
@@ -76,7 +87,21 @@ const SigninPage = ({ className, ...props }: React.ComponentPropsWithoutRef<"div
               <CardDescription>Enter your email below to login to your account</CardDescription>
             </CardHeader>
             <CardContent>
-              <SigninForm onSubmit={handleSignin} />
+              {message && (
+                <div
+                  className={`animate-fadeIn mb-4 w-full overflow-hidden rounded-md border ${"border-green-200 bg-gradient-to-r from-green-50 to-green-100 text-green-700"} p-3 shadow-inner`}>
+                  <div className="flex items-center">
+                    <div
+                      className={`mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${"bg-green-200"}`}>
+                      <FiCheck className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      {message && <p className="break-words text-xs opacity-80">{message}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
+              <SigninForm message={message} onSubmit={handleSignin} />
             </CardContent>
           </Card>
         </div>

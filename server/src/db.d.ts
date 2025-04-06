@@ -150,6 +150,7 @@ export interface Statistics {
 }
 
 export interface Users {
+  account_status: Generated<number>;
   created_at: Generated<Timestamp | null>;
   deleted: Generated<number | null>;
   email: string;
@@ -161,25 +162,13 @@ export interface Users {
   username: string;
 }
 
-export interface UsersNotification {
-  aqi_index: number | null;
-  archived: Generated<number | null>;
+export interface VerificationCode {
+  activate_status: Generated<number>;
+  code: string;
+  created_at: Generated<Timestamp>;
   id: Generated<number>;
-  location_id: string | null;
-  recommendation_id: number | null;
-  timestamp: Generated<Timestamp | null>;
-  user_id: number | null;
-}
-
-export interface UsersSetting {
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  id: Generated<number>;
-  profile_url: string | null;
-  receive_notifications: Generated<number | null>;
-  updated_at: Generated<Timestamp | null>;
-  user_id: number | null;
-  user_location: string | null;
+  type: Generated<number>;
+  user_id: number;
 }
 
 export interface WindData {
@@ -203,7 +192,6 @@ export interface DB {
   stations: Stations;
   statistics: Statistics;
   users: Users;
-  users_notification: UsersNotification;
-  users_setting: UsersSetting;
+  verification_code: VerificationCode;
   wind_data: WindData;
 }

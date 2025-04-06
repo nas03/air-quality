@@ -2,7 +2,7 @@
 import { AUTHENTICATION } from "@/config/constant";
 import { ISecurityService } from "@/interfaces/services/ISecurityService";
 import argon from "argon2";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 export class SecurityService implements ISecurityService {
   async encryptString(input: string): Promise<string> {
@@ -22,9 +22,10 @@ export class SecurityService implements ISecurityService {
     return jwt.sign(payload, String(process.env.JWT_SECRET), options);
   }
 
-  decodeToken<T>(input: string): T {
+  decodeToken<T>(input: string): T & JwtPayload {
     const parsedToken = jwt.verify(input, String(process.env.JWT_SECRET));
-    return parsedToken as T;
+
+    return parsedToken as T & JwtPayload;
   }
 
   verifyToken(input: string): number {

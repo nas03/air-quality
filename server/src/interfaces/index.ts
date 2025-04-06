@@ -5,8 +5,7 @@ export * from "./interactors/IMRecomendationInteractor";
 export * from "./interactors/IStationsInteractor";
 export * from "./interactors/IStatisticInteractor";
 export * from "./interactors/IUserInteractor";
-export * from "./interactors/IUserNotificationInteractor";
-export * from "./interactors/IUserSettingInteractor";
+export * from "./interactors/IVerificationCodeInteractor";
 export * from "./interactors/IWindDataInteractor";
 
 export * from "./repositories/IAlertSettingRepository";
@@ -17,7 +16,7 @@ export * from "./repositories/IMRecommendationRepository";
 export * from "./repositories/IStationsRepository";
 export * from "./repositories/IStatisticRepository";
 export * from "./repositories/IUserRepository";
-export * from "./repositories/IUserSettingRepository";
+export * from "./repositories/IVerificationCodeRepository";
 export * from "./repositories/IWindDataRepository";
 
 export * from "./services/ICacheService";

@@ -1,5 +1,5 @@
 import { resMessage, statusCode } from "@/config/constant";
-import { emailTemplate } from "@/config/mailTemplate";
+import { alertMailTemplate } from "@/config/mailTemplate";
 import { MailService } from "@/services";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -34,7 +34,7 @@ export class AlertSettingController extends BaseController<
       }));
       return {
         email: data.email,
-        html: emailTemplate(
+        html: alertMailTemplate(
           `${statisticData.vn_district}, ${statisticData.vn_province}`,
           exceededDays,
           aqiDays

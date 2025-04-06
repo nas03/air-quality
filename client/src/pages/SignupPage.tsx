@@ -69,7 +69,12 @@ const SignupPage = () => {
   const handleSignup = async (data: SignupFormData) => {
     try {
       await createUser(data);
-      navigate({ to: "/signin" });
+      navigate({
+        to: "/signin",
+        search: {
+          message: "Vui lòng kiểm tra email để kích hoạt tài khoản",
+        },
+      });
     } catch (error) {
       console.error("Sign up failed:", error);
     }

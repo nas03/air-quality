@@ -26,6 +26,7 @@ export type User = {
   username: string;
   email: string;
   password: string;
+  account_status: number;
   phone_number: string;
   role: string;
   user_id?: number;
@@ -76,7 +77,7 @@ export type AlertSetting = {
   receive_notifications: number;
 };
 
-export type CronjobMonitor =  {
+export type CronjobMonitor = {
   id: number;
   raster_data_status: number;
   wind_data_status: number;
@@ -84,4 +85,4 @@ export type CronjobMonitor =  {
   wind_data_log: string;
   station_data_log: string;
   timestamp: string;
-}
+};

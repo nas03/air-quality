@@ -7,12 +7,11 @@ import districtRouter from "@/domain/routes/districtRoutes";
 import recommendationRouter from "@/domain/routes/mRecommendationRoute";
 import stationsRouter from "@/domain/routes/stationsRoute";
 import statisticRouter from "@/domain/routes/statisticRoutes";
-import notificationRouter from "@/domain/routes/userNotificationRoute";
 import userRouter from "@/domain/routes/userRoutes";
+
 import { Router } from "express";
 import alertSettingRouter from "./alertSettingRoute";
 import cronjobMonitorRoute from "./cronjobMonitorRoute";
-import userSettingRouter from "./userSettingRoute";
 import windDataRoute from "./windDataRoute";
 
 const routes = [
@@ -21,9 +20,7 @@ const routes = [
   ...districtRouter,
   ...stationsRouter,
   ...authRouter,
-  ...notificationRouter,
   ...recommendationRouter,
-  ...userSettingRouter,
   ...alertSettingRouter,
   ...windDataRoute,
   ...cronjobMonitorRoute,

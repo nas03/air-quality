@@ -49,7 +49,7 @@ const AdminPage = () => {
     try {
       setRerunStatus({ loading: true, success: false, error: null });
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutes timeout
+      const timeoutId = setTimeout(() => controller.abort(), 300000);
 
       const response = await api.post(`/cronjob/rerun`, {
         signal: controller.signal,

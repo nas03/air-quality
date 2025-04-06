@@ -17,6 +17,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				min-width: 100vw;
 				min-height: 100vh;
 				background-color: #f0f2f5;
 				padding: 12px;
@@ -222,7 +223,7 @@
 				color: white;
 				margin: 0 auto;
 				border-radius: 50%;
-				line-height: 35px; /* Match the height */
+				line-height: 35px; /* Match the height for vertical centering */
 				text-align: center;
 			}
 
@@ -261,7 +262,7 @@
 				margin-top: 14px;
 				width: 100%;
 				border-collapse: collapse;
-				font-size: 14px;
+				font-size: 13px;
 			}
 
 			.aqi-info-table th {
@@ -310,28 +311,28 @@
 				align-items: center;
 				white-space: nowrap;
 			}
-
+			
 			/* Very small screens */
 			@media (max-width: 320px) {
 				.card {
 					padding: 10px;
 				}
-
+				
 				.day-item {
 					padding: 0 2px;
 				}
-
+				
 				.aqi-value {
 					height: 30px;
 					width: 30px;
-					font-size: 10px;
+					font-size: 11px;
 					line-height: 30px;
 				}
-
+				
 				.aqi-info-table th,
 				.aqi-info-table td {
 					padding: 4px 2px;
-					font-size: 10px;
+					font-size: 11px;
 				}
 			}
 		</style>

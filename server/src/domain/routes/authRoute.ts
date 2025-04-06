@@ -1,12 +1,14 @@
 import { Route } from "@/config/constant/types";
 import { AuthController } from "@/domain/controllers/authController";
-import { UserInteractor } from "@/domain/interactors";
+import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";
-import { UserRepository } from "@/domain/repositories";
+import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
 
 const userRepository = new UserRepository();
+const verificationRepository = new VerificationCodeRepository();
 const userInteractor = new UserInteractor(userRepository);
-const authController = new AuthController(userInteractor);
+const verificationInteractor = new VerificationCodeInteractor(verificationRepository);
+const authController = new AuthController(userInteractor, verificationInteractor);
 const authMiddleware = new UserMiddleware(userInteractor);
 
 const authRouter: Route[] = [
@@ -23,6 +25,12 @@ const authRouter: Route[] = [
     controller: authController.onSignin.bind(authController),
     role: "",
     middleware: [authMiddleware.validateSignin],
+  },
+  {
+    path: "/auth/verification/:code",
+    method: "POST",
+    controller: authController.onVerifyVerificationCode.bind(authController),
+    role: "",
   },
 ];
 

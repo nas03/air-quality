@@ -1,12 +1,14 @@
 import { Route } from "@/config/constant/types";
 import { UserController } from "@/domain/controllers";
-import { UserInteractor } from "@/domain/interactors";
+import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { UserMiddleware } from "@/domain/middlewares/user.middleware";
-import { UserRepository } from "@/domain/repositories";
+import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
 
 const userRepository = new UserRepository();
+const verificationCodeRepository = new VerificationCodeRepository();
 const userInteractor = new UserInteractor(userRepository);
-const userController = new UserController(userInteractor);
+const verificationCodeInteractor = new VerificationCodeInteractor(verificationCodeRepository);
+const userController = new UserController(userInteractor, verificationCodeInteractor);
 const userMiddleware = new UserMiddleware(userInteractor);
 
 const userRouter: Route[] = [

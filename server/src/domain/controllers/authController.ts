@@ -1,13 +1,15 @@
 import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
 import { UserToken } from "@/domain/controllers/types";
-import { UserInteractor } from "@/domain/interactors";
+import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services";
 import { Request, Response } from "express";
 
-export class AuthController extends BaseController<[UserInteractor]> {
+export class AuthController extends BaseController<[UserInteractor, VerificationCodeInteractor]> {
   private securityService = new SecurityService();
   private userInteractor = this.interactors[0];
+  private verificationCodeInteractor = this.interactors[1];
+
   onRotateRefreshToken = (req: Request, res: Response) => {
     const refresh_token = req.headers["authorization"];
 
@@ -136,7 +138,27 @@ export class AuthController extends BaseController<[UserInteractor]> {
     });
   };
 
-  /*  onVerifyToken = (req: Request, res: Response) => {
-    const 
-  } */
+  onVerifyVerificationCode = async (req: Request, res: Response) => {
+    const { code } = req.params;
+    const decodeCode = this.securityService.decodeToken<{ user_id: number }>(code);
+    const verificationCode = await this.verificationCodeInteractor.getVerificationCode(
+      decodeCode.user_id
+    );
+    if (verificationCode?.code !== code) {
+      return res.status(statusCode.UNAUTHORIZED).json({
+        status: "fail",
+        message: "Not authorized",
+        data: null,
+      });
+    }
+    await Promise.all([
+      this.userInteractor.updateUser(decodeCode.user_id, { account_status: 1 }),
+      this.verificationCodeInteractor.updateVerificationCodeStatus(decodeCode.user_id),
+    ]);
+
+    return res.status(statusCode.SUCCESS).json({
+      status: "success",
+      data: true,
+    });
+  };
 }

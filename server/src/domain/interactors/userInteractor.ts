@@ -49,7 +49,7 @@ export class UserInteractor implements IUserInteractor {
     );
   };
 
-  createUser = async (input: Omit<User, "user_id">): Promise<User | null> => {
+  createUser = async (input: Omit<User, "user_id" | "account_status">): Promise<User | null> => {
     return this.userRepository.createUser(input);
   };
 
