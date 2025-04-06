@@ -43,7 +43,9 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className, ...props }) =>
         <span>
           <SlLocationPin />
         </span>
-        {provinceData.isSuccess ? provinceData.data?.provinceData[0].vn_province : "Loading..."}
+        {provinceData.isSuccess && provinceData.data?.provinceData.length
+          ? provinceData.data?.provinceData[0].vn_province
+          : "Loading..."}
       </p>
       <div className="h-[80%] w-full flex-grow">
         <LineChart

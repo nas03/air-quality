@@ -71,10 +71,18 @@ const AdminPage = () => {
 
   const renderContent = () => {
     if (loading) {
-      return <div className="my-4 animate-pulse rounded-lg bg-white p-4 shadow-sm">Loading cronjobs...</div>;
+      return (
+        <div className="my-4 animate-pulse rounded-lg bg-white/80 p-4 shadow-sm backdrop-blur-sm">
+          Loading cronjobs...
+        </div>
+      );
     }
     if (error) {
-      return <div className="my-4 rounded-lg border-l-4 border-red-500 bg-red-50 p-4 text-red-700">{error}</div>;
+      return (
+        <div className="my-4 rounded-lg border-l-4 border-red-500 bg-red-50/90 p-4 text-red-700 backdrop-blur-sm">
+          {error}
+        </div>
+      );
     }
     switch (activeTab) {
       case "cron":
@@ -98,7 +106,7 @@ const AdminPage = () => {
         );
       case "data":
         return (
-          <div className="rounded-lg bg-white p-4 shadow-sm">
+          <div className="rounded-lg bg-white/80 p-4 shadow-sm backdrop-blur-sm">
             <p>Data Management section coming soon...</p>
           </div>
         );
@@ -106,15 +114,14 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-gray-50">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50/30">
       <PageHeader
         title="Admin Console"
         subtitle="Monitor and manage scheduled data collection tasks"
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
-
-      <div className="px-5 pb-5">{renderContent()}</div>
+      <div className="container mx-auto px-5 pb-5">{renderContent()}</div>
     </div>
   );
 };

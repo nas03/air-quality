@@ -60,24 +60,32 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
     handleLocationChange("VNM.27_1");
   }, []);
   return (
-    <div className={cn("relative flex flex-row items-center justify-between bg-gray-50 px-5 py-1.5", className)}>
-      <div className="flex items-center">
-        <Link to="/" className="mr-3">
-          <img src="/logo_no_text.png" alt="Air Quality Logo" className="h-10 w-auto" />
+    <div
+      className={cn(
+        "relative flex flex-row items-center justify-between bg-gradient-to-r from-[#003366] to-[#1a237e] px-6 py-4",
+        className,
+      )}>
+      <div className="flex items-center space-x-4">
+        <Link to="/" className="group relative">
+          <img
+            src="/logo_no_text.svg"
+            alt="Air Quality Logo"
+            className="h-8 w-auto transition-transform duration-200 group-hover:scale-105"
+          />
         </Link>
         <div>
-          <h1 className="bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-3xl font-bold leading-tight tracking-tight text-transparent">
+          <h1 className="bg-gradient-to-r from-blue-100 to-blue-50 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
             Analytics Dashboard
           </h1>
-          <p className="-mt-0.5 text-xs text-gray-500">Analyze and visualize air quality data</p>
+          <p className="text-xs font-medium text-gray-200">Analyze and visualize air quality data</p>
         </div>
       </div>
 
-      <div className="flex flex-row items-center gap-4 text-sm">
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-gray-700">Province:</span>
+      <div className="flex flex-row items-center gap-5 rounded-lg bg-white/10 px-4 py-2 backdrop-blur-sm">
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-gray-100">Province:</span>
           <Select
-            className="w-[8rem]"
+            className="w-[8.5rem]"
             size="small"
             defaultValue="VNM.27_1"
             options={
@@ -96,8 +104,8 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
           />
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-gray-700">Date Range:</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-gray-100">Date Range:</span>
           <DatePicker.RangePicker
             size="small"
             placement="bottomRight"
@@ -106,10 +114,10 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
           />
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-gray-700">Data Type:</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-gray-100">Data Type:</span>
           <Select
-            className="w-[5.5rem]"
+            className="w-[6rem]"
             size="small"
             defaultValue={0}
             options={DATA_TYPE_OPTIONS}
@@ -117,7 +125,7 @@ const ControlBar: React.FC<IPropsControlBar> = ({ className }) => {
           />
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500/10 to-indigo-600/10"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-400/30 via-indigo-400/30 to-transparent"></div>
     </div>
   );
 };
