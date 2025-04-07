@@ -3,12 +3,10 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import React, { useState } from "react";
 import { AiFillBell, AiFillProfile } from "react-icons/ai";
-import { IoMdSettings } from "react-icons/io";
-import { MdAnalytics, MdFavorite } from "react-icons/md";
+import { MdAdminPanelSettings, MdAnalytics } from "react-icons/md";
 import UserMenu from "../UserMenu/UserMenu";
 import AlertTab from "./AlertTab/AlertTab";
 import ProfileTab from "./ProfileTab";
-import SettingsTab from "./SettingsTab";
 type MenuItemType = {
   label: string;
   key: number;
@@ -36,7 +34,7 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, selectedTab, setSelectedTab
             <Link
               to={item.path}
               key={item.key}
-              className="flex w-1/3 min-w-[90px] flex-col items-center gap-1 rounded-lg p-2 text-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
+              className="flex w-1/3 min-w-[90px] basis-1/2 flex-col items-center gap-1 rounded-lg p-2 text-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
               <span className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50">
                 {item.icon}
               </span>
@@ -48,7 +46,7 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, selectedTab, setSelectedTab
             key={item.key}
             onClick={() => setSelectedTab(item.key)}
             className={cn(
-              "flex w-1/3 min-w-[90px] flex-col items-center gap-1 rounded-lg p-2 text-center transition-colors",
+              "flex w-1/3 min-w-[90px] basis-1/2 flex-col items-center gap-1 rounded-lg p-2 text-center transition-colors",
               isSelected ? "bg-slate-200 font-medium dark:bg-slate-700" : "hover:bg-slate-100 dark:hover:bg-slate-800",
             )}>
             <span
@@ -71,22 +69,29 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, selectedTab, setSelectedTab
 const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const items: MenuItemType[] = [
-    { label: "My Alerts", key: 0, icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
-    { label: "My Favorites", key: 1, icon: <MdFavorite className="h-5 w-5" /> },
+    { label: "Thông Báo", key: 0, icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
+    // { label: "Yêu Thích", key: 1, icon: <MdFavorite className="h-5 w-5" /> },
     {
-      label: "Analytics Page",
+      label: "Bảng Điều Khiển",
+      key: 1,
+      icon: <MdAdminPanelSettings className="h-5 w-5" />,
+      path: "/admin",
+      type: "link",
+    },
+    {
+      label: "Phân Tích Dữ Liệu",
       key: 2,
       type: "link",
       path: "/analytics",
       icon: <MdAnalytics className="h-5 w-5" />,
     },
-    { label: "Profile", key: 3, icon: <AiFillProfile className="h-5 w-5" />, children: <ProfileTab /> },
-    {
-      label: "Settings",
-      key: 4,
-      icon: <IoMdSettings className="h-5 w-5" />,
-      children: <SettingsTab className="mt-4 px-4" />,
-    },
+    { label: "Hồ Sơ", key: 3, icon: <AiFillProfile className="h-5 w-5" />, children: <ProfileTab /> },
+    // {
+    //   label: "Cài Đặt",
+    //   key: 4,
+    //   icon: <IoMdSettings className="h-5 w-5" />,
+    //   children: <SettingsTab className="mt-4 px-4" />,
+    // },
   ];
 
   // Calculate number of rows (3 items per row)

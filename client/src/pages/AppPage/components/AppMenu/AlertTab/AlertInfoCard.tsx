@@ -88,7 +88,7 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
         </div>
         <div className="flex h-full flex-col items-center">
           <IoCloudy size={32} className="mb-1 text-blue-500" />
-          <p className="text-sm font-medium">{currentWeatherData?.weather}</p>
+          <p className="text-sm font-medium">{currentWeatherData?.weather.description}</p>
           <div className="mt-1 flex flex-row gap-2">
             <p className="text-xs text-orange-500">H: {currentWeatherData?.temperature.max}&#8451;</p>
             <p className="text-xs text-blue-400">L: {currentWeatherData?.temperature.min}&#8451;</p>

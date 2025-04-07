@@ -10,6 +10,7 @@ export const signin = async (email: string, password: string): Promise<SignInRes
   if (response.data.status === "error") {
     return false;
   }
+
   return response.data.data;
 };
 

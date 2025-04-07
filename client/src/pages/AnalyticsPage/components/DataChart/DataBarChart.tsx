@@ -33,11 +33,15 @@ const DataBarChart: React.FC<DataBarChartProps> = ({ className }) => {
       }
       setValues({ labels: districtsLabel, data });
     }
-  });
+  }, [provinceMutation.data?.districtsData]);
+
   const chartConfig: BarChartProps = {
     grid: { horizontal: true, vertical: false },
     margin: { bottom: 70, left: 60 },
-    series: [{ id: config.label, data: values.data }],
+    series: [{ 
+      id: config.label === "AQI" ? "Chỉ số AQI" : "Nồng độ PM2.5", 
+      data: values.data 
+    }],
     xAxis: [
       {
         scaleType: "band",

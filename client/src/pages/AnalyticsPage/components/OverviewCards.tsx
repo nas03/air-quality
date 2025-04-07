@@ -64,26 +64,26 @@ const OverviewCards: React.FC<IPropsOverviewCards> = ({ className }) => {
 
   const infoCardData: CardData[] = [
     {
-      data: [{ content: values.pollutedDays, unit: "Ngày" }],
-      header: "số ngày ô nhiễm",
+      data: [{ content: values.pollutedDays, unit: "ngày" }],
+      header: "Số Ngày Ô Nhiễm",
     },
     {
-      data: [{ content: values.pollutedDistrictsNumber, unit: "Quận" }],
-      header: "Số quận ô nhiễm",
+      data: [{ content: values.pollutedDistrictsNumber, unit: "quận" }],
+      header: "Số Quận Ô Nhiễm",
     },
     {
       data: [
         { content: values.leastPollutedDistrict?.vn_district || "", unit: "" },
-        { content: Math.ceil(values.leastPollutedDistrict?.aqi_index || 0), unit: "(AQI Index)" },
+        { content: Math.ceil(values.leastPollutedDistrict?.aqi_index || 0), unit: "(Chỉ số AQI)" },
       ],
-      header: "Ít ô nhiễm nhất",
+      header: "Khu Vực Không Khí Tốt Nhất",
     },
     {
       data: [
         { content: values.mostPollutedDistrict?.vn_district || "", unit: "" },
-        { content: Math.ceil(values.mostPollutedDistrict?.aqi_index || 0), unit: "(AQI Index)" },
+        { content: Math.ceil(values.mostPollutedDistrict?.aqi_index || 0), unit: "(Chỉ số AQI)" },
       ],
-      header: "Ô nhiễm nhất",
+      header: "Khu Vực Ô Nhiễm Nhất",
     },
   ];
 

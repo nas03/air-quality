@@ -54,6 +54,7 @@ export const alertMailTemplate = (
 				justify-content: center;
 				align-items: center;
 				min-width: 100vw;
+				width: 100%;
 				min-height: 100vh;
 				background-color: #f0f2f5;
 				padding: 12px;
@@ -63,6 +64,7 @@ export const alertMailTemplate = (
 				width: 30rem;
 				background-color: #fff;
 				border-radius: 8px;
+				margin: 0 auto;
 				box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 				padding: 16px;
 			}

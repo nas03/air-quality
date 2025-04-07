@@ -129,7 +129,10 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
     res.cookie("AUTH_REF_TOKEN", refresh_token, {
       httpOnly: true,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(statusCode.SUCCESS).json({

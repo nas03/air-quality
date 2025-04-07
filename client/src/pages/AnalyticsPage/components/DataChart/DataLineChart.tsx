@@ -1,4 +1,5 @@
 import { ProvinceData } from "@/api";
+import { Loading } from "@/components";
 import { AnalyticContext } from "@/context";
 import useProvinceData from "@/hooks/useProvinceData";
 import { cn } from "@/lib/utils";
@@ -8,6 +9,7 @@ import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
 import { SlLocationPin } from "react-icons/sl";
 import { CHART_CONFIGS, ChartConfig } from "./config";
+
 interface DataLineChartProps extends React.ComponentPropsWithoutRef<"div"> {
   data?: unknown[];
   chartID: number | string;
@@ -38,22 +40,24 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className, ...props }) =>
   }, [provinceData.data, config.value]);
 
   return (
-    <div className={cn("flex flex-col justify-center py-5", className)}>
-      <p className="flex flex-shrink flex-row items-center gap-2 pl-5 font-semibold">
+    <Loading loading={!provinceData.isSuccess} className={cn("flex flex-col justify-center py-5", className)}>
+      <div className="flex flex-shrink flex-row items-center gap-2 pl-5 font-semibold">
         <span>
           <SlLocationPin />
         </span>
-        {provinceData.isSuccess && provinceData.data?.provinceData.length
-          ? provinceData.data?.provinceData[0].vn_province
-          : "Loading..."}
-      </p>
+        <p>
+          {provinceData.isSuccess && provinceData.data?.provinceData.length
+            ? provinceData.data?.provinceData[0].vn_province
+            : "Đang tải..."}
+        </p>
+      </div>
       <div className="h-[80%] w-full flex-grow">
         <LineChart
           grid={{ horizontal: true, vertical: true }}
           margin={{ bottom: 60, left: 60 }}
           yAxis={[
             {
-              label: config.label,
+              label: config.label === "AQI" ? "Chỉ số AQI" : "Nồng độ PM2.5 (µg/m³)",
               colorMap: {
                 type: "piecewise",
                 thresholds: config.value === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
@@ -61,7 +65,13 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className, ...props }) =>
               },
             },
           ]}
-          series={[{ id: config.label, data: values, area: true }]}
+          series={[
+            {
+              id: config.label === "AQI" ? "Chỉ số AQI" : "PM2.5",
+              data: values,
+              area: true,
+            },
+          ]}
           sx={{
             "& .MuiAreaElement-root": {
               fill: `url(#${props.chartID.toString()})`,
@@ -77,7 +87,7 @@ const DataLineChart: React.FC<DataLineChartProps> = ({ className, ...props }) =>
           {getGradient(props.chartID.toString(), values, config.value)}
         </LineChart>
       </div>
-    </div>
+    </Loading>
   );
 };
 

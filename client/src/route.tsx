@@ -16,7 +16,6 @@ const protectedRoute = createRoute({
   getParentRoute: () => rootRoute,
   beforeLoad: () => {
     const accessToken = sessionStorage.getItem("access_token");
-
     if (!accessToken) {
       throw redirect({
         to: "/signin",

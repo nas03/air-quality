@@ -1,5 +1,4 @@
 import { createUserAlertSetting } from "@/api/alertSetting";
-import { AlertInfoType } from "@/api/userSetting";
 import { AlertRegistrationContext } from "@/context";
 import { useAuth } from "@/hooks/useAuth";
 import useRegistrationState from "@/hooks/useRegistrationState";
@@ -20,7 +19,7 @@ const INITIAL_STEP = 0;
 
 const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotification, setAddAlert }) => {
   const { registrationData, setRegistrationData } = useRegistrationState();
-  const [form] = Form.useForm<AlertInfoType>();
+  const [form] = Form.useForm();
   const { user } = useAuth();
   const userId = user?.user_id ? Number(user.user_id) : undefined;
 

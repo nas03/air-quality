@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { DatePicker, Tabs } from "antd";
 import dayjs from "dayjs";
 
@@ -12,13 +13,13 @@ interface PageHeaderProps {
 
 const { RangePicker } = DatePicker;
 
-const PageHeader = ({ 
-  title = "Admin Console", 
-  subtitle, 
-  activeTab, 
+const PageHeader = ({
+  title = "Admin Console",
+  subtitle,
+  activeTab,
   onTabChange,
   dateRange,
-  onDateRangeChange
+  onDateRangeChange,
 }: PageHeaderProps) => {
   return (
     <div className="sticky top-0 z-10">
@@ -26,11 +27,13 @@ const PageHeader = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="group relative">
-              <img
-                src="/logo_no_text.svg"
-                alt="Air Quality Logo"
-                className="h-8 w-auto transition-transform duration-200 group-hover:scale-105"
-              />
+              <Link to="/">
+                <img
+                  src="/logo_no_text.svg"
+                  alt="Air Quality Logo"
+                  className="h-8 w-auto transition-transform duration-200 group-hover:scale-105"
+                />
+              </Link>
             </div>
             <div>
               <h1 className="bg-gradient-to-r from-blue-100 to-blue-50 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
@@ -43,11 +46,7 @@ const PageHeader = ({
           </div>
           <div className="flex items-center space-x-2">
             <span className="font-medium text-gray-100">Date Range:</span>
-            <RangePicker
-              value={dateRange}
-              onChange={onDateRangeChange}
-              className="w-[300px]"
-            />
+            <RangePicker value={dateRange} onChange={onDateRangeChange} className="w-[300px]" />
           </div>
         </div>
       </div>

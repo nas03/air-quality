@@ -20,6 +20,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
   const [config, setConfig] = useState<ChartConfig>(CHART_CONFIGS[MonitoringData.OUTPUT.AQI]);
   const analyticContext = useContext(AnalyticContext);
   const selectedDistrictData = useGetDistrictData(analyticContext.selectedDistrict, analyticContext.dateRange);
+
   useEffect(() => {
     setConfig(CHART_CONFIGS[dataType]);
   }, [dataType]);
@@ -39,7 +40,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
       <div className="flex flex-row items-center gap-2 pl-5 font-semibold">
         <SlLocationPin />
         <p>
-          {selectedDistrictData.isSuccess ? String(selectedDistrictData.data?.[0]?.vn_district || "") : "Loading..."}
+          {selectedDistrictData.isSuccess ? String(selectedDistrictData.data?.[0]?.vn_district || "") : "Đang tải..."}
         </p>
       </div>
       <div className="h-[90%] w-full">
@@ -48,7 +49,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
           margin={{ bottom: 60, left: 60 }}
           yAxis={[
             {
-              label: config.label,
+              label: config.label === "AQI" ? "Chỉ số AQI" : "Nồng độ PM2.5 (µg/m³)",
               colorMap: {
                 type: "piecewise",
                 thresholds: config.value === MonitoringData.OUTPUT.AQI ? aqiThresholds : pm25Thresholds,
@@ -58,7 +59,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
           ]}
           series={[
             {
-              id: config.label,
+              id: config.label === "AQI" ? "Chỉ số AQI" : "PM2.5",
               data: values,
               area: true,
             },
@@ -72,11 +73,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
             {
               scaleType: "point",
               data: dateRange ?? [],
-              tickLabelStyle: {
-                angle: -40,
-                textAnchor: "end",
-                fontSize: 13,
-              },
+              tickLabelStyle: { angle: -40, textAnchor: "end", fontSize: 13 },
             },
           ]}>
           {getGradient(props.chartID.toString(), values, config.value)}
