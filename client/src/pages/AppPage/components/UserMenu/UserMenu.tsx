@@ -14,7 +14,7 @@ const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
         onClick={logout}
         className="flex items-center gap-1 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-gray-300 transition-all duration-200 hover:bg-gray-50 hover:text-blue-400">
         <LoginOutlined className="rotate-180" />
-        Logout
+        Đăng xuất
       </button>
     </div>
   );
@@ -25,7 +25,7 @@ const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
         type="default"
         className="flex items-center gap-1 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-gray-300 transition-all duration-200 hover:border-blue-400 hover:bg-gray-50 hover:text-blue-400"
         icon={<LoginOutlined />}>
-        Sign in
+        Đăng nhập
       </Button>
     </Link>
   );

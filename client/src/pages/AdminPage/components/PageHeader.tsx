@@ -45,7 +45,7 @@ const PageHeader = ({
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="font-medium text-gray-100">Date Range:</span>
+            <span className="font-medium text-gray-100">Khoảng thời gian:</span>
             <RangePicker value={dateRange} onChange={onDateRangeChange} className="w-[300px]" />
           </div>
         </div>
@@ -58,11 +58,11 @@ const PageHeader = ({
           items={[
             {
               key: "cron",
-              label: "Cron Management",
+              label: "Quản lý Cronjob",
             },
             {
               key: "data",
-              label: "Data Management",
+              label: "Quản lý dữ liệu",
             },
           ]}
           size="large"

@@ -17,7 +17,7 @@ const SelectionMap = ({ className }: IPropsSelectionMap) => {
   const mapRef = useRef<Map | null>(null);
   const markerRef = useRef<VectorLayer | null>(null);
   const analyticContext = useContext(AnalyticContext);
-  const mapQuery = useMapData(analyticContext.province_id);
+  const mapQuery = useMapData(analyticContext.province_id, "GID_1");
   const provinceMutation = useProvinceData(analyticContext.province_id, analyticContext.dateRange);
 
   const initializeMap = () => {

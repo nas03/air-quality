@@ -2,7 +2,7 @@ import { DistrictsData } from "@/api";
 import { AnalyticContext } from "@/context";
 import useGetDistrictData from "@/hooks/useGetDistrictData";
 import { cn } from "@/lib/utils";
-import { getGradient } from "@/pages/AppPage/components/SideBar/config";
+import { getGradient } from "@/pages/AppPage/components/SideBar/utils";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";

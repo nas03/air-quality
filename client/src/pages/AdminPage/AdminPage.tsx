@@ -120,7 +120,7 @@ const AdminPage = () => {
     if (loading) {
       return (
         <div className="my-4 animate-pulse rounded-lg bg-white/80 p-4 shadow-sm backdrop-blur-sm">
-          Loading cronjobs...
+          Đang tải dữ liệu...
         </div>
       );
     }
@@ -163,7 +163,7 @@ const AdminPage = () => {
       case "data":
         return (
           <div className="rounded-lg bg-white/80 p-4 shadow-sm backdrop-blur-sm">
-            <p>Data Management section coming soon...</p>
+            <p>Chức năng đang được phát triển...</p>
           </div>
         );
     }
@@ -172,8 +172,8 @@ const AdminPage = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50/30">
       <PageHeader
-        title="Admin Console"
-        subtitle="Monitor and manage scheduled data collection tasks"
+        title="Bảng Điều Khiển"
+        subtitle="Giám sát và quản lý Cronjob"
         activeTab={activeTab}
         onTabChange={setActiveTab}
         dateRange={dateRange}

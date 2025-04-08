@@ -1,12 +1,17 @@
-import { getAllDistricts } from "@/api/districts";
-import { IPropsSideBar } from "@/components/types";
-import { TimeContext } from "@/context";
-import useDistrictRanking from "@/hooks/useDistrictRanking";
-import { cn } from "@/lib/utils";
-import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
-import { Collapse, CollapseProps } from "antd";
+// React and Context
+import { ConfigContext, TimeContext } from "@/context";
 import { useContext, useEffect, useState } from "react";
+
+// Libraries
+import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { Collapse, CollapseProps } from "antd";
+
+// API
+
+// Hooks
+import useDistrictRanking, { RankData } from "@/hooks/useDistrictRanking";
+
+// Components
 import LocationDataCard from "./components/Location/LineChart/LocationDataCard";
 import WarningTab from "./components/Location/WarningTab/WarningTab";
 import RankTable from "./components/RankTable";
@@ -14,7 +19,36 @@ import SearchBar from "./components/SearchBar";
 import TabButton, { IPropsTabButton } from "./components/TabButton";
 import TabContent from "./components/TabContent";
 
+// Types
+import { IPropsSideBar } from "@/components/types";
+
+// Utils
+import useGetAllDistricts from "@/hooks/useGetAllDistricts";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { centerMapOnDistrict } from "./utils";
+
+// Constants
 const DEFAULT_DISTRICT = "VNM.27.12_1";
+
+const tabComponents = (targetDistrictID: string, tableData: RankData[], loading: boolean) => [
+  {
+    component: (
+      <TabContent title="Điểm đang chọn" className="scrollbar overflow-y-auto scroll-smooth">
+        <WarningTab className="" district_id={targetDistrictID} />
+        <LocationDataCard className="h-1/2 w-full" district_id={targetDistrictID} />
+      </TabContent>
+    ),
+  },
+  {
+    component: (
+      <TabContent title="Bảng xếp hạng">
+        <RankTable tableData={tableData} loading={loading} />
+      </TabContent>
+    ),
+  },
+];
 
 const getCollapseItems = (
   tabIndex: number,
@@ -40,48 +74,63 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
   const [targetDistrictID, setTargetDistrictID] = useState<string>(DEFAULT_DISTRICT);
   const [tabIndex, setTabIndex] = useState(0);
 
-  const { data: districts = [] } = useQuery({
-    queryKey: ["districts:*"],
-    queryFn: getAllDistricts,
+  const mapMutation = useMutation({
+    mutationKey: ["map", location],
+    mutationFn: async () => {
+      const response = await axios.get("http://localhost:8080/geoserver/wfs", {
+        params: {
+          SERVICE: "WFS",
+          version: "2.0.0",
+          REQUEST: "GetFeature",
+          typename: "air:gadm41_VNM_2",
+          CQL_FILTER: `GID_2='${targetDistrictID}'`,
+          outputFormat: "text/javascript",
+          srsname: "EPSG:3857",
+        },
+      });
+      const jsonStartIndex = response.data.indexOf("{");
+      const jsonEndIndex = response.data.lastIndexOf("}") + 1;
+      return JSON.parse(response.data.slice(jsonStartIndex, jsonEndIndex));
+    },
   });
 
   const { time } = useContext(TimeContext);
   const { mutation, tableData } = useDistrictRanking(time);
+  const { mapRef, markerRef } = useContext(ConfigContext);
+  const allDistricts = useGetAllDistricts();
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    console.log({ targetDistrictID });
+    mapRef.current.getView().setZoom(12);
+    mapMutation.mutate();
+  }, [targetDistrictID]);
+
+  useEffect(() => {
+    const targetDistrictFeatures = mapMutation.data?.features?.[0];
+    if (!mapRef.current || !targetDistrictFeatures) return;
+    centerMapOnDistrict(mapRef.current, targetDistrictFeatures, markerRef);
+  }, [mapMutation.data]);
 
   useEffect(() => {
     mutation.mutate(time);
   }, [time]);
 
-  const tabComponents = [
-    {
-      component: (
-        <TabContent title="Điểm đang chọn" className="scrollbar overflow-y-auto scroll-smooth">
-          <WarningTab className="" district_id={targetDistrictID} />
-          <LocationDataCard className="h-1/2 w-full" district_id={targetDistrictID} />
-        </TabContent>
-      ),
-    },
-    {
-      component: (
-        <TabContent title="Bảng xếp hạng">
-          <RankTable tableData={tableData} loading={!mutation.isSuccess} />
-        </TabContent>
-      ),
-    },
-  ];
-
-  const items = getCollapseItems(tabIndex, TabButton, tabComponents, setTabIndex);
-
   return (
     <div className={cn("flex flex-col gap-5", className)}>
-      <SearchBar districts={districts} setTargetDistrict={setTargetDistrictID} className="relative" />
+      <SearchBar districts={allDistricts.data} setTargetDistrict={setTargetDistrictID} className="relative" />
       <Collapse
         onChange={() => setExpanded((prev) => !prev)}
         expandIconPosition="end"
         defaultActiveKey={["1"]}
         collapsible="icon"
         className="relative w-full rounded-md p-0"
-        items={items}
+        items={getCollapseItems(
+          tabIndex,
+          TabButton,
+          tabComponents(targetDistrictID, tableData, !mutation.isSuccess),
+          setTabIndex,
+        )}
       />
     </div>
   );

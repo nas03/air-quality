@@ -8,7 +8,7 @@ import { MonitoringOutputDataType } from "@/types/types";
 import { LineChart } from "@mui/x-charts";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import { getGradient } from "../../../config";
+import { getGradient } from "../../../utils";
 
 interface ChartDataType {
   aqi: number[];

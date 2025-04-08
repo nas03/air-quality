@@ -11,7 +11,7 @@ import WeatherInfoCard from "./WeatherInfoCard";
 import { getWeatherByDistrict } from "@/api/alertSetting";
 import useAirQualityData from "@/hooks/useAirQualityData";
 import { cn } from "@/lib/utils";
-import { getSvgAndColorByAQI } from "../../../config";
+import { getSvgAndColorByAQI } from "../../../utils";
 
 import { GeoContext, TimeContext } from "@/context";
 import { MonitoringData } from "@/types/consts";

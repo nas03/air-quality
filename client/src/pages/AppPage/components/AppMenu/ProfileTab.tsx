@@ -37,7 +37,7 @@ const beforeUpload = (file: FileType) => {
 
 // Components
 const EditableField = ({ label, value, name, type = "text", isEditing, onEdit, onCancel }: EditableFieldProps) => (
-  <div className="grid grid-cols-7 border-b-2 border-slate-100 pb-3">
+  <div className="grid grid-cols-7 border-b-2 border-slate-100 pb-3 text-sm">
     <p className="col-span-2 flex flex-row items-start py-1 font-medium">{label}</p>
     <div className="col-span-4 flex flex-col justify-center gap-3">
       <input
@@ -125,7 +125,7 @@ const ProfileTab = () => {
 
       <div className="grid gap-3">
         <EditableField
-          label="Username"
+          label="Tên người dùng"
           value={userInfoQuery.data?.username || ""}
           name="username"
           isEditing={false}
@@ -142,7 +142,7 @@ const ProfileTab = () => {
           onCancel={() => setEditEmail(false)}
         />
         <EditableField
-          label="Phone Number"
+          label="Số điện thoại"
           value={userInfoQuery.data?.phone_number || ""}
           name="phone_number"
           type="tel"

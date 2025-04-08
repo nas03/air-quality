@@ -22,7 +22,7 @@ const formatTime = (timestamp: string) => {
 };
 
 const formatLogText = (logText: string) => {
-  return logText.split("\\n").map((line, i) => {
+  return logText.split("\n").map((line, i) => {
     const isError = line.includes("ERROR");
     const className = isError ? "text-red-500" : "text-blue-600";
     return (
@@ -46,10 +46,10 @@ const LogSection = ({ title, jobs, getStatus, getLog }: {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-medium text-gray-700">{title} ({jobs.length} records)</h4>
+        <h4 className="font-medium text-gray-700">{title} ({jobs.length} bản ghi)</h4>
         {jobs.length > 0 && (
           <div className="text-xs text-gray-500">
-            Latest update: {formatTime(latestFirst[0].timestamp)}
+            Cập nhật gần nhất: {formatTime(latestFirst[0].timestamp)}
           </div>
         )}
       </div>
@@ -61,10 +61,10 @@ const LogSection = ({ title, jobs, getStatus, getLog }: {
               <span className="text-xs text-gray-500">{formatTime(job.timestamp)}</span>
             </div>
             <div className="relative">
-              <div className="max-h-[100px] overflow-y-auto rounded-lg bg-gray-900 p-2 font-mono text-xs scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+              <div className="max-h-[200px] overflow-y-auto rounded-lg bg-gray-900 p-2 font-mono text-xs scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
                 {formatLogText(getLog(job))}
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none"></div>
+              {/* <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none"></div> */}
             </div>
           </div>
         ))}
@@ -98,7 +98,7 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
               rerunStatus.loading ? "cursor-not-allowed bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
             }`}>
             <FiRefreshCw className={`mr-1.5 h-4 w-4 ${rerunStatus.loading ? "animate-spin" : ""}`} />
-            {rerunStatus.loading ? "Processing..." : "Rerun"}
+            {rerunStatus.loading ? "Đang xử lý..." : "Chạy lại"}
           </button>
         </div>
       </div>
@@ -107,24 +107,24 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
         <div className="space-y-6 divide-y divide-gray-100">
           {/* Raster Data Section */}
           <div className="pb-4">
-            <h4 className="mb-2 font-medium text-gray-700">Raster Data</h4>
+            <h4 className="mb-2 font-medium text-gray-700">Dữ liệu Raster</h4>
             {jobs.raster ? (
               <div className="space-y-2">
                 <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-500">Status:</span>
+                  <span className="text-sm text-gray-500">Trạng thái:</span>
                   <TableStatusBadge status={jobs.raster.raster_data_status} />
                 </div>
-                <div className="text-sm text-gray-500">Time: {formatTime(jobs.raster.timestamp)}</div>
+                <div className="text-sm text-gray-500">Thời gian: {formatTime(jobs.raster.timestamp)}</div>
               </div>
             ) : (
-              <div className="text-sm text-gray-500">No raster data available for this date</div>
+              <div className="text-sm text-gray-500">Không có dữ liệu raster cho ngày này</div>
             )}
           </div>
 
           {/* Wind Data Section */}
           <div className="py-4">
             <LogSection 
-              title="Wind Data"
+              title="Dữ liệu Gió"
               jobs={jobs.wind}
               getStatus={(job) => job.wind_data_status}
               getLog={(job) => job.wind_data_log}
@@ -134,7 +134,7 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
           {/* Station Data Section */}
           <div className="pt-4">
             <LogSection 
-              title="Station Data"
+              title="Dữ liệu Trạm"
               jobs={jobs.station}
               getStatus={(job) => job.station_data_status}
               getLog={(job) => job.station_data_log}

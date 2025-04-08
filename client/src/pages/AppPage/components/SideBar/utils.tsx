@@ -1,6 +1,8 @@
 import { aqiThresholds, colorMap, getGradientDefs, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { MonitoringOutputDataType } from "@/types/types";
-
+import { Map } from "ol";
+import GeoJSON from "ol/format/GeoJSON";
+import { MultiPolygon, Point } from "ol/geom";
 // const _color = ["#009966", "#facf39", "#ea7643", "#fe6a6", "#70006a", "#7e0023"];
 
 export const getGradient = (id: string, data: number[], chartType: MonitoringOutputDataType) => {
@@ -33,4 +35,28 @@ export const getSvgAndColorByAQI = (aqi_index: number) => {
   else if (aqi_index < 200) return { icon: "ic-face-red.svg", color: "#f65e5f" };
   else if (aqi_index < 300) return { icon: "ic-face-purple.svg", color: "#a97abc" };
   else return { icon: "ic-face-purple.svg", color: "#a97abc" };
+};
+
+export const centerMapOnDistrict = (
+  map: Map,
+  feature: GeoJSON.Feature,
+  markerRef: React.MutableRefObject<any>,
+): void => {
+  const format = new GeoJSON();
+  const features = format.readFeatures(feature);
+  if (!features.length) return;
+
+  const geometry = features[0].getGeometry() as MultiPolygon;
+  const size = map.getSize();
+  if (!size) return;
+
+  const markerFeature = markerRef.current?.getSource()?.getFeatures().at(0);
+  const coordinates = geometry.getCoordinates()[0][0][0];
+
+  if (markerFeature) {
+    const extent = geometry.getExtent();
+    const center = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+    markerFeature.setGeometry(new Point(center));
+    map.getView().centerOn(coordinates, size, [size[0] / 2, size[1] / 2]);
+  }
 };

@@ -26,22 +26,24 @@ const DataBarChart: React.FC<DataBarChartProps> = ({ className }) => {
         (a, b) => a.eng_district.charCodeAt(0) - b.eng_district.charCodeAt(0),
       );
       const districtsLabel = districtsData.flatMap((d) => d.vn_district);
-      if (config.value === MonitoringData.OUTPUT.AQI) {
+      if (analyticContext.dataType === MonitoringData.OUTPUT.AQI) {
         data = districtsData.flatMap((d) => Math.ceil(Number(d.aqi_index)));
-      } else {
+      } else if (analyticContext.dataType === MonitoringData.OUTPUT.PM25) {
         data = districtsData.flatMap((d) => Number(d.pm_25.toFixed(2)));
       }
       setValues({ labels: districtsLabel, data });
     }
-  }, [provinceMutation.data?.districtsData]);
+  }, [provinceMutation.data?.districtsData, config.value]);
 
   const chartConfig: BarChartProps = {
     grid: { horizontal: true, vertical: false },
     margin: { bottom: 70, left: 60 },
-    series: [{ 
-      id: config.label === "AQI" ? "Chỉ số AQI" : "Nồng độ PM2.5", 
-      data: values.data 
-    }],
+    series: [
+      {
+        id: config.label === "AQI" ? "Chỉ số AQI" : "Nồng độ PM2.5",
+        data: values.data,
+      },
+    ],
     xAxis: [
       {
         scaleType: "band",

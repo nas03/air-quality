@@ -69,7 +69,7 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, selectedTab, setSelectedTab
 const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const items: MenuItemType[] = [
-    { label: "Thông Báo", key: 0, icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
+    { label: "Cảnh Báo", key: 0, icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
     // { label: "Yêu Thích", key: 1, icon: <MdFavorite className="h-5 w-5" /> },
     {
       label: "Bảng Điều Khiển",

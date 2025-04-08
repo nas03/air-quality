@@ -14,12 +14,12 @@ interface CronjobDateGroupProps {
 }
 
 const formatDate = (dateStr: string) => {
-  return new Date(dateStr).toLocaleDateString(undefined, {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const date = new Date(dateStr);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  return `${day}-${month}-${year}`;
 };
 
 export const CronjobDateGroup = ({ date, jobs, isSelected, onDateClick }: CronjobDateGroupProps) => {
@@ -36,7 +36,7 @@ export const CronjobDateGroup = ({ date, jobs, isSelected, onDateClick }: Cronjo
           <FiCalendar className="h-5 w-5 text-gray-500" />
           <div>
             <h3 className="font-medium text-gray-700">{formatDate(date)}</h3>
-            <p className="text-xs text-gray-500">{getTotalJobCount()} records</p>
+            <p className="text-xs text-gray-500">{getTotalJobCount()} bản ghi</p>
           </div>
         </div>
         <div className="flex items-center space-x-4">

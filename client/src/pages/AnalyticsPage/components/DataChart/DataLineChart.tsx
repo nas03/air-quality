@@ -3,7 +3,7 @@ import { Loading } from "@/components";
 import { AnalyticContext } from "@/context";
 import useProvinceData from "@/hooks/useProvinceData";
 import { cn } from "@/lib/utils";
-import { getGradient } from "@/pages/AppPage/components/SideBar/config";
+import { getGradient } from "@/pages/AppPage/components/SideBar/utils";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
 import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
