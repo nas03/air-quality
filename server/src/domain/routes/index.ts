@@ -12,6 +12,7 @@ import userRouter from "@/domain/routes/userRoutes";
 import { Router } from "express";
 import alertSettingRouter from "./alertSettingRoute";
 import cronjobMonitorRoute from "./cronjobMonitorRoute";
+import dataRoute from "./dataRoute";
 import windDataRoute from "./windDataRoute";
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
   ...alertSettingRouter,
   ...windDataRoute,
   ...cronjobMonitorRoute,
+  ...dataRoute
 ];
 
 const userRepository = new UserRepository();

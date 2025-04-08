@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "client": "cd client && bun dev",
+    "server": "cd server && bun dev"
+  }
+}
