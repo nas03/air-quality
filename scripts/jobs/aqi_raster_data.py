@@ -87,9 +87,55 @@ def ensure_directory_exists(directory: str) -> None:
         raise
 
 
+def validate_with_sampling(input_path, output_path):
+    """Check sample points to verify correct AQI calculation"""
+    src_ds = gdal.Open(input_path)
+    input_data = src_ds.ReadAsArray()
+
+    out_ds = gdal.Open(output_path)
+    output_data = out_ds.ReadAsArray()
+
+    # Get dimensions
+    rows, cols = input_data.shape
+
+    # Sample size
+    n_samples = min(100, rows * cols // 1000)
+
+    # Random sampling
+    np.random.seed(42)  # For reproducibility
+    sample_rows = np.random.randint(0, rows, n_samples)
+    sample_cols = np.random.randint(0, cols, n_samples)
+
+    errors = 0
+    for i in range(n_samples):
+        r, c = sample_rows[i], sample_cols[i]
+        pm25_value = input_data[r, c]
+
+        if pm25_value == NODATA_VALUE:
+            continue
+
+        # Calculate expected AQI using your function
+        expected_aqi = calculate_aqi(pm25_value)
+        actual_aqi = output_data[r, c]
+
+        # Allow for small rounding differences
+        if expected_aqi is not None and abs(expected_aqi - actual_aqi) > 1:
+            errors += 1
+            logger.warning(
+                f"AQI mismatch at ({r},{c}): PM2.5={pm25_value}, Expected AQI={expected_aqi}, Actual AQI={actual_aqi}"
+            )
+
+    error_rate = errors / n_samples if n_samples > 0 else 0
+    logger.info(
+        f"Sample validation: {errors} errors in {n_samples} samples ({error_rate:.2%})"
+    )
+
+    return error_rate < 0.01  # Less than 1% error rate is acceptable
+
+
 def createAQIRasterFile(filepath: str, output_path: str):
     """
-    Convert PM2.5 raster data to AQI raster data.
+    Convert PM2.5 raster data to AQI raster data with optimized file size.
 
     Args:
         filepath: Path to the input PM2.5 raster file
@@ -101,78 +147,122 @@ def createAQIRasterFile(filepath: str, output_path: str):
     logger.info(f"Processing file: {filepath}")
 
     try:
-
+        # Get relative paths for file handling
         file_parts = filepath.split("/")
         aqi_filepath = "/".join(file_parts[2:]).replace("PM25", "AQI")
         aqi_filename = "/".join(file_parts[4:]).replace("PM25", "AQI")
-        logger.info(f"Extracted relative path: {aqi_filepath}")
-        gdal.Warp(
-            TEMP_FILE,
-            filepath,
+
+        # First, analyze the source file to understand its structure
+        src_ds = gdal.Open(filepath, gdal.GA_ReadOnly)
+        src_metadata = gdal.Info(src_ds, format="json")
+        logger.info(f"Input file size: {os.path.getsize(filepath)/1024:.2f} KB")
+
+        # Use the warp operation with optimized settings
+        warp_options = gdal.WarpOptions(
             format="GTiff",
             dstSRS="+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs",
             xRes=100,
             yRes=-100,
             outputBounds=(upper_left_x, lower_right_y, lower_right_x, upper_left_y),
             resampleAlg="near",
-            creationOptions=["COMPRESS=LZW"],
+            creationOptions=[
+                "COMPRESS=DEFLATE",  # Try DEFLATE instead of LZW for better compression
+                "PREDICTOR=2",  # Predictor=1 for integer data
+                "ZLEVEL=9",  # Maximum compression level
+                "TILED=YES",
+                "BLOCKXSIZE=256",
+                "BLOCKYSIZE=256",
+            ],
         )
 
-        data = gdal.Open(TEMP_FILE, gdal.GA_ReadOnly).ReadAsArray()
+        temp_ds = gdal.Warp(TEMP_FILE, src_ds, options=warp_options)
+
+        # Read data from temporary file
+        data = temp_ds.ReadAsArray()
         rows, cols = data.shape
 
-        # Create output array with same shape as input
-        output_array = np.full((rows, cols), NODATA_VALUE, dtype=np.float32)
-
-        # Calculate AQI for all valid values
+        # Calculate AQI with vectorized function for efficiency
+        output_array = np.full(
+            (rows, cols), NODATA_VALUE, dtype=np.int16
+        )  # Try int16 instead of int32
         mask = data != NODATA_VALUE
-        output_array[mask] = np.vectorize(calculate_aqi)(data[mask])
 
-        # Create output raster
+        # Use the smaller appropriate integer data type based on AQI range (0-500)
+        # Int16 is sufficient for AQI values and will use half the space of Int32
+        vectorized_aqi = np.vectorize(calculate_aqi, otypes=[np.int16])
+        output_array[mask] = vectorized_aqi(data[mask])
+
+        # Create output file with optimized creation options
         driver = gdal.GetDriverByName("GTiff")
         out_ds = driver.Create(
             output_path,
-            dist_dataset.RasterXSize,
-            dist_dataset.RasterYSize,
+            cols,
+            rows,
             1,
-            gdal.GDT_Float32,
+            gdal.GDT_Int16,  # Use Int16 for AQI values (0-500)
+            options=[
+                "COMPRESS=DEFLATE",  # Better compression than LZW for many cases
+                "PREDICTOR=1",  # For integer data
+                "ZLEVEL=9",  # Maximum compression level
+                "TILED=YES",
+                "BLOCKXSIZE=256",
+                "BLOCKYSIZE=256",
+                "BIGTIFF=NO",  # Ensure we don't create an unnecessarily large file format
+            ],
         )
 
-        # Set the same geotransform and projection as the district raster
-        out_ds.SetGeoTransform(dist_dataset.GetGeoTransform())
-        out_ds.SetProjection(dist_dataset.GetProjection())
+        # Copy georeferencing information
+        out_ds.SetGeoTransform(temp_ds.GetGeoTransform())
+        out_ds.SetProjection(temp_ds.GetProjection())
 
         # Write data
         out_band = out_ds.GetRasterBand(1)
         out_band.WriteArray(output_array)
         out_band.SetNoDataValue(NODATA_VALUE)
+        out_band.SetDescription("Air Quality Index")
+
+        # Add color interpretation and metadata
+        out_ds.SetMetadataItem("PARAMETER", "AQI")
+        out_ds.SetMetadataItem("PARAMETER_UNIT", "AQI")
+        out_ds.SetMetadataItem("STATISTICS_MINIMUM", "0")
+        out_ds.SetMetadataItem("STATISTICS_MAXIMUM", "500")
+
+        # Flush and close all resources
         out_band.FlushCache()
+        out_ds = None
+        temp_ds = None
+        src_ds = None
+
+        # Log the file size before upload for comparison
+        output_size_kb = os.path.getsize(output_path) / 1024
+        logger.info(
+            f"Output file size: {output_size_kb:.2f} KB (compression ratio: {os.path.getsize(filepath)/output_size_kb:.2f}x)"
+        )
+
+        # Upload using correct path
+        with open(output_path, "rb") as f:
+            files = [("file", (aqi_filename, f))]
+            requests.post(
+                f"http://localhost:5500/api/files/",
+                files=files,
+                data={"filename": aqi_filepath},
+            )
 
         # Cleanup
-        out_ds = None
-        files = [
-            (
-                "file",
-                (
-                    aqi_filename,
-                    open(
-                        TEMP_FILE,
-                        "rb",
-                    ),
-                ),
-            )
-        ]
-        # requests.post('http://ec2-52-221-181-109.ap-southeast-1.compute.amazonaws.com:5500/api/files/:filename')
-        requests.post(
-            f"http://localhost:5500/api/files",
-            files=files,
-            data={"filename": aqi_filepath},
-        )
         os.remove(TEMP_FILE)
         logger.info(f"Successfully created output file: {output_path}")
+        try:
+            samples_valid = validate_with_sampling(filepath, output_path)
+            if not samples_valid:
+                logger.warning("Sample validation indicates calculation errors")
+        except Exception as e:
+            logger.error(f"Sample validation failed: {str(e)}")
         return True
+
     except Exception as e:
         logger.error(f"Error processing file {filepath}: {str(e)}")
+        if os.path.exists(TEMP_FILE):
+            os.remove(TEMP_FILE)
         return False
 
 
@@ -361,3 +451,4 @@ __all__ = ["scrape_aqi_data"]
 
 if __name__ == "__main__":
     scrape_aqi_data()
+    # notify_geoserver(OUTPUT_FOLDER)
