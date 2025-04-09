@@ -1,12 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { DatePicker, Tabs } from "antd";
+import { DatePicker } from "antd";
 import dayjs from "dayjs";
 
 interface PageHeaderProps {
   title?: string;
   subtitle?: string;
-  activeTab: "cron" | "data";
-  onTabChange: (tab: "cron" | "data") => void;
   dateRange: [dayjs.Dayjs, dayjs.Dayjs];
   onDateRangeChange: (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => void;
 }
@@ -16,8 +14,6 @@ const { RangePicker } = DatePicker;
 const PageHeader = ({
   title = "Admin Console",
   subtitle,
-  activeTab,
-  onTabChange,
   dateRange,
   onDateRangeChange,
 }: PageHeaderProps) => {
@@ -49,25 +45,6 @@ const PageHeader = ({
             <RangePicker value={dateRange} onChange={onDateRangeChange} className="w-[300px]" />
           </div>
         </div>
-      </div>
-
-      <div className="border-t border-[#1a237e]/10 bg-white px-6 shadow-sm">
-        <Tabs
-          activeKey={activeTab}
-          onChange={(key) => onTabChange(key as "cron" | "data")}
-          items={[
-            {
-              key: "cron",
-              label: "Quản lý Cronjob",
-            },
-            {
-              key: "data",
-              label: "Quản lý dữ liệu",
-            },
-          ]}
-          size="large"
-          className="!mb-0"
-        />
       </div>
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-400/30 via-indigo-400/30 to-transparent"></div>
     </div>

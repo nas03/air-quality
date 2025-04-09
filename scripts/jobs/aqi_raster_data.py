@@ -1,3 +1,4 @@
+import array
 import datetime
 import logging
 import os
@@ -100,7 +101,11 @@ def createAQIRasterFile(filepath: str, output_path: str):
     logger.info(f"Processing file: {filepath}")
 
     try:
-        # Process the input file - reproject and align with district data
+
+        file_parts = filepath.split("/")
+        aqi_filepath = "/".join(file_parts[2:]).replace("PM25", "AQI")
+        aqi_filename = "/".join(file_parts[4:]).replace("PM25", "AQI")
+        logger.info(f"Extracted relative path: {aqi_filepath}")
         gdal.Warp(
             TEMP_FILE,
             filepath,
@@ -145,6 +150,24 @@ def createAQIRasterFile(filepath: str, output_path: str):
 
         # Cleanup
         out_ds = None
+        files = [
+            (
+                "file",
+                (
+                    aqi_filename,
+                    open(
+                        TEMP_FILE,
+                        "rb",
+                    ),
+                ),
+            )
+        ]
+        # requests.post('http://ec2-52-221-181-109.ap-southeast-1.compute.amazonaws.com:5500/api/files/:filename')
+        requests.post(
+            f"http://localhost:5500/api/files",
+            files=files,
+            data={"filename": aqi_filepath},
+        )
         os.remove(TEMP_FILE)
         logger.info(f"Successfully created output file: {output_path}")
         return True

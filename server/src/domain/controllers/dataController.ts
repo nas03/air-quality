@@ -9,7 +9,7 @@ export class DataController {
   }
 
   onPutObject = async (req: Request, res: Response) => {
-    const { filename } = req.params;
+    const { filename } = req.body;
     if (!req.file) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "error",

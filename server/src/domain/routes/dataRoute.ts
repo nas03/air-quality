@@ -9,7 +9,7 @@ const dataController = new DataController();
 
 const dataRoute: Route[] = [
   {
-    path: "/files/:filename",
+    path: "/files",
     method: "POST",
     controller: dataController.onPutObject,
     middleware: [upload.single("file")],

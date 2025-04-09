@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "./components";
 import { CronjobDateDetail } from "./components/CronjobDateGroup/CronjobDateDetail";
 import { CronjobDateGroup } from "./components/CronjobDateGroup/CronjobDateGroup";
-import { DataDateDetail, DataDateGroup } from "./components/DataDateGroup";
 
 interface GroupedCronjobs {
   [date: string]: {
@@ -18,7 +17,6 @@ interface GroupedCronjobs {
 }
 
 const AdminPage = () => {
-  const [activeTab, setActiveTab] = useState<"cron" | "data">("cron");
   const [groupedCronjobs, setGroupedCronjobs] = useState<GroupedCronjobs>({});
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -132,71 +130,47 @@ const AdminPage = () => {
         </div>
       );
     }
-    switch (activeTab) {
-      case "cron":
-        return (
-          <div className={`grid grid-cols-1 ${selectedDate ? 'lg:grid-cols-3' : ''} gap-6`}>
-            <div className={`${selectedDate ? 'lg:col-span-1' : ''} h-[calc(100vh-12rem)] overflow-auto`}>
-              <div className="space-y-4">
-                {Object.entries(groupedCronjobs)
-                  .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
-                  .map(([date, jobs]) => (
-                    <CronjobDateGroup
-                      key={date}
-                      date={date}
-                      jobs={jobs}
-                      isSelected={date === selectedDate}
-                      onDateClick={() => handleDateClick(date)}
-                    />
-                  ))}
-              </div>
-            </div>
-            {selectedDate && groupedCronjobs[selectedDate] && (
-              <CronjobDateDetail
-                date={selectedDate}
-                jobs={groupedCronjobs[selectedDate]}
-                onRerun={handleRerunCronjob}
-                rerunStatus={rerunStatus}
-              />
-            )}
+    
+    return (
+      <div className={`grid grid-cols-1 ${selectedDate ? 'lg:grid-cols-3' : ''} gap-6`}>
+        <div className={`${selectedDate ? 'lg:col-span-1' : ''} h-[calc(100vh-12rem)] overflow-auto`}>
+          <div className="space-y-4">
+            {Object.entries(groupedCronjobs)
+              .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
+              .map(([date, jobs]) => (
+                <CronjobDateGroup
+                  key={date}
+                  date={date}
+                  jobs={jobs}
+                  isSelected={date === selectedDate}
+                  onDateClick={() => handleDateClick(date)}
+                />
+              ))}
           </div>
-        );
-      case "data":
-        return (
-          <div className={`grid grid-cols-1 ${selectedDate ? 'lg:grid-cols-3' : ''} gap-6`}>
-            <div className={`${selectedDate ? 'lg:col-span-1' : ''} h-[calc(100vh-12rem)] overflow-auto`}>
-              <div className="space-y-4">
-                {Object.entries(groupedCronjobs)
-                  .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
-                  .map(([date, jobs]) => (
-                    <DataDateGroup
-                      key={date}
-                      date={date}
-                      jobs={jobs}
-                      isSelected={date === selectedDate}
-                      onDateClick={() => handleDateClick(date)}
-                    />
-                  ))}
-              </div>
-            </div>
-            {selectedDate && groupedCronjobs[selectedDate] && (
-              <DataDateDetail
-                date={selectedDate}
-                jobs={groupedCronjobs[selectedDate]}
-              />
-            )}
+        </div>
+        {selectedDate && groupedCronjobs[selectedDate] && (
+          <div className="lg:col-span-2 space-y-6">
+            <CronjobDateDetail
+              date={selectedDate}
+              jobs={groupedCronjobs[selectedDate]}
+              onRerun={handleRerunCronjob}
+              rerunStatus={rerunStatus}
+            />
+            {/* <DataDateDetail
+              date={selectedDate}
+              jobs={groupedCronjobs[selectedDate]}
+            /> */}
           </div>
-        );
-    }
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-blue-50/30">
       <PageHeader
         title="Bảng Điều Khiển"
-        subtitle="Giám sát và quản lý Cronjob"
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
+        subtitle="Giám sát và quản lý Cronjob & Dữ liệu"
         dateRange={dateRange}
         onDateRangeChange={handleDateRangeChange}
       />

@@ -2,7 +2,8 @@ import datetime
 import logging
 
 import requests
-from jobs.aqi_raster_data import scrape_aqi_data
+
+# from jobs.aqi_raster_data import scrape_aqi_data
 from jobs.stations_data import scrape_stations_data
 from jobs.wind_data import scrape_wind_data
 
@@ -33,8 +34,8 @@ def send_notifications(station_data_log, wind_data_log):
 
 if __name__ == "__main__":
     try:
-        logger.info("Starting scraping aqi_data")
-        scrape_aqi_data()
+        # logger.info("Starting scraping aqi_data")
+        # scrape_aqi_data()
         logger.info("Starting scraping station_data")
         station_data_log = scrape_stations_data()
         logger.info("Starting scraping wind_data")
