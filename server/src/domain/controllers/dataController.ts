@@ -9,6 +9,7 @@ export class DataController {
   }
 
   onPutObject = async (req: Request, res: Response) => {
+    const { filename } = req.params;
     if (!req.file) {
       return res.status(statusCode.BAD_REQUEST).json({
         status: "error",
@@ -17,9 +18,6 @@ export class DataController {
     }
 
     const file = req.file;
-    const timestamp = new Date().getTime();
-    const filename = `${timestamp}-${req.file.originalname}`;
-
     const uploadResult = await this.storageService.putObject(filename, file);
     return res.status(statusCode.SUCCESS).json({
       status: "success",

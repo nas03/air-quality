@@ -1,5 +1,11 @@
 import { IStorageService } from "@/interfaces/services/IStorageService";
-import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client, S3ClientConfig } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+  S3ClientConfig,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export class StorageService implements IStorageService {
@@ -35,22 +41,22 @@ export class StorageService implements IStorageService {
       if (!data || !data.buffer) {
         throw new Error("Invalid file data");
       }
-      
-      const command = new PutObjectCommand({ 
-        Bucket: this.s3Bucket, 
-        Key: objectPath, 
-        Body: data.buffer, 
+
+      const command = new PutObjectCommand({
+        Bucket: this.s3Bucket,
+        Key: objectPath,
+        Body: data.buffer,
         ContentType: data.mimetype,
-        ContentLength: data.size 
+        ContentLength: data.size,
       });
       const response = await this.s3Client.send(command);
       const url = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
-      
+
       return {
         success: true,
         url,
         etag: response.ETag,
-        key: objectPath
+        key: objectPath,
       };
     } catch (error) {
       console.error("Error uploading file to AWS S3:", error);
@@ -58,23 +64,23 @@ export class StorageService implements IStorageService {
     }
   };
 
-  deleteObject = async(objectPath: string) => {
+  deleteObject = async (objectPath: string) => {
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.s3Bucket,
         Key: objectPath,
       });
-      
+
       const response = await this.s3Client.send(command);
-      
+
       return {
         success: true,
         key: objectPath,
-        deleteMarker: response.DeleteMarker
+        deleteMarker: response.DeleteMarker,
       };
     } catch (error) {
       console.error("Error deleting file from AWS S3:", error);
       throw error;
     }
-  }
+  };
 }

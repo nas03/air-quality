@@ -36,7 +36,7 @@ const router = Router();
 routes.forEach((route) => {
   const { method, path, middleware, role, controller } = route;
 
-  if (middleware) {
+  if (middleware && middleware.length) {
     router.use(path, middleware);
   }
   if (role === "user") {
