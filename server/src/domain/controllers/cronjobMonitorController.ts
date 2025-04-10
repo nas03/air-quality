@@ -6,156 +6,156 @@ import { CronjobMonitorInteractor } from "../interactors";
 import { BaseController } from "./baseController";
 
 export class CronjobMonitorController extends BaseController<[CronjobMonitorInteractor]> {
-  private cronjobMonitorInteractor = this.interactors[0];
+    private cronjobMonitorInteractor = this.interactors[0];
 
-  /**
-   * Get a cronjob monitor record by timestamp
-   */
-  onGetCronjobRecord = async (req: Request, res: Response) => {
-    const dateStr = req.query.date as string;
+    /**
+     * Get a cronjob monitor record by timestamp
+     */
+    onGetCronjobRecord = async (req: Request, res: Response) => {
+        const dateStr = req.query.date as string;
 
-    if (!dateStr) {
-      return res.status(statusCode.BAD_REQUEST).json({
-        status: "fail",
-        message: resMessage.field_invalid,
-        data: null,
-      });
-    }
+        if (!dateStr) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "fail",
+                message: resMessage.field_invalid,
+                data: null,
+            });
+        }
 
-    const date = new Date(dateStr);
-    console.log(date);
-    if (isNaN(date.getTime())) {
-      return res.status(statusCode.BAD_REQUEST).json({
-        status: "fail",
-        message: "Invalid date format",
-        data: null,
-      });
-    }
+        const date = new Date(dateStr);
+        console.log(date);
+        if (isNaN(date.getTime())) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "fail",
+                message: "Invalid date format",
+                data: null,
+            });
+        }
 
-    try {
-      const record = await this.cronjobMonitorInteractor.getCronjobRecord(dateStr);
+        try {
+            const record = await this.cronjobMonitorInteractor.getCronjobRecord(dateStr);
 
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        data: record,
-      });
-    } catch (error: any) {
-      if (error.message?.includes("not found")) {
-        return res.status(statusCode.NOT_FOUND).json({
-          status: "fail",
-          message: error.message,
-          data: null,
+            return res.status(statusCode.SUCCESS).json({
+                status: "success",
+                data: record,
+            });
+        } catch (error: any) {
+            if (error.message?.includes("not found")) {
+                return res.status(statusCode.NOT_FOUND).json({
+                    status: "fail",
+                    message: error.message,
+                    data: null,
+                });
+            }
+
+            return res.status(statusCode.ERROR).json({
+                status: "error",
+                message: error.message || resMessage.server_error,
+                data: null,
+            });
+        }
+    };
+
+    onGetAllCronjobRecords = async (req: Request, res: Response) => {
+        const data = await this.cronjobMonitorInteractor.getAllCronjobRecords();
+        return res.status(statusCode.SUCCESS).json({
+            status: "success",
+            data: data,
         });
-      }
+    };
+    /**
+     * Create a new cronjob monitor record
+     */
+    onCreateCronjobRecord = async (req: Request, res: Response) => {
+        const payload = req.body as Omit<CronjobMonitor, "id">;
 
-      return res.status(statusCode.ERROR).json({
-        status: "error",
-        message: error.message || resMessage.server_error,
-        data: null,
-      });
-    }
-  };
+        if (!payload.timestamp) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "fail",
+                message: resMessage.field_invalid,
+                data: null,
+            });
+        }
 
-  onGetAllCronjobRecords = async (req: Request, res: Response) => {
-    const data = await this.cronjobMonitorInteractor.getAllCronjobRecords();
-    return res.status(statusCode.SUCCESS).json({
-      status: "success",
-      data: data,
-    });
-  };
-  /**
-   * Create a new cronjob monitor record
-   */
-  onCreateCronjobRecord = async (req: Request, res: Response) => {
-    const payload = req.body as Omit<CronjobMonitor, "id">;
+        try {
+            const newRecord = await this.cronjobMonitorInteractor.createNewCronjobRecord(payload);
 
-    if (!payload.timestamp) {
-      return res.status(statusCode.BAD_REQUEST).json({
-        status: "fail",
-        message: resMessage.field_invalid,
-        data: null,
-      });
-    }
+            return res.status(statusCode.SUCCESS).json({
+                status: "success",
+                data: newRecord,
+            });
+        } catch (error: any) {
+            return res.status(statusCode.ERROR).json({
+                status: "error",
+                message: error.message || resMessage.server_error,
+                data: null,
+            });
+        }
+    };
 
-    try {
-      const newRecord = await this.cronjobMonitorInteractor.createNewCronjobRecord(payload);
+    /**
+     * Update an existing cronjob monitor record
+     */
+    onUpdateCronjobRecord = async (req: Request, res: Response) => {
+        const id = parseInt(req.params.id, 10);
 
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        data: newRecord,
-      });
-    } catch (error: any) {
-      return res.status(statusCode.ERROR).json({
-        status: "error",
-        message: error.message || resMessage.server_error,
-        data: null,
-      });
-    }
-  };
+        if (isNaN(id)) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "fail",
+                message: resMessage.field_invalid,
+                data: null,
+            });
+        }
 
-  /**
-   * Update an existing cronjob monitor record
-   */
-  onUpdateCronjobRecord = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id, 10);
+        const payload = { ...req.body, id } as Partial<CronjobMonitor> & { id: number };
 
-    if (isNaN(id)) {
-      return res.status(statusCode.BAD_REQUEST).json({
-        status: "fail",
-        message: resMessage.field_invalid,
-        data: null,
-      });
-    }
+        try {
+            const updatedRecord = await this.cronjobMonitorInteractor.updateCronjobRecord(payload);
 
-    const payload = { ...req.body, id } as Partial<CronjobMonitor> & { id: number };
+            return res.status(statusCode.SUCCESS).json({
+                status: "success",
+                data: updatedRecord,
+            });
+        } catch (error: any) {
+            return res.status(statusCode.ERROR).json({
+                status: "error",
+                message: error.message || resMessage.server_error,
+                data: null,
+            });
+        }
+    };
 
-    try {
-      const updatedRecord = await this.cronjobMonitorInteractor.updateCronjobRecord(payload);
+    onRerunCronjob = async (req: Request, res: Response) => {
+        try {
+            const TIMEOUT = 300000; // 5 minutes
+            // const controller = new AbortController();
+            // const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        data: updatedRecord,
-      });
-    } catch (error: any) {
-      return res.status(statusCode.ERROR).json({
-        status: "error",
-        message: error.message || resMessage.server_error,
-        data: null,
-      });
-    }
-  };
+            const request = await axios.post("http://13.213.59.37:5000/execute-cron", {
+                timeout: TIMEOUT, // Add axios timeout
+            });
 
-  onRerunCronjob = async (req: Request, res: Response) => {
-    try {
-      const TIMEOUT = 300000; // 5 minutes
-      // const controller = new AbortController();
-      // const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+            // clearTimeout(timeoutId);
 
-      const request = await axios.post("http://13.213.59.37:5000/execute-cron", {
-        timeout: TIMEOUT, // Add axios timeout
-      });
+            const result = request.data;
+            return res.status(statusCode.SUCCESS).json({
+                status: "success",
+                data: result,
+            });
+        } catch (error: any) {
+            if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
+                return res.status(statusCode.ERROR).json({
+                    status: "error",
+                    message: "Request timed out after 5 minutes",
+                    data: null,
+                });
+            }
 
-      // clearTimeout(timeoutId);
-
-      const result = request.data;
-      return res.status(statusCode.SUCCESS).json({
-        status: "success",
-        data: result,
-      });
-    } catch (error: any) {
-      if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
-        return res.status(statusCode.ERROR).json({
-          status: "error",
-          message: "Request timed out after 5 minutes",
-          data: null,
-        });
-      }
-
-      return res.status(statusCode.ERROR).json({
-        status: "error",
-        message: error.message || resMessage.server_error,
-        data: null,
-      });
-    }
-  };
+            return res.status(statusCode.ERROR).json({
+                status: "error",
+                message: error.message || resMessage.server_error,
+                data: null,
+            });
+        }
+    };
 }

@@ -12,26 +12,26 @@ const authController = new AuthController(userInteractor, verificationInteractor
 const authMiddleware = new UserMiddleware(userInteractor);
 
 const authRouter: Route[] = [
-  /* {
+    /* {
     path: "/auths/signup",
     method: "POST",
     controller: authController.onCreateauth.bind(authController),
     role: "",
     middleware: [authMiddleware.validateCreateauth],
   }, */
-  {
-    path: "/auth/signin",
-    method: "POST",
-    controller: authController.onSignin.bind(authController),
-    role: "",
-    middleware: [authMiddleware.validateSignin],
-  },
-  {
-    path: "/auth/verification/:code",
-    method: "POST",
-    controller: authController.onVerifyVerificationCode.bind(authController),
-    role: "",
-  },
+    {
+        path: "/auth/signin",
+        method: "POST",
+        controller: authController.onSignin.bind(authController),
+        role: "",
+        middleware: [authMiddleware.validateSignin],
+    },
+    {
+        path: "/auth/verification/:code",
+        method: "POST",
+        controller: authController.onVerifyVerificationCode.bind(authController),
+        role: "",
+    },
 ];
 
 export default authRouter;

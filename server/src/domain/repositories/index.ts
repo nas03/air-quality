@@ -6,6 +6,5 @@ export * from "./mRecommendationRepository";
 export * from "./stationsRepository";
 export * from "./statisticRepository";
 export * from "./userRepository";
-export * from './verificationCodeRepository';
+export * from "./verificationCodeRepository";
 export * from "./windDataRepository";
-

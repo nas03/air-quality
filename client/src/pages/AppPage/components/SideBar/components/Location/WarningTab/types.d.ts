@@ -1,50 +1,50 @@
 export interface DataSourceInfo {
-  name: string;
-  location: string | string[];
-  source: string;
+    name: string;
+    location: string | string[];
+    source: string;
 }
 
 export interface WeatherInfo {
-  temperature: {
-    min: number;
-    max: number;
-    avg: number;
-  };
-  weather: {
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  };
-  wind_speed: number;
+    temperature: {
+        min: number;
+        max: number;
+        avg: number;
+    };
+    weather: {
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    };
+    wind_speed: number;
 }
 
 export interface AirQualityInfo {
-  aqi_index: string;
-  pm_25: string;
-  status: string;
-  time: string;
-  color: string;
-  icon: string;
+    aqi_index: string;
+    pm_25: string;
+    status: string;
+    time: string;
+    color: string;
+    icon: string;
 }
 
 export interface DataSourceCardProps {
-  data: DataSourceInfo;
+    data: DataSourceInfo;
 }
 
 export interface AirQualityCardProps {
-  data: AirQualityInfo;
+    data: AirQualityInfo;
 }
 
 export interface HealthRecommendationCardProps {
-  data: string;
+    data: string;
 }
 
 export interface IPropsWeatherInfoCard extends React.ComponentPropsWithRef<"div"> {
-  data: WeatherInfo;
-  loading?: boolean;
+    data: WeatherInfo;
+    loading?: boolean;
 }
 
 export interface WarningTabProps extends React.ComponentPropsWithRef<"div"> {
-  district_id: string;
+    district_id: string;
 }

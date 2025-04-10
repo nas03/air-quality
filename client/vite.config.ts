@@ -6,31 +6,31 @@ import { defineConfig } from "vite";
   target: "18", // '17' | '18' | '19'
 }; */
 export default defineConfig({
-  plugins: [
-    react(),
-    /*     {
+    plugins: [
+        react(),
+        /*     {
       babel: {
         plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
       },
     } */
-  ],
-  build: {
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "react-vendor": ["react", "react-dom"],
-          "tanstack-vendor": ["@tanstack/react-query", "@tanstack/react-router"],
-          "antd-vendor": ["antd", "@ant-design/icons"],
-          "mui-vender": ["@mui/x-charts"],
-          "framer-motion-vender": ["motion"],
+    ],
+    build: {
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    "react-vendor": ["react", "react-dom"],
+                    "tanstack-vendor": ["@tanstack/react-query", "@tanstack/react-router"],
+                    "antd-vendor": ["antd", "@ant-design/icons"],
+                    "mui-vender": ["@mui/x-charts"],
+                    "framer-motion-vender": ["motion"],
+                },
+            },
         },
-      },
     },
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+        },
     },
-  },
 });

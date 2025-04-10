@@ -3,8 +3,8 @@
 ## Main Tasks
 
 - [x] Setup CI/CD Pipeline
-  - [x] Create docker container
-  - [x] Auto deploy container
+    - [x] Create docker container
+    - [x] Auto deploy container
 
 ## Week 1 (Jan 1-5, 2025)
 
@@ -20,7 +20,7 @@ Core API & Data Management:
 Data Processing & Collection:
 
 - [x] Enhance Python script with AQI calculations
-  - [x] Update database schema and data
+    - [x] Update database schema and data
 - [x] Develop data crawler for Center of Environmental Monitoring (cem.gov.vn)
 
 ## Week 3 (Jan 13-19, 2025)
@@ -44,12 +44,11 @@ Data Integration & Dashboard:
 - [x] Add PM2.5 data collection from CEM
 - [x] Integrate data from moitruongthudo.vn
 - [x] Implement analytics dashboard
-  - [x] Layout
-  - [x] Data controller
-  - [x] Data fetch
+    - [x] Layout
+    - [x] Data controller
+    - [x] Data fetch
 
 ## Week 6 (Mar 3-9, 2025)
 
 - [x] Check if user enabled notifications API
 - [ ] Check redisKeys for API
-  

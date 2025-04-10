@@ -6,9 +6,9 @@ import { useState } from "react";
 export type RankData = Statistic & MDistrict & { aqi_change: number };
 
 const useDistrictRanking = (time: string) => {
-  const [tableData, setTableData] = useState<RankData[]>([]);
+    const [tableData, setTableData] = useState<RankData[]>([]);
 
-  /* const processRankData = (data: (Statistic & MDistrict)[] | null): RankData[] => {
+    /* const processRankData = (data: (Statistic & MDistrict)[] | null): RankData[] => {
     return (
       data
         ?.map(({ vn_district, aqi_index }) => ({ vn_district, aqi_index }))
@@ -16,15 +16,15 @@ const useDistrictRanking = (time: string) => {
     );
   }; */
 
-  const mutation = useMutation({
-    mutationKey: ["rank", time],
-    mutationFn: (date: string) => getRankByDate(date),
-    onSuccess: (data: (Statistic & MDistrict & { aqi_change: number })[] | null) => {
-      setTableData(data || []);
-    },
-  });
+    const mutation = useMutation({
+        mutationKey: ["rank", time],
+        mutationFn: (date: string) => getRankByDate(date),
+        onSuccess: (data: (Statistic & MDistrict & { aqi_change: number })[] | null) => {
+            setTableData(data || []);
+        },
+    });
 
-  return { mutation, tableData };
+    return { mutation, tableData };
 };
 
 export default useDistrictRanking;

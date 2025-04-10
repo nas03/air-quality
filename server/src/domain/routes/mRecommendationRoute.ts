@@ -8,11 +8,11 @@ const interactor = new MRecommendationInteractor(repository);
 const controller = new MRecommendationController(interactor);
 
 const recommendationRouter: Route[] = [
-  {
-    path: "/recommendations",
-    controller: controller.onGetAllRecommendations.bind(controller),
-    role: "",
-    method: "GET",
-  },
+    {
+        path: "/recommendations",
+        controller: controller.onGetAllRecommendations.bind(controller),
+        role: "",
+        method: "GET",
+    },
 ];
 export default recommendationRouter;

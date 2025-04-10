@@ -1,3 +1,3 @@
 module.exports = {
-  entry: "./dist/server.js",
+    entry: "./dist/server.js",
 };

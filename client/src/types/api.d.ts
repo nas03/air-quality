@@ -1,17 +1,17 @@
 export type APIResponse<T> = {
-  status: "error" | "fail" | "success";
-  data: T;
-  message?: string;
+    status: "error" | "fail" | "success";
+    data: T;
+    message?: string;
 };
 
 interface SignInResponse {
-  user_id: number;
-  username: string;
-  access_token: string;
+    user_id: number;
+    username: string;
+    access_token: string;
 }
 
 interface VerifyTokenResponse {
-  verified: boolean;
-  user_id: number;
-  role: string;
+    verified: boolean;
+    user_id: number;
+    role: string;
 }

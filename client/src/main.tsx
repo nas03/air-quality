@@ -8,16 +8,16 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+    interface Register {
+        router: typeof router;
+    }
 }
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <AuthenticationProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthenticationProvider>
-  </StrictMode>,
+    <StrictMode>
+        <AuthenticationProvider>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
+        </AuthenticationProvider>
+    </StrictMode>,
 );

@@ -2,8 +2,8 @@ import { RegistrationDataType } from "@/pages/AppPage/components/AppMenu/AlertTa
 import { useState } from "react";
 
 const useRegistrationState = () => {
-  const [registrationData, setRegistrationData] = useState<RegistrationDataType | null>(null);
+    const [registrationData, setRegistrationData] = useState<RegistrationDataType | null>(null);
 
-  return { registrationData, setRegistrationData };
+    return { registrationData, setRegistrationData };
 };
 export default useRegistrationState;

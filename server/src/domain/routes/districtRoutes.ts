@@ -8,18 +8,18 @@ const districtInteractor = new DistrictInteractor(districtRepository);
 const districtController = new DistrictController(districtInteractor);
 
 const districtRouter: Route[] = [
-  {
-    path: "/districts",
-    controller: districtController.onGetAllDistricts.bind(districtController),
-    method: "GET",
-    role: "user",
-  },
-  {
-    path: "/districts/:district_id",
-    controller: districtController.onFindDistrict.bind(districtController),
-    method: "GET",
-    role: "user",
-  },
+    {
+        path: "/districts",
+        controller: districtController.onGetAllDistricts.bind(districtController),
+        method: "GET",
+        role: "user",
+    },
+    {
+        path: "/districts/:district_id",
+        controller: districtController.onFindDistrict.bind(districtController),
+        method: "GET",
+        role: "user",
+    },
 ];
 
 export default districtRouter;

@@ -1,3 +1,3 @@
 export interface IPropsUserMenu {
-  className?: string;
+    className?: string;
 }

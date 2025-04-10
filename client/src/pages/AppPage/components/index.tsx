@@ -11,16 +11,15 @@ import TimeSlider from "./TimeSlider";
 import UserMenu from "./UserMenu/UserMenu";
 
 export {
-  AppMenu,
-  CurrentLocationData,
-  GradientBar,
-  LayerToggle,
-  MenuDrawer,
-  Navigator,
-  Notifications,
-  OpenLayerMap,
-  SideBar,
-  TimeSlider,
-  UserMenu
+    AppMenu,
+    CurrentLocationData,
+    GradientBar,
+    LayerToggle,
+    MenuDrawer,
+    Navigator,
+    Notifications,
+    OpenLayerMap,
+    SideBar,
+    TimeSlider,
+    UserMenu,
 };
-

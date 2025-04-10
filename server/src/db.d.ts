@@ -5,193 +5,194 @@
 
 import type { ColumnType } from "kysely";
 
-export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S, I | undefined, U>
-  : ColumnType<T, T | undefined, T>;
+export type Generated<T> =
+    T extends ColumnType<infer S, infer I, infer U>
+        ? ColumnType<S, I | undefined, U>
+        : ColumnType<T, T | undefined, T>;
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface AlertsSetting {
-  aqi_index: Generated<boolean>;
-  district_id: string;
-  id: Generated<number>;
-  pm_25: Generated<boolean>;
-  receive_notifications: Generated<number>;
-  temperature: Generated<boolean>;
-  user_id: number;
-  weather: Generated<boolean>;
-  wind_speed: Generated<boolean>;
+    aqi_index: Generated<boolean>;
+    district_id: string;
+    id: Generated<number>;
+    pm_25: Generated<boolean>;
+    receive_notifications: Generated<number>;
+    temperature: Generated<boolean>;
+    user_id: number;
+    weather: Generated<boolean>;
+    wind_speed: Generated<boolean>;
 }
 
 export interface CronjobMonitor {
-  id: Generated<number>;
-  raster_data_status: number;
-  station_data_log: string;
-  station_data_status: number;
-  timestamp: Timestamp;
-  wind_data_log: string;
-  wind_data_status: number;
+    id: Generated<number>;
+    raster_data_status: number;
+    station_data_log: string;
+    station_data_status: number;
+    timestamp: Timestamp;
+    wind_data_log: string;
+    wind_data_status: number;
 }
 
 export interface GeographyColumns {
-  coord_dimension: number | null;
-  f_geography_column: string | null;
-  f_table_catalog: string | null;
-  f_table_name: string | null;
-  f_table_schema: string | null;
-  srid: number | null;
-  type: string | null;
+    coord_dimension: number | null;
+    f_geography_column: string | null;
+    f_table_catalog: string | null;
+    f_table_name: string | null;
+    f_table_schema: string | null;
+    srid: number | null;
+    type: string | null;
 }
 
 export interface GeometryColumns {
-  coord_dimension: number | null;
-  f_geometry_column: string | null;
-  f_table_catalog: string | null;
-  f_table_name: string | null;
-  f_table_schema: string | null;
-  srid: number | null;
-  type: string | null;
+    coord_dimension: number | null;
+    f_geometry_column: string | null;
+    f_table_catalog: string | null;
+    f_table_name: string | null;
+    f_table_schema: string | null;
+    srid: number | null;
+    type: string | null;
 }
 
 export interface Mail {
-  html: string;
-  id: number;
-  subject: string;
+    html: string;
+    id: number;
+    subject: string;
 }
 
 export interface MDistricts {
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  district_id: string;
-  eng_district: string;
-  eng_type: string;
-  province_id: string;
-  updated_at: Generated<Timestamp | null>;
-  vn_district: string;
-  vn_province: string;
-  vn_type: string;
+    created_at: Generated<Timestamp | null>;
+    deleted: Generated<number | null>;
+    district_id: string;
+    eng_district: string;
+    eng_type: string;
+    province_id: string;
+    updated_at: Generated<Timestamp | null>;
+    vn_district: string;
+    vn_province: string;
+    vn_type: string;
 }
 
 export interface MRecommendation {
-  color: string;
-  en_recommendation: string;
-  en_status: string;
-  id: Generated<number>;
-  max_threshold: number;
-  min_threshold: number;
-  vn_recommendation: string | null;
-  vn_status: string | null;
+    color: string;
+    en_recommendation: string;
+    en_status: string;
+    id: Generated<number>;
+    max_threshold: number;
+    min_threshold: number;
+    vn_recommendation: string | null;
+    vn_status: string | null;
 }
 
 export interface RasterColumns {
-  blocksize_x: number | null;
-  blocksize_y: number | null;
-  extent: string | null;
-  nodata_values: number[] | null;
-  num_bands: number | null;
-  out_db: boolean[] | null;
-  pixel_types: string[] | null;
-  r_raster_column: string | null;
-  r_table_catalog: string | null;
-  r_table_name: string | null;
-  r_table_schema: string | null;
-  regular_blocking: boolean | null;
-  same_alignment: boolean | null;
-  scale_x: number | null;
-  scale_y: number | null;
-  spatial_index: boolean | null;
-  srid: number | null;
+    blocksize_x: number | null;
+    blocksize_y: number | null;
+    extent: string | null;
+    nodata_values: number[] | null;
+    num_bands: number | null;
+    out_db: boolean[] | null;
+    pixel_types: string[] | null;
+    r_raster_column: string | null;
+    r_table_catalog: string | null;
+    r_table_name: string | null;
+    r_table_schema: string | null;
+    regular_blocking: boolean | null;
+    same_alignment: boolean | null;
+    scale_x: number | null;
+    scale_y: number | null;
+    spatial_index: boolean | null;
+    srid: number | null;
 }
 
 export interface RasterOverviews {
-  o_raster_column: string | null;
-  o_table_catalog: string | null;
-  o_table_name: string | null;
-  o_table_schema: string | null;
-  overview_factor: number | null;
-  r_raster_column: string | null;
-  r_table_catalog: string | null;
-  r_table_name: string | null;
-  r_table_schema: string | null;
+    o_raster_column: string | null;
+    o_table_catalog: string | null;
+    o_table_name: string | null;
+    o_table_schema: string | null;
+    overview_factor: number | null;
+    r_raster_column: string | null;
+    r_table_catalog: string | null;
+    r_table_name: string | null;
+    r_table_schema: string | null;
 }
 
 export interface SpatialRefSys {
-  auth_name: string | null;
-  auth_srid: number | null;
-  proj4text: string | null;
-  srid: number;
-  srtext: string | null;
+    auth_name: string | null;
+    auth_srid: number | null;
+    proj4text: string | null;
+    srid: number;
+    srtext: string | null;
 }
 
 export interface Stations {
-  address: string | null;
-  aqi_index: number;
-  color: string;
-  geom: string | null;
-  id: Generated<number>;
-  lat: number;
-  lng: number;
-  pm25: number | null;
-  station_id: string;
-  station_name: string | null;
-  status: string;
-  timestamp: Timestamp | null;
+    address: string | null;
+    aqi_index: number;
+    color: string;
+    geom: string | null;
+    id: Generated<number>;
+    lat: number;
+    lng: number;
+    pm25: number | null;
+    station_id: string;
+    station_name: string | null;
+    status: string;
+    timestamp: Timestamp | null;
 }
 
 export interface Statistics {
-  aqi_index: number;
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  district_id: string;
-  id: Generated<number>;
-  pm_25: number;
-  time: Timestamp;
-  updated_at: Generated<Timestamp | null>;
+    aqi_index: number;
+    created_at: Generated<Timestamp | null>;
+    deleted: Generated<number | null>;
+    district_id: string;
+    id: Generated<number>;
+    pm_25: number;
+    time: Timestamp;
+    updated_at: Generated<Timestamp | null>;
 }
 
 export interface Users {
-  account_status: Generated<number>;
-  created_at: Generated<Timestamp | null>;
-  deleted: Generated<number | null>;
-  email: string;
-  password: string;
-  phone_number: string;
-  role: Generated<number>;
-  updated_at: Generated<Timestamp | null>;
-  user_id: Generated<number>;
-  username: string;
+    account_status: Generated<number>;
+    created_at: Generated<Timestamp | null>;
+    deleted: Generated<number | null>;
+    email: string;
+    password: string;
+    phone_number: string;
+    role: Generated<number>;
+    updated_at: Generated<Timestamp | null>;
+    user_id: Generated<number>;
+    username: string;
 }
 
 export interface VerificationCode {
-  activate_status: Generated<number>;
-  code: string;
-  created_at: Generated<Timestamp>;
-  id: Generated<number>;
-  type: Generated<number>;
-  user_id: number;
+    activate_status: Generated<number>;
+    code: string;
+    created_at: Generated<Timestamp>;
+    id: Generated<number>;
+    type: Generated<number>;
+    user_id: number;
 }
 
 export interface WindData {
-  id: Generated<number>;
-  timestamp: Timestamp;
-  ugrid_data: number[];
-  vgrid_data: number[];
+    id: Generated<number>;
+    timestamp: Timestamp;
+    ugrid_data: number[];
+    vgrid_data: number[];
 }
 
 export interface DB {
-  alerts_setting: AlertsSetting;
-  cronjob_monitor: CronjobMonitor;
-  geography_columns: GeographyColumns;
-  geometry_columns: GeometryColumns;
-  m_districts: MDistricts;
-  m_recommendation: MRecommendation;
-  mail: Mail;
-  raster_columns: RasterColumns;
-  raster_overviews: RasterOverviews;
-  spatial_ref_sys: SpatialRefSys;
-  stations: Stations;
-  statistics: Statistics;
-  users: Users;
-  verification_code: VerificationCode;
-  wind_data: WindData;
+    alerts_setting: AlertsSetting;
+    cronjob_monitor: CronjobMonitor;
+    geography_columns: GeographyColumns;
+    geometry_columns: GeometryColumns;
+    m_districts: MDistricts;
+    m_recommendation: MRecommendation;
+    mail: Mail;
+    raster_columns: RasterColumns;
+    raster_overviews: RasterOverviews;
+    spatial_ref_sys: SpatialRefSys;
+    stations: Stations;
+    statistics: Statistics;
+    users: Users;
+    verification_code: VerificationCode;
+    wind_data: WindData;
 }

@@ -1,23 +1,23 @@
 .scrollbar {
-  overflow-y: auto;
+    overflow-y: auto;
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 10px;
-  height: 6px;
+    width: 10px;
+    height: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  background: white;
-  border-radius: 9999px;
+    background: white;
+    border-radius: 9999px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
-  border: 2px solid white;
-  border-radius: 9999px;
+    background: #e5e7eb;
+    border: 2px solid white;
+    border-radius: 9999px;
 }
 
 .scrollbar:hover::-webkit-scrollbar-track {
-  background: white;
+    background: white;
 }
