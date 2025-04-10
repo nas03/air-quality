@@ -2,6 +2,7 @@ import Loading from "@/components/Loading";
 import { RankData } from "@/hooks/useDistrictRanking";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 import { getStyleRankTable } from "../utils";
 
 interface RankTableProps {
@@ -132,14 +133,7 @@ const RankTable: React.FC<RankTableProps> = ({ className, tableData, loading }) 
                                 ))}
                             </select>
                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 9l-7 7-7-7"
-                                    />
-                                </svg>
+                                <FiChevronDown className="h-4 w-4" />
                             </div>
                         </div>
                     </div>

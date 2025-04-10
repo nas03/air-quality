@@ -1,21 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import { FiAlertCircle } from "react-icons/fi";
 
 const SignInNotification = () => {
     return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-3 py-10">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-zinc-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 15v2m0 0v2m0-2h2m-2 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-            </svg>
+            <FiAlertCircle className="h-10 w-10 text-zinc-400" />
             <p className="text-center font-medium text-zinc-500 dark:text-zinc-400">
                 You need to sign in to view your alerts
             </p>

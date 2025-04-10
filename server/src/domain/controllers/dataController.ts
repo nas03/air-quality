@@ -1,10 +1,16 @@
 import { statusCode } from "@/config/constant";
 import { StorageService } from "@/services";
 import { Request, Response } from "express";
+import JSZip from "jszip";
+import { DataInteractor } from "../interactors";
+import { BaseController } from "./baseController";
 
-export class DataController {
+export class DataController extends BaseController<[DataInteractor]> {
     private readonly storageService: StorageService;
-    constructor() {
+    private readonly dataInteractor = this.interactors[0];
+
+    constructor(...interactors: [DataInteractor]) {
+        super(...interactors);
         this.storageService = new StorageService();
     }
 
@@ -26,7 +32,7 @@ export class DataController {
     };
 
     onGetObject = async (req: Request, res: Response) => {
-        const { filename } = req.params;
+        const { filename } = req.query;
 
         if (!filename) {
             return res.status(statusCode.BAD_REQUEST).json({
@@ -35,7 +41,7 @@ export class DataController {
             });
         }
 
-        const signedURL = await this.storageService.getObject(filename);
+        const signedURL = await this.storageService.getObject(filename as string);
 
         if (!signedURL) {
             return res.status(statusCode.NOT_FOUND).json({
@@ -69,5 +75,28 @@ export class DataController {
         });
     };
 
-    onListObject = async (req: Request, res: Response) => {};
+    onBatchDownload = async (req: Request, res: Response) => {
+        const start_date = req.query.start_date as string;
+        const end_date = req.query.end_date as string;
+
+        if (!start_date || !end_date) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "error",
+                message: "start_date and end_date are required",
+            });
+        }
+
+        const zip = new JSZip();
+
+        await this.dataInteractor.getRasterData(start_date, end_date, zip);
+        await this.dataInteractor.getStationData(start_date, end_date, zip);
+        await this.dataInteractor.getWindData(start_date, end_date, zip);
+        const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+        res.setHeader("Content-Type", "application/zip");
+        res.setHeader("Content-Disposition", `attachment; filename="archive.zip"`);
+        res.setHeader("Content-Length", zipBuffer.length);
+
+        return res.send(zipBuffer);
+    };
 }

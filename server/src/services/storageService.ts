@@ -2,11 +2,14 @@ import { IStorageService } from "@/interfaces/services/IStorageService";
 import {
     DeleteObjectCommand,
     GetObjectCommand,
+    ListObjectsCommand,
+    ListObjectsCommandInput,
     PutObjectCommand,
     S3Client,
     S3ClientConfig,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import JSZip from "jszip";
 
 export class StorageService implements IStorageService {
     private readonly s3Client: S3Client;
@@ -80,6 +83,56 @@ export class StorageService implements IStorageService {
             };
         } catch (error) {
             console.error("Error deleting file from AWS S3:", error);
+            throw error;
+        }
+    };
+
+    listObjects = async (options: Omit<ListObjectsCommandInput, "Bucket">) => {
+        const listObjectsCommand = new ListObjectsCommand({
+            ...options,
+            Bucket: this.s3Bucket,
+        });
+
+        const response = await this.s3Client.send(listObjectsCommand);
+        return response;
+    };
+
+    getMultipleObjects = async (objectPaths: string[], zip: JSZip): Promise<JSZip> => {
+        try {
+            // Download each file and add it to the zip
+            const downloadPromises = objectPaths.map(async (path) => {
+                try {
+                    const command = new GetObjectCommand({
+                        Bucket: this.s3Bucket,
+                        Key: path,
+                    });
+
+                    const response = await this.s3Client.send(command);
+                    if (!response.Body) {
+                        console.warn(`Empty body for file: ${path}`);
+                        return;
+                    }
+
+                    // Convert the stream to buffer
+                    const chunks: Uint8Array[] = [];
+                    for await (const chunk of response.Body as any) {
+                        chunks.push(chunk);
+                    }
+                    const buffer = Buffer.concat(chunks);
+
+                    const [year, month, fileName] = path.split("/");
+                    zip.folder("raster_data")?.folder(year)?.folder(month)?.file(fileName, buffer);
+
+                    console.log(`Added file ${fileName} to zip archive`);
+                } catch (error) {
+                    console.error(`Error downloading file ${path}:`, error);
+                }
+            });
+
+            await Promise.all(downloadPromises);
+            return zip;
+        } catch (error) {
+            console.error("Error creating zip archive:", error);
             throw error;
         }
     };

@@ -3,6 +3,7 @@ import { Loading } from "@/components";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 import AlertInfoCards from "./AlertInfoCard";
 import AlertRegistration from "./AlertRegistration";
 import SignInNotification from "./SignInNotification";
@@ -57,14 +58,7 @@ const AlertTab: React.FC<AlertTabProps> = () => {
                     <button
                         onClick={() => setAddAlert(true)}
                         className="flex items-center gap-1.5 rounded-md border border-blue-500 bg-white px-3 py-1.5 text-sm font-medium text-blue-500 shadow-sm transition hover:bg-blue-50 active:bg-blue-100">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
+                        <FiPlus className="h-4 w-4" />
                         Thêm Cảnh Báo
                     </button>
                 </div>
