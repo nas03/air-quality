@@ -1,4 +1,4 @@
-import { resMessage, statusCode } from "@/config/constant";
+import { statusCode } from "@/config/constant";
 import { StorageService } from "@/services";
 import { Request, Response } from "express";
 import JSZip from "jszip";
@@ -28,45 +28,6 @@ export class DataController extends BaseController<[DataInteractor]> {
         return res.status(statusCode.SUCCESS).json({
             status: "success",
             data: uploadResult,
-        });
-    };
-
-    onGetData = async (req: Request, res: Response) => {
-        const { type } = req.query;
-        if (!type || !["raster", "wind_data", "station_data"].includes(String(type))) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-                data: null,
-            });
-        }
-        let isValid = true;
-        let data: any = null;
-        switch (type) {
-            case "raster":
-                if (!req.query.date) isValid = false;
-                data = await this.dataInteractor.getRasterData(req.query.date as string);
-                break;
-            case "wind_data":
-                if (!req.query.date) isValid = false;
-                // data = await this.dataInteractor.getWindData(req.query.date as string)
-                break;
-            case "station_data":
-                if (!req.query.date) isValid = false;
-                break;
-            default:
-                break;
-        }
-
-        if (!isValid)
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-                data: null,
-            });
-        return res.status(statusCode.SUCCESS).json({
-            status: "success",
-            data: data,
         });
     };
 
@@ -134,6 +95,33 @@ export class DataController extends BaseController<[DataInteractor]> {
 
         res.setHeader("Content-Type", "application/zip");
         res.setHeader("Content-Disposition", `attachment; filename="archive.zip"`);
+        res.setHeader("Content-Length", zipBuffer.length);
+
+        return res.send(zipBuffer);
+    };
+
+    onDownloadByDate = async (req: Request, res: Response) => {
+        const date = req.query.date as string;
+
+        if (!date) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "error",
+                message: "date parameter is required",
+            });
+        }
+
+        const zip = new JSZip();
+
+        await this.dataInteractor.getRasterDataHistory(date, date, zip);
+        await this.dataInteractor.getStationDataHistory(date, date, zip);
+        await this.dataInteractor.getWindDataHistory(date, date, zip);
+
+        const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+        const formattedDate = date.replace(/-/g, "");
+
+        res.setHeader("Content-Type", "application/zip");
+        res.setHeader("Content-Disposition", `attachment; filename="data_${formattedDate}.zip"`);
         res.setHeader("Content-Length", zipBuffer.length);
 
         return res.send(zipBuffer);

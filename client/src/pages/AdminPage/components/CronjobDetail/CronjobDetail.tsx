@@ -1,7 +1,6 @@
 import api from "@/config/api";
-import { message } from "antd";
 import { useEffect, useState } from "react";
-import { FiChevronRight, FiDownload, FiInfo, FiLoader, FiRefreshCw, FiX } from "react-icons/fi";
+import { FiChevronRight, FiInfo, FiLoader, FiRefreshCw, FiX } from "react-icons/fi";
 import StatusAlert from "./StatusAlert";
 import StatusBadge from "./StatusBadge";
 
@@ -108,39 +107,6 @@ const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetail
         }
     }, [cronjob.id, cronjob.raster_data_status, cronjob.wind_data_status, cronjob.station_data_status]);
 
-    const handleDownload = async (type: "raster" | "wind" | "station") => {
-        try {
-            setLoading((prev) => ({ ...prev, [type]: true }));
-            message.loading({ content: `Đang tải xuống dữ liệu ${type}...`, key: `download-${type}-${cronjob.id}` });
-
-            const response = await api.get(`/data/download/${type}/${cronjob.id}`, {
-                responseType: "blob",
-            });
-
-            // Create a download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            const date = new Date(cronjob.timestamp).toISOString().split("T")[0];
-            link.setAttribute("download", `${type}_data_${date}_${cronjob.id}.zip`);
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-            message.success({
-                content: `Tải xuống dữ liệu ${type} thành công!`,
-                key: `download-${type}-${cronjob.id}`,
-            });
-        } catch (error) {
-            console.error(`Error downloading ${type} data:`, error);
-            message.error({ content: `Lỗi khi tải xuống dữ liệu ${type}!`, key: `download-${type}-${cronjob.id}` });
-        } finally {
-            setLoading((prev) => ({ ...prev, [type]: false }));
-        }
-    };
-
     return (
         <div className="h-full overflow-scroll rounded-lg bg-white p-4 shadow-md lg:col-span-2">
             <h2 className="mb-4 flex items-center justify-between text-xl font-semibold text-gray-700">
@@ -215,17 +181,6 @@ const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetail
                                     {formatFileSize(fileSizes.raster)}
                                 </span>
                             )}
-                            <button
-                                onClick={() => handleDownload("raster")}
-                                disabled={cronjob.raster_data_status !== 1 || loading.raster}
-                                className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                                    cronjob.raster_data_status === 1 && !loading.raster
-                                        ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                        : "cursor-not-allowed bg-gray-100 text-gray-400"
-                                }`}>
-                                <FiDownload className={`h-3 w-3 ${loading.raster ? "animate-pulse" : ""}`} />
-                                <span>{loading.raster ? "Đang tải..." : "Tải xuống"}</span>
-                            </button>
                         </div>
                     </div>
 
@@ -237,17 +192,6 @@ const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetail
                                     {formatFileSize(fileSizes.wind)}
                                 </span>
                             )}
-                            <button
-                                onClick={() => handleDownload("wind")}
-                                disabled={cronjob.wind_data_status !== 1 || loading.wind}
-                                className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                                    cronjob.wind_data_status === 1 && !loading.wind
-                                        ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                        : "cursor-not-allowed bg-gray-100 text-gray-400"
-                                }`}>
-                                <FiDownload className={`h-3 w-3 ${loading.wind ? "animate-pulse" : ""}`} />
-                                <span>{loading.wind ? "Đang tải..." : "Tải xuống"}</span>
-                            </button>
                         </div>
                     </div>
 
@@ -259,17 +203,6 @@ const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetail
                                     {formatFileSize(fileSizes.station)}
                                 </span>
                             )}
-                            <button
-                                onClick={() => handleDownload("station")}
-                                disabled={cronjob.station_data_status !== 1 || loading.station}
-                                className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                                    cronjob.station_data_status === 1 && !loading.station
-                                        ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                        : "cursor-not-allowed bg-gray-100 text-gray-400"
-                                }`}>
-                                <FiDownload className={`h-3 w-3 ${loading.station ? "animate-pulse" : ""}`} />
-                                <span>{loading.station ? "Đang tải..." : "Tải xuống"}</span>
-                            </button>
                         </div>
                     </div>
                 </div>

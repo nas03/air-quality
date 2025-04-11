@@ -17,6 +17,8 @@ export class DataInteractor {
     getRasterDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
         const startOfMonthDate = moment(start_date, "YYYY-MM-DD").startOf("M");
         const endOfMonthDate = moment(end_date, "YYYY-MM-DD").endOf("M");
+        const startDate = moment(start_date, "YYYY-MM-DD");
+        const endDate = moment(end_date, "YYYY-MM-DD");
 
         const prefixes: string[] = [];
         const currentDate = startOfMonthDate.clone();
@@ -25,15 +27,46 @@ export class DataInteractor {
             prefixes.push(currentDate.format("YYYY/MM"));
             currentDate.add(1, "month");
         }
+        const objectKeys: string[] = [];
+        await Promise.all(
+            prefixes.map((prefix, index) =>
+                this.storageService.listObjects({ Prefix: prefix }).then((res) => {
+                    let keys: string[] = [];
+                    if (index === 0 || index === prefixes.length - 1) {
+                        keys = (res.Contents || [])
+                            .map((item) => item.Key)
+                            .filter((key): key is string => {
+                                if (!key) return false;
 
-        const objectListPromises = prefixes.map((prefix) =>
-            this.storageService.listObjects({ Prefix: prefix })
-        );
+                                const [, , filename] = key.split("/");
+                                if (!filename) return false;
 
-        const objectListResults = await Promise.all(objectListPromises);
+                                const filenameParts = filename.split("_");
+                                if (filenameParts.length < 2) return false;
 
-        const objectKeys: string[] = objectListResults.flatMap(
-            (res) => (res.Contents || []).map((item) => item.Key).filter(Boolean) as string[]
+                                const filenameDate = filenameParts[1];
+                                if (filenameDate.length < 8) return false;
+
+                                const timestamp = [
+                                    filenameDate.slice(0, 4),
+                                    filenameDate.slice(4, 6),
+                                    filenameDate.slice(6, 8),
+                                ].join("-");
+                                const fileDate = moment(timestamp, "YYYY-MM-DD");
+
+                                return (
+                                    fileDate.isSameOrAfter(startDate) &&
+                                    fileDate.isSameOrBefore(endDate)
+                                );
+                            });
+                    } else {
+                        keys = (res.Contents || [])
+                            .map((item) => item.Key)
+                            .filter((key): key is string => Boolean(key));
+                    }
+                    objectKeys.push(...keys);
+                })
+            )
         );
 
         if (objectKeys.length === 0) {
@@ -114,7 +147,7 @@ export class DataInteractor {
         const prefix = date.split("-").splice(0, 2).join("/");
         const filename = ["AQI", date.split("-").join("").toString(), "3kmNRT.tif"].join("_");
         const path = `${prefix}/${filename}`;
-        console.log({ filename, path });
+
         const data = await this.storageService.getObject(path);
         return data;
     };

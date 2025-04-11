@@ -19,13 +19,7 @@ const dataRoute: Route[] = [
         middleware: [upload.single("file")],
         role: "",
     },
-    {
-        path: "/files/download",
-        method: "GET",
-        controller: dataController.onGetData,
-        middleware: [],
-        role: "",
-    },
+
     {
         path: "/files/:filename",
         method: "DELETE",
@@ -37,6 +31,12 @@ const dataRoute: Route[] = [
         path: "/files/batch-download",
         method: "GET",
         controller: dataController.onBatchDownload,
+        role: "",
+    },
+    {
+        path: "/files/download-date",
+        method: "GET",
+        controller: dataController.onDownloadByDate,
         role: "",
     },
 ];

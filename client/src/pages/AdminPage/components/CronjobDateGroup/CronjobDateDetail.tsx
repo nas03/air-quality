@@ -1,8 +1,7 @@
 import api from "@/config/api";
 import { CronjobMonitor } from "@/types/db";
-import { message } from "antd";
 import { useEffect, useState } from "react";
-import { FiDownload, FiInfo, FiRefreshCw } from "react-icons/fi";
+import { FiInfo, FiRefreshCw } from "react-icons/fi";
 import TableStatusBadge from "../CronjobTable/TableStatusBadge";
 
 interface CronjobDateDetailProps {
@@ -60,7 +59,6 @@ const LogSection = ({ title, jobs, getStatus, getLog, type, date }: LogSectionPr
     const latestFirst = [...jobs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     const [fileSizes, setFileSizes] = useState<{ [key: number]: number | null }>({});
-    const [loading, setLoading] = useState<{ [key: number]: boolean }>({});
 
     useEffect(() => {
         // Fetch file sizes for all jobs with status 1 (success)
@@ -78,35 +76,6 @@ const LogSection = ({ title, jobs, getStatus, getLog, type, date }: LogSectionPr
             }
         });
     }, [jobs, type]);
-
-    const handleDownload = async (jobId: number) => {
-        try {
-            setLoading((prev) => ({ ...prev, [jobId]: true }));
-            message.loading({ content: `Đang tải xuống dữ liệu ${type}...`, key: `download-${type}-${jobId}` });
-
-            const response = await api.get(`/data/download/${type}/${jobId}`, {
-                responseType: "blob",
-            });
-
-            // Create a download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `${type}_data_${date}_${jobId}.zip`);
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-            message.success({ content: `Tải xuống dữ liệu ${type} thành công!`, key: `download-${type}-${jobId}` });
-        } catch (error) {
-            console.error(`Error downloading ${type} data:`, error);
-            message.error({ content: `Lỗi khi tải xuống dữ liệu ${type}!`, key: `download-${type}-${jobId}` });
-        } finally {
-            setLoading((prev) => ({ ...prev, [jobId]: false }));
-        }
-    };
 
     return (
         <div className="space-y-4">
@@ -132,20 +101,6 @@ const LogSection = ({ title, jobs, getStatus, getLog, type, date }: LogSectionPr
                                         {formatFileSize(fileSizes[job.id]!)}
                                     </span>
                                 )}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleDownload(job.id);
-                                    }}
-                                    disabled={getStatus(job) !== 1 || loading[job.id]}
-                                    className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                                        getStatus(job) === 1 && !loading[job.id]
-                                            ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                            : "cursor-not-allowed bg-gray-100 text-gray-400"
-                                    }`}>
-                                    <FiDownload className={`h-3 w-3 ${loading[job.id] ? "animate-pulse" : ""}`} />
-                                    <span>{loading[job.id] ? "Đang tải..." : "Tải xuống"}</span>
-                                </button>
                             </div>
                         </div>
                         <div className="relative">
@@ -171,7 +126,6 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
     };
 
     const [rasterFileSize, setRasterFileSize] = useState<number | null>(null);
-    const [rasterLoading, setRasterLoading] = useState(false);
 
     useEffect(() => {
         // Fetch raster file size if available
@@ -187,40 +141,6 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
                 });
         }
     }, [jobs.raster]);
-
-    const handleDownloadRaster = async () => {
-        if (!jobs.raster) return;
-
-        try {
-            setRasterLoading(true);
-            message.loading({ content: "Đang tải xuống dữ liệu Raster...", key: `download-raster-${jobs.raster.id}` });
-
-            const response = await api.get(`/data/download/raster/${jobs.raster.id}`, {
-                responseType: "blob",
-            });
-
-            // Create a download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `raster_data_${date}_${jobs.raster.id}.zip`);
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-            message.success({
-                content: "Tải xuống dữ liệu Raster thành công!",
-                key: `download-raster-${jobs.raster.id}`,
-            });
-        } catch (error) {
-            console.error("Error downloading raster data:", error);
-            message.error({ content: "Lỗi khi tải xuống dữ liệu Raster!", key: `download-raster-${jobs.raster.id}` });
-        } finally {
-            setRasterLoading(false);
-        }
-    };
 
     return (
         <div className="flex h-[calc(100vh-12rem)] flex-col rounded-lg bg-white shadow-md lg:col-span-2">
@@ -260,17 +180,6 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
                                                 {formatFileSize(rasterFileSize)}
                                             </span>
                                         )}
-                                        <button
-                                            onClick={handleDownloadRaster}
-                                            disabled={jobs.raster.raster_data_status !== 1 || rasterLoading}
-                                            className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                                                jobs.raster.raster_data_status === 1 && !rasterLoading
-                                                    ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                                    : "cursor-not-allowed bg-gray-100 text-gray-400"
-                                            }`}>
-                                            <FiDownload className={`h-3 w-3 ${rasterLoading ? "animate-pulse" : ""}`} />
-                                            <span>{rasterLoading ? "Đang tải..." : "Tải xuống"}</span>
-                                        </button>
                                     </div>
                                 </div>
                                 <div className="text-sm text-gray-500">

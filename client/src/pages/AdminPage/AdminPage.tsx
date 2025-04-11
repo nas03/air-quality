@@ -1,8 +1,9 @@
 import { getAllCronjobs } from "@/api";
-import { downloadFilesAsZip } from "@/api/batchDownload";
+import { downloadByDate, downloadFilesAsZip } from "@/api/data";
 import api from "@/config/api";
 import { CronjobMonitor } from "@/types/db";
 import { useQuery } from "@tanstack/react-query";
+import { message } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { FiDownload, FiLoader } from "react-icons/fi";
@@ -134,6 +135,22 @@ const AdminPage = () => {
         }
     };
 
+    const handleDownloadDateGroup = async (date: string) => {
+        if (!groupedCronjobs[date]) {
+            message.error("No data available for this date");
+            return;
+        }
+
+        try {
+            message.loading({ content: `Đang tải xuống dữ liệu cho ngày ${date}...`, key: `download-date-${date}` });
+            downloadByDate(date);
+            message.success({ content: `Tải xuống dữ liệu thành công!`, key: `download-date-${date}` });
+        } catch (error) {
+            console.error("Error downloading files for date:", error);
+            message.error({ content: `Lỗi khi tải xuống dữ liệu!`, key: `download-date-${date}` });
+        }
+    };
+
     const renderContent = () => {
         if (loading) {
             return (
@@ -191,6 +208,10 @@ const AdminPage = () => {
                                         jobs={jobs}
                                         isSelected={date === selectedDate}
                                         onDateClick={() => handleDateClick(date)}
+                                        onDownloadClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDownloadDateGroup(date);
+                                        }}
                                     />
                                 ))}
                         </div>

@@ -1,5 +1,5 @@
 import { CronjobMonitor } from "@/types/db";
-import { FiCalendar, FiChevronRight } from "react-icons/fi";
+import { FiCalendar, FiChevronRight, FiDownload } from "react-icons/fi";
 import TableStatusBadge from "../CronjobTable/TableStatusBadge";
 
 interface CronjobDateGroupProps {
@@ -11,6 +11,7 @@ interface CronjobDateGroupProps {
     };
     isSelected: boolean;
     onDateClick: () => void;
+    onDownloadClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const formatDate = (dateStr: string) => {
@@ -22,8 +23,15 @@ const formatDate = (dateStr: string) => {
     return `${day}-${month}-${year}`;
 };
 
-export const CronjobDateGroup = ({ date, jobs, isSelected, onDateClick }: CronjobDateGroupProps) => {
+export const CronjobDateGroup = ({ date, jobs, isSelected, onDateClick, onDownloadClick }: CronjobDateGroupProps) => {
     const getTotalJobCount = () => jobs.wind.length + jobs.station.length + (jobs.raster ? 1 : 0);
+    const hasSuccessfulData = () => {
+        return (
+            (jobs.raster && jobs.raster.raster_data_status === 1) ||
+            jobs.wind.some((job) => job.wind_data_status === 1) ||
+            jobs.station.some((job) => job.station_data_status === 1)
+        );
+    };
 
     return (
         <div
@@ -39,7 +47,18 @@ export const CronjobDateGroup = ({ date, jobs, isSelected, onDateClick }: Cronjo
                         <p className="text-xs text-gray-500">{getTotalJobCount()} bản ghi</p>
                     </div>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                    <button
+                        onClick={onDownloadClick}
+                        disabled={!hasSuccessfulData()}
+                        className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs ${
+                            hasSuccessfulData()
+                                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                : "cursor-not-allowed bg-gray-100 text-gray-400"
+                        }`}>
+                        <FiDownload className="h-3 w-3" />
+                        <span>Xuất dữ liệu</span>
+                    </button>
                     <div className="flex space-x-2">
                         {jobs.raster && <TableStatusBadge status={jobs.raster.raster_data_status} />}
                     </div>

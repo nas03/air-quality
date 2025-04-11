@@ -1,8 +1,6 @@
 import api from "@/config/api";
 import { CronjobMonitor } from "@/types/db";
-import { message } from "antd";
 import { useEffect, useState } from "react";
-import { FiDownload } from "react-icons/fi";
 import TableStatusBadge from "../CronjobTable/TableStatusBadge";
 
 interface DataItemProps {
@@ -25,7 +23,6 @@ const formatFileSize = (bytes: number): string => {
 
 const DataItem = ({ job, type, date, getStatus }: DataItemProps) => {
     const [fileSize, setFileSize] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // Format timestamp to local time
     const formatTime = (timestamp: string) => {
@@ -47,55 +44,12 @@ const DataItem = ({ job, type, date, getStatus }: DataItemProps) => {
         }
     }, [job.id, type, getStatus, job]);
 
-    const handleDownload = async () => {
-        try {
-            setIsLoading(true);
-            message.loading({ content: `Đang tải xuống dữ liệu ${type}...`, key: `download-${type}-${job.id}` });
-
-            const response = await api.get(`/data/download/${type}/${job.id}`, {
-                responseType: "blob",
-            });
-
-            // Create a download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `${type}_data_${date}_${job.id}.zip`);
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-            message.success({ content: `Tải xuống dữ liệu ${type} thành công!`, key: `download-${type}-${job.id}` });
-        } catch (error) {
-            console.error(`Error downloading ${type} data:`, error);
-            message.error({ content: `Lỗi khi tải xuống dữ liệu ${type}!`, key: `download-${type}-${job.id}` });
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     return (
         <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <div className="mb-2 flex items-center justify-between">
                 <TableStatusBadge status={getStatus(job)} />
                 <div className="flex items-center space-x-2">
                     <span className="text-xs text-gray-500">{formatTime(job.timestamp)}</span>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleDownload();
-                        }}
-                        disabled={getStatus(job) !== 1 || isLoading}
-                        className={`flex items-center space-x-1 rounded-md px-2 py-1 text-xs font-medium ${
-                            getStatus(job) === 1 && !isLoading
-                                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                                : "cursor-not-allowed bg-gray-100 text-gray-400"
-                        }`}>
-                        <FiDownload className={`h-3 w-3 ${isLoading ? "animate-pulse" : ""}`} />
-                        <span>{isLoading ? "Đang tải..." : "Tải xuống"}</span>
-                    </button>
                 </div>
             </div>
             <div className="mt-2 flex items-center justify-between">
