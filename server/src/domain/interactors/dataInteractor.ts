@@ -14,7 +14,7 @@ export class DataInteractor {
         this.stationRepository = stationRepository;
     }
 
-    getRasterData = async (start_date: string, end_date: string, zip: JSZip) => {
+    getRasterDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
         const startOfMonthDate = moment(start_date, "YYYY-MM-DD").startOf("M");
         const endOfMonthDate = moment(end_date, "YYYY-MM-DD").endOf("M");
 
@@ -45,7 +45,7 @@ export class DataInteractor {
         return zip;
     };
 
-    getWindData = async (start_date: string, end_date: string, zip: JSZip) => {
+    getWindDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
         const data = await this.windDataRepository.getWindDataHistory(
             moment(start_date, "YYYY-MM-DD"),
             moment(end_date, "YYYY-MM-DD")
@@ -54,7 +54,7 @@ export class DataInteractor {
         return zip.file("wind_data.json", dataBuffer);
     };
 
-    getStationData = async (start_date: string, end_date: string, zip: JSZip) => {
+    getStationDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
         const startDate = moment(start_date, "YYYY-MM-DD");
         const endDate = moment(end_date, "YYYY-MM-DD");
         const data = await this.stationRepository.getStationDataHistory(startDate, endDate);
@@ -109,4 +109,15 @@ export class DataInteractor {
         zip.file("stations.json", jsonData);
         return zip;
     };
+
+    getRasterData = async (date: string) => {
+        const prefix = date.split("-").splice(0, 2).join("/");
+        const filename = ["AQI", date.split("-").join("").toString(), "3kmNRT.tif"].join("_");
+        const path = `${prefix}/${filename}`;
+        console.log({ filename, path });
+        const data = await this.storageService.getObject(path);
+        return data;
+    };
+    getWindData = async (id: number) => {};
+    getStationData = async (date: string) => {};
 }

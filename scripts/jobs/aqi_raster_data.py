@@ -239,9 +239,8 @@ def createAQIRasterFile(filepath: str, output_path: str):
             f"Output file size: {output_size_kb:.2f} KB (compression ratio: {os.path.getsize(filepath)/output_size_kb:.2f}x)"
         )
 
-        # Upload using correct path
         with open(output_path, "rb") as f:
-            files = [("file", (aqi_filename, f))]
+            files = [("file", (aqi_filename, f, "image/tiff"))]
             requests.post(
                 f"http://localhost:5500/api/files/",
                 files=files,

@@ -20,9 +20,9 @@ const dataRoute: Route[] = [
         role: "",
     },
     {
-        path: "/files/download/:filename",
+        path: "/files/download",
         method: "GET",
-        controller: dataController.onGetObject,
+        controller: dataController.onGetData,
         middleware: [],
         role: "",
     },
