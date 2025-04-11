@@ -33,15 +33,15 @@ const formatFileSize = (bytes: number): string => {
 };
 
 const CronjobDetail = ({ cronjob, onClose, onRerun, rerunStatus }: CronjobDetailProps) => {
-    const [loading, setLoading] = useState<{
-        raster: boolean;
-        wind: boolean;
-        station: boolean;
-    }>({
-        raster: false,
-        wind: false,
-        station: false,
-    });
+    // const [loading, setLoading] = useState<{
+    //     raster: boolean;
+    //     wind: boolean;
+    //     station: boolean;
+    // }>({
+    //     raster: false,
+    //     wind: false,
+    //     station: false,
+    // });
     const [fileSizes, setFileSizes] = useState<{
         raster: number | null;
         wind: number | null;
