@@ -55,7 +55,7 @@ interface LogSectionProps {
     date: string;
 }
 
-const LogSection = ({ title, jobs, getStatus, getLog, type, date }: LogSectionProps) => {
+const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) => {
     const latestFirst = [...jobs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     const [fileSizes, setFileSizes] = useState<{ [key: number]: number | null }>({});

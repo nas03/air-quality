@@ -21,7 +21,7 @@ const formatFileSize = (bytes: number): string => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 };
 
-const DataItem = ({ job, type, date, getStatus }: DataItemProps) => {
+const DataItem = ({ job, type, getStatus }: DataItemProps) => {
     const [fileSize, setFileSize] = useState<number | null>(null);
 
     // Format timestamp to local time
