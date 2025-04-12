@@ -47,7 +47,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
             });
 
         const verificationCode = await this.verificationCodeInteractor.createVerificationCode(
-            newUser.user_id,
+            newUser.user_id
         );
         const FE_URL = "http://localhost:5173/email-verification";
         await this.mailService.sendMail({
@@ -55,7 +55,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
             subject: "Xác nhận Email",
             html: emailVerificationTemplate(
                 `${FE_URL}?code=${verificationCode?.code}`,
-                newUser.email,
+                newUser.email
             ),
         });
         return res.status(200).json({
@@ -106,7 +106,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
             });
         const validateOldPassword = await new SecurityService().compareString(
             old_password,
-            user.password,
+            user.password
         );
         if (!validateOldPassword) {
             return res.status(statusCode.ERROR).json({

@@ -146,7 +146,17 @@ const OpenLayerMap: React.FC<IPropsOpenLayerMap> = (props) => {
 
         mapRef.current = map;
         configContext.setMap(map);
-        setupMap();
+        setupMap().then(() => {
+            const zoom = map.getView().getZoom();
+            const windLayer = map.getLayers().getArray()[6];
+            if (!zoom || !windLayer) return;
+
+            if (zoom >= 11) {
+                windLayer.setVisible(false);
+            } else {
+                windLayer.setVisible(configContext.layer.wind);
+            }
+        });
 
         return () => map.dispose();
     }, []);
