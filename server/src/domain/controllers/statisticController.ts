@@ -4,17 +4,12 @@ import { Request, Response } from "express";
 
 export class StatisticController extends BaseController<[StatisticInteractor]> {
     private statisticInteractor = this.interactors[0];
+
     onGetByDistrictID = async (req: Request, res: Response) => {
-        const params = req.params as {
-            district_id: string;
-        };
-        const queries = req.query as unknown as {
-            date?: Date;
-        };
-        const data = await this.statisticInteractor.getByDistrictID(
-            params["district_id"],
-            queries.date,
-        );
+        const { district_id } = req.params;
+        const date = req.query.date as unknown as Date | undefined;
+
+        const data = await this.statisticInteractor.getByDistrictID(district_id, date);
         return res.status(200).json({
             status: "success",
             data,
@@ -22,18 +17,14 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
     };
 
     onGetDistrictHistory = async (req: Request, res: Response) => {
-        const params = req.params as {
-            district_id: string;
-        };
-        const queries = req.query as unknown as {
-            start_date: Date;
-            end_date: Date;
-        };
+        const { district_id } = req.params;
+        const start_date = req.query.start_date as unknown as Date;
+        const end_date = req.query.end_date as unknown as Date;
 
         const data = await this.statisticInteractor.getDistrictHistory(
-            params.district_id,
-            queries.start_date,
-            queries.end_date,
+            district_id,
+            start_date,
+            end_date
         );
         return res.status(200).json({
             status: "success",
@@ -42,10 +33,8 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
     };
 
     onGetRankByDate = async (req: Request, res: Response) => {
-        const queries = req.query as unknown as {
-            date: Date;
-        };
-        const data = await this.statisticInteractor.getRankByDate(queries.date);
+        const date = req.query.date as unknown as Date;
+        const data = await this.statisticInteractor.getRankByDate(date);
         return res.status(200).json({
             status: "success",
             data,
@@ -62,19 +51,15 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
     };
 
     onGetAQIStatisticsByProvince = async (req: Request, res: Response) => {
-        const params = req.params as {
-            province_id: string;
-        };
-        const queries = req.query as unknown as {
-            start_date: Date;
-            end_date: Date;
-        };
+        const { province_id } = req.params;
+        const start_date = req.query.start_date as unknown as Date;
+        const end_date = req.query.end_date as unknown as Date;
 
         const { districtsData, provinceData } =
             await this.statisticInteractor.getAQIStatisticsByProvince(
-                params.province_id,
-                queries.start_date,
-                queries.end_date,
+                province_id,
+                start_date,
+                end_date
             );
         return res.status(200).json({
             status: "success",
