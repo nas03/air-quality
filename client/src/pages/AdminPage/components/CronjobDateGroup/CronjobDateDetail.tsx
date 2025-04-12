@@ -61,7 +61,6 @@ const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) =
     const [fileSizes, setFileSizes] = useState<{ [key: number]: number | null }>({});
 
     useEffect(() => {
-        // Fetch file sizes for all jobs with status 1 (success)
         latestFirst.forEach((job) => {
             if (getStatus(job) === 1) {
                 api.get(`/data/size/${type}/${job.id}`)
@@ -117,7 +116,7 @@ const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) =
 
 export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobDateDetailProps) => {
     const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString(undefined, {
+        return new Date(dateStr).toLocaleDateString("vi-VN", {
             weekday: "long",
             year: "numeric",
             month: "long",
@@ -128,7 +127,6 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
     const [rasterFileSize, setRasterFileSize] = useState<number | null>(null);
 
     useEffect(() => {
-        // Fetch raster file size if available
         if (jobs.raster && jobs.raster.raster_data_status === 1) {
             api.get(`/data/size/raster/${jobs.raster.id}`)
                 .then((response) => {

@@ -2,7 +2,7 @@ import { getUserAlertSetting } from "@/api/alertSetting";
 import { Loading } from "@/components";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import AlertInfoCards from "./AlertInfoCard";
 import AlertRegistration from "./AlertRegistration";
@@ -12,7 +12,6 @@ interface AlertTabProps extends React.ComponentPropsWithoutRef<"div"> {}
 
 const AlertTab: React.FC<AlertTabProps> = () => {
     const [addAlert, setAddAlert] = useState(false);
-    const [refetchNotification, setRefetchNotification] = useState(false);
     const { user } = useAuth();
     const userId = user?.user_id ? Number(user.user_id) : undefined;
 
@@ -26,13 +25,6 @@ const AlertTab: React.FC<AlertTabProps> = () => {
         enabled: !!userId,
     });
 
-    useEffect(() => {
-        if (refetchNotification) {
-            refetchAlertSetting();
-            setRefetchNotification(false);
-        }
-    }, [refetchNotification, refetchAlertSetting]);
-
     const renderContent = () => {
         if (!user) {
             return <SignInNotification />;
@@ -42,7 +34,7 @@ const AlertTab: React.FC<AlertTabProps> = () => {
             return (
                 <AlertRegistration
                     setAddAlert={setAddAlert}
-                    setRefetchNotification={setRefetchNotification}
+                    refetchNotifications={refetchAlertSetting}
                     alertSettingData={alertSettingData}
                 />
             );

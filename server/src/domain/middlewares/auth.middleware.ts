@@ -1,54 +1,17 @@
 import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
-import { UserToken } from "@/domain/controllers/types";
-import { UserInteractor } from "@/domain/interactors";
 import { SecurityService, Validator } from "@/services";
 import { NextFunction, Request, Response } from "express";
-import { z } from "zod";
+import z from "zod";
+import { UserToken } from "../controllers/types";
+import { UserInteractor } from "../interactors";
 
-export class UserMiddleware {
+export class AuthMiddleware {
     private securityService = new SecurityService();
     private userInteractor: UserInteractor;
-
-    constructor(userInteractor: UserInteractor) {
-        this.userInteractor = userInteractor;
-    }
-
-    validateCreateUser = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const userSchema = z.object({
-                username: z.string(),
-                password: z.string(),
-                email: z.string().email(),
-                phone_number: z.string(),
-            });
-            const userValidator = new Validator(userSchema);
-            userValidator.validate(req.body);
-            next();
-        } catch {
-            res.status(400).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-            });
+     constructor(userInteractor: UserInteractor) {
+            this.userInteractor = userInteractor;
         }
-    };
-
-    validateSignin = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const userSchema = z.object({
-                accountIdentifier: z.string(),
-                password: z.string(),
-            });
-            const userValidator = new Validator(userSchema);
-            userValidator.validate(req.body);
-            next();
-        } catch {
-            res.status(400).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-            });
-        }
-    };
-
+    
     authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const authorizeSchema = z.string().includes("Bearer");

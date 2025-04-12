@@ -1,6 +1,5 @@
 import { UserInteractor } from "@/domain/interactors";
 import { catchAsync } from "@/domain/middlewares/catchAsync";
-import { UserMiddleware } from "@/domain/middlewares/user.middleware";
 import { UserRepository } from "@/domain/repositories";
 import authRouter from "@/domain/routes/authRoute";
 import districtRouter from "@/domain/routes/districtRoutes";
@@ -10,6 +9,7 @@ import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 
 import { Router } from "express";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 import alertSettingRouter from "./alertSettingRoute";
 import cronjobMonitorRoute from "./cronjobMonitorRoute";
 import dataRoute from "./dataRoute";
@@ -30,7 +30,7 @@ const routes = [
 
 const userRepository = new UserRepository();
 const userInteractor = new UserInteractor(userRepository);
-const userMiddleware = new UserMiddleware(userInteractor);
+const authMiddleware = new AuthMiddleware(userInteractor);
 const router = Router();
 
 routes.forEach((route) => {
@@ -39,8 +39,8 @@ routes.forEach((route) => {
     if (middleware && middleware.length) {
         router.use(path, middleware);
     }
-    if (role === "user") {
-        // router.use(path, userMiddleware.authorizeUser.bind(userMiddleware));
+    if (role) {
+        // router.use(path, authMiddleware.authorizeUser.bind(authMiddleware));
     }
 
     const handler = catchAsync(controller);

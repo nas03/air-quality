@@ -4,12 +4,13 @@ import { useAuth } from "@/hooks/useAuth";
 import useRegistrationState from "@/hooks/useRegistrationState";
 import { RECEIVE_NOTIFICATIONS } from "@/types/consts";
 import { AlertSetting } from "@/types/db";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import { Form } from "antd";
-import React, { SetStateAction, useCallback, useEffect, useMemo } from "react";
+import React, { SetStateAction, useEffect, useMemo } from "react";
 import RegistrationSteps from "./RegistrationSteps/RegistrationSteps";
 
 interface IPropsAlertRegistration extends React.ComponentPropsWithoutRef<"div"> {
-    setRefetchNotification: React.Dispatch<SetStateAction<boolean>>;
+    refetchNotifications: (options?: RefetchOptions) => Promise<QueryObserverResult<any[], Error>>;
     alertSettingData: AlertSetting[];
     setAddAlert: React.Dispatch<SetStateAction<boolean>>;
 }
@@ -17,7 +18,7 @@ interface IPropsAlertRegistration extends React.ComponentPropsWithoutRef<"div"> 
 const MAX_STEP = 3;
 const INITIAL_STEP = 0;
 
-const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotification, setAddAlert }) => {
+const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotifications, setAddAlert }) => {
     const { registrationData, setRegistrationData } = useRegistrationState();
     const [form] = Form.useForm();
     const { user } = useAuth();
@@ -26,7 +27,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
     const [currentStep, setCurrentStep] = React.useState(INITIAL_STEP);
     const [registrationLoading, setRegistrationLoading] = React.useState(false);
 
-    const handleRegisterAlert = useCallback(async () => {
+    const handleRegisterAlert = async () => {
         if (!userId) return;
 
         try {
@@ -53,7 +54,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
             };
 
             await createUserAlertSetting(payload);
-            setRefetchNotification(true);
+            refetchNotifications();
             setAddAlert(false);
         } catch (error) {
             console.error("Error registering alert:", error);
@@ -61,7 +62,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ setRefetchNotifi
             setRegistrationLoading(false);
             setAddAlert(false);
         }
-    }, [form, userId, setRefetchNotification]);
+    };
 
     useEffect(() => {
         if (registrationData) {

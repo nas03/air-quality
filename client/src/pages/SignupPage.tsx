@@ -32,7 +32,7 @@ const SignupForm = ({ onSubmit }: { onSubmit: (data: SignupFormData) => Promise<
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="grid gap-3">
                 <Label htmlFor="username" className="text-sm font-medium text-gray-700">
-                    Username
+                    Tên đăng nhập
                 </Label>
                 <Input
                     id="username"
@@ -56,7 +56,7 @@ const SignupForm = ({ onSubmit }: { onSubmit: (data: SignupFormData) => Promise<
             </div>
             <div className="grid gap-3">
                 <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                    Phone Number
+                    Số điện thoại
                 </Label>
                 <Input
                     id="phone"
@@ -68,7 +68,7 @@ const SignupForm = ({ onSubmit }: { onSubmit: (data: SignupFormData) => Promise<
             </div>
             <div className="grid gap-3">
                 <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                    Password
+                    Mật khẩu
                 </Label>
                 <Input
                     id="password"
@@ -81,18 +81,18 @@ const SignupForm = ({ onSubmit }: { onSubmit: (data: SignupFormData) => Promise<
             <Button
                 type="submit"
                 className="mt-4 w-full rounded-md bg-indigo-600 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                Create Account
+                Tạo tài khoản
             </Button>
             <Button
                 variant="outline"
                 className="mt-2 flex w-full items-center justify-center border-gray-300 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <FcGoogle className="mr-2 h-5 w-5" />
-                Sign up with Google
+                Đăng ký với Google
             </Button>
             <div className="mt-6 text-center text-sm text-gray-500">
-                Already have an account?{" "}
+                Đã có tài khoản?{" "}
                 <Link to="/signin" className="font-medium text-indigo-600 hover:underline">
-                    Sign in
+                    Đăng nhập
                 </Link>
             </div>
         </form>
@@ -112,7 +112,7 @@ const SignupPage = () => {
                 },
             });
         } catch (error) {
-            console.error("Sign up failed:", error);
+            console.error("Đăng ký thất bại:", error);
         }
     };
 
@@ -126,8 +126,8 @@ const SignupPage = () => {
                                 <img src="/logo_no_text.svg" alt="logo" className="h-8 w-auto" />
                                 <p>Airly</p>
                             </CardTitle>
-                            <CardDescription className="text-sm text-gray-200">
-                                Air Quality Forecast System
+                            <CardDescription className="text-sm text-gray-200 mt-3">
+                                Hệ thống Dự báo Chất lượng Không khí
                             </CardDescription>
                         </Link>
                     </CardHeader>

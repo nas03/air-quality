@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { AlertSetting } from "@/types/db";
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import { Card, Tooltip, Typography } from "antd";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoCloudy } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -140,7 +140,10 @@ const AlertInfoCards: React.FC<IPropsAlertInfoCards> = ({ className, alertSettin
     const handleDeleteCard = (index: number) => {
         setActiveAlerts((prev) => prev.filter((_, i) => i !== index));
     };
-
+    useEffect(() => {
+        setActiveAlerts(alertSettingData);
+        queries.forEach((query) => query.refetch());
+    }, [alertSettingData]);
     return (
         <div className="flex h-full w-full flex-col gap-5" {...props}>
             {queries.map((query, index) => (

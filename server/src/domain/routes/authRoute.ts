@@ -1,7 +1,7 @@
 import { Route } from "@/config/constant/types";
 import { AuthController } from "@/domain/controllers/authController";
 import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
-import { UserMiddleware } from "@/domain/middlewares/user.middleware";
+import { UserValidationMiddleware } from "@/domain/middlewares/userValidation.middleware";
 import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
 
 const userRepository = new UserRepository();
@@ -9,7 +9,7 @@ const verificationRepository = new VerificationCodeRepository();
 const userInteractor = new UserInteractor(userRepository);
 const verificationInteractor = new VerificationCodeInteractor(verificationRepository);
 const authController = new AuthController(userInteractor, verificationInteractor);
-const authMiddleware = new UserMiddleware(userInteractor);
+const authMiddleware = new UserValidationMiddleware();
 
 const authRouter: Route[] = [
     /* {

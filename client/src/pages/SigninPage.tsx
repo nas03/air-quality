@@ -42,7 +42,7 @@ const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) 
             <div className="grid gap-3">
                 <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                        Password
+                        Mật khẩu
                     </Label>
                 </div>
                 <Input
@@ -56,18 +56,18 @@ const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) 
             <Button
                 type="submit"
                 className="mt-4 w-full rounded-md bg-indigo-600 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                Sign in
+                Đăng nhập
             </Button>
             <Button
                 variant="outline"
                 className="mt-2 flex w-full items-center justify-center border-gray-300 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <FcGoogle className="mr-2 h-5 w-5" />
-                Sign in with Google
+                Đăng nhập với Google
             </Button>
             <div className="mt-6 text-center text-sm text-gray-500">
-                Don't have an account?{" "}
+                Bạn chưa có tài khoản?{" "}
                 <Link to="/signup" className="font-medium text-indigo-600 hover:underline">
-                    Sign up
+                    Đăng ký
                 </Link>
             </div>
         </form>
@@ -88,7 +88,7 @@ const SigninPage = () => {
     const handleSignin = async (data: SigninFormData) => {
         const status = await auth.login(data.email, data.password);
         if (!status) {
-            setMessage({ msg: "Invalid email or password", isSuccess: false });
+            setMessage({ msg: "Email hoặc mật khẩu không đúng", isSuccess: false });
             return;
         }
         navigate({ to: "/" });
@@ -104,8 +104,8 @@ const SigninPage = () => {
                                 <img src="/logo_no_text.svg" alt="logo" className="h-8 w-auto" />
                                 <p>Airly</p>
                             </CardTitle>
-                            <CardDescription className="text-sm text-gray-200">
-                                Air Quality Forecast System
+                            <CardDescription className="text-sm text-gray-200 mt-3">
+                                Hệ thống Dự báo Chất lượng Không khí
                             </CardDescription>
                         </Link>
                     </CardHeader>

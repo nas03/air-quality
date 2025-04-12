@@ -1,3 +1,4 @@
+import { flag } from "@/config/constant";
 import { db } from "@/config/db";
 import { AlertSetting, User } from "@/entities";
 import { IAlertSettingRepository } from "@/interfaces";
@@ -21,6 +22,7 @@ export class AlertSettingRepository implements IAlertSettingRepository {
                 "md.vn_type",
             ])
             .where("as.district_id", "=", district_id)
+            .where("md.deleted", "=", flag.FALSE)
             .executeTakeFirst();
         return { ...query };
     }
@@ -69,7 +71,7 @@ export class AlertSettingRepository implements IAlertSettingRepository {
             .innerJoin(
                 (eb) =>
                     eb.selectFrom("alerts_setting").select("user_id").groupBy("user_id").as("a"),
-                (join) => join.onRef("a.user_id", "=", "u.user_id"),
+                (join) => join.onRef("a.user_id", "=", "u.user_id")
             )
             .select(["u.email", "u.user_id", "u.phone_number"])
             .execute();
@@ -77,7 +79,7 @@ export class AlertSettingRepository implements IAlertSettingRepository {
 
         const userDataMap = usersData.reduce(
             (map, data) => map.set(data.user_id, data),
-            new Map<number, Pick<User, "email" | "user_id" | "phone_number">>(),
+            new Map<number, Pick<User, "email" | "user_id" | "phone_number">>()
         );
 
         const result = userAlertSettingData
