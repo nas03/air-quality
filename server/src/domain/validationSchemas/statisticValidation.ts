@@ -1,10 +1,5 @@
-import moment from "moment";
 import { z } from "zod";
-const dateTransformer = (val: unknown) => {
-    if (typeof val !== "string") return undefined;
-    const isValid = moment(val, "YYYY-MM-DD").isValid();
-    return isValid ? val : undefined;
-};
+import { dateTransformer } from "./common";
 
 export const districtIdSchema = z.object({
     district_id: z.string().min(1, "District ID is required"),

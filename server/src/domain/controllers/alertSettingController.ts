@@ -28,7 +28,7 @@ export class AlertSettingController extends BaseController<
             const exceededDays = statisticData.forecast
                 .filter((data) => data.aqi_index >= 50)
                 .flatMap((el) =>
-                    new Date(el.time).toLocaleDateString("en-GB").split("/").join("-"),
+                    new Date(el.time).toLocaleDateString("en-GB").split("/").join("-")
                 );
             const aqiDays = statisticData.forecast.map((data) => ({
                 ...data,
@@ -43,7 +43,7 @@ export class AlertSettingController extends BaseController<
                 html: alertMailTemplate(
                     `${statisticData.vn_district}, ${statisticData.vn_province}`,
                     exceededDays,
-                    aqiDays,
+                    aqiDays
                 ),
             };
         });
@@ -69,8 +69,9 @@ export class AlertSettingController extends BaseController<
     async onCreateAlertSetting(req: Request, res: Response) {
         try {
             const alertSettingData = req.body;
-            const alertSetting =
-                await this.alertSettingInteractor.createAlertSetting(alertSettingData);
+            const alertSetting = await this.alertSettingInteractor.createAlertSetting(
+                alertSettingData
+            );
 
             return res.status(statusCode.CREATED).json({
                 status: "success",
@@ -93,7 +94,7 @@ export class AlertSettingController extends BaseController<
 
             const updatedAlertSetting = await this.alertSettingInteractor.updateAlertSetting(
                 Number(id),
-                alertSettingData,
+                alertSettingData
             );
 
             if (!updatedAlertSetting) {
@@ -147,15 +148,8 @@ export class AlertSettingController extends BaseController<
         try {
             const { user_id } = req.params;
 
-            if (!user_id) {
-                return res.status(statusCode.BAD_REQUEST).json({
-                    status: "fail",
-                    message: resMessage.field_invalid,
-                    data: null,
-                });
-            }
             const alertSetting = await this.alertSettingInteractor.getAlertSettingByUserId(
-                Number(user_id),
+                Number(user_id)
             );
 
             return res.status(statusCode.SUCCESS).json({
@@ -173,19 +167,10 @@ export class AlertSettingController extends BaseController<
     }
 
     onGetUserAlertByDistrict = async (req: Request, res: Response) => {
-        const { user_id } = req.params;
         const { district_id } = req.query;
 
-        if (!user_id || !district_id) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-                data: null,
-            });
-        }
-
         const setting = await this.alertSettingInteractor.getUserAlertByDistrict(
-            district_id as string,
+            district_id as string
         );
         const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
         console.log(setting);
@@ -207,7 +192,7 @@ export class AlertSettingController extends BaseController<
                     appid: API_KEY,
                     units: "metric",
                 },
-            },
+            }
         );
         const dates: Date[] = [];
         const result = openWeatherData.data.list.map((data) => {
@@ -233,7 +218,7 @@ export class AlertSettingController extends BaseController<
         const forecast = await this.statisticInteractor.getDistrictHistory(
             district_id as string,
             dates[0],
-            dates[7],
+            dates[7]
         );
 
         const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
@@ -245,7 +230,7 @@ export class AlertSettingController extends BaseController<
                     appid: API_KEY,
                     units: "metric",
                 },
-            },
+            }
         );
 
         const currentWeather = {
@@ -268,13 +253,6 @@ export class AlertSettingController extends BaseController<
     onGetWeatherDataByLocation = async (req: Request, res: Response) => {
         const { district_id, lat, lon } = req.query;
 
-        if (!district_id && (!lat || !lon)) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "fail",
-                message: resMessage.field_invalid,
-                data: null,
-            });
-        }
         const payload = { lat: 0, lon: 0, location: "" };
         const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 
@@ -303,7 +281,7 @@ export class AlertSettingController extends BaseController<
                     units: "metric",
                     lang: "vi",
                 },
-            },
+            }
         );
 
         const result = {

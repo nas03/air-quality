@@ -3,7 +3,7 @@ import {
     getByDistrictIDSchema,
     getDistrictHistorySchema,
     getRankByDateSchema,
-} from "../validations/statisticValidation";
+} from "@/domain/validationSchemas/statisticValidation";
 import { validateRequest } from "./validationMiddleware";
 
 export class StatisticValidationMiddleware {

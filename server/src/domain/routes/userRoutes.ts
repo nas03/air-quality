@@ -1,7 +1,7 @@
 import { Route } from "@/config/constant/types";
 import { UserController } from "@/domain/controllers";
 import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
-import { UserValidationMiddleware } from "@/domain/middlewares/userValidation.middleware";
+import { UserValidationMiddleware } from "@/domain/middlewares/validations/userValidation.middleware";
 import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
 
 const userRepository = new UserRepository();

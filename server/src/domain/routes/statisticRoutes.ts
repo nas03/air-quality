@@ -1,8 +1,8 @@
 import { Route } from "@/config/constant/types";
 import { StatisticController } from "@/domain/controllers/statisticController";
 import { StatisticInteractor } from "@/domain/interactors";
+import { StatisticValidationMiddleware } from "@/domain/middlewares/validations/statisticValidation.middleware";
 import { StatisticRepository } from "@/domain/repositories";
-import { StatisticValidationMiddleware } from "../middlewares/statisticValidation.middleware";
 
 const statisticRepository = new StatisticRepository();
 const statisticInteractor = new StatisticInteractor(statisticRepository);

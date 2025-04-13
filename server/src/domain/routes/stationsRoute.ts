@@ -12,6 +12,7 @@ const stationsRouter: Route[] = [
         path: "/stations",
         controller: stationsController.onGetAllStations.bind(stationsController),
         method: "GET",
+
         role: "user",
     },
     {

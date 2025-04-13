@@ -31,40 +31,8 @@ export class DataController extends BaseController<[DataInteractor]> {
         });
     };
 
-    onGetObject = async (req: Request, res: Response) => {
-        const { filename } = req.query;
-
-        if (!filename) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "error",
-                message: "Filename is required",
-            });
-        }
-
-        const signedURL = await this.storageService.getObject(filename as string);
-
-        if (!signedURL) {
-            return res.status(statusCode.NOT_FOUND).json({
-                status: "error",
-                message: "File not found",
-            });
-        }
-
-        return res.status(statusCode.SUCCESS).json({
-            status: "success",
-            data: { url: signedURL },
-        });
-    };
-
     onDeleteObject = async (req: Request, res: Response) => {
         const { filename } = req.params;
-
-        if (!filename) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "error",
-                message: "Filename is required",
-            });
-        }
 
         const result = await this.storageService.deleteObject(filename);
 
@@ -78,13 +46,6 @@ export class DataController extends BaseController<[DataInteractor]> {
     onBatchDownload = async (req: Request, res: Response) => {
         const start_date = req.query.start_date as string;
         const end_date = req.query.end_date as string;
-
-        if (!start_date || !end_date) {
-            return res.status(statusCode.BAD_REQUEST).json({
-                status: "error",
-                message: "start_date and end_date are required",
-            });
-        }
 
         const zip = new JSZip();
 
