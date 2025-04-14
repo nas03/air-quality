@@ -7,6 +7,27 @@ import {
 import { validateRequest } from "./validationMiddleware";
 
 export class DataValidationMiddleware {
+    validateObject = validateRequest({
+        PUT: {
+            body: onPutObjectSchema.body,
+        },
+        DELETE: {
+            params: onDeleteObjectSchema.params,
+        },
+    });
+
+    validateDownload = validateRequest({
+        GET: {
+            query: onBatchDownloadSchema.query,
+        },
+    });
+
+    validateDownloadByDate = validateRequest({
+        GET: {
+            query: onDownloadByDateSchema.query,
+        },
+    });
+
     validatePutObject = validateRequest({
         body: onPutObjectSchema.body,
     });
@@ -17,9 +38,5 @@ export class DataValidationMiddleware {
 
     validateBatchDownload = validateRequest({
         query: onBatchDownloadSchema.query,
-    });
-
-    validateDownloadByDate = validateRequest({
-        query: onDownloadByDateSchema.query,
     });
 }

@@ -44,9 +44,9 @@ export type AlertInfo = {
     weather: UserAlert[];
     forecast: number[];
 };
-export const getUserAlertByDistrict = async (user_id: number, district_id: string) => {
+export const getUserAlertByDistrict = async (_user_id: number, district_id: string) => {
     try {
-        const response = await api.get<APIResponse<AlertInfo>>(`/alert-settings/user/${user_id}`, {
+        const response = await api.get<APIResponse<AlertInfo>>(`/alert-settings/user`, {
             params: {
                 district_id: district_id,
             },

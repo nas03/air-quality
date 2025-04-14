@@ -63,9 +63,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
             data: data,
         });
     };
-    /**
-     * Create a new cronjob monitor record
-     */
+
     onCreateCronjobRecord = async (req: Request, res: Response) => {
         const payload = req.body as Omit<CronjobMonitor, "id">;
 

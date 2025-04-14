@@ -12,6 +12,10 @@ export class Validator<T extends z.ZodTypeAny> implements IValidationService<T> 
         return this.schema.parse(data);
     }
 
+    async validateAsync(data: unknown): Promise<ZodInfer<T>> {
+        return this.schema.parse(data);
+    }
+
     async isValid(data: unknown): Promise<boolean> {
         try {
             this.schema.parse(data);

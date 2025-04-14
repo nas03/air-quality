@@ -3,6 +3,26 @@ import { signInSchema } from "@/domain/validationSchemas/userValidation";
 import { validateRequest } from "./validationMiddleware";
 
 export class AuthValidationMiddleware {
+    // Method-based validations for authentication routes
+    validateAuth = validateRequest({
+        POST: {
+            body: signInSchema.body
+        }
+    });
+
+    validateToken = validateRequest({
+        POST: {
+            headers: refreshTokenSchema.headers
+        }
+    });
+
+    validateCode = validateRequest({
+        POST: {
+            params: verifyCodeSchema.params
+        }
+    });
+    
+    // For backward compatibility
     validateSignin = validateRequest({
         body: signInSchema.body,
     });

@@ -5,5 +5,5 @@ export type Route = {
     method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
     role: "user" | "";
     controller: (req: Request, res: Response) => Promise<Response | null | undefined>;
-    middleware?: ((req: Request, res: Response, next: NextFunction) => void | Promise<void>)[];
+    middleware?: ((req: Request, res: Response, next: NextFunction) => any | Promise<any>)[];
 };

@@ -7,3 +7,5 @@ export * from "./mRecommendationController";
 export * from "./stationsController";
 export * from "./statisticController";
 export * from "./userController";
+export * from "./windDataController";
+

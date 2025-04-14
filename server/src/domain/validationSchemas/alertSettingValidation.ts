@@ -2,19 +2,19 @@ import z from "zod";
 import { numberTransformer } from "./common";
 const idSchema = z.object({
     id: z
-        .string({ error: "ID is required" })
+        .string({ message: "ID is required" })
         .transform(numberTransformer)
         .refine((val) => val !== undefined, {
-            error: "ID is not a number",
+            message: "ID is not a number",
         }),
 });
 
 const userIdSchema = z.object({
     user_id: z
-        .string({ error: "user_id is required" })
+        .string({ message: "user_id is required" })
         .transform(numberTransformer)
         .refine((val) => val !== undefined, {
-            error: "user_id is not in correct format",
+            message: "user_id is not in correct format",
         }),
 });
 
@@ -60,9 +60,13 @@ export const onGetUserAlertByDistrict = {
 };
 
 export const onGetWeatherDataByLocation = {
-    query: z.object({
-        district_id: z.string(),
-        lat: z.number(),
-        lon: z.number(),
-    }),
+    query: z.union([
+        z.object({
+            district_id: z.string(),
+        }),
+        z.object({
+            lat: z.number(),
+            lon: z.number(),
+        }),
+    ]),
 };

@@ -7,6 +7,35 @@ import {
 import { validateRequest } from "./validationMiddleware";
 
 export class StatisticValidationMiddleware {
+    // Method-specific validations for district statistics
+    validateDistrictStatistics = validateRequest({
+        GET: {
+            params: getByDistrictIDSchema.params,
+            query: getByDistrictIDSchema.query,
+        }
+    });
+
+    validateDistrictHistory = validateRequest({
+        GET: {
+            params: getDistrictHistorySchema.params,
+            query: getDistrictHistorySchema.query,
+        }
+    });
+
+    validateRanking = validateRequest({
+        GET: {
+            query: getRankByDateSchema.query,
+        }
+    });
+
+    validateProvinceStatistics = validateRequest({
+        GET: {
+            params: getAQIStatisticsByProvinceSchema.params,
+            query: getAQIStatisticsByProvinceSchema.query,
+        }
+    });
+
+    // For backward compatibility
     validateGetByDistrictID = validateRequest({
         params: getByDistrictIDSchema.params,
         query: getByDistrictIDSchema.query,

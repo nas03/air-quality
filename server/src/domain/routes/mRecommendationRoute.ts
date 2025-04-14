@@ -3,14 +3,14 @@ import { MRecommendationController } from "@/domain/controllers";
 import { MRecommendationInteractor } from "@/domain/interactors";
 import { MRecommendationRepository } from "@/domain/repositories";
 
-const repository = new MRecommendationRepository();
-const interactor = new MRecommendationInteractor(repository);
-const controller = new MRecommendationController(interactor);
+const mRecommendationRepository = new MRecommendationRepository();
+const mRecommendationInteractor = new MRecommendationInteractor(mRecommendationRepository);
+const mRecommendationController = new MRecommendationController(mRecommendationInteractor);
 
 const recommendationRouter: Route[] = [
     {
-        path: "/recommendations",
-        controller: controller.onGetAllRecommendations.bind(controller),
+        path: "/recommendation",
+        controller: mRecommendationController.onGetAllRecommendation.bind(mRecommendationController),
         role: "",
         method: "GET",
     },

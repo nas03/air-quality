@@ -1,5 +1,5 @@
 import { Route } from "@/config/constant";
-import { WindDataController } from "../controllers/windDataController";
+import { WindDataController } from "../controllers";
 import { WindDataInteractor } from "../interactors";
 import { WindDataRepository } from "../repositories";
 

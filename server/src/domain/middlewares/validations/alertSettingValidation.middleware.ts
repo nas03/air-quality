@@ -8,7 +8,29 @@ import {
 } from "@/domain/validationSchemas/alertSettingValidation";
 import { validateRequest } from "./validationMiddleware";
 
-export default class AlertSettingValidationMiddleware {
+export class AlertSettingValidationMiddleware {
+    // Alert settings endpoint
+    validateAlertSettings = validateRequest({
+        POST: {
+            body: onCreateAlertSettingSchema.body,
+        },
+        GET: {
+            params: onGetAlertSettingByUser.params,
+        }
+    });
+
+    // Individual alert setting endpoint
+    validateAlertSettingById = validateRequest({
+        PUT: {
+            params: onUpdateAlertSetting.params,
+            body: onUpdateAlertSetting.body,
+        },
+        DELETE: {
+            params: onDeleteAlertSettingById.params,
+        }
+    });
+
+    // For backward compatibility
     validateCreateAlertSetting = validateRequest({
         body: onCreateAlertSettingSchema.body,
     });
@@ -27,7 +49,6 @@ export default class AlertSettingValidationMiddleware {
     });
 
     validateGetUserAlertByDistrict = validateRequest({
-        // params: onGetUserAlertByDistrict.params,
         query: onGetUserAlertByDistrict.query,
     });
 

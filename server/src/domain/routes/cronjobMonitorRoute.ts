@@ -14,31 +14,25 @@ const cronjobValidation = new CronjobMonitorValidationMiddleware();
 
 const cronjobMonitorRoute: Route[] = [
     {
-        path: "/cronjob/record",
-        method: "GET",
-        controller: cronjobMonitorController.onGetCronjobRecord.bind(cronjobMonitorController),
-        role: "",
-        middleware: [cronjobValidation.validateGetCronjobRecord],
-    },
-    {
         path: "/cronjob/record/all",
         method: "GET",
         controller: cronjobMonitorController.onGetAllCronjobRecords.bind(cronjobMonitorController),
         role: "",
+    },
+
+    {
+        path: "/cronjob/record",
+        method: "GET",
+        controller: cronjobMonitorController.onGetCronjobRecord.bind(cronjobMonitorController),
+        role: "",
+        middleware: [/* cronjobValidation.validateGetCronjobRecord.bind(cronjobValidation) */],
     },
     {
         path: "/cronjob/record",
         method: "POST",
         controller: cronjobMonitorController.onCreateCronjobRecord.bind(cronjobMonitorController),
         role: "",
-        middleware: [cronjobValidation.validateCreateCronjobRecord],
-    },
-    {
-        path: "/cronjob/record/:id",
-        method: "PUT",
-        controller: cronjobMonitorController.onUpdateCronjobRecord.bind(cronjobMonitorController),
-        role: "",
-        middleware: [cronjobValidation.validateUpdateCronjobRecord],
+        middleware: [/* cronjobValidation.validateCreateCronjobRecord.bind(cronjobValidation) */],
     },
     {
         path: "/cronjob/rerun",
@@ -46,6 +40,13 @@ const cronjobMonitorRoute: Route[] = [
         controller: cronjobMonitorController.onRerunCronjob.bind(cronjobMonitorController),
         role: "",
         middleware: [cronjobMonitorMiddleware.rerunCronjobMiddleware],
+    },
+    {
+        path: "/cronjob/record/:id",
+        method: "PUT",
+        controller: cronjobMonitorController.onUpdateCronjobRecord.bind(cronjobMonitorController),
+        role: "",
+        middleware: [/* cronjobValidation.validateUpdateCronjobRecord.bind(cronjobValidation) */],
     },
 ];
 

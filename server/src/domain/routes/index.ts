@@ -37,7 +37,7 @@ routes.forEach((route) => {
     const { method, path, middleware, role, controller } = route;
 
     if (middleware && middleware.length) {
-        router.use(path, middleware);
+        router.use(path, ...middleware);
     }
     if (role) {
         // router.use(path, authMiddleware.authorizeUser.bind(authMiddleware));
