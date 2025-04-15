@@ -33,16 +33,14 @@ export class UserRepository implements IUserRepository {
 
     deleteUser = async (user_id: number) => {
         const transaction = await db.transaction().execute(async (trx) => {
+            // Hard delete related tables
+
+            await trx.deleteFrom("alerts_setting").where("user_id", "=", user_id).execute();
+            await trx.deleteFrom("verification_code").where("user_id", "=", user_id).execute();
+            // Hard delete user
             const query = await trx
-                // .with("deleteUserAndFavorite", (qb) =>
-                //   qb.updateTable("users_setting").where("user_id", "=", user_id).set("deleted", flag.TRUE)
-                // )
-                /* .with("deleteUserAndSession", (qb) =>
-          qb.updateTable("users_session").where("user_id", "=", user_id).set("deleted", flag.TRUE)
-        ) */
-                .updateTable("users")
+                .deleteFrom("users")
                 .where("user_id", "=", user_id)
-                .set("deleted", flag.TRUE)
                 .returningAll()
                 .executeTakeFirst();
             return query ?? null;

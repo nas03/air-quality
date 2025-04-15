@@ -142,4 +142,27 @@ export class UserController extends BaseController<[UserInteractor, Verification
             data: userInfo,
         });
     };
+
+    onDeleteUser = async (req: Request, res: Response) => {
+        const { user_id } = req.params;
+        if (!user_id) {
+            return res.status(statusCode.BAD_REQUEST).json({
+                status: "fail",
+                message: resMessage.field_invalid,
+                data: null,
+            });
+        }
+        const deletedUser = await this.userInteractor.deleteUser(Number(user_id));
+        if (!deletedUser) {
+            return res.status(statusCode.NOT_FOUND).json({
+                status: "fail",
+                message: resMessage.not_found || "User not found",
+                data: null,
+            });
+        }
+        return res.status(statusCode.SUCCESS).json({
+            status: "success",
+            data: null,
+        });
+    };
 }

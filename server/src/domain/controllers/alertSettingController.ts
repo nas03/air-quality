@@ -173,7 +173,7 @@ export class AlertSettingController extends BaseController<
             district_id as string
         );
         const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
-        console.log(setting);
+
         const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
             params: {
                 q: `${setting?.vn_province},VN`,
@@ -181,7 +181,7 @@ export class AlertSettingController extends BaseController<
                 limit: 1,
             },
         });
-
+        console.log({ setting, geocodingAPI: geocodingAPI.data });
         const openWeatherData = await axios.get<OpenWeatherForecastDataType>(
             `http://api.openweathermap.org/data/2.5/forecast/daily`,
             {

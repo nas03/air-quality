@@ -37,6 +37,12 @@ const userRouter: Route[] = [
         controller: userController.onGetUserInfo.bind(userController),
         role: "user",
     },
+    {
+        path: "/user/:user_id",
+        method: "DELETE",
+        controller: userController.onDeleteUser.bind(userController),
+        role: "user",
+    },
 ];
 
 export default userRouter;
