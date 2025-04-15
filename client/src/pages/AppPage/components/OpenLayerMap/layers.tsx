@@ -14,10 +14,12 @@ import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 
+const BASE_URL = "http://localhost:8080/geoserver/air";
+
 export const createAQILayer = (time: string) =>
     new TileLayer({
         source: new TileWMS({
-            url: "http://localhost:8080/geoserver/air/wms",
+            url: `${BASE_URL}/wms`,
             params: {
                 LAYERS: "air:aqi_map",
                 TIME: time,
@@ -33,7 +35,7 @@ export const createAQILayer = (time: string) =>
 export const createVietnamBoundaryLayer = (map: Map) =>
     new TileLayer({
         source: new TileWMS({
-            url: "http://localhost:8080/geoserver/air/wms",
+            url: `${BASE_URL}/wms`,
             params: {
                 LAYERS: "air:gadm41_VNM",
                 FORMAT: "image/png",
@@ -48,7 +50,7 @@ export const createStationsLayer = (time: string) => {
     const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
     return new VectorLayer({
         source: new VectorSource({
-            url: `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
+            url: `${BASE_URL}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
             format: new GeoJSON(),
         }),
         style: (feature) => {
@@ -128,7 +130,7 @@ export const updateStationLayer = (stationSource: VectorSource, time: string) =>
     const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
     try {
         stationSource.setUrl(
-            `http://localhost:8080/geoserver/air/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
+            `${BASE_URL}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
         );
         stationSource.refresh();
     } catch (error) {
