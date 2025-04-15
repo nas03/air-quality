@@ -28,20 +28,20 @@ const StepControl: React.FC<IPropsStepControl> = () => {
             {!isLastStep ? (
                 <>
                     <Button type="default" onClick={handlePrevious}>
-                        Previous
+                        Quay lại
                     </Button>
                     <Button type="primary" onClick={handleNext}>
-                        Next
+                        Tiếp
                     </Button>
                 </>
             ) : (
                 <>
                     <Button type="default" onClick={handlePrevious}>
-                        Previous
+                        Quay lại
                     </Button>
 
                     <Button type="primary" loading={registrationLoading} onClick={handleFinish}>
-                        Finish
+                        Hoàn thành
                     </Button>
                 </>
             )}

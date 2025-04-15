@@ -18,28 +18,41 @@ const dataRoute: Route[] = [
         path: "/files",
         method: "POST",
         controller: dataController.onPutObject,
-        middleware: [upload.single("file"), /* dataValidationMiddleware.validatePutObject */],
+        middleware: [upload.single("file") /* dataValidationMiddleware.validatePutObject */],
         role: "",
     },
     {
         path: "/files/batch-download",
         method: "GET",
         controller: dataController.onBatchDownload,
-        middleware: [/* dataValidationMiddleware.validateBatchDownload */],
+        middleware: [
+            /* dataValidationMiddleware.validateBatchDownload */
+        ],
         role: "",
     },
+
     {
         path: "/files/download-date",
         method: "GET",
         controller: dataController.onDownloadByDate,
-        middleware: [/* dataValidationMiddleware.validateDownloadByDate */],
+        middleware: [
+            /* dataValidationMiddleware.validateDownloadByDate */
+        ],
         role: "",
     },
     {
         path: "/files/:filename",
         method: "DELETE",
         controller: dataController.onDeleteObject,
-        middleware: [/* dataValidationMiddleware.validateDeleteObject */],
+        middleware: [
+            /* dataValidationMiddleware.validateDeleteObject */
+        ],
+        role: "",
+    },
+    {
+        path: "/files/geoserver",
+        method: "GET",
+        controller: dataController.onGetObjectURL.bind(dataController),
         role: "",
     },
 ];

@@ -87,4 +87,13 @@ export class DataController extends BaseController<[DataInteractor]> {
 
         return res.send(zipBuffer);
     };
+
+    onGetObjectURL = async (req: Request, res: Response) => {
+        // const { objectPath } = req.query;
+        const url = await this.storageService.getObject("geoserver.zip");
+        return res.status(200).json({
+            statusL: "success",
+            data: url,
+        });
+    };
 }

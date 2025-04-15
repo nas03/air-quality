@@ -8,7 +8,7 @@ export const onGetStationByID = {
             .string()
             .transform(dateTransformer)
             .refine((val) => val !== undefined, {
-                error: "Date is undefined",
+                message: "Date is undefined",
             }),
     }),
 };
@@ -19,7 +19,7 @@ export const onGetAllStations = {
             .string()
             .transform(dateTransformer)
             .refine((val) => val !== undefined, {
-                error: "Date is undefined",
+                message: "Date is undefined",
             }),
     }),
 };

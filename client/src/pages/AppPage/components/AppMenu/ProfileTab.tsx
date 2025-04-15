@@ -153,9 +153,9 @@ const ProfileTab = () => {
             </div>
 
             <div>
-                <h3 className="text-xl font-semibold">Security & Privacy</h3>
+                <h3 className="text-xl font-semibold">Quyền riêng tư & Bảo mật</h3>
                 <Divider className="mt-3" />
-                <Button>Update Password</Button>
+                <Button>Cập nhật mật khẩu</Button>
             </div>
         </Loading>
     );

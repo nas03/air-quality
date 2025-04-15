@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from minio import Minio  # type: ignore
 from osgeo import gdal  # type: ignore
 
-from .districts_avg_data import scrape_district_avg_data  # type: ignore
+from districts_avg_data import scrape_district_avg_data  # type: ignore
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 # Constants
 INPUT_FOLDER = "assets/input"
-OUTPUT_FOLDER = "/usr/local/geoserver/data_dir/aqi_data"
+OUTPUT_FOLDER = "/usr/local/geoserver/data_dir/aqi_map"
 DIST_PATH = "assets/data/VN_districts_100m.tif"
 TEMP_FILE = "temp.tif"
 NODATA_VALUE = -9999
@@ -450,4 +450,4 @@ __all__ = ["scrape_aqi_data"]
 
 if __name__ == "__main__":
     scrape_aqi_data()
-    # notify_geoserver(OUTPUT_FOLDER)
+    notify_geoserver(OUTPUT_FOLDER)

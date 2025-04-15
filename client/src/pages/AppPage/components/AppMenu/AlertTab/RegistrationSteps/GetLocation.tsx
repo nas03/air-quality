@@ -15,14 +15,13 @@ const GetLocation: React.FC<IPropsGetLocation> = ({ setRegistrationData, registr
 
     return (
         <div>
-            <p>
-                Click <span className="font-medium text-blue-600">Get Location</span> and <strong>Allow</strong> to get
-                your current location
-            </p>
+            {/* <p>
+                Nhấn <span className="font-medium text-blue-600">Lấy vị trí</span> và <strong>Cho phép</strong> để lấy vị trí hiện tại của bạn
+            </p> */}
             <RegisterLocation registrationData={registrationData} />
             <div className="mt-5 flex w-full flex-row items-center justify-between gap-4">
                 <Button type="primary" onClick={handleGetUserDistrict} className="flex-1" disabled={currentStep !== 0}>
-                    Get Location
+                    Vị trí hiện tại
                 </Button>
             </div>
             {currentStep === 0 && (

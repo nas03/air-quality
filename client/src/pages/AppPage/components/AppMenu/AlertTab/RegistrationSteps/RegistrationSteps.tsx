@@ -21,11 +21,18 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
             <Steps
                 current={currentStep}
                 direction="vertical"
+                size="small"
                 items={[
                     {
-                        title: "Get your location",
+                        title: <p className="text-base font-semibold">Lựa chọn địa điểm</p>,
+                        subTitle: (
+                            <p>
+                                Nhấn <span className="font-medium text-blue-600">Lấy vị trí</span> và{" "}
+                                <strong>Cho phép</strong> để lấy vị trí hiện tại của bạn
+                            </p>
+                        ),
                         description: (
-                            <div className="">
+                            <div className="mt-3">
                                 <GetLocation
                                     registrationData={registrationData}
                                     setRegistrationData={setRegistrationData}
@@ -34,11 +41,11 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
                         ),
                     },
                     {
-                        title: "Customize Alert Information",
+                        title: <p className="text-base font-semibold">Tuỳ chỉnh cảnh báo</p>,
                         description: <RegisterAlertInfo />,
                     },
                     {
-                        title: "Additional Settings",
+                        title: <p className="text-base font-semibold">Tuỳ chỉnh nhận thông báo</p>,
                         description: <RegisterSettings />,
                     },
                 ]}
