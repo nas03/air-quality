@@ -3,14 +3,45 @@ import { ICacheService } from "@/interfaces/services/ICacheService";
 import Redis from "ioredis";
 
 export class CacheService implements ICacheService {
-    private readonly redisClient = new Redis({
-        username: "default",
-        password: "evZA0KtsVBPoKsF4Vvt9z5Xa6yJlN5qh",
-        port: 12511,
-        host: "redis-12511.c295.ap-southeast-1-1.ec2.redns.redis-cloud.com",
-        disconnectTimeout: 0,
-        maxRetriesPerRequest: 0,
-    });
+    private readonly redisClient: Redis;
+
+    constructor() {
+        this.redisClient = new Redis({
+            username: "default",
+            password: "evZA0KtsVBPoKsF4Vvt9z5Xa6yJlN5qh",
+            port: 12511,
+            host: "redis-12511.c295.ap-southeast-1-1.ec2.redns.redis-cloud.com",
+            disconnectTimeout: 0,
+            maxRetriesPerRequest: 0,
+        });
+    }
+    async withClosableConnection<T>(operation: () => Promise<T>): Promise<T> {
+        try {
+            const result = await operation();
+            await this.quit();
+            return result;
+        } catch (error) {
+            await this.quit();
+            throw error;
+        }
+    }
+
+    getRedisClient() {
+        return this.redisClient;
+    }
+    async quit(): Promise<void> {
+        try {
+            // Force immediate disconnect instead of graceful quit
+
+            await this.redisClient.disconnect();
+            // Additionally, destroy the client to ensure all resources are released
+            if (this.redisClient.status !== "end") {
+                this.redisClient.disconnect(false);
+            }
+        } catch (error) {
+            console.error("Error disconnecting Redis client:", error);
+        }
+    }
 
     async exists(key: string): Promise<boolean> {
         try {
@@ -123,7 +154,7 @@ export class CacheService implements ICacheService {
     generateRedisKey = (
         objectType: string,
         objectId: string | number,
-        field: string | "*" = "*",
+        field: string | "*" = "*"
     ) => {
         return `${objectType}:${objectId}:${field}`;
     };

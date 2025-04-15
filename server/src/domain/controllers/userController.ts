@@ -60,7 +60,10 @@ export class UserController extends BaseController<[UserInteractor, Verification
         });
         return res.status(200).json({
             status: "success",
-            data: null,
+            data: {
+                user_id: newUser.user_id,
+                username: newUser.username,
+            },
         });
     };
 

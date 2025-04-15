@@ -12,7 +12,9 @@ export class StationsController extends BaseController<[StationsInteractor]> {
 
         const data = await this.stationInteractor.getStationByID(
             station_id,
-            moment(date as string, "YYYY-MM-DD").toDate()
+            moment(date as string, "YYYY-MM-DD")
+                .utcOffset("+07:00")
+                .toDate()
         );
         return res.status(statusCode.SUCCESS).json({
             status: "success",
@@ -23,8 +25,11 @@ export class StationsController extends BaseController<[StationsInteractor]> {
     onGetAllStations = async (req: Request, res: Response) => {
         const { date } = req.query;
         const data = await this.stationInteractor.getAllStations(
-            moment(date as string, "YYYY-MM-DD").toDate()
+            moment(date as string, "YYYY-MM-DD")
+                .utcOffset("+07:00")
+                .toDate()
         );
+
         return res.status(statusCode.SUCCESS).json({
             status: "success",
             data: data,

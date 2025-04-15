@@ -6,8 +6,8 @@
         "build": "tsc && tsc-alias",
         "docker": "docker compose build",
         "scrape": "python src/scripts/scraper.py",
-        "test": "jest",
-        "test:watch": "jest --watch"
+        "test": "NODE_ENV=test vitest run",
+        "test:watch": "NODE_ENV=test vitest"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.782.0",
@@ -33,11 +33,13 @@
     },
     "devDependencies": {
         "@types/bcryptjs": "^2.4.6",
+        "@types/chai": "^5.2.1",
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
         "@types/ioredis": "^5.0.0",
         "@types/jest": "^29.5.14",
         "@types/jsonwebtoken": "^9.0.7",
+        "@types/mocha": "^10.0.10",
         "@types/morgan": "^1.9.9",
         "@types/multer": "^1.4.12",
         "@types/nodemailer": "^6.4.17",
@@ -49,6 +51,8 @@
         "morgan": "^1.10.0",
         "nodemon": "^3.1.9",
         "supertest": "^7.1.0",
-        "ts-jest": "^29.3.2"
+        "ts-jest": "^29.3.2",
+        "ts-node": "^10.9.2",
+        "vitest": "^3.1.1"
     }
 }

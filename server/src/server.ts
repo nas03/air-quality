@@ -3,10 +3,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
+import { CacheService } from "./services/cacheService";
+
 dotenv.config();
 
 const server = express();
 const PORT = process.env.PORT || 5500;
+const cacheService = new CacheService();
 
 server.use(cors());
 server.use(express.json());
@@ -16,27 +19,31 @@ server.use(morgan("dev"));
 
 server.use("/api", routes);
 
-const startupServer = () => {
-    // server._router.stack.forEach((middleware: any) => {
-    // 	if (middleware.route) {
-    // 		// routes registered directly on the app
-    // 		Object.keys(middleware.route.methods).forEach((method) => {
-    // 			console.log(`${method.toUpperCase()} ${middleware.route.path}`);
-    // 		});
-    // 	} else if (middleware.name === "router") {
-    // 		// router middleware
-    // 		middleware.handle.stack.forEach((handler: any) => {
-    // 			if (handler.route) {
-    // 				Object.keys(handler.route.methods).forEach((method) => {
-    // 					console.log(`${method.toUpperCase()} ${handler.route.path}`);
-    // 				});
-    // 			}
-    // 		});
-    // 	}
-    // });
-    server.listen(5500, "0.0.0.0", () => {
-        console.log("Server is running on port 5500");
-    });
-};
+const serverInstance = server.listen(5500, "0.0.0.0", () => {
+    console.log("Server is running on port 5500");
+});
 
-startupServer();
+// Handle graceful shutdown
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+async function gracefulShutdown() {
+    console.log('Received shutdown signal, closing connections...');
+    
+    try {
+        // Close Redis connection
+        await cacheService.quit();
+        console.log('Redis connection closed successfully');
+        
+        // Close server
+        serverInstance.close(() => {
+            console.log('Server closed successfully');
+            process.exit(0);
+        });
+    } catch (error) {
+        console.error('Error during shutdown:', error);
+        process.exit(1);
+    }
+}
+
+export default server;

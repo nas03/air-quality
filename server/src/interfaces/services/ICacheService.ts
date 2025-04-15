@@ -38,6 +38,24 @@ export interface ICacheService {
      * Get multiple values from cache
      */
     mget(keys: string[]): Promise<(string | null)[]>;
+
+    /**
+     * Cache the result of a function
+     */
     cache<T>(key: string, func: () => Promise<T>): Promise<T | null>;
+
+    /**
+     * Generate a standardized Redis key
+     */
     generateRedisKey(objectType: string, objectId: string | number, field: string | "*"): string;
+
+    /**
+     * Quit/disconnect the Redis client - useful for testing and cleanup
+     */
+    quit(): Promise<void>;
+    
+    /**
+     * Execute an operation and automatically close the Redis connection when done
+     */
+    withClosableConnection<T>(operation: () => Promise<T>): Promise<T>;
 }
