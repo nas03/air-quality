@@ -1,24 +1,28 @@
 import api from "@/config/api";
 import { APIResponse } from "@/types/api";
 import { MDistrict, Statistic } from "@/types/db";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const getTimeList = (): string[] => {
-    const today = new Date();
+    const today = dayjs().tz("Asia/Bangkok"); // GMT+7 timezone
 
     const timeList = [];
 
     for (let i = 3; i > 0; i--) {
-        const date = new Date();
-        date.setDate(today.getDate() - i);
-        timeList.push(date.toISOString().split("T")[0]);
+        const date = today.subtract(i, 'day');
+        timeList.push(date.format("YYYY-MM-DD"));
     }
 
-    timeList.push(today.toISOString().split("T")[0]);
+    timeList.push(today.format("YYYY-MM-DD"));
 
     for (let i = 1; i <= 7; i++) {
-        const date = new Date();
-        date.setDate(today.getDate() + i);
-        timeList.push(date.toISOString().split("T")[0]);
+        const date = today.add(i, 'day');
+        timeList.push(date.format("YYYY-MM-DD"));
     }
 
     return timeList;
