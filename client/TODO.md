@@ -96,3 +96,7 @@ UI/UX Improvements & Feature Completion:
     - [x] Get wind data by cycle (nearest cycle available)
     - [x] Trang quản lý pipeline: Force rerun, check cronjob nào hoàn thành, ... (Quản lý dữ liệu indra.eweather.gov.vn)
     - [x] near real-time aqi
+
+(https://geoi.edu.vn/)
+geoi.com.vn
+geoi.vn

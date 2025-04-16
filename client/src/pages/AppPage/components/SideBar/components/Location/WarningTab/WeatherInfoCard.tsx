@@ -17,10 +17,10 @@ const getIcon = (weatherId: number) => {
 const TemperatureDisplay = ({ avg, max, min }: { avg: number; max: number; min: number }) => (
     <div className="flex h-full flex-col">
         <p className="text-4xl font-bold text-gray-800">{avg}&#8451;</p>
-        <div className="mt-1 flex flex-row gap-2">
+       {/*  <div className="mt-1 flex flex-row gap-2">
             <p className="text-xs text-orange-500">H: {max}&#8451;</p>
             <p className="text-xs text-blue-400">L: {min}&#8451;</p>
-        </div>
+        </div> */}
     </div>
 );
 

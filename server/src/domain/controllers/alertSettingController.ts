@@ -181,7 +181,7 @@ export class AlertSettingController extends BaseController<
                 limit: 1,
             },
         });
-        console.log({ setting, geocodingAPI: geocodingAPI.data });
+
         const openWeatherData = await axios.get<OpenWeatherForecastDataType>(
             `http://api.openweathermap.org/data/2.5/forecast/daily`,
             {
@@ -191,6 +191,7 @@ export class AlertSettingController extends BaseController<
                     cnt: 8,
                     appid: API_KEY,
                     units: "metric",
+                    lang: "vi",
                 },
             }
         );
@@ -229,6 +230,7 @@ export class AlertSettingController extends BaseController<
                     lon: geocodingAPI.data[0].lon,
                     appid: API_KEY,
                     units: "metric",
+                    lang: "vi",
                 },
             }
         );
@@ -283,7 +285,7 @@ export class AlertSettingController extends BaseController<
                 },
             }
         );
-
+        console.log(openWeatherCurrentData.data);
         const result = {
             temperature: {
                 max: Math.round(openWeatherCurrentData.data.main.temp_max),

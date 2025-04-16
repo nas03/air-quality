@@ -1,5 +1,6 @@
 import api from "@/config/api";
 import "@/css/open.css";
+import dayjs from "dayjs";
 import { Feature, Map } from "ol";
 import { WindLayer } from "ol-wind";
 import { Coordinate } from "ol/coordinate";
@@ -13,11 +14,11 @@ import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
-
-const BASE_URL = "http://localhost:8080/geoserver/air";
+// const BASE_URL = "http://localhost:8080/geoserver/air";
+const BASE_URL = "http://18.142.186.247:8080/geoserver/air";
 
 export const createAQILayer = (time: string) =>
-    new TileLayer({
+    new TileLayer({ 
         source: new TileWMS({
             url: `${BASE_URL}/wms`,
             params: {
@@ -47,7 +48,8 @@ export const createVietnamBoundaryLayer = (map: Map) =>
     });
 
 export const createStationsLayer = (time: string) => {
-    const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+    // const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+    const timestamp = dayjs(time).startOf("day").toISOString();
     return new VectorLayer({
         source: new VectorSource({
             url: `${BASE_URL}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
@@ -106,7 +108,7 @@ export const createMarkerLayer = (INITIAL_COORDINATE: Coordinate) =>
 export const createWindyLayer = async (time: string) => {
     const windData = await api.get("/wind-data", {
         params: {
-            timestamp: new Date(time).toISOString(),
+            timestamp: time,
         },
     });
     const data = windData.data.data;
@@ -127,7 +129,8 @@ export const createWindyLayer = async (time: string) => {
 };
 
 export const updateStationLayer = (stationSource: VectorSource, time: string) => {
-    const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+    // const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
+    const timestamp = dayjs(time).startOf("day").toISOString();
     try {
         stationSource.setUrl(
             `${BASE_URL}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,

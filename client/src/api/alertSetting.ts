@@ -22,7 +22,7 @@ export const createUserAlertSetting = async (payload: Omit<AlertSetting, "id">):
     }
 };
 
-export type UserAlert = {
+export type WeatherInfo = {
     id: number;
     aqi_index: boolean;
     temperature: {
@@ -40,8 +40,21 @@ export type UserAlert = {
     date: string;
     location: string;
 };
+type Alert = {
+    id: number;
+    aqi_index: boolean;
+    temperature: {
+        max: number;
+        min: number;
+        avg: number;
+    };
+    weather: string;
+    wind_speed: number;
+    date: string;
+    location: string;
+};
 export type AlertInfo = {
-    weather: UserAlert[];
+    weather: Alert[];
     forecast: number[];
 };
 export const getUserAlertByDistrict = async (_user_id: number, district_id: string) => {
@@ -73,7 +86,7 @@ export const getWeatherByDistrict = async (location: string | number[]) => {
                   lat: location[0],
                   lon: location[1],
               };
-    const response = await api.get<APIResponse<Omit<UserAlert, "id" | "aqi_index" | "location">>>(
+    const response = await api.get<APIResponse<Omit<WeatherInfo, "id" | "aqi_index" | "location">>>(
         `/alert-settings/location`,
         {
             params: params,

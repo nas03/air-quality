@@ -30,7 +30,7 @@ const formatDate = (dateStr: string | undefined): string => {
     if (!dateStr) return "Today";
 
     const itemDate = new Date(dateStr);
-    if (isToday(itemDate)) return "Today";
+    // if (isToday(itemDate)) return dateStr;
 
     const month = itemDate.getMonth() + 1;
     const date = itemDate.getDate();
@@ -41,14 +41,16 @@ const getAqiColor = (value: number): string => {
     if (value <= 50) return "bg-green-500";
     if (value <= 100) return "bg-yellow-500";
     if (value <= 150) return "bg-orange-500";
-    return "bg-red-500";
+    if (value <=200) return "bg-red-500";
+    else return "bg-purple-500"
 };
 
 const getAqiLabel = (value: number): string => {
     if (value <= 50) return "Good";
     if (value <= 100) return "Moderate";
     if (value <= 150) return "Poor";
-    return "Bad";
+    if (value <= 200) return "Bad";
+    else return "Hazardous";
 };
 
 const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...props }) => {
@@ -75,7 +77,7 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
                 <Typography.Title level={5} className="">
                     {currentWeatherData?.location}
                 </Typography.Title>
-                <Tooltip title={"Delete this alert"} getPopupContainer={() => document.body}>
+                <Tooltip title={"Xoá"} getPopupContainer={() => document.body}>
                     <div ref={deleteIconRef}>
                         <MdDeleteOutline onClick={handleDelete} size={30} className="cursor-pointer p-1 text-red-500" />
                     </div>
@@ -84,20 +86,20 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
             <div className="flex w-full flex-row items-center justify-between">
                 <div className="flex h-full flex-col">
                     <p className="text-4xl font-bold text-gray-800">{currentWeatherData?.temperature.avg}&#8451;</p>
-                    <p className="mt-1 text-sm text-gray-600">Wind: {currentWeatherData?.wind_speed}m/s</p>
+                    <p className="mt-1 text-sm text-gray-600">Tốc độ gió: {currentWeatherData?.wind_speed}m/s</p>
                 </div>
                 <div className="flex h-full flex-col items-center">
                     <IoCloudy size={32} className="mb-1 text-blue-500" />
-                    <p className="text-sm font-medium">{currentWeatherData?.weather.description}</p>
-                    <div className="mt-1 flex flex-row gap-2">
+                    <p className="text-sm font-medium">{currentWeatherData?.weather}</p>
+                    {/*  <div className="mt-1 flex flex-row gap-2">
                         <p className="text-xs text-orange-500">H: {currentWeatherData?.temperature.max}&#8451;</p>
                         <p className="text-xs text-blue-400">L: {currentWeatherData?.temperature.min}&#8451;</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="mt-4 w-full border-t border-gray-200 pt-3">
                 <Typography.Text strong className="mb-2 flex w-full items-center justify-center text-sm text-gray-700">
-                    AQI VN Index Forecast
+                    Dự báo chỉ số AQI VN
                 </Typography.Text>
                 <div className="overflow-x-auto">
                     <div className="flex w-full flex-wrap justify-start">
