@@ -2,7 +2,7 @@ import api from "@/config/api";
 import { APIResponse, SignInResponse, VerifyTokenResponse } from "@/types/api";
 import { User } from "@/types/db";
 
-export const signin = async (email: string, password: string): Promise<SignInResponse | false> => {
+export const signin = async (email: string, password: string): Promise<APIResponse<SignInResponse> | false> => {
     const response = await api.post<APIResponse<SignInResponse>>("/auth/signin", {
         accountIdentifier: email,
         password,
@@ -11,7 +11,7 @@ export const signin = async (email: string, password: string): Promise<SignInRes
         return false;
     }
 
-    return response.data.data;
+    return response.data;
 };
 
 export const verifyToken = async (token: string): Promise<boolean> => {

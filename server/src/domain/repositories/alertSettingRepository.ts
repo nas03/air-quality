@@ -1,4 +1,4 @@
-import { flag } from "@/config/constant";
+import { ACCOUNT_STATUS, flag, receiveNotification } from "@/config/constant";
 import { db } from "@/config/db";
 import { AlertSetting, User } from "@/entities";
 import { IAlertSettingRepository } from "@/interfaces";
@@ -74,8 +74,14 @@ export class AlertSettingRepository implements IAlertSettingRepository {
                 (join) => join.onRef("a.user_id", "=", "u.user_id")
             )
             .select(["u.email", "u.user_id", "u.phone_number"])
+            .where("u.account_status", "=", ACCOUNT_STATUS.ACTIVATED)
+
             .execute();
-        const userAlertSettingData = await db.selectFrom("alerts_setting").selectAll().execute();
+        const userAlertSettingData = await db
+            .selectFrom("alerts_setting")
+            .selectAll()
+            .where("receive_notifications", ">", receiveNotification.DISABLED)
+            .execute();
 
         const userDataMap = usersData.reduce(
             (map, data) => map.set(data.user_id, data),

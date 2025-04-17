@@ -48,7 +48,7 @@ export type AuthUser = {
 export interface AuthContextType {
     user?: AuthUser | null;
     token?: string | null;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
     logout: () => void;
 }
 

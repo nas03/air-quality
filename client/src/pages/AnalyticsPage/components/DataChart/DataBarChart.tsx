@@ -1,10 +1,19 @@
-import { Loading } from "@/components";
+// React and Context
 import { AnalyticContext } from "@/context";
-import useProvinceData from "@/hooks/useProvinceData";
-import { cn } from "@/lib/utils";
-import { MonitoringData } from "@/types/consts";
-import { BarChart, BarChartProps } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
+
+// Charts and UI Libraries
+import { BarChart, BarChartProps } from "@mui/x-charts";
+
+// Components
+import { Loading } from "@/components";
+
+// Utilities
+import { cn } from "@/lib/utils";
+
+// Types and Constants
+import useProvinceData from "@/hooks/useProvinceData";
+import { MonitoringData } from "@/types/consts";
 import { CHART_CONFIGS, ChartConfig, yAxisConfig } from "./config";
 
 interface DataBarChartProps extends React.ComponentPropsWithoutRef<"div"> {}

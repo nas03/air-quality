@@ -1,3 +1,4 @@
+// Types
 import {
     AlertRegistrationContextType,
     AnalyticContextType,
@@ -6,7 +7,11 @@ import {
     GeoContextType,
     TimeContextType,
 } from "@/types/contexts";
+
+// React
 import { createContext } from "react";
+
+// Constants
 import { MonitoringData } from "./types/consts";
 
 export const MonitoringDataConst = Object.freeze({

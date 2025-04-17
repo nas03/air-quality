@@ -1,7 +1,7 @@
-import { IPropsOpenLayerMap } from "@/components/types";
-import { ConfigContext, TimeContext } from "@/context";
-import "@/css/open.css";
-import { cn } from "@/lib/utils";
+// React and React-related imports
+import React, { useContext, useEffect, useRef } from "react";
+
+// OpenLayers core imports
 import { Map, View } from "ol";
 import { apply } from "ol-mapbox-style";
 import { WindLayer } from "ol-wind";
@@ -11,11 +11,24 @@ import { Point } from "ol/geom";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import { unByKey } from "ol/Observable";
-import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
-import React, { useContext, useEffect, useRef } from "react";
+
+// Types and interfaces
+import { IPropsOpenLayerMap } from "@/components/types";
+
+// Context
+import { ConfigContext, TimeContext } from "@/context";
+
+// Utilities
+import { cn } from "@/lib/utils";
+
+// Styles
+import "@/css/open.css";
+import "ol/ol.css";
+
+// Local imports
 import { fetchLocationData, getWMSFeatureInfo } from "./functions";
 import {
     createAQILayer,

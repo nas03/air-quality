@@ -1,10 +1,22 @@
+
+// Data Types and API
 import { ProvinceData } from "@/api";
+
+// Components
 import { Loading } from "@/components";
+
+// Context and Hooks
 import { AnalyticContext } from "@/context";
 import useProvinceData from "@/hooks/useProvinceData";
+
+// Utilities
 import { cn } from "@/lib/utils";
 import { getGradient } from "@/pages/AppPage/components/SideBar/utils";
+
+// Constants and Types
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
+
+// UI Libraries
 import { LineChart } from "@mui/x-charts";
 import React, { useContext, useEffect, useState } from "react";
 import { SlLocationPin } from "react-icons/sl";

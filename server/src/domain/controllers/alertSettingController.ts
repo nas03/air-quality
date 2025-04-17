@@ -26,7 +26,7 @@ export class AlertSettingController extends BaseController<
             const statisticData = allStatisticData[user.district_id];
             const data = { ...user, forecast: statisticData.forecast };
             const exceededDays = statisticData.forecast
-                .filter((data) => data.aqi_index >= 50)
+                .filter((data) => data.aqi_index > 100)
                 .flatMap((el) =>
                     new Date(el.time).toLocaleDateString("en-GB").split("/").join("-")
                 );

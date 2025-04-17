@@ -57,7 +57,15 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
     };
 
     onGetAllCronjobRecords = async (req: Request, res: Response) => {
-        const data = await this.cronjobMonitorInteractor.getAllCronjobRecords();
+        const { start_date, end_date } = req.query as unknown as {
+            start_date: Date;
+            end_date: Date;
+        };
+
+        const data = await this.cronjobMonitorInteractor.getAllCronjobRecords({
+            start_date: start_date,
+            end_date: end_date,
+        });
         return res.status(statusCode.SUCCESS).json({
             status: "success",
             data: data,

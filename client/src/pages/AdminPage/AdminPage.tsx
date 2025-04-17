@@ -36,7 +36,7 @@ const AdminPage = () => {
 
     const useCronJobs = useQuery({
         queryKey: ["cronjob_monitor", "*", dateRange],
-        queryFn: () => getAllCronjobs(),
+        queryFn: () => getAllCronjobs(dateRange[0].format("YYYY-MM-DD"), dateRange[1].format("YYYY-MM-DD")),
     });
 
     const handleDateRangeChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {

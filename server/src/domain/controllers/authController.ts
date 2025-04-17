@@ -1,4 +1,4 @@
-import { AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
+import { ACCOUNT_STATUS, AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
 import { UserToken } from "@/domain/controllers/types";
 import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
@@ -89,7 +89,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
         const { accountIdentifier, password } = req.body;
 
         const isUserExists = await this.userInteractor.findUser(accountIdentifier);
-        console.log(isUserExists, accountIdentifier, password);
+
         if (!isUserExists) {
             return res.status(statusCode.SUCCESS).json({
                 status: "success",
@@ -97,12 +97,18 @@ export class AuthController extends BaseController<[UserInteractor, Verification
                 data: null,
             });
         }
-
+        if (isUserExists.account_status === ACCOUNT_STATUS.NOT_ACTIVATED) {
+            return res.status(statusCode.SUCCESS).json({
+                status: "success",
+                message: "Người dùng chưa kích hoạt tài khoản",
+                data: null,
+            });
+        }
         const validatePassword = await securityService.compareString(
             password,
             isUserExists.password
         );
-        console.log(validatePassword, password, isUserExists.password);
+
         if (!validatePassword) {
             return res.status(statusCode.SUCCESS).json({
                 status: "success",

@@ -14,6 +14,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
         super(...interactors);
         this.mailService = new MailService();
     }
+    
     onCreateUser = async (req: Request, res: Response) => {
         const body = req.body as {
             username: string;

@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Label } from "@radix-ui/react-label";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FiAlertCircle, FiCheck } from "react-icons/fi";
@@ -13,7 +15,7 @@ interface SigninFormData {
     password: string;
 }
 
-const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) => {
+const SigninForm = ({ onSubmit, loading }: { onSubmit: (data: SigninFormData) => void; loading: boolean }) => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -53,11 +55,14 @@ const SigninForm = ({ onSubmit }: { onSubmit: (data: SigninFormData) => void }) 
                     className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
             </div>
+
             <Button
                 type="submit"
-                className="mt-4 w-full rounded-md bg-indigo-600 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                Đăng nhập
+                className="mt-4 flex w-full flex-row rounded-md bg-indigo-600 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                {loading && <Spin indicator={<LoadingOutlined spin className="text-white" />} className="h-full" />}
+                <p>Đăng nhập</p>
             </Button>
+
             <Button
                 variant="outline"
                 className="mt-2 flex w-full items-center justify-center border-gray-300 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -79,18 +84,25 @@ const SigninPage = () => {
     const auth = useAuth();
     const navigate = useNavigate();
     const params: { message: string } | null = useSearch({ from: "/public/signin" });
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (params && params["message"]) {
             setMessage({ msg: params.message, isSuccess: true });
         }
     }, [params]);
+
     const handleSignin = async (data: SigninFormData) => {
+        setLoading(true);
         const status = await auth.login(data.email, data.password);
-        if (!status) {
+        setLoading(false);
+        if (!status.success) {
             setMessage({ msg: "Email hoặc mật khẩu không đúng", isSuccess: false });
             return;
+        } else if (status.success && status.message) {
+            setMessage({ msg: status.message, isSuccess: false });
+            return;
         }
+
         navigate({ to: "/" });
     };
 
@@ -104,7 +116,7 @@ const SigninPage = () => {
                                 <img src="/logo_no_text.svg" alt="logo" className="h-8 w-auto" />
                                 <p>Airly</p>
                             </CardTitle>
-                            <CardDescription className="text-sm text-gray-200 mt-3">
+                            <CardDescription className="mt-3 text-sm text-gray-200">
                                 Hệ thống Dự báo Chất lượng Không khí
                             </CardDescription>
                         </Link>
@@ -129,12 +141,12 @@ const SigninPage = () => {
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        {message && <p className="break-words text-xs opacity-80">{message.msg}</p>}
+                                        {message && <p className="break-words text-sm opacity-80">{message.msg}</p>}
                                     </div>
                                 </div>
                             </div>
                         )}
-                        <SigninForm onSubmit={handleSignin} />
+                        <SigninForm loading={loading} onSubmit={handleSignin} />
                     </CardContent>
                 </Card>
             </div>

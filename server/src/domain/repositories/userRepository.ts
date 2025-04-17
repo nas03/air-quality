@@ -20,7 +20,9 @@ export class UserRepository implements IUserRepository {
     };
 
     findUser = async (input: { user_id?: number; email?: string; username?: string }) => {
-        let query = db.selectFrom("users");
+        let query = db
+            .selectFrom("users")
+            // .innerJoin("verification_code as vc", "vc.user_id", "users.user_id");
 
         if (input.user_id) query = query.where("user_id", "=", input.user_id);
         else if (input.email) query = query.where("email", "=", input.email);

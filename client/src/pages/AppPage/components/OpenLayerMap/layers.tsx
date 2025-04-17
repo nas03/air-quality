@@ -14,8 +14,8 @@ import { fromLonLat } from "ol/proj";
 import { TileWMS } from "ol/source";
 import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
-// const BASE_URL = "http://localhost:8080/geoserver/air";
-const BASE_URL = "http://18.142.186.247:8080/geoserver/air";
+const BASE_URL = "http://localhost:8080/geoserver/air";
+// const BASE_URL = "http://18.142.186.247:8080/geoserver/air";
 
 export const createAQILayer = (time: string) =>
     new TileLayer({ 

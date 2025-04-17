@@ -54,3 +54,8 @@ export const receiveNotification = Object.freeze({
     SMS_NOTIFICATION: 2,
     BOTH: 3,
 });
+
+export const ACCOUNT_STATUS = Object.freeze({
+    NOT_ACTIVATED: 0,
+    ACTIVATED: 1,
+});

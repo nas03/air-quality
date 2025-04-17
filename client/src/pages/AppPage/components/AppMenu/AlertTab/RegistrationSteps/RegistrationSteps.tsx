@@ -1,7 +1,6 @@
 import { Steps } from "antd";
 import { RegistrationDataType } from "../types";
 import GetLocation from "./GetLocation";
-import RegisterAlertInfo from "./RegisterAlertInfo";
 import RegisterSettings from "./RegisterSettings";
 
 interface IPropsRegistrationSteps extends React.ComponentPropsWithoutRef<"div"> {
@@ -27,8 +26,9 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
                         title: <p className="text-base font-semibold">Lựa chọn địa điểm</p>,
                         subTitle: (
                             <p>
-                                Nhấn <span className="font-medium text-blue-600">Lấy vị trí</span> và{" "}
-                                <strong>Cho phép</strong> để lấy vị trí hiện tại của bạn
+                                Nhấn <span className="font-medium text-blue-600">Vị trí hiện tại</span> và{" "}
+                                <span className="font-medium text-blue-600">Cho phép</span> để lấy vị trí hiện tại của
+                                bạn
                             </p>
                         ),
                         description: (
@@ -40,10 +40,10 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
                             </div>
                         ),
                     },
-                    {
+                    /*  {
                         title: <p className="text-base font-semibold">Tuỳ chỉnh cảnh báo</p>,
                         description: <RegisterAlertInfo />,
-                    },
+                    }, */
                     {
                         title: <p className="text-base font-semibold">Tuỳ chỉnh nhận thông báo</p>,
                         description: <RegisterSettings />,

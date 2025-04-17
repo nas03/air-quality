@@ -14,13 +14,13 @@ const RegisterSettings: React.FC<IPropsAdditionalSettings> = () => {
                         Nhận thông báo qua Email
                     </Checkbox>
                 </Form.Item>
-                <Form.Item initialValue={true} name="sms_notification" className="mb-0" valuePropName="checked">
+                <Form.Item initialValue={true} name="sms_notification" className="mb-0 hidden" valuePropName="checked">
                     <Checkbox className="text-sm" disabled={currentStep !== 2}>
                         Nhận thông báo qua SMS
                     </Checkbox>
                 </Form.Item>
             </div>
-            {currentStep >= 2 && <StepControl />}
+            {currentStep >= 1 && <StepControl />}
         </>
     );
 };

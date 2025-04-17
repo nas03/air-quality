@@ -41,16 +41,18 @@ const getAqiColor = (value: number): string => {
     if (value <= 50) return "bg-green-500";
     if (value <= 100) return "bg-yellow-500";
     if (value <= 150) return "bg-orange-500";
-    if (value <=200) return "bg-red-500";
-    else return "bg-purple-500"
+    if (value <= 200) return "bg-red-500";
+    if (value <= 300) return "bg-[#70006a]";
+    else return "bg-[#7e0023]";
 };
 
 const getAqiLabel = (value: number): string => {
-    if (value <= 50) return "Good";
-    if (value <= 100) return "Moderate";
-    if (value <= 150) return "Poor";
-    if (value <= 200) return "Bad";
-    else return "Hazardous";
+    if (value <= 50) return "Tốt";
+    if (value <= 100) return "Trung bình";
+    if (value <= 150) return "Không tốt";
+    if (value <= 200) return "Có hại";
+    if (value <= 300) return "Rất có hại";
+    return "Nguy hiểm";
 };
 
 const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...props }) => {
@@ -71,6 +73,24 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
         }
     };
 
+    const getWeatherVi = (weather: string | undefined) => {
+        switch (weather) {
+            case "Thunderstorm":
+                return "Dông";
+            case "Drizzle":
+                return "Mưa phùn";
+            case "Rain":
+                return "Mưa";
+            case "Snow":
+                return "Tuyết";
+            case "Clear":
+                return "Quang đãng";
+            case "Clouds":
+                return "Có mây";
+            default:
+                return "";
+        }
+    };
     return (
         <Card className={cn("w-full rounded-lg shadow-md", className)} {...props}>
             <div className="items-cen mb-3 flex w-full flex-row justify-between">
@@ -90,7 +110,7 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
                 </div>
                 <div className="flex h-full flex-col items-center">
                     <IoCloudy size={32} className="mb-1 text-blue-500" />
-                    <p className="text-sm font-medium">{currentWeatherData?.weather}</p>
+                    <p className="text-sm font-medium">{getWeatherVi(currentWeatherData?.weather)}</p>
                     {/*  <div className="mt-1 flex flex-row gap-2">
                         <p className="text-xs text-orange-500">H: {currentWeatherData?.temperature.max}&#8451;</p>
                         <p className="text-xs text-blue-400">L: {currentWeatherData?.temperature.min}&#8451;</p>

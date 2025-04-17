@@ -11,31 +11,35 @@ export const AuthenticationProvider = ({ children }: { children: React.ReactNode
 
     const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("access_token"));
 
-    const login = useCallback(async (email: string, password: string): Promise<boolean> => {
-        try {
-            const signedIn = await signin(email, password);
+    const login = useCallback(
+        async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
+            try {
+                const signedIn = await signin(email, password);
 
-            if (!signedIn) {
-                return false;
+                if (!signedIn) {
+                    return { success: false, message: "" };
+                } else if (signedIn.message) {
+                    return { message: signedIn.message, success: true };
+                } else {
+                    const userData = {
+                        user_id: signedIn.data.user_id,
+                        username: signedIn.data.username,
+                    };
+
+                    sessionStorage.setItem("access_token", signedIn.data.access_token);
+                    sessionStorage.setItem("user", JSON.stringify(userData));
+
+                    setUser(userData);
+                    setToken(signedIn.data.access_token);
+                    return { message: "", success: true };
+                }
+            } catch (error) {
+                console.error("Login failed:", error);
+                return { success: false, message: "" };
             }
-
-            const userData = {
-                user_id: signedIn.user_id,
-                username: signedIn.username,
-            };
-
-            sessionStorage.setItem("access_token", signedIn.access_token);
-            sessionStorage.setItem("user", JSON.stringify(userData));
-
-            setUser(userData);
-            setToken(signedIn.access_token);
-
-            return true;
-        } catch (error) {
-            console.error("Login failed:", error);
-            return false;
-        }
-    }, []);
+        },
+        [],
+    );
 
     const logout = useCallback((): void => {
         sessionStorage.removeItem("access_token");

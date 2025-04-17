@@ -1,14 +1,31 @@
+// API and Data Management
 import { getTimeList } from "@/api";
-import { Loading } from "@/components";
-import { ConfigContext, GeoContext, TimeContext } from "@/context";
-import { cn } from "@/lib/utils";
-import { MarkData } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
+
+// Core Components
+import { Loading } from "@/components";
+
+// Context
+import { ConfigContext, GeoContext, TimeContext } from "@/context";
+
+// UI Libraries and Animation
 import { motion } from "motion/react";
+
+// OpenLayers
 import { Map } from "ol";
 import { Coordinate } from "ol/coordinate";
 import VectorLayer from "ol/layer/Vector";
+
+// React and Hooks
 import { useEffect, useRef, useState } from "react";
+
+// Utilities
+import { cn } from "@/lib/utils";
+
+// Types
+import { MarkData } from "@/types/types";
+
+// Local Components
 import {
     AppMenu,
     CurrentLocationData,

@@ -15,7 +15,7 @@ interface IPropsAlertRegistration extends React.ComponentPropsWithoutRef<"div"> 
     setAddAlert: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const MAX_STEP = 3;
+const MAX_STEP = 2;
 const INITIAL_STEP = 0;
 
 const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotifications, setAddAlert }) => {
@@ -34,21 +34,21 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotificat
             setRegistrationLoading(true);
             const formData = form.getFieldsValue();
 
-            let receive_notifications = RECEIVE_NOTIFICATIONS.DISABLED;
-            if (formData.sms_notification && !formData.email_notification)
+            let receive_notifications = RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION;
+           /*  if (formData.sms_notification && !formData.email_notification)
                 receive_notifications = RECEIVE_NOTIFICATIONS.SMS_NOTIFICATION;
             else if (!formData.sms_notification && formData.email_notification)
                 receive_notifications = RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION;
             else if (formData.sms_notification && formData.email_notification)
-                receive_notifications = RECEIVE_NOTIFICATIONS.BOTH;
+                receive_notifications = RECEIVE_NOTIFICATIONS.BOTH; */
 
             const payload: Omit<AlertSetting, "id"> = {
                 user_id: userId,
                 district_id: formData.district_id,
-                aqi_index: formData.aqi_index,
-                pm_25: formData.aqi_index,
-                temperature: formData.temperature,
-                wind_speed: formData.wind,
+                aqi_index: formData.aqi_index || true,
+                pm_25: formData.aqi_index || true,
+                temperature: formData.temperature || true,
+                wind_speed: formData.wind || true,
                 weather: true,
                 receive_notifications,
             };

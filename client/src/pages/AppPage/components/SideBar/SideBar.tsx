@@ -2,16 +2,16 @@
 import { ConfigContext, TimeContext } from "@/context";
 import { useContext, useEffect, useState } from "react";
 
-// Libraries
+// UI Components and Icons
 import { BarChartOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { Collapse, CollapseProps } from "antd";
 
-// API
-
-// Hooks
+// Data Hooks
 import useDistrictRanking, { RankData } from "@/hooks/useDistrictRanking";
+import useGetAllDistricts from "@/hooks/useGetAllDistricts";
+import { useMutation } from "@tanstack/react-query";
 
-// Components
+// Local Components
 import LocationDataCard from "./components/Location/LineChart/LocationDataCard";
 import WarningTab from "./components/Location/WarningTab/WarningTab";
 import RankTable from "./components/RankTable";
@@ -22,10 +22,8 @@ import TabContent from "./components/TabContent";
 // Types
 import { IPropsSideBar } from "@/components/types";
 
-// Utils
-import useGetAllDistricts from "@/hooks/useGetAllDistricts";
+// Utilities
 import { cn } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { centerMapOnDistrict } from "./utils";
 

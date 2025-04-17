@@ -1,19 +1,29 @@
+// UI Components and Icons
 import { AreaChartOutlined } from "@ant-design/icons";
-import { useMutation } from "@tanstack/react-query";
 import { Collapse, CollapseProps } from "antd";
+
+// React and Hooks
+import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 
+// Internal Components
 import AirQualityCard from "./AirQualityCard";
 import DataSourceCard from "./DataSourceCard";
 import HealthRecommendationCard from "./HealthRecommendationCard";
 import WeatherInfoCard from "./WeatherInfoCard";
 
+// API and Data
 import { getWeatherByDistrict } from "@/api/alertSetting";
 import useAirQualityData from "@/hooks/useAirQualityData";
+
+// Utilities and Helpers
 import { cn } from "@/lib/utils";
 import { getSvgAndColorByAQI } from "../../../utils";
 
+// Context
 import { GeoContext, TimeContext } from "@/context";
+
+// Types and Constants
 import { MonitoringData } from "@/types/consts";
 import { AirQualityInfo, DataSourceInfo, WarningTabProps, WeatherInfo } from "./types";
 
