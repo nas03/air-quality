@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepository {
     };
 
     updateUser = async (user_id: number, payload: Partial<Omit<User, "role" | "user_id">>) => {
-        let query = await db
+        const query = await db
             .updateTable("users")
             .set(payload)
             .where("user_id", "=", user_id)

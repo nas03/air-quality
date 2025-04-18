@@ -39,18 +39,18 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
                 status: "success",
                 data: record,
             });
-        } catch (error: any) {
-            if (error.message?.includes("not found")) {
+        } catch (error) {
+            if ((error as Error).message?.includes("not found")) {
                 return res.status(statusCode.NOT_FOUND).json({
                     status: "fail",
-                    message: error.message,
+                    message: (error as Error).message,
                     data: null,
                 });
             }
 
             return res.status(statusCode.ERROR).json({
                 status: "error",
-                message: error.message || resMessage.server_error,
+                message: (error as Error).message || resMessage.server_error,
                 data: null,
             });
         }
@@ -90,10 +90,10 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
                 status: "success",
                 data: newRecord,
             });
-        } catch (error: any) {
+        } catch (error) {
             return res.status(statusCode.ERROR).json({
                 status: "error",
-                message: error.message || resMessage.server_error,
+                message: (error as Error).message || resMessage.server_error,
                 data: null,
             });
         }
@@ -122,10 +122,10 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
                 status: "success",
                 data: updatedRecord,
             });
-        } catch (error: any) {
+        } catch (error) {
             return res.status(statusCode.ERROR).json({
                 status: "error",
-                message: error.message || resMessage.server_error,
+                message: (error as Error).message || resMessage.server_error,
                 data: null,
             });
         }
@@ -148,7 +148,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
                 status: "success",
                 data: result,
             });
-        } catch (error: any) {
+        } catch (error) {
             if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
                 return res.status(statusCode.ERROR).json({
                     status: "error",
@@ -159,7 +159,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
 
             return res.status(statusCode.ERROR).json({
                 status: "error",
-                message: error.message || resMessage.server_error,
+                message: (error as Error).message || resMessage.server_error,
                 data: null,
             });
         }

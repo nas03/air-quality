@@ -70,7 +70,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
 
     onUpdateUserBasicData = async (req: Request, res: Response) => {
         const { user_id, username, phone_number } = req.body;
-        let payload = {};
+        const payload = {};
         if (username) payload["username"] = username;
         if (phone_number) payload["phone_number"] = phone_number;
         if (!user_id) {

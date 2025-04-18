@@ -8,10 +8,10 @@ import { UserInteractor } from "../interactors";
 export class AuthMiddleware {
     private securityService = new SecurityService();
     private userInteractor: UserInteractor;
-     constructor(userInteractor: UserInteractor) {
-            this.userInteractor = userInteractor;
-        }
-    
+    constructor(userInteractor: UserInteractor) {
+        this.userInteractor = userInteractor;
+    }
+
     authorizeUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const authorizeSchema = z.string().includes("Bearer");
@@ -32,7 +32,7 @@ export class AuthMiddleware {
                 }
             } else throw Error(resMessage.user_not_authorized);
             next();
-        } catch (error) {
+        } catch {
             res.status(statusCode.UNAUTHORIZED).json({
                 status: "error",
                 message: resMessage.user_not_authorized,

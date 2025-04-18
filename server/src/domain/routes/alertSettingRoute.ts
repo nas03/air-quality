@@ -2,7 +2,6 @@ import { Route } from "@/config/constant";
 import { AlertSettingController } from "../controllers";
 import { AlertSettingInteractor, DistrictInteractor, StatisticInteractor } from "../interactors";
 
-import { AlertSettingValidationMiddleware } from "../middlewares/validations/alertSettingValidation.middleware";
 import { AlertSettingRepository, DistrictRepository, StatisticRepository } from "../repositories";
 
 const alertSettingRepository = new AlertSettingRepository();
@@ -16,7 +15,7 @@ const alertSettingController = new AlertSettingController(
     districtInteractor,
     statisticInteractor
 );
-const alertSettingValidationMiddleware = new AlertSettingValidationMiddleware();
+// const alertSettingValidationMiddleware = new AlertSettingValidationMiddleware();
 const alertSettingRouter: Route[] = [
     // Put more specific routes first
     {

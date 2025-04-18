@@ -3,14 +3,13 @@ import { CronjobMonitorController } from "@/domain/controllers";
 import { CronjobMonitorInteractor } from "@/domain/interactors";
 import { CronjobMonitorRepository } from "@/domain/repositories";
 import { CronjobMonitorMiddleware } from "../middlewares/cronjob.middleware";
-import { CronjobMonitorValidationMiddleware } from "../middlewares/validations/cronjobMonitorValidation.middleware";
 
 // Create instances in the correct order
 const cronjobMonitorRepository = new CronjobMonitorRepository();
 const cronjobMonitorInteractor = new CronjobMonitorInteractor(cronjobMonitorRepository);
 const cronjobMonitorController = new CronjobMonitorController(cronjobMonitorInteractor);
 const cronjobMonitorMiddleware = new CronjobMonitorMiddleware();
-const cronjobValidation = new CronjobMonitorValidationMiddleware();
+// const cronjobValidation = new CronjobMonitorValidationMiddleware();
 
 const cronjobMonitorRoute: Route[] = [
     {

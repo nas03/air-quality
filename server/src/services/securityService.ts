@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { AUTHENTICATION } from "@/config/constant";
 import { ISecurityService } from "@/interfaces/services/ISecurityService";
 import argon from "argon2";

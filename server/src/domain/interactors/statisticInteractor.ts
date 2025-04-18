@@ -30,7 +30,7 @@ export class StatisticInteractor implements IStatisticInteractor {
     };
 
     getByDistrictID = async (district_id: string, date?: Date) => {
-        let hashKey = ["statistics", district_id, "date", date].join(":");
+        const hashKey = ["statistics", district_id, "date", date].join(":");
         const cache = await this.cacheService.get<(Statistic & MDistrict)[] | null>(hashKey);
         if (cache) return cache;
 
@@ -57,7 +57,7 @@ export class StatisticInteractor implements IStatisticInteractor {
     getRankByDate = async (
         date: Date,
     ): Promise<(Statistic & MDistrict & { aqi_change: number })[] | null> => {
-        let hashKey = ["statistics", "rank", "date", date].join(":");
+        const hashKey = ["statistics", "rank", "date", date].join(":");
         const cache = await this.cacheService.get<
             (Statistic & MDistrict & { aqi_change: number })[] | null
         >(hashKey);
@@ -69,7 +69,7 @@ export class StatisticInteractor implements IStatisticInteractor {
     };
 
     getTimeList = async () => {
-        let hashKey = ["statistics", "date", "*"].join(":");
+        const hashKey = ["statistics", "date", "*"].join(":");
         const cache = await this.cacheService.get<Pick<Statistic, "time">[]>(hashKey);
         if (cache) return cache;
 

@@ -151,6 +151,4 @@ export class DataInteractor {
         const data = await this.storageService.getObject(path);
         return data;
     };
-    getWindData = async (id: number) => {};
-    getStationData = async (date: string) => {};
 }

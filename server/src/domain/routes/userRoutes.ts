@@ -1,7 +1,6 @@
 import { Route } from "@/config/constant/types";
 import { UserController } from "@/domain/controllers";
 import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
-import { UserValidationMiddleware } from "@/domain/middlewares/validations/userValidation.middleware";
 import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
 
 const userRepository = new UserRepository();
@@ -9,7 +8,7 @@ const verificationCodeRepository = new VerificationCodeRepository();
 const userInteractor = new UserInteractor(userRepository);
 const verificationCodeInteractor = new VerificationCodeInteractor(verificationCodeRepository);
 const userController = new UserController(userInteractor, verificationCodeInteractor);
-const userMiddleware = new UserValidationMiddleware();
+// const userMiddleware = new UserValidationMiddleware();
 
 const userRouter: Route[] = [
     {

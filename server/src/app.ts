@@ -13,6 +13,4 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", routes);
 
-// Handle graceful shutdown
-
 export default app;

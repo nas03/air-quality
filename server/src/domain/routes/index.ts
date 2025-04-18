@@ -1,6 +1,4 @@
-import { UserInteractor } from "@/domain/interactors";
 import { catchAsync } from "@/domain/middlewares/catchAsync";
-import { UserRepository } from "@/domain/repositories";
 import authRouter from "@/domain/routes/authRoute";
 import districtRouter from "@/domain/routes/districtRoutes";
 import recommendationRouter from "@/domain/routes/mRecommendationRoute";
@@ -9,7 +7,6 @@ import statisticRouter from "@/domain/routes/statisticRoutes";
 import userRouter from "@/domain/routes/userRoutes";
 
 import { Router } from "express";
-import { AuthMiddleware } from "../middlewares/auth.middleware";
 import alertSettingRouter from "./alertSettingRoute";
 import cronjobMonitorRoute from "./cronjobMonitorRoute";
 import dataRoute from "./dataRoute";
@@ -28,9 +25,9 @@ const routes = [
     ...dataRoute,
 ];
 
-const userRepository = new UserRepository();
-const userInteractor = new UserInteractor(userRepository);
-const authMiddleware = new AuthMiddleware(userInteractor);
+// const userRepository = new UserRepository();
+// const userInteractor = new UserInteractor(userRepository);
+// const authMiddleware = new AuthMiddleware(userInteractor);
 const router = Router();
 
 routes.forEach((route) => {
@@ -75,6 +72,7 @@ const logRoute = () => {
         reset: "\x1b[0m", // Reset
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     router.stack.forEach((middleware: any) => {
         if (middleware.route) {
             Object.keys(middleware.route.methods).forEach((method) => {
@@ -84,6 +82,7 @@ const logRoute = () => {
                 });
             });
         } else if (middleware.name === "router") {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             middleware.handle.stack.forEach((handler: any) => {
                 if (handler.route) {
                     Object.keys(handler.route.methods).forEach((method) => {
@@ -120,5 +119,5 @@ const logRoute = () => {
         console.log("------------------------------------------");
     });
 };
-!["test", "prod"].includes(process.env.NODE_ENV as string) && logRoute();
+if (!["test", "prod"].includes(process.env.NODE_ENV as string)) logRoute();
 export default router;

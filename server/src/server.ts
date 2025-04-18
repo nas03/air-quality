@@ -8,7 +8,7 @@ import { CacheService } from "./services/cacheService";
 dotenv.config();
 
 const server = express();
-const PORT = process.env.PORT || 5500;
+
 const cacheService = new CacheService();
 
 server.use(cors());
@@ -24,24 +24,24 @@ const serverInstance = server.listen(5500, "0.0.0.0", () => {
 });
 
 // Handle graceful shutdown
-process.on('SIGTERM', gracefulShutdown);
-process.on('SIGINT', gracefulShutdown);
+process.on("SIGTERM", gracefulShutdown);
+process.on("SIGINT", gracefulShutdown);
 
 async function gracefulShutdown() {
-    console.log('Received shutdown signal, closing connections...');
-    
+    console.log("Received shutdown signal, closing connections...");
+
     try {
         // Close Redis connection
         await cacheService.quit();
-        console.log('Redis connection closed successfully');
-        
+        console.log("Redis connection closed successfully");
+
         // Close server
         serverInstance.close(() => {
-            console.log('Server closed successfully');
+            console.log("Server closed successfully");
             process.exit(0);
         });
     } catch (error) {
-        console.error('Error during shutdown:', error);
+        console.error("Error during shutdown:", error);
         process.exit(1);
     }
 }

@@ -11,7 +11,7 @@ export class DistrictInteractor implements IDistrictInteractor {
         this.cacheService = new CacheService();
     }
 
-    async findDistrict(district_id: any) {
+    async findDistrict(district_id: string) {
         const data = await this.districtRepository.findDistrict(district_id);
         return data;
     }
