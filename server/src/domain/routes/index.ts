@@ -30,10 +30,10 @@ const routes = [
 // const authMiddleware = new AuthMiddleware(userInteractor);
 const router = Router();
 
-routes.forEach((route) => {
+for (const route of routes) {
     const { method, path, middleware, role, controller } = route;
 
-    if (middleware && middleware.length) {
+    if (middleware?.length) {
         router.use(path, ...middleware);
     }
     if (role) {
@@ -58,11 +58,14 @@ routes.forEach((route) => {
             router.delete(path, handler);
             break;
     }
-});
+}
 
 // Log router path
 const logRoute = () => {
-    const routePaths: { method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH"; path: string }[] = [];
+    const routePaths: {
+        method: "GET" | "POST" | "DELETE" | "PUT" | "PATCH";
+        path: string;
+    }[] = [];
     const colors = {
         get: "\x1b[32m", // Green
         post: "\x1b[34m", // Blue
@@ -72,20 +75,24 @@ const logRoute = () => {
         reset: "\x1b[0m", // Reset
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.stack.forEach((middleware: any) => {
+    for (const middleware of router.stack) {
         if (middleware.route) {
-            Object.keys(middleware.route.methods).forEach((method) => {
+            const route = middleware.route;
+
+            for (const method of Object.keys(route.stack[0].method)) {
                 routePaths.push({
                     method: method.toUpperCase() as "GET" | "POST" | "DELETE" | "PUT" | "PATCH",
                     path: middleware.route.path,
                 });
-            });
+            }
         } else if (middleware.name === "router") {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            middleware.handle.stack.forEach((handler: any) => {
+            const routerMiddleware = middleware as unknown as {
+                handle: { stack: typeof router.stack };
+            };
+            for (const handler of routerMiddleware.handle.stack) {
                 if (handler.route) {
-                    Object.keys(handler.route.methods).forEach((method) => {
+                    const methods = Object.keys(handler.route.stack[0].method);
+                    for (const method of methods) {
                         routePaths.push({
                             method: method.toUpperCase() as
                                 | "GET"
@@ -95,11 +102,11 @@ const logRoute = () => {
                                 | "PATCH",
                             path: handler.route.path,
                         });
-                    });
+                    }
                 }
-            });
+            }
         }
-    });
+    }
 
     // Print color-coded table
     console.log("\nAPI ROUTES:");
@@ -110,14 +117,14 @@ const logRoute = () => {
     console.log("+------------------------------------------+");
 
     // Table rows
-    routePaths.forEach((route) => {
+    for (const route of routePaths) {
         const methodLower = route.method.toLowerCase();
-        const color = colors[methodLower] || colors.reset;
+        const color = colors[methodLower as keyof typeof colors] || colors.reset;
         console.log(
-            ` ${color}${route.method.padEnd(7)}${colors.reset} | ${route.path.padEnd(30)} `
+            `| ${color}${route.method.padEnd(7)}${colors.reset} | ${route.path.padEnd(30)} |`,
         );
-        console.log("------------------------------------------");
-    });
+        console.log("+------------------------------------------+");
+    }
 };
 if (!["test", "prod"].includes(process.env.NODE_ENV as string)) logRoute();
 export default router;

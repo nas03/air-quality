@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant";
+import type { Route } from "@/config/constant";
 import multer from "multer";
 import { DataController } from "../controllers";
 import { DataInteractor } from "../interactors";

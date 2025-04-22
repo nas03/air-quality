@@ -24,7 +24,7 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
         const data = await this.statisticInteractor.getDistrictHistory(
             district_id,
             start_date,
-            end_date
+            end_date,
         );
         return res.status(200).json({
             status: "success",
@@ -59,7 +59,7 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
             await this.statisticInteractor.getAQIStatisticsByProvince(
                 province_id,
                 start_date,
-                end_date
+                end_date,
             );
         return res.status(200).json({
             status: "success",

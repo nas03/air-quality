@@ -71,7 +71,7 @@ export class AlertSettingRepository implements IAlertSettingRepository {
             .innerJoin(
                 (eb) =>
                     eb.selectFrom("alerts_setting").select("user_id").groupBy("user_id").as("a"),
-                (join) => join.onRef("a.user_id", "=", "u.user_id")
+                (join) => join.onRef("a.user_id", "=", "u.user_id"),
             )
             .select(["u.email", "u.user_id", "u.phone_number"])
             .where("u.account_status", "=", ACCOUNT_STATUS.ACTIVATED)
@@ -85,7 +85,7 @@ export class AlertSettingRepository implements IAlertSettingRepository {
 
         const userDataMap = usersData.reduce(
             (map, data) => map.set(data.user_id, data),
-            new Map<number, Pick<User, "email" | "user_id" | "phone_number">>()
+            new Map<number, Pick<User, "email" | "user_id" | "phone_number">>(),
         );
 
         const result = userAlertSettingData

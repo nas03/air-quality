@@ -47,7 +47,7 @@ export const dateRangeSchema = z
         {
             message: "End date cannot be before start date",
             path: ["end_date"],
-        }
+        },
     );
 
 export const getByDistrictIDSchema = {

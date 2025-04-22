@@ -10,7 +10,8 @@ const mRecommendationController = new MRecommendationController(mRecommendationI
 const recommendationRouter: Route[] = [
     {
         path: "/recommendations",
-        controller: mRecommendationController.onGetAllRecommendation.bind(mRecommendationController),
+        controller:
+            mRecommendationController.onGetAllRecommendation.bind(mRecommendationController),
         role: "",
         method: "GET",
     },

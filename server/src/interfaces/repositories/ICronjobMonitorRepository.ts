@@ -5,6 +5,6 @@ export interface ICronjobMonitorRepository {
     getAllCronjobRecords(payload?: { start_date: Date; end_date: Date }): Promise<CronjobMonitor[]>;
     createNewCronjobRecord(payload: Omit<CronjobMonitor, "id">): Promise<CronjobMonitor>;
     updateCronjobRecord(
-        payload: Partial<Omit<CronjobMonitor, "id">> & { id: number }
+        payload: Partial<Omit<CronjobMonitor, "id">> & { id: number },
     ): Promise<CronjobMonitor>;
 }

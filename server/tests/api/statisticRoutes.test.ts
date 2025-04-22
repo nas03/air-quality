@@ -25,7 +25,7 @@ describe("Statistics API", () => {
             const start_date = "2025-04-10";
             const end_date = "2025-04-12";
             const res = await api.get(
-                `/api/statistics/district/${districtId}/history?start_date=${start_date}&end_date=${end_date}`
+                `/api/statistics/district/${districtId}/history?start_date=${start_date}&end_date=${end_date}`,
             );
 
             // Status check
@@ -71,7 +71,7 @@ describe("Statistics API", () => {
             const start_date = "2025-04-10";
             const end_date = "2025-04-12";
             const res = await api.get(
-                `/api/statistics/average/${provinceId}?start_date=${start_date}&end_date=${end_date}`
+                `/api/statistics/average/${provinceId}?start_date=${start_date}&end_date=${end_date}`,
             );
 
             // Status check

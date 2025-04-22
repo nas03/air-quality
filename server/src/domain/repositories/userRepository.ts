@@ -1,7 +1,7 @@
 import { flag } from "@/config/constant";
 import { db } from "@/config/db";
-import { User } from "@/entities";
-import { IUserRepository } from "@/interfaces";
+import type { User } from "@/entities";
+import type { IUserRepository } from "@/interfaces";
 
 export class UserRepository implements IUserRepository {
     createUser = async (data: Omit<User, "user_id" | "account_status">) => {
@@ -20,9 +20,8 @@ export class UserRepository implements IUserRepository {
     };
 
     findUser = async (input: { user_id?: number; email?: string; username?: string }) => {
-        let query = db
-            .selectFrom("users")
-            // .innerJoin("verification_code as vc", "vc.user_id", "users.user_id");
+        let query = db.selectFrom("users");
+        // .innerJoin("verification_code as vc", "vc.user_id", "users.user_id");
 
         if (input.user_id) query = query.where("user_id", "=", input.user_id);
         else if (input.email) query = query.where("email", "=", input.email);

@@ -8,4 +8,3 @@ export * from "./statisticInteractor";
 export * from "./userInteractor";
 export * from "./verificationCodeInteractor";
 export * from "./windDataInteractor";
-

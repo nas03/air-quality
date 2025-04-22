@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/types";
+import type { Route } from "@/config/constant/types";
 import { CronjobMonitorController } from "@/domain/controllers";
 import { CronjobMonitorInteractor } from "@/domain/interactors";
 import { CronjobMonitorRepository } from "@/domain/repositories";
@@ -24,14 +24,18 @@ const cronjobMonitorRoute: Route[] = [
         method: "GET",
         controller: cronjobMonitorController.onGetCronjobRecord.bind(cronjobMonitorController),
         role: "",
-        middleware: [/* cronjobValidation.validateGetCronjobRecord.bind(cronjobValidation) */],
+        middleware: [
+            /* cronjobValidation.validateGetCronjobRecord.bind(cronjobValidation) */
+        ],
     },
     {
         path: "/cronjob/record",
         method: "POST",
         controller: cronjobMonitorController.onCreateCronjobRecord.bind(cronjobMonitorController),
         role: "",
-        middleware: [/* cronjobValidation.validateCreateCronjobRecord.bind(cronjobValidation) */],
+        middleware: [
+            /* cronjobValidation.validateCreateCronjobRecord.bind(cronjobValidation) */
+        ],
     },
     {
         path: "/cronjob/rerun",
@@ -45,7 +49,9 @@ const cronjobMonitorRoute: Route[] = [
         method: "PUT",
         controller: cronjobMonitorController.onUpdateCronjobRecord.bind(cronjobMonitorController),
         role: "",
-        middleware: [/* cronjobValidation.validateUpdateCronjobRecord.bind(cronjobValidation) */],
+        middleware: [
+            /* cronjobValidation.validateUpdateCronjobRecord.bind(cronjobValidation) */
+        ],
     },
 ];
 

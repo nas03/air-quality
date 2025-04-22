@@ -53,7 +53,7 @@ export interface ICacheService {
      * Quit/disconnect the Redis client - useful for testing and cleanup
      */
     quit(): Promise<void>;
-    
+
     /**
      * Execute an operation and automatically close the Redis connection when done
      */

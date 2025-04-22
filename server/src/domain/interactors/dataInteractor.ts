@@ -65,8 +65,8 @@ export class DataInteractor {
                             .filter((key): key is string => Boolean(key));
                     }
                     objectKeys.push(...keys);
-                })
-            )
+                }),
+            ),
         );
 
         if (objectKeys.length === 0) {
@@ -81,7 +81,7 @@ export class DataInteractor {
     getWindDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
         const data = await this.windDataRepository.getWindDataHistory(
             moment(start_date, "YYYY-MM-DD"),
-            moment(end_date, "YYYY-MM-DD")
+            moment(end_date, "YYYY-MM-DD"),
         );
         const dataBuffer = Buffer.from(JSON.stringify(data));
         return zip.file("wind_data.json", dataBuffer);

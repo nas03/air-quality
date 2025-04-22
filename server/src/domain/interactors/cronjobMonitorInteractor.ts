@@ -35,7 +35,7 @@ export class CronjobMonitorInteractor implements ICronjobMonitorInteractor {
     }
 
     async updateCronjobRecord(
-        payload: Partial<CronjobMonitor> & { id: number }
+        payload: Partial<CronjobMonitor> & { id: number },
     ): Promise<CronjobMonitor> {
         const adaptedPayload = {
             ...payload,

@@ -16,7 +16,9 @@ const userRouter: Route[] = [
         method: "POST",
         controller: userController.onCreateUser.bind(userController),
         role: "",
-        middleware: [/* userMiddleware.validateCreateUser */],
+        middleware: [
+            /* userMiddleware.validateCreateUser */
+        ],
     },
     {
         path: "/user/update-info",

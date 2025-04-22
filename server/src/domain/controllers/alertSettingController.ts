@@ -28,7 +28,7 @@ export class AlertSettingController extends BaseController<
             const exceededDays = statisticData.forecast
                 .filter((data) => data.aqi_index > 100)
                 .flatMap((el) =>
-                    new Date(el.time).toLocaleDateString("en-GB").split("/").join("-")
+                    new Date(el.time).toLocaleDateString("en-GB").split("/").join("-"),
                 );
             const aqiDays = statisticData.forecast.map((data) => ({
                 ...data,
@@ -43,7 +43,7 @@ export class AlertSettingController extends BaseController<
                 html: alertMailTemplate(
                     `${statisticData.vn_district}, ${statisticData.vn_province}`,
                     exceededDays,
-                    aqiDays
+                    aqiDays,
                 ),
             };
         });
@@ -69,9 +69,8 @@ export class AlertSettingController extends BaseController<
     async onCreateAlertSetting(req: Request, res: Response) {
         try {
             const alertSettingData = req.body;
-            const alertSetting = await this.alertSettingInteractor.createAlertSetting(
-                alertSettingData
-            );
+            const alertSetting =
+                await this.alertSettingInteractor.createAlertSetting(alertSettingData);
 
             return res.status(statusCode.CREATED).json({
                 status: "success",
@@ -94,7 +93,7 @@ export class AlertSettingController extends BaseController<
 
             const updatedAlertSetting = await this.alertSettingInteractor.updateAlertSetting(
                 Number(id),
-                alertSettingData
+                alertSettingData,
             );
 
             if (!updatedAlertSetting) {
@@ -149,7 +148,7 @@ export class AlertSettingController extends BaseController<
             const { user_id } = req.params;
 
             const alertSetting = await this.alertSettingInteractor.getAlertSettingByUserId(
-                Number(user_id)
+                Number(user_id),
             );
 
             return res.status(statusCode.SUCCESS).json({
@@ -170,7 +169,7 @@ export class AlertSettingController extends BaseController<
         const { district_id } = req.query;
 
         const setting = await this.alertSettingInteractor.getUserAlertByDistrict(
-            district_id as string
+            district_id as string,
         );
         const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 
@@ -193,7 +192,7 @@ export class AlertSettingController extends BaseController<
                     units: "metric",
                     lang: "vi",
                 },
-            }
+            },
         );
         const dates: Date[] = [];
         const result = openWeatherData.data.list.map((data) => {
@@ -219,7 +218,7 @@ export class AlertSettingController extends BaseController<
         const forecast = await this.statisticInteractor.getDistrictHistory(
             district_id as string,
             dates[0],
-            dates[7]
+            dates[7],
         );
 
         const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
@@ -232,7 +231,7 @@ export class AlertSettingController extends BaseController<
                     units: "metric",
                     lang: "vi",
                 },
-            }
+            },
         );
 
         const currentWeather = {
@@ -248,7 +247,10 @@ export class AlertSettingController extends BaseController<
         result[0] = { ...result[0], ...currentWeather };
         return res.status(statusCode.SUCCESS).json({
             status: "success",
-            data: { weather: result, forecast: forecast?.flatMap((body) => body.aqi_index) || [] },
+            data: {
+                weather: result,
+                forecast: forecast?.flatMap((body) => body.aqi_index) || [],
+            },
         });
     };
 
@@ -283,7 +285,7 @@ export class AlertSettingController extends BaseController<
                     units: "metric",
                     lang: "vi",
                 },
-            }
+            },
         );
         console.log(openWeatherCurrentData.data);
         const result = {

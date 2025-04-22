@@ -6,22 +6,22 @@ export class AuthValidationMiddleware {
     // Method-based validations for authentication routes
     validateAuth = validateRequest({
         POST: {
-            body: signInSchema.body
-        }
+            body: signInSchema.body,
+        },
     });
 
     validateToken = validateRequest({
         POST: {
-            headers: refreshTokenSchema.headers
-        }
+            headers: refreshTokenSchema.headers,
+        },
     });
 
     validateCode = validateRequest({
         POST: {
-            params: verifyCodeSchema.params
-        }
+            params: verifyCodeSchema.params,
+        },
     });
-    
+
     // For backward compatibility
     validateSignin = validateRequest({
         body: signInSchema.body,

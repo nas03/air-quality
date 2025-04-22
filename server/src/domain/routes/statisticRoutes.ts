@@ -14,21 +14,27 @@ const statisticRouter: Route[] = [
         method: "GET",
         controller: statisticController.onGetByDistrictID.bind(statisticController),
         role: "user",
-        middleware: [/* statisticValidation.validateGetByDistrictID */],
+        middleware: [
+            /* statisticValidation.validateGetByDistrictID */
+        ],
     },
     {
         path: "/statistics/district/:district_id/history",
         method: "GET",
         controller: statisticController.onGetDistrictHistory.bind(statisticController),
         role: "user",
-        middleware: [/* statisticValidation.validateGetDistrictHistory */],
+        middleware: [
+            /* statisticValidation.validateGetDistrictHistory */
+        ],
     },
     {
         path: "/statistics/ranking",
         method: "GET",
         controller: statisticController.onGetRankByDate.bind(statisticController),
         role: "user",
-        middleware: [/* statisticValidation.validateGetRankByDate */],
+        middleware: [
+            /* statisticValidation.validateGetRankByDate */
+        ],
     },
     {
         path: "/statistics/time-list",
@@ -41,7 +47,9 @@ const statisticRouter: Route[] = [
         method: "GET",
         controller: statisticController.onGetAQIStatisticsByProvince.bind(statisticController),
         role: "",
-        middleware: [/* statisticValidation.validateGetAQIStatisticsByProvince */],
+        middleware: [
+            /* statisticValidation.validateGetAQIStatisticsByProvince */
+        ],
     },
 ];
 

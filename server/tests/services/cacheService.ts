@@ -81,11 +81,11 @@
 //     expect(mockRedisClient.exists).toHaveBeenCalledWith(key);
 //     expect(result).toBe(true);
 //   });
-  
+
 //   test("should properly disconnect Redis client", async () => {
 //     // When
 //     await cacheService.quit();
-    
+
 //     // Then
 //     const mockRedisClient = cacheService.getRedisClient() as any;
 //     expect(mockRedisClient.quit).toHaveBeenCalled();

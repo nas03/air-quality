@@ -16,7 +16,7 @@ export class AlertSettingValidationMiddleware {
         },
         GET: {
             params: onGetAlertSettingByUser.params,
-        }
+        },
     });
 
     // Individual alert setting endpoint
@@ -27,7 +27,7 @@ export class AlertSettingValidationMiddleware {
         },
         DELETE: {
             params: onDeleteAlertSettingById.params,
-        }
+        },
     });
 
     // For backward compatibility

@@ -16,12 +16,13 @@ export const validateRequest = (schemas: ValidationSchemaConfig | MethodValidati
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             // Determine if we're dealing with method-specific schemas
-            const isMethodBased = Object.keys(schemas).some(key => 
-                ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"].includes(key));
+            const isMethodBased = Object.keys(schemas).some((key) =>
+                ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"].includes(key),
+            );
 
             // Get the appropriate schema for this request
             let schemaToUse: ValidationSchemaConfig = {};
-            
+
             if (isMethodBased) {
                 // If method-based, get schema for current HTTP method
                 const method = req.method as HttpMethod;

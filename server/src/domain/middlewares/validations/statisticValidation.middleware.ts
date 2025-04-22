@@ -12,27 +12,27 @@ export class StatisticValidationMiddleware {
         GET: {
             params: getByDistrictIDSchema.params,
             query: getByDistrictIDSchema.query,
-        }
+        },
     });
 
     validateDistrictHistory = validateRequest({
         GET: {
             params: getDistrictHistorySchema.params,
             query: getDistrictHistorySchema.query,
-        }
+        },
     });
 
     validateRanking = validateRequest({
         GET: {
             query: getRankByDateSchema.query,
-        }
+        },
     });
 
     validateProvinceStatistics = validateRequest({
         GET: {
             params: getAQIStatisticsByProvinceSchema.params,
             query: getAQIStatisticsByProvinceSchema.query,
-        }
+        },
     });
 
     // For backward compatibility

@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant";
+import type { Route } from "@/config/constant";
 import { AlertSettingController } from "../controllers";
 import { AlertSettingInteractor, DistrictInteractor, StatisticInteractor } from "../interactors";
 
@@ -13,7 +13,7 @@ const statisticInteractor = new StatisticInteractor(statisticRepository);
 const alertSettingController = new AlertSettingController(
     alertSettingInteractor,
     districtInteractor,
-    statisticInteractor
+    statisticInteractor,
 );
 // const alertSettingValidationMiddleware = new AlertSettingValidationMiddleware();
 const alertSettingRouter: Route[] = [
@@ -22,35 +22,45 @@ const alertSettingRouter: Route[] = [
         path: "/alert-settings/location",
         controller: alertSettingController.onGetWeatherDataByLocation.bind(alertSettingController),
         method: "GET",
-        middleware: [/* alertSettingValidationMiddleware.validateGetWeatherDataByLocation */],
+        middleware: [
+            /* alertSettingValidationMiddleware.validateGetWeatherDataByLocation */
+        ],
         role: "",
     },
     {
         path: "/alert-settings/user",
         controller: alertSettingController.onGetUserAlertByDistrict.bind(alertSettingController),
         method: "GET",
-        middleware: [/* alertSettingValidationMiddleware.validateGetUserAlertByDistrict */],
+        middleware: [
+            /* alertSettingValidationMiddleware.validateGetUserAlertByDistrict */
+        ],
         role: "user",
     },
     {
         path: "/alert-settings/:id",
         controller: alertSettingController.onUpdateAlertSetting.bind(alertSettingController),
         method: "PUT",
-        middleware: [/* alertSettingValidationMiddleware.validateUpdateAlertSetting */],
+        middleware: [
+            /* alertSettingValidationMiddleware.validateUpdateAlertSetting */
+        ],
         role: "user",
     },
     {
         path: "/alert-settings/:id",
         controller: alertSettingController.onDeleteAlertSettingById.bind(alertSettingController),
         method: "DELETE",
-        middleware: [/* alertSettingValidationMiddleware.validateDeleteAlertSettingById */],
+        middleware: [
+            /* alertSettingValidationMiddleware.validateDeleteAlertSettingById */
+        ],
         role: "user",
     },
     {
         path: "/alert-settings",
         controller: alertSettingController.onCreateAlertSetting.bind(alertSettingController),
         method: "POST",
-        middleware: [/* alertSettingValidationMiddleware.validateCreateAlertSetting */],
+        middleware: [
+            /* alertSettingValidationMiddleware.validateCreateAlertSetting */
+        ],
         role: "user",
     },
     {

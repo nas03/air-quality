@@ -3,10 +3,17 @@ export interface IStorageService {
 
     putObject(
         path: string,
-        data: Express.Multer.File
-    ): Promise<{ success: boolean; url: string; etag: string | undefined; key: string }>;
+        data: Express.Multer.File,
+    ): Promise<{
+        success: boolean;
+        url: string;
+        etag: string | undefined;
+        key: string;
+    }>;
 
-    deleteObject(
-        path: string
-    ): Promise<{ success: boolean; key: string; deleteMarker: boolean | undefined }>;
+    deleteObject(path: string): Promise<{
+        success: boolean;
+        key: string;
+        deleteMarker: boolean | undefined;
+    }>;
 }

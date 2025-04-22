@@ -31,7 +31,9 @@ export class StorageService implements IStorageService {
                 Bucket: this.s3Bucket,
                 Key: objectPath,
             });
-            const signedURL = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
+            const signedURL = await getSignedUrl(this.s3Client, command, {
+                expiresIn: 3600,
+            });
             return signedURL ?? null;
         } catch (error) {
             console.log("Error get file from AWS S3", error);
@@ -54,7 +56,9 @@ export class StorageService implements IStorageService {
             });
 
             const response = await this.s3Client.send(command);
-            const url = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
+            const url = await getSignedUrl(this.s3Client, command, {
+                expiresIn: 3600,
+            });
 
             return {
                 success: true,

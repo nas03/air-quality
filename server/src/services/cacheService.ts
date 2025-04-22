@@ -153,7 +153,7 @@ export class CacheService implements ICacheService {
     generateRedisKey = (
         objectType: string,
         objectId: string | number,
-        field: string | "*" = "*"
+        field: string | "*" = "*",
     ) => {
         return `${objectType}:${objectId}:${field}`;
     };

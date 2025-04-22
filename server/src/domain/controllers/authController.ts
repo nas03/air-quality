@@ -77,7 +77,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
                     username: decodedToken?.username,
                     role: decodedToken?.role,
                 },
-                "15m"
+                "15m",
             );
 
             return res.status(statusCode.SUCCESS).json({
@@ -106,7 +106,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
         }
         const validatePassword = await securityService.compareString(
             password,
-            isUserExists.password
+            isUserExists.password,
         );
 
         if (!validatePassword) {
@@ -124,7 +124,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
                     username: isUserExists.username,
                     role: AUTHENTICATION.USER_ROLE.USER,
                 },
-                "15m"
+                "15m",
             ),
             securityService.createToken(
                 {
@@ -132,7 +132,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
                     username: isUserExists.username,
                     role: AUTHENTICATION.USER_ROLE.USER,
                 },
-                "30d"
+                "30d",
             ),
         ]);
 
@@ -146,7 +146,11 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
         return res.status(statusCode.SUCCESS).json({
             status: "success",
-            data: { user_id: isUserExists.user_id, username: isUserExists.username, access_token },
+            data: {
+                user_id: isUserExists.user_id,
+                username: isUserExists.username,
+                access_token,
+            },
         });
     };
 
@@ -154,7 +158,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
         const { code } = req.params;
         const decodeCode = this.securityService.decodeToken<{ user_id: number }>(code);
         const verificationCode = await this.verificationCodeInteractor.getVerificationCode(
-            decodeCode.user_id
+            decodeCode.user_id,
         );
         if (verificationCode?.code !== code) {
             return res.status(statusCode.UNAUTHORIZED).json({

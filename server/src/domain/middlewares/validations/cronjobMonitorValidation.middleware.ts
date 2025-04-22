@@ -17,7 +17,7 @@ export class CronjobMonitorValidationMiddleware {
         PUT: {
             params: updateCronjobRecordSchema.params,
             body: updateCronjobRecordSchema.body,
-        }
+        },
     });
 
     // For backward compatibility

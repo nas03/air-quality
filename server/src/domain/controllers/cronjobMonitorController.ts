@@ -113,7 +113,9 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
             });
         }
 
-        const payload = { ...req.body, id } as Partial<CronjobMonitor> & { id: number };
+        const payload = { ...req.body, id } as Partial<CronjobMonitor> & {
+            id: number;
+        };
 
         try {
             const updatedRecord = await this.cronjobMonitorInteractor.updateCronjobRecord(payload);

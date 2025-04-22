@@ -1,7 +1,7 @@
 import { getAllCronjobs } from "@/api";
 import { downloadByDate, downloadFilesAsZip } from "@/api/data";
 import api from "@/config/api";
-import { CronjobMonitor } from "@/types/db";
+import type { CronjobMonitor } from "@/types/db";
 import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 import dayjs from "dayjs";
@@ -107,8 +107,10 @@ const AdminPage = () => {
 
             if (response.data.status === "success") {
                 setRerunStatus({ loading: false, success: true, error: null });
+                message.success("Chạy cronjob thành công");
                 useCronJobs.refetch();
             } else {
+                message.success("Chạy cronjob thất bại");
                 setRerunStatus({ loading: false, success: false, error: "Failed to rerun cronjob" });
             }
         } catch (err) {

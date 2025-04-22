@@ -13,15 +13,15 @@ export class CronjobMonitorRepository implements ICronjobMonitorRepository {
                     eb(
                         sql`EXTRACT(YEAR FROM timestamp)`,
                         "=",
-                        sql`EXTRACT(YEAR FROM date(${date}))`
+                        sql`EXTRACT(YEAR FROM date(${date}))`,
                     ),
                     eb(
                         sql`EXTRACT(MONTH FROM timestamp)`,
                         "=",
-                        sql`EXTRACT(MONTH FROM date(${date}))`
+                        sql`EXTRACT(MONTH FROM date(${date}))`,
                     ),
                     eb(sql`EXTRACT(DAY FROM timestamp)`, "=", sql`EXTRACT(DAY FROM date(${date}))`),
-                ])
+                ]),
             )
             .orderBy("timestamp", "desc")
             .executeTakeFirst();
@@ -31,10 +31,10 @@ export class CronjobMonitorRepository implements ICronjobMonitorRepository {
 
     async getAllCronjobRecords(payload?: { start_date: Date; end_date: Date }) {
         let records = db.selectFrom("cronjob_monitor").selectAll().orderBy("timestamp", "desc");
-        console.log(payload)
+        console.log(payload);
         if (payload)
             records = records.where((eb) =>
-                eb.between("timestamp", payload.start_date, payload.end_date)
+                eb.between("timestamp", payload.start_date, payload.end_date),
             );
         return await records.execute();
     }
@@ -49,7 +49,7 @@ export class CronjobMonitorRepository implements ICronjobMonitorRepository {
     }
 
     async updateCronjobRecord(
-        payload: Partial<CronjobMonitor> & { id: number }
+        payload: Partial<CronjobMonitor> & { id: number },
     ): Promise<CronjobMonitor> {
         const updatedRecord = await db
             .updateTable("cronjob_monitor")

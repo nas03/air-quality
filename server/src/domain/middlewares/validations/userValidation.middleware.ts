@@ -6,9 +6,9 @@ export class UserValidationMiddleware {
     validateUser = validateRequest({
         POST: {
             body: createUserSchema.body,
-        }
+        },
     });
-    
+
     // For backward compatibility
     validateCreateUser = validateRequest({
         body: createUserSchema.body,
