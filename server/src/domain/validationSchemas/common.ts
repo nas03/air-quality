@@ -8,6 +8,6 @@ export const dateTransformer = (val: unknown) => {
 
 export const numberTransformer = (val: unknown) => {
 	if (typeof val !== "number" || typeof val !== "string") return undefined;
-	const isValid = !isNaN(Number(val));
+	const isValid = !Number.isNaN(Number(val));
 	return isValid ? val : undefined;
 };

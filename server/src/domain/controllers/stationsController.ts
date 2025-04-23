@@ -7,7 +7,7 @@ export class StationsController extends BaseController<[StationsInteractor]> {
 	private stationInteractor = this.interactors[0];
 
 	onGetStationByID = async (req: Request, res: Response) => {
-		const station_id = req.params["station_id"];
+		const station_id = req.params.station_id;
 		const { date } = req.query;
 
 		const data = await this.stationInteractor.getStationByID(

@@ -33,7 +33,7 @@ const router = Router();
 routes.forEach((route) => {
 	const { method, path, middleware, role, controller } = route;
 
-	if (middleware && middleware.length) {
+	if (middleware?.length) {
 		router.use(path, ...middleware);
 	}
 	if (role) {
@@ -72,7 +72,7 @@ const logRoute = () => {
 		reset: "\x1b[0m", // Reset
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// biome-ignore lint/suspicious/noExplicitAny: only on runtime
 	router.stack.forEach((middleware: any) => {
 		if (middleware.route) {
 			Object.keys(middleware.route.methods).forEach((method) => {
@@ -82,7 +82,7 @@ const logRoute = () => {
 				});
 			});
 		} else if (middleware.name === "router") {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// biome-ignore lint/suspicious/noExplicitAny: only on runtime
 			middleware.handle.stack.forEach((handler: any) => {
 				if (handler.route) {
 					Object.keys(handler.route.methods).forEach((method) => {

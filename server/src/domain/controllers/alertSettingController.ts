@@ -173,7 +173,7 @@ export class AlertSettingController extends BaseController<
 		);
 		const API_KEY = process.env.OPEN_WEATHER_MAP_API_KEY;
 
-		const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
+		const geocodingAPI = await axios.get("http://api.openweathermap.org/geo/1.0/direct", {
 			params: {
 				q: `${setting?.vn_province},VN`,
 				appid: API_KEY,
@@ -182,7 +182,7 @@ export class AlertSettingController extends BaseController<
 		});
 
 		const openWeatherData = await axios.get<OpenWeatherForecastDataType>(
-			`http://api.openweathermap.org/data/2.5/forecast/daily`,
+			"http://api.openweathermap.org/data/2.5/forecast/daily",
 			{
 				params: {
 					lat: geocodingAPI.data[0].lat,
@@ -222,7 +222,7 @@ export class AlertSettingController extends BaseController<
 		);
 
 		const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
-			`https://api.openweathermap.org/data/2.5/weather`,
+			"https://api.openweathermap.org/data/2.5/weather",
 			{
 				params: {
 					lat: geocodingAPI.data[0].lat,
@@ -262,7 +262,7 @@ export class AlertSettingController extends BaseController<
 
 		if (district_id) {
 			const district = await this.districtInteractor.findDistrict(district_id as string);
-			const geocodingAPI = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
+			const geocodingAPI = await axios.get("http://api.openweathermap.org/geo/1.0/direct", {
 				params: {
 					q: `${district?.vn_province},VN`,
 					appid: API_KEY,
@@ -276,7 +276,7 @@ export class AlertSettingController extends BaseController<
 			payload.lon = Number(lon);
 		}
 		const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
-			`https://api.openweathermap.org/data/2.5/weather`,
+			"https://api.openweathermap.org/data/2.5/weather",
 			{
 				params: {
 					lat: payload.lat,

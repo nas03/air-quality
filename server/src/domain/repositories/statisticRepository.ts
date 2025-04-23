@@ -194,11 +194,11 @@ export class StatisticRepository implements IStatisticRepository {
 					...item,
 					forecast: [...item.forecast, { aqi_index: data.aqi_index, time: data.time }],
 				});
-			else
-				return map.set(data.district_id, {
-					...data,
-					forecast: [{ aqi_index: data.aqi_index, time: data.time }],
-				});
+
+			return map.set(data.district_id, {
+				...data,
+				forecast: [{ aqi_index: data.aqi_index, time: data.time }],
+			});
 		}, new Map<string, MDistrict & { forecast: Pick<Statistic, "time" | "aqi_index">[] }>());
 
 		return Object.fromEntries(resultMap);

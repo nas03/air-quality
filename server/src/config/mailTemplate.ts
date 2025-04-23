@@ -8,11 +8,11 @@ export const alertMailTemplate = (
 ) => {
 	const getStatus = (value: number) => {
 		if (value <= 50) return "good";
-		else if (value <= 100) return "moderate";
-		else if (value <= 150) return "unhealthy-sensitive";
-		else if (value <= 200) return "unhealthy";
-		else if (value <= 300) return "very-unhealthy";
-		else return "hazardous";
+		if (value <= 100) return "moderate";
+		if (value <= 150) return "unhealthy-sensitive";
+		if (value <= 200) return "unhealthy";
+		if (value <= 300) return "very-unhealthy";
+		return "hazardous";
 	};
 	let exceedDayList = "";
 	let firstAQIList = "";

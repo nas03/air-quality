@@ -23,8 +23,8 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
 		}
 
 		const date = new Date(dateStr);
-		console.log(date);
-		if (isNaN(date.getTime())) {
+
+		if (Number.isNaN(date.getTime())) {
 			return res.status(statusCode.BAD_REQUEST).json({
 				status: "fail",
 				message: "Invalid date format",
@@ -105,7 +105,7 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
 	onUpdateCronjobRecord = async (req: Request, res: Response) => {
 		const id = Number.parseInt(req.params.id, 10);
 
-		if (isNaN(id)) {
+		if (Number.isNaN(id)) {
 			return res.status(statusCode.BAD_REQUEST).json({
 				status: "fail",
 				message: resMessage.field_invalid,

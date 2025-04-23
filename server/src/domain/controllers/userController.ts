@@ -70,9 +70,9 @@ export class UserController extends BaseController<[UserInteractor, Verification
 
 	onUpdateUserBasicData = async (req: Request, res: Response) => {
 		const { user_id, username, phone_number } = req.body;
-		const payload = {};
-		if (username) payload["username"] = username;
-		if (phone_number) payload["phone_number"] = phone_number;
+		const payload: { username?: string; phone_number?: string } = {};
+		if (username) payload.username = username;
+		if (phone_number) payload.phone_number = phone_number;
 		if (!user_id) {
 			return res.status(statusCode.BAD_REQUEST).json({
 				status: "fail",
