@@ -1,3 +1,3 @@
 export interface IDataInteractor {
-    getImage(path: string);
+	getImage(path: string);
 }

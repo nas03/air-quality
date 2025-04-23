@@ -14,14 +14,14 @@ export const getTimeList = (): string[] => {
     const timeList = [];
 
     for (let i = 3; i > 0; i--) {
-        const date = today.subtract(i, 'day');
+        const date = today.subtract(i, "day");
         timeList.push(date.format("YYYY-MM-DD"));
     }
 
     timeList.push(today.format("YYYY-MM-DD"));
 
     for (let i = 1; i <= 7; i++) {
-        const date = today.add(i, 'day');
+        const date = today.add(i, "day");
         timeList.push(date.format("YYYY-MM-DD"));
     }
 

@@ -2,5 +2,8 @@
   "scripts": {
     "client": "cd client && bun dev",
     "server": "cd server && bun dev"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
   }
 }

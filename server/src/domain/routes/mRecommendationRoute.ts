@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant";
+import type { Route } from "@/config/constant";
 import { MRecommendationController } from "@/domain/controllers";
 import { MRecommendationInteractor } from "@/domain/interactors";
 import { MRecommendationRepository } from "@/domain/repositories";
@@ -8,12 +8,12 @@ const mRecommendationInteractor = new MRecommendationInteractor(mRecommendationR
 const mRecommendationController = new MRecommendationController(mRecommendationInteractor);
 
 const recommendationRouter: Route[] = [
-    {
-        path: "/recommendations",
-        controller:
-            mRecommendationController.onGetAllRecommendation.bind(mRecommendationController),
-        role: "",
-        method: "GET",
-    },
+	{
+		path: "/recommendations",
+		controller:
+			mRecommendationController.onGetAllRecommendation.bind(mRecommendationController),
+		role: "",
+		method: "GET",
+	},
 ];
 export default recommendationRouter;

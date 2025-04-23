@@ -1,6 +1,6 @@
-import { MDistrict } from "@/entities";
+import type { MDistrict } from "@/entities";
 
 export interface IDistrictInteractor {
-    getAllDistrict(): Promise<MDistrict[]>;
-    findDistrict(district_id: string): Promise<MDistrict | null>;
+	getAllDistrict(): Promise<MDistrict[]>;
+	findDistrict(district_id: string): Promise<MDistrict | null>;
 }

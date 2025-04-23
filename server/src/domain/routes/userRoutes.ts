@@ -1,4 +1,4 @@
-import { Route } from "@/config/constant/types";
+import type { Route } from "@/config/constant/types";
 import { UserController } from "@/domain/controllers";
 import { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { UserRepository, VerificationCodeRepository } from "@/domain/repositories";
@@ -11,39 +11,39 @@ const userController = new UserController(userInteractor, verificationCodeIntera
 // const userMiddleware = new UserValidationMiddleware();
 
 const userRouter: Route[] = [
-    {
-        path: "/users/signup",
-        method: "POST",
-        controller: userController.onCreateUser.bind(userController),
-        role: "",
-        middleware: [
-            /* userMiddleware.validateCreateUser */
-        ],
-    },
-    {
-        path: "/user/update-info",
-        method: "PUT",
-        controller: userController.onUpdateUserBasicData.bind(userController),
-        role: "user",
-    },
-    {
-        path: "/user/update-password",
-        method: "PUT",
-        controller: userController.onUpdateUserPassword.bind(userController),
-        role: "user",
-    },
-    {
-        path: "/user/:user_id",
-        method: "GET",
-        controller: userController.onGetUserInfo.bind(userController),
-        role: "user",
-    },
-    {
-        path: "/user/:user_id",
-        method: "DELETE",
-        controller: userController.onDeleteUser.bind(userController),
-        role: "user",
-    },
+	{
+		path: "/users/signup",
+		method: "POST",
+		controller: userController.onCreateUser.bind(userController),
+		role: "",
+		middleware: [
+			/* userMiddleware.validateCreateUser */
+		],
+	},
+	{
+		path: "/user/update-info",
+		method: "PUT",
+		controller: userController.onUpdateUserBasicData.bind(userController),
+		role: "user",
+	},
+	{
+		path: "/user/update-password",
+		method: "PUT",
+		controller: userController.onUpdateUserPassword.bind(userController),
+		role: "user",
+	},
+	{
+		path: "/user/:user_id",
+		method: "GET",
+		controller: userController.onGetUserInfo.bind(userController),
+		role: "user",
+	},
+	{
+		path: "/user/:user_id",
+		method: "DELETE",
+		controller: userController.onDeleteUser.bind(userController),
+		role: "user",
+	},
 ];
 
 export default userRouter;

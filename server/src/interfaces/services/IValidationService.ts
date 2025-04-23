@@ -1,6 +1,7 @@
-import z, { infer as ZodInfer } from "zod";
+import type z from "zod";
+import type { infer as ZodInfer } from "zod";
 export interface IValidationService<T extends z.ZodTypeAny> {
-    validate(data: unknown): ZodInfer<T>;
-    isValid(data: unknown): Promise<boolean>;
-    validateAsync(data: unknown): Promise<ZodInfer<T>>;
+	validate(data: unknown): ZodInfer<T>;
+	isValid(data: unknown): Promise<boolean>;
+	validateAsync(data: unknown): Promise<ZodInfer<T>>;
 }

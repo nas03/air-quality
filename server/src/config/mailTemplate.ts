@@ -1,39 +1,39 @@
 export const alertMailTemplate = (
-    location: string,
-    exceededDays: string[],
-    aqiDays: {
-        time: string;
-        aqi_index: number;
-    }[],
+	location: string,
+	exceededDays: string[],
+	aqiDays: {
+		time: string;
+		aqi_index: number;
+	}[],
 ) => {
-    const getStatus = (value: number) => {
-        if (value <= 50) return "good";
-        else if (value <= 100) return "moderate";
-        else if (value <= 150) return "unhealthy-sensitive";
-        else if (value <= 200) return "unhealthy";
-        else if (value <= 300) return "very-unhealthy";
-        else return "hazardous";
-    };
-    let exceedDayList = "";
-    let firstAQIList = "";
-    let secondAQIList = "";
-    exceededDays.forEach((day) => {
-        exceedDayList += `<li>${day}</li>`;
-    });
-    aqiDays.forEach((item, index) => {
-        if (index < 4) {
-            firstAQIList += `<div class="day-item">
+	const getStatus = (value: number) => {
+		if (value <= 50) return "good";
+		else if (value <= 100) return "moderate";
+		else if (value <= 150) return "unhealthy-sensitive";
+		else if (value <= 200) return "unhealthy";
+		else if (value <= 300) return "very-unhealthy";
+		else return "hazardous";
+	};
+	let exceedDayList = "";
+	let firstAQIList = "";
+	let secondAQIList = "";
+	exceededDays.forEach((day) => {
+		exceedDayList += `<li>${day}</li>`;
+	});
+	aqiDays.forEach((item, index) => {
+		if (index < 4) {
+			firstAQIList += `<div class="day-item">
 							<span class="day-label">${item.time}</span>
 							<div class="aqi-value ${getStatus(item.aqi_index)}">${item.aqi_index}</div>
 				</div>`;
-        } else {
-            secondAQIList += `<div class="day-item">
+		} else {
+			secondAQIList += `<div class="day-item">
 		<span class="day-label">${item.time}</span>
 		<div class="aqi-value ${getStatus(item.aqi_index)}">${item.aqi_index}</div>
 </div>`;
-        }
-    });
-    return `
+		}
+	});
+	return `
 <!DOCTYPE html>
 <html lang="vi">
 	<head>
@@ -500,7 +500,7 @@ export const alertMailTemplate = (
 };
 
 export const emailVerificationTemplate = (url: string, email: string) => {
-    return `
+	return `
 	<!DOCTYPE html>
 <html lang="vi">
   <head>

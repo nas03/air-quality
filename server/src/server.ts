@@ -20,7 +20,7 @@ server.use(morgan("dev"));
 server.use("/api", routes);
 
 const serverInstance = server.listen(5500, "0.0.0.0", () => {
-    console.log("Server is running on port 5500");
+	console.log("Server is running on port 5500");
 });
 
 // Handle graceful shutdown
@@ -28,22 +28,22 @@ process.on("SIGTERM", gracefulShutdown);
 process.on("SIGINT", gracefulShutdown);
 
 async function gracefulShutdown() {
-    console.log("Received shutdown signal, closing connections...");
+	console.log("Received shutdown signal, closing connections...");
 
-    try {
-        // Close Redis connection
-        await cacheService.quit();
-        console.log("Redis connection closed successfully");
+	try {
+		// Close Redis connection
+		await cacheService.quit();
+		console.log("Redis connection closed successfully");
 
-        // Close server
-        serverInstance.close(() => {
-            console.log("Server closed successfully");
-            process.exit(0);
-        });
-    } catch (error) {
-        console.error("Error during shutdown:", error);
-        process.exit(1);
-    }
+		// Close server
+		serverInstance.close(() => {
+			console.log("Server closed successfully");
+			process.exit(0);
+		});
+	} catch (error) {
+		console.error("Error during shutdown:", error);
+		process.exit(1);
+	}
 }
 
 export default server;

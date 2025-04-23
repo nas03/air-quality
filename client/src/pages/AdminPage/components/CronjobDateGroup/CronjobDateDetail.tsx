@@ -159,7 +159,7 @@ export const CronjobDateDetail = ({ date, jobs, onRerun, rerunStatus }: CronjobD
                     </button>
                 </div>
             </div>
-                            
+
             <div className="flex-1 overflow-auto p-4">
                 <div className="space-y-6 divide-y divide-gray-100">
                     {/* Raster Data Section */}
