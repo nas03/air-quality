@@ -58,7 +58,9 @@ export const ConfigContext = createContext<ConfigContextType>({
 export const AuthenticationContext = createContext<AuthContextType>({
     user: null,
     token: null,
-    login: async () => true,
+    login: async () => {
+        return { message: "", success: true };
+    },
     logout: () => null,
 });
 
