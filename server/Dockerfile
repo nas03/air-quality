@@ -22,7 +22,7 @@ COPY .env .env
 RUN npm run build
 
 # Expose the application port
-EXPOSE 5500
+EXPOSE 443
 
 # Start the application
 CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
