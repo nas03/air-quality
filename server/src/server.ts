@@ -19,7 +19,7 @@ server.use(morgan("dev"));
 
 server.use("/api", routes);
 
-const serverInstance = server.listen(80, "0.0.0.0", () => {
+const serverInstance = server.listen(443, "0.0.0.0", () => {
 	console.log("Server is running on port 5500");
 });
 
