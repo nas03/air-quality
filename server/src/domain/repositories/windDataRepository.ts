@@ -10,6 +10,7 @@ export class WindDataRepository implements IWindDataRepository {
 			.selectAll()
 			.where("timestamp", "=", timestamp)
 			.executeTakeFirst();
+		console.log({ query });
 		return query ?? null;
 	}
 
