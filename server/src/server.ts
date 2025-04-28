@@ -3,13 +3,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { CacheService } from "./services/cacheService";
+import fs from "node:fs";
+import http from "node:http";
+import https from "node:https";
 
 dotenv.config();
 
 const server = express();
-
-const cacheService = new CacheService();
 
 server.use(cors());
 server.use(express.json());
@@ -19,31 +19,30 @@ server.use(morgan("dev"));
 
 server.use("/api", routes);
 
-const serverInstance = server.listen(443, "0.0.0.0", () => {
-	console.log("Server is running on port 5500");
-});
+if (process.env.NODE_ENV === "production") {
+	const privateKey = fs.readFileSync("/etc/letsencrypt/live/api.nas03.xyz/privkey.pem", "utf8");
+	const certificate = fs.readFileSync(
+		"/etc/letsencrypt/live/api.nas03.xyz/fullchain.pem",
+		"utf8",
+	);
+	const credentials = { key: privateKey, cert: certificate };
+	const httpsServer = https.createServer(credentials, server);
+	const httpApp = express();
+	httpApp.use((req, res) => {
+		res.redirect(`https://${req.headers.host}${req.url}`);
+	});
 
-// Handle graceful shutdown
-process.on("SIGTERM", gracefulShutdown);
-process.on("SIGINT", gracefulShutdown);
+	http.createServer(httpApp).listen(80, () => {
+		console.log("HTTP server redirecting to HTTPS");
+	});
 
-async function gracefulShutdown() {
-	console.log("Received shutdown signal, closing connections...");
-
-	try {
-		// Close Redis connection
-		await cacheService.quit();
-		console.log("Redis connection closed successfully");
-
-		// Close server
-		serverInstance.close(() => {
-			console.log("Server closed successfully");
-			process.exit(0);
-		});
-	} catch (error) {
-		console.error("Error during shutdown:", error);
-		process.exit(1);
-	}
+	httpsServer.listen(443, "0.0.0.0", () => {
+		console.log("HTTPS Server is running on port 443");
+	});
+} else {
+	server.listen(443, "0.0.0.0", () => {
+		console.log("HTTP Server is running on port 443");
+	});
 }
 
 export default server;
