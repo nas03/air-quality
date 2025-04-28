@@ -17,9 +17,9 @@ import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 // export const GEOSERVER_BASE_URL = "http://localhost:8080/geoserver/air";
 // export const GEOSERVER_URL="http://localhost:8080/geoserver"
 export const GEOSERVER_BASE_URL = "https://geoserver.nas03.xyz/geoserver/air";
-export const GEOSERVER_URL="https://geoserver.nas03.xyz/geoserver"
+export const GEOSERVER_URL = "https://geoserver.nas03.xyz/geoserver";
 export const createAQILayer = (time: string) =>
-    new TileLayer({ 
+    new TileLayer({
         source: new TileWMS({
             url: `${GEOSERVER_BASE_URL}/wms`,
             params: {
@@ -49,8 +49,7 @@ export const createVietnamBoundaryLayer = (map: Map) =>
     });
 
 export const createStationsLayer = (time: string) => {
-    // const timestamp = new Date(new Date(new Date(time).getTime()).setHours(0, 0, 0, 0)).toISOString();
-    const timestamp = dayjs(time).startOf("day").toISOString();
+    const timestamp = dayjs(time).startOf("day").set("hour", 7).toISOString();
     return new VectorLayer({
         source: new VectorSource({
             url: `${GEOSERVER_BASE_URL}/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=air:stations_point_map&outputFormat=application/json&CQL_FILTER=timestamp='${timestamp}'`,
