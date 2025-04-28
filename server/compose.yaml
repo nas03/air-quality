@@ -1,0 +1,13 @@
+services:
+    app:
+        container_name: airq-server
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: airq-server:latest
+        ports:
+            - "443:443"
+        env_file:
+            - .env
+
+        command: ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
