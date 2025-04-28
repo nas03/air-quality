@@ -33,4 +33,7 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    server: {
+        cors: true
+    }
 });
