@@ -25,6 +25,7 @@ import { IPropsSideBar } from "@/components/types";
 // Utilities
 import { cn } from "@/lib/utils";
 import axios from "axios";
+import { GEOSERVER_URL } from "../OpenLayerMap/layers";
 import { centerMapOnDistrict } from "./utils";
 
 // Constants
@@ -75,7 +76,7 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
     const mapMutation = useMutation({
         mutationKey: ["map", location],
         mutationFn: async () => {
-            const response = await axios.get("http://localhost:8080/geoserver/wfs", {
+            const response = await axios.get(`${GEOSERVER_URL}/wfs`, {
                 params: {
                     SERVICE: "WFS",
                     version: "2.0.0",

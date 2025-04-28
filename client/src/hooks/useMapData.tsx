@@ -1,3 +1,4 @@
+import { GEOSERVER_URL } from "@/pages/AppPage/components/OpenLayerMap/layers";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
@@ -6,7 +7,7 @@ const useMapData = (location: string, filter: string) => {
     const mutation = useMutation({
         mutationKey: ["map", location],
         mutationFn: async () => {
-            const response = await axios.get("http://localhost:8080/geoserver/wfs", {
+            const response = await axios.get(`${GEOSERVER_URL}/wfs`, {
                 params: {
                     SERVICE: "WFS",
                     version: "2.0.0",
