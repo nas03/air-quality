@@ -7,7 +7,6 @@ import { Label } from "@radix-ui/react-label";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { FiAlertCircle, FiCheck } from "react-icons/fi";
 
 interface SigninFormData {
@@ -63,12 +62,12 @@ const SigninForm = ({ onSubmit, loading }: { onSubmit: (data: SigninFormData) =>
                 <p>Đăng nhập</p>
             </Button>
 
-            <Button
+            {/* <Button
                 variant="outline"
                 className="mt-2 flex w-full items-center justify-center border-gray-300 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <FcGoogle className="mr-2 h-5 w-5" />
                 Đăng nhập với Google
-            </Button>
+            </Button> */}
             <div className="mt-6 text-center text-sm text-gray-500">
                 Bạn chưa có tài khoản?{" "}
                 <Link to="/signup" className="font-medium text-indigo-600 hover:underline">

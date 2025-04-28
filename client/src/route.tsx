@@ -1,5 +1,4 @@
 import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
-
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 import CodeVerificationPage from "./pages/CodeVerificationPage/CodeVerificationPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
