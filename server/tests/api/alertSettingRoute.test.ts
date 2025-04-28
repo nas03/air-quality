@@ -4,7 +4,7 @@ import api from "../config/api";
 describe("Alert Setting API", () => {
     const district_id = "VNM.63.8_1";
     const coordinate = { lat: 21.0, lon: 105.87 };
-    const user_id = 13;
+    const user_id = 38;
     let alertId: number | null = null;
 
     describe("GET /alert-settings/location", () => {
