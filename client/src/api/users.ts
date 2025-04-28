@@ -26,6 +26,7 @@ export type CreateUserParams = {
     phone_number: string;
     password: string;
 };
+
 export const createUser = async (payload: CreateUserParams) => {
     const response = await api.post<APIResponse<null>>("/users/signup", {
         username: payload.username,
@@ -33,11 +34,10 @@ export const createUser = async (payload: CreateUserParams) => {
         password: payload.password,
         phone_number: payload.phone_number,
     });
-
-    if (["fail", "error"].includes(response.data.status)) {
-        throw Error("Error creating new user");
-    }
-    return null;
+    if (response.data.status === "fail") return { message: "Email đã được tài khoản khác sử dụng", isSuccess: false };
+    if (response.data.status === "error")
+        return { message: "Lỗi hệ thống, vui lòng thử lại sau ít phút", isSuccess: false };
+    return { message: "", isSuccess: true };
 };
 
 export const getUserInfoByUserId = async (user_id: number | undefined) => {

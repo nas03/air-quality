@@ -1,8 +1,8 @@
 import axios from "axios";
+const env = import.meta.env.DEV
+const baseURL = env ? "http://localhost:443/api" : "https://api.nas03.xyz/api"
 const api = axios.create({
-    baseURL: "https://api.nas03.xyz/api",
-
-    // baseURL: "http://ec2-18-136-124-168.ap-southeast-1.compute.amazonaws.com:5500/api",
+    baseURL: baseURL,
 });
 
 export default api;
