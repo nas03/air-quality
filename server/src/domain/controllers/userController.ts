@@ -50,7 +50,7 @@ export class UserController extends BaseController<[UserInteractor, Verification
         const verificationCode = await this.verificationCodeInteractor.createVerificationCode(
             newUser.user_id,
         );
-        const FE_URL = "http://localhost:5173/email-verification";
+        const FE_URL = "https://www.nas03.xyz/email-verification";
         await this.mailService.sendMail({
             to: newUser.email,
             subject: "Xác nhận Email",
