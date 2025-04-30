@@ -16,8 +16,8 @@ import VectorSource from "ol/source/Vector";
 import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 // export const GEOSERVER_BASE_URL = "http://localhost:8080/geoserver/air";
 // export const GEOSERVER_URL="http://localhost:8080/geoserver"
-export const GEOSERVER_BASE_URL = "https://geoserver.nas03.xyz/geoserver/air";
-export const GEOSERVER_URL = "https://geoserver.nas03.xyz/geoserver";
+export const GEOSERVER_BASE_URL = "https://13.215.127.229/geoserver/air";
+export const GEOSERVER_URL = "https://13.215.127.229/geoserver";
 
 export const createAQILayer = (time: string) =>
     new TileLayer({
