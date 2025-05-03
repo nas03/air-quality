@@ -4,7 +4,7 @@ import { useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 const CodeVerificationPage = () => {
-    const searchParams: { code: string } | null = useSearch({ from: "/public/verification" });
+    const searchParams: { code: string } | null = useSearch({ from: "/sub/verification" });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
