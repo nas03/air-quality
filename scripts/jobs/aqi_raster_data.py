@@ -242,7 +242,7 @@ def createAQIRasterFile(filepath: str, output_path: str):
         with open(output_path, "rb") as f:
             files = [("file", (aqi_filename, f, "image/tiff"))]
             requests.post(
-                f"http://localhost:443/api/files/",
+                f"https://api.nas03.xyz/api/files/",
                 files=files,
                 data={"filename": aqi_filepath},
             )

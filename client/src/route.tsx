@@ -1,5 +1,6 @@
 import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
+import axios from "axios";
 import CodeVerificationPage from "./pages/CodeVerificationPage/CodeVerificationPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 
@@ -10,30 +11,49 @@ const publicRoute = createRoute({
     getParentRoute: () => rootRoute,
 });
 
-const protectedRoute = createRoute({
+const protectUserRoute = createRoute({
     id: "protected",
     getParentRoute: () => rootRoute,
-    beforeLoad: () => {
+    beforeLoad: async () => {
         const accessToken = sessionStorage.getItem("access_token");
-        if (!accessToken) {
+        if (!accessToken) throw redirect({ to: "/signin" });
+        const verify = await axios.post("/auth/verify/user", { access_token: accessToken });
+        if (verify.status !== 200)
+            throw redirect({
+                to: "/",
+            });
+    },
+});
+
+const protectAdminRoute = createRoute({
+    id: "admin",
+    getParentRoute: () => rootRoute,
+    beforeLoad: async () => {
+        const accessToken = sessionStorage.getItem("access_token");
+        if (!accessToken)
             throw redirect({
                 to: "/signin",
             });
-        }
+        const verify = await axios.post("/auth/verify/admin", { access_token: accessToken });
+        if (verify.status !== 200)
+            throw redirect({
+                to: "/",
+            });
     },
 });
 /* PRIVATE ROUTE */
 const adminRoute = createRoute({
-    getParentRoute: () => protectedRoute,
+    getParentRoute: () => protectAdminRoute,
     path: "/admin",
     component: AdminPage,
 });
 
 const analyticsRoute = createRoute({
-    getParentRoute: () => publicRoute,
+    getParentRoute: () => protectUserRoute,
     path: "/analytics",
     component: AnalyticsDashboard,
 });
+
 /* PUBLIC ROUTE */
 const signInRoute = createRoute({
     getParentRoute: () => publicRoute,
@@ -66,17 +86,17 @@ const emailVerificationRoute = createRoute({
 });
 
 /* ROUTE TREE */
-const protectedRouteTree = protectedRoute.addChildren([adminRoute]);
+const protectedRouteTree = protectUserRoute.addChildren([analyticsRoute]);
+const adminProtectRoute = protectAdminRoute.addChildren([adminRoute]);
 const publicRouteTree = publicRoute.addChildren([
     signInRoute,
     homeRoute,
     signUpRoute,
-    analyticsRoute,
     landingRoute,
     emailVerificationRoute,
 ]);
 
-const routeTree = rootRoute.addChildren([protectedRouteTree, publicRouteTree]);
+const routeTree = rootRoute.addChildren([adminProtectRoute, protectedRouteTree, publicRouteTree]);
 
 const router = createRouter({ routeTree });
 

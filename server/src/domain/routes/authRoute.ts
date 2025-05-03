@@ -45,6 +45,18 @@ const authRouter: Route[] = [
 			/* authValidation.validateRefreshToken */
 		],
 	},
+	{
+		path: "/auth/verify/admin",
+		method: "POST",
+		controller: authController.onVerifyAdmin.bind(authController),
+		role: "",
+	},
+	{
+		path: "/auth/verify/user",
+		method: "POST",
+		controller: authController.onVerifyUser.bind(authController),
+		role: "",
+	},
 ];
 
 export default authRouter;

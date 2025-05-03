@@ -1,7 +1,9 @@
+export type UserRole = 1 | 2;
+
 export type UserToken = {
 	user_id: number;
 	username: string;
-	role?: string;
+	role?: UserRole;
 };
 
 /* export interface OpenWeatherDataType {

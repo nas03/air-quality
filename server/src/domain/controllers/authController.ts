@@ -1,6 +1,6 @@
 import { ACCOUNT_STATUS, AUTHENTICATION, resMessage, statusCode } from "@/config/constant";
 import { BaseController } from "@/domain/controllers/baseController";
-import type { UserToken } from "@/domain/controllers/types";
+import type { UserRole, UserToken } from "@/domain/controllers/types";
 import type { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services";
 import type { Request, Response } from "express";
@@ -9,6 +9,18 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 	private securityService = new SecurityService();
 	private userInteractor = this.interactors[0];
 	private verificationCodeInteractor = this.interactors[1];
+
+	// --- Private helpers ---
+
+	private isValidUserRole = (role: UserRole | undefined): boolean => {
+		const validRoles: UserRole[] = [
+			AUTHENTICATION.USER_ROLE.USER,
+			AUTHENTICATION.USER_ROLE.ADMIN,
+		];
+		return !!role && validRoles.includes(role);
+	};
+
+	// --- Controller methods ---
 
 	onRotateRefreshToken = async (req: Request, res: Response) => {
 		const refresh_token = req.headers.authorization;
@@ -96,6 +108,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				data: null,
 			});
 		}
+
 		if (isUserExists.account_status === ACCOUNT_STATUS.NOT_ACTIVATED) {
 			return res.status(statusCode.SUCCESS).json({
 				status: "success",
@@ -103,6 +116,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				data: null,
 			});
 		}
+
 		const validatePassword = await securityService.compareString(
 			password,
 			isUserExists.password,
@@ -159,6 +173,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 		const verificationCode = await this.verificationCodeInteractor.getVerificationCode(
 			decodeCode.user_id,
 		);
+
 		if (verificationCode?.code !== code) {
 			return res.status(statusCode.UNAUTHORIZED).json({
 				status: "fail",
@@ -166,6 +181,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				data: null,
 			});
 		}
+
 		await Promise.all([
 			this.userInteractor.updateUser(decodeCode.user_id, { account_status: 1 }),
 			this.verificationCodeInteractor.updateVerificationCodeStatus(decodeCode.user_id),
@@ -174,6 +190,47 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 		return res.status(statusCode.SUCCESS).json({
 			status: "success",
 			data: true,
+		});
+	};
+
+	onVerifyAdmin = async (req: Request, res: Response) => {
+		const { access_token } = req.body;
+		const verify = this.securityService.verifyToken(access_token);
+
+		if (verify === AUTHENTICATION.TOKEN_VERIFICATION.VALID) {
+			const decodeToken = this.securityService.decodeToken<UserToken>(access_token);
+			if (decodeToken.role === AUTHENTICATION.USER_ROLE.ADMIN) {
+				return res.status(statusCode.SUCCESS).json({
+					status: "success",
+					data: null,
+				});
+			}
+		}
+
+		return res.status(statusCode.UNAUTHORIZED).json({
+			status: "fail",
+			message: "Invalid token",
+		});
+	};
+
+	onVerifyUser = async (req: Request, res: Response) => {
+		const { access_token } = req.body;
+		const verify = this.securityService.verifyToken(access_token);
+
+		if (verify === AUTHENTICATION.TOKEN_VERIFICATION.VALID) {
+			const decodeToken = this.securityService.decodeToken<UserToken>(access_token);
+
+			if (this.isValidUserRole(decodeToken.role)) {
+				return res.status(statusCode.SUCCESS).json({
+					status: "success",
+					data: null,
+				});
+			}
+		}
+
+		return res.status(statusCode.UNAUTHORIZED).json({
+			status: "fail",
+			message: "Invalid token",
 		});
 	};
 }
