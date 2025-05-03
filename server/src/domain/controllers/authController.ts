@@ -135,7 +135,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				{
 					user_id: isUserExists.user_id,
 					username: isUserExists.username,
-					role: AUTHENTICATION.USER_ROLE.USER,
+					role: isUserExists.role,
 				},
 				"15m",
 			),
@@ -143,7 +143,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				{
 					user_id: isUserExists.user_id,
 					username: isUserExists.username,
-					role: AUTHENTICATION.USER_ROLE.USER,
+					role: isUserExists.role,
 				},
 				"30d",
 			),
@@ -199,6 +199,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
 		if (verify === AUTHENTICATION.TOKEN_VERIFICATION.VALID) {
 			const decodeToken = this.securityService.decodeToken<UserToken>(access_token);
+			console.log({ decodeToken });
 			if (decodeToken.role === AUTHENTICATION.USER_ROLE.ADMIN) {
 				return res.status(statusCode.SUCCESS).json({
 					status: "success",

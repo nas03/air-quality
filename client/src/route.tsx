@@ -1,6 +1,6 @@
 import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
-import axios from "axios";
+import api from "./config/api";
 import CodeVerificationPage from "./pages/CodeVerificationPage/CodeVerificationPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 
@@ -17,11 +17,11 @@ const protectUserRoute = createRoute({
     beforeLoad: async () => {
         const accessToken = sessionStorage.getItem("access_token");
         if (!accessToken) throw redirect({ to: "/signin" });
-        const verify = await axios.post("/auth/verify/user", { access_token: accessToken });
-        if (verify.status !== 200)
+        await api.post("/auth/verify/user", { access_token: accessToken }).catch(() => {
             throw redirect({
-                to: "/",
+                to: "/signin",
             });
+        });
     },
 });
 
@@ -34,11 +34,11 @@ const protectAdminRoute = createRoute({
             throw redirect({
                 to: "/signin",
             });
-        const verify = await axios.post("/auth/verify/admin", { access_token: accessToken });
-        if (verify.status !== 200)
+        await api.post("/auth/verify/admin", { access_token: accessToken }).catch(() => {
             throw redirect({
                 to: "/",
             });
+        });
     },
 });
 /* PRIVATE ROUTE */
@@ -81,7 +81,7 @@ const landingRoute = createRoute({
 
 const emailVerificationRoute = createRoute({
     getParentRoute: () => publicRoute,
-    path: "/email-verification",
+    path: "/verification",
     component: CodeVerificationPage,
 });
 

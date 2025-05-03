@@ -4,14 +4,16 @@ import { useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 const CodeVerificationPage = () => {
-    const searchParams: { code: string } | null = useSearch({ from: "/public/email-verification" });
+    const searchParams: { code: string } | null = useSearch({ from: "/public/verification" });
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (searchParams && searchParams.code) {
             setLoading(true);
             api.post(`/auth/verification/${searchParams.code}`).then(() => setLoading(false));
         }
     }, [searchParams]);
+
     return (
         <Loading loading={loading} className="h-screen bg-gray-50">
             <div className="flex h-full w-full flex-col items-center justify-center">

@@ -26,7 +26,7 @@ def send_notifications(station_data_log, wind_data_log):
     }
 
     response = requests.post(
-        "http://ec2-52-221-181-109.ap-southeast-1.compute.amazonaws.com:5500/api/cronjob/record",
+        "https://api.nas03.xyz/api/cronjob/record",
         data=data,
     )
     print(response.json())
