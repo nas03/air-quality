@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/analytics", "destination": "/index.html" },
+    { "source": "/signin", "destination": "/index.html" },
+    { "source": "/signup", "destination": "/index.html" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/home", "destination": "/index.html" },
+    { "source": "/verification", "destination": "/index.html" }
+  ]
+}
