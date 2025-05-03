@@ -55,12 +55,12 @@ interface LogSectionProps {
     date: string;
 }
 
-const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) => {
+const LogSection = ({ title, jobs, getStatus, getLog, /* type */ }: LogSectionProps) => {
     const latestFirst = [...jobs].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-    const [fileSizes, setFileSizes] = useState<{ [key: number]: number | null }>({});
+    // const [fileSizes, setFileSizes] = useState<{ [key: number]: number | null }>({});
 
-    useEffect(() => {
+   /*  useEffect(() => {
         latestFirst.forEach((job) => {
             if (getStatus(job) === 1) {
                 api.get(`/data/size/${type}/${job.id}`)
@@ -74,7 +74,7 @@ const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) =
                     });
             }
         });
-    }, [jobs, type]);
+    }, [jobs, type]); */
 
     return (
         <div className="space-y-4">
@@ -82,11 +82,11 @@ const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) =
                 <h4 className="font-medium text-gray-700">
                     {title} ({jobs.length} bản ghi)
                 </h4>
-                {jobs.length > 0 && (
+             {/*    {jobs.length > 0 && (
                     <div className="text-xs text-gray-500">
                         Cập nhật gần nhất: {formatTime(latestFirst[0].timestamp)}
                     </div>
-                )}
+                )} */}
             </div>
             <div className="max-h-[300px] space-y-2 overflow-y-auto">
                 {latestFirst.map((job) => (
@@ -95,11 +95,11 @@ const LogSection = ({ title, jobs, getStatus, getLog, type }: LogSectionProps) =
                             <TableStatusBadge status={getStatus(job)} />
                             <div className="flex items-center space-x-2">
                                 <span className="text-xs text-gray-500">{formatTime(job.timestamp)}</span>
-                                {fileSizes[job.id] !== undefined && (
+                              {/*   {fileSizes[job.id] !== undefined && (
                                     <span className="text-xs font-medium text-gray-500">
                                         {formatFileSize(fileSizes[job.id]!)}
                                     </span>
-                                )}
+                                )} */}
                             </div>
                         </div>
                         <div className="relative">

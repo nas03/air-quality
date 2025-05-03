@@ -64,7 +64,11 @@ const AdminPage = () => {
         const grouped: GroupedCronjobs = {};
 
         jobs.forEach((job) => {
-            const date = new Date(job.timestamp).toISOString().split("T")[0];
+            const hour = dayjs(job.timestamp).get("hour");
+            const date = dayjs(job.timestamp)
+                .set("hour", hour + 7)
+                .toISOString()
+                .split("T")[0];
 
             if (!grouped[date]) {
                 grouped[date] = {
