@@ -103,5 +103,13 @@ const subRouteTree = subRoute.addChildren([landingRoute, emailVerificationRoute]
 const routeTree = rootRoute.addChildren([adminProtectRoute, protectedRouteTree, publicRouteTree, subRouteTree]);
 
 const router = createRouter({ routeTree });
+// Declare the router types
+declare module '@tanstack/react-router' {
+    interface Register {
+        router: typeof router;
+    }
+}
 
+// Log the router for debugging
+console.log('Router configuration:', router);
 export default router;
