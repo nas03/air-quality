@@ -1,8 +1,6 @@
-import { AdminPage, AnalyticsDashboard, AppPage, SigninPage, SignupPage } from "@/pages";
+import { AdminPage, AnalyticsDashboard, AppPage, CodeVerificationPage, LandingPage, SigninPage, SignupPage } from "@/pages";
 import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 import api from "./config/api";
-import CodeVerificationPage from "./pages/CodeVerificationPage/CodeVerificationPage";
-import LandingPage from "./pages/LandingPage/LandingPage";
 
 export const rootRoute = createRootRoute();
 
