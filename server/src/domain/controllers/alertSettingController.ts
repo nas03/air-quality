@@ -198,6 +198,7 @@ export class AlertSettingController extends BaseController<
 		const result = openWeatherData.data.list.map((data) => {
 			const date = new Date(data.dt * 1000);
 			dates.push(new Date(date.setHours(7, 0, 0, 0)));
+
 			return {
 				id: setting?.id,
 				aqi_index: setting?.aqi_index || null,
@@ -218,7 +219,7 @@ export class AlertSettingController extends BaseController<
 		const forecast = await this.statisticInteractor.getDistrictHistory(
 			district_id as string,
 			dates[0],
-			dates[7],
+			new Date(dates[7].setHours(23, 59, 59)),
 		);
 
 		const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
