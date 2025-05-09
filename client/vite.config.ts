@@ -41,7 +41,7 @@ export default defineConfig({
                 if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin)) return true;
                 return false;
             },
-            credentials: true
+            
         }
     }
 });

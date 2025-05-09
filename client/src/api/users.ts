@@ -6,7 +6,7 @@ export const signin = async (email: string, password: string): Promise<APIRespon
     const response = await api.post<APIResponse<SignInResponse>>("/auth/signin", {
         accountIdentifier: email,
         password,
-    });
+    }, {withCredentials: true});
     if (response.data.status === "error") {
         return false;
     }
