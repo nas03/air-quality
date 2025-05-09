@@ -37,7 +37,7 @@ export default defineConfig({
         cors: {
             origin: (origin, _req) => {
                 
-                if (origin === "https://localhost:443") return true;
+                if (origin === "http://localhost:443") return true;
                 if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin)) return true;
                 return false;
             },
