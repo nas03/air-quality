@@ -4,6 +4,7 @@ import type { UserRole, UserToken } from "@/domain/controllers/types";
 import type { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services";
 import type { Request, Response } from "express";
+import console from "node:console";
 
 export class AuthController extends BaseController<[UserInteractor, VerificationCodeInteractor]> {
 	private securityService = new SecurityService();
@@ -77,11 +78,12 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 		const cookies = req.cookies;
 
 		if (
-			cookies?.REFRESH_TOKEN &&
-			securityService.verifyToken(cookies.REFRESH_TOKEN) ===
+			cookies?.AUTH_REF_TOKEN &&
+			securityService.verifyToken(cookies.AUTH_REF_TOKEN) ===
 				AUTHENTICATION.TOKEN_VERIFICATION.VALID
 		) {
-			const decodedToken = securityService.decodeToken<UserToken>(cookies.REFRESH_TOKEN);
+			const decodedToken = securityService.decodeToken<UserToken>(cookies.AUTH_REF_TOKEN);
+			console.log({ decodedToken });
 			const access_token = securityService.createToken(
 				{
 					user_id: decodedToken?.user_id,
@@ -93,7 +95,11 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
 			return res.status(statusCode.SUCCESS).json({
 				status: "success",
-				data: { access_token },
+				data: {
+					access_token,
+					user_id: decodedToken.user_id,
+					username: decodedToken.username,
+				},
 			});
 		}
 
@@ -151,7 +157,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
 		res.cookie("AUTH_REF_TOKEN", refresh_token, {
 			httpOnly: true,
-			secure: true,
+			secure: false,
 			sameSite: "lax",
 			path: "/",
 			maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -199,7 +205,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
 		if (verify === AUTHENTICATION.TOKEN_VERIFICATION.VALID) {
 			const decodeToken = this.securityService.decodeToken<UserToken>(access_token);
-			console.log({ decodeToken });
+
 			if (decodeToken.role === AUTHENTICATION.USER_ROLE.ADMIN) {
 				return res.status(statusCode.SUCCESS).json({
 					status: "success",

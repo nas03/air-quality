@@ -100,7 +100,7 @@ const SideBar: React.FC<IPropsSideBar> = ({ setExpanded, className }) => {
 
     useEffect(() => {
         if (!mapRef.current) return;
-        console.log({ targetDistrictID });
+
         mapRef.current.getView().setZoom(12);
         mapMutation.mutate();
     }, [targetDistrictID]);

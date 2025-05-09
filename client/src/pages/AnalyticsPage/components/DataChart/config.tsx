@@ -47,7 +47,6 @@ export const getGradientLinearMap = (id: string, data: number[], chartType: Moni
 
 export const yAxisConfig: { [key: string]: Pick<LineChartProps, "yAxis"> } = Object.fromEntries(
     Object.entries(MonitoringData.OUTPUT).map(([_key, value]) => {
-        console.log({ barChar: value });
         const isAQI = Number(value) === MonitoringData.OUTPUT.AQI;
         const thresholds = isAQI ? aqiThresholds : pm25Thresholds;
 

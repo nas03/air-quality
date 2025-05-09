@@ -1,4 +1,5 @@
 import routes from "@/domain/routes";
+import cookieParser from 'cookie-parser';
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -11,8 +12,15 @@ dotenv.config();
 
 const server = express();
 
-server.use(cors());
+server.use(
+	cors({
+		origin: ["http://localhost:5173", "https://nas03.xyz", "https://air-quality.nas03.xyz"],
+		credentials: true,
+	}),
+);
+
 server.use(express.json());
+server.use(cookieParser())
 server.use(express.urlencoded({ extended: true }));
 
 server.use(morgan("dev"));

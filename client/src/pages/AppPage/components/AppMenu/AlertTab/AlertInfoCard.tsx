@@ -56,7 +56,6 @@ const getAqiLabel = (value: number): string => {
 };
 
 const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...props }) => {
-    console.log({ data });
     const values = {
         labels: data.weather.map((item) => formatDate(item.date)),
         data: data.forecast,

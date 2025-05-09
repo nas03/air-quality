@@ -48,7 +48,7 @@ export const getCurrentLocation = (
                             setRegistrationData(null);
                             return;
                         }
-                        console.log(locationProperty);
+
                         const locationData = {
                             province_id: locationProperty["GID_1"],
                             district_id: locationProperty["GID_2"],

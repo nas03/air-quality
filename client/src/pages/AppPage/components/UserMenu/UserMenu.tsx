@@ -2,11 +2,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "@tanstack/react-router";
 import { Avatar, Button } from "antd";
+import { useEffect } from "react";
 import { IPropsUserMenu } from "./types";
 
 const UserMenu: React.FC<IPropsUserMenu> = ({ className }) => {
     const { user, logout } = useAuth();
-
+    useEffect(() => {}, [user]);
     const renderAuthenticatedView = () => (
         <div className="flex w-full flex-row items-center justify-between gap-2">
             <Avatar size="large" icon={<UserOutlined />} src="avatar.jpg" className="cursor-default shadow-sm" />

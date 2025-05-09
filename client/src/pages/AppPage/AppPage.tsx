@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { MarkData } from "@/types/types";
 
 // Local Components
+import { useAuth } from "@/hooks/useAuth";
 import {
     AppMenu,
     CurrentLocationData,
@@ -73,6 +74,11 @@ const AppPage = () => {
         if (isSuccess) setTime(timeList[3]);
     }, [isSuccess]);
 
+    const auth = useAuth();
+
+    useEffect(() => {
+        auth.login("", "").catch();
+    }, []);
     // Framer Motion
     const transition = { type: "tween", duration: 0.3 };
     const animate = openDrawer ? "open" : "close";

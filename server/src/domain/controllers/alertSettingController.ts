@@ -288,7 +288,7 @@ export class AlertSettingController extends BaseController<
 				},
 			},
 		);
-		console.log(openWeatherCurrentData.data);
+
 		const result = {
 			temperature: {
 				max: Math.round(openWeatherCurrentData.data.main.temp_max),

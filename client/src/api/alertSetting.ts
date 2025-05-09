@@ -6,8 +6,8 @@ export const getUserAlertSetting = async (user_id: number): Promise<AlertSetting
     try {
         const response = await api.get<APIResponse<AlertSetting[]>>(`/user/${user_id}/alert-settings`);
         return response.data.data;
-    } catch (error) {
-        console.log(error);
+    } catch  {
+        
         return [];
     }
 };

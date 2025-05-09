@@ -18,10 +18,12 @@ const routes = {
         id: "public",
         getParentRoute: () => rootRoute,
     }),
+
     sub: createRoute({
         id: "sub",
         getParentRoute: () => rootRoute,
     }),
+
     protectedUser: createRoute({
         id: "protected",
         getParentRoute: () => rootRoute,
@@ -101,6 +103,4 @@ declare module "@tanstack/react-router" {
     }
 }
 
-// Log the router for debugging
-console.log("Router configuration:", router);
 export default router;

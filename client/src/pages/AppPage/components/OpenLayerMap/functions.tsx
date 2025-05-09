@@ -80,7 +80,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
     if (!modelData?.features?.length) return null;
 
     const [aqiFeature, locationFeature] = modelData.features;
-    console.log(locationFeature.properties);
+    
     const locationProps = locationFeature.properties || "";
     let location = "";
 

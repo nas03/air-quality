@@ -72,7 +72,6 @@ const AvatarUpload = ({
     loading: boolean;
     onChangeImage: UploadProps["onChange"];
 }) => {
-    console.log(loading);
     return (
         <Upload
             name="avatar"
