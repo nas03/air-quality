@@ -1,5 +1,5 @@
 import routes from "@/domain/routes";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -14,13 +14,19 @@ const server = express();
 
 server.use(
 	cors({
-		origin: ["http://localhost:5173", "https://nas03.xyz", "https://air-quality.nas03.xyz"],
+		origin: (origin, callback) => {
+			if (origin === "https://localhost:443") return callback(null, true);
+			if (origin === "http://13.213.59.37") return callback(null, true);
+			if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin))
+				return callback(null, true);
+			callback(new Error("Not allowed by CORS"));
+		},
 		credentials: true,
 	}),
 );
 
 server.use(express.json());
-server.use(cookieParser())
+server.use(cookieParser());
 server.use(express.urlencoded({ extended: true }));
 
 server.use(morgan("dev"));
