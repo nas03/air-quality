@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
-RUN npm install -g node-gyp
-RUN npm install argon2
+# Combine dependency installation into a single layer for better caching
+RUN npm install && \
+    npm install -g node-gyp && \
+    npm install argon2
 
 COPY . .
 
