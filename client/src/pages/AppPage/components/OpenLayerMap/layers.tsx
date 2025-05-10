@@ -119,7 +119,7 @@ export const createWindyLayer = async (time: string) => {
             velocityScale: 1 / 700,
             paths: 800,
             colorScale: ["rgba(0, 0, 0, 0.7)"],
-            lineWidth: 2.5,
+            lineWidth: 3.5,
             globalAlpha: 0.9,
         },
         fieldOptions: {
@@ -158,6 +158,7 @@ export const updateWindLayer = async (windLayer: WindLayer, time: string) => {
         windLayer.setData(data, {
             flipY: true,
             wrappedX: true,
+            
         });
     } catch (error) {
         console.error("Failed to update wind layer:", error);
