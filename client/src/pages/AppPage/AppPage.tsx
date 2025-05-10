@@ -85,7 +85,7 @@ const AppPage = () => {
 
     return (
         <div className="h-screen w-screen">
-            <Loading loading={!time} className="h-screen w-screen">
+            <Loading loading={!time} fullscreen>
                 <ConfigContext.Provider
                     value={{
                         setLayer,

@@ -54,7 +54,7 @@ const AirQualityCard: React.FC<AirQualityCardProps> = ({ data }) => {
                     <TimeDisplay time={data.time} />
                 </div>
 
-                <AirQualityStatus status={data.status} bgClass="bg-white/10" />
+                <AirQualityStatus status={data.status || "--"} bgClass="bg-white/10" />
 
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
