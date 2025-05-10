@@ -83,7 +83,6 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
             },
             {
                 label: "Phân Tích Dữ Liệu",
-
                 type: "link",
                 path: "/analytics",
                 icon: <MdAnalytics className="h-5 w-5" />,
