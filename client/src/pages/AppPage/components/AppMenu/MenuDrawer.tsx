@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
@@ -70,31 +71,28 @@ const MenuItem: React.FC<IPropsMenuItem> = ({ items, selectedTab, setSelectedTab
 
 const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
     const [selectedTab, setSelectedTab] = useState(0);
-    const items: MenuItemType[] = [
-        { label: "Cảnh Báo", key: 0, icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
-        // { label: "Yêu Thích", key: 1, icon: <MdFavorite className="h-5 w-5" /> },
-        {
-            label: "Bảng Điều Khiển",
-            key: 1,
-            icon: <MdAdminPanelSettings className="h-5 w-5" />,
-            path: "/admin",
-            type: "link",
-        },
-        {
-            label: "Phân Tích Dữ Liệu",
-            key: 2,
-            type: "link",
-            path: "/analytics",
-            icon: <MdAnalytics className="h-5 w-5" />,
-        },
-        { label: "Hồ Sơ", key: 3, icon: <AiFillProfile className="h-5 w-5" />, children: <ProfileTab /> },
-        // {
-        //   label: "Cài Đặt",
-        //   key: 4,
-        //   icon: <IoMdSettings className="h-5 w-5" />,
-        //   children: <SettingsTab className="mt-4 px-4" />,
-        // },
-    ];
+    const { user } = useAuth();
+    const items = (
+        [
+            { label: "Cảnh Báo", icon: <AiFillBell className="h-5 w-5" />, children: <AlertTab /> },
+            user?.role == 2 && {
+                label: "Bảng Điều Khiển",
+                icon: <MdAdminPanelSettings className="h-5 w-5" />,
+                path: "/admin",
+                type: "link",
+            },
+            {
+                label: "Phân Tích Dữ Liệu",
+
+                type: "link",
+                path: "/analytics",
+                icon: <MdAnalytics className="h-5 w-5" />,
+            },
+            { label: "Hồ Sơ", icon: <AiFillProfile className="h-5 w-5" />, children: <ProfileTab /> },
+        ] as Omit<MenuItemType, "key">[]
+    )
+        .filter((el) => el.label)
+        .map((el, index) => ({ ...el, key: index }));
 
     // Calculate number of rows (3 items per row)
     const numberOfRows = Math.ceil(items.length / 3);

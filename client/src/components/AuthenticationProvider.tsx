@@ -24,11 +24,12 @@ export const AuthenticationProvider = ({ children }: { children: React.ReactNode
                     const userData = {
                         user_id: signedIn.data.user_id,
                         username: signedIn.data.username,
+                        role: signedIn.data.role,
                     };
 
                     sessionStorage.setItem("access_token", signedIn.data.access_token);
                     sessionStorage.setItem("user", JSON.stringify(userData));
-
+                    console.log(signedIn.data.access_token);
                     setUser(userData);
                     setToken(signedIn.data.access_token);
                     return { message: "", success: true };

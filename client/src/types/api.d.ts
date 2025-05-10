@@ -8,6 +8,7 @@ interface SignInResponse {
     user_id: number;
     username: string;
     access_token: string;
+    role: number;
 }
 
 interface VerifyTokenResponse {

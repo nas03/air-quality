@@ -4,7 +4,6 @@ import type { UserRole, UserToken } from "@/domain/controllers/types";
 import type { UserInteractor, VerificationCodeInteractor } from "@/domain/interactors";
 import { SecurityService } from "@/services";
 import type { Request, Response } from "express";
-import console from "node:console";
 
 export class AuthController extends BaseController<[UserInteractor, VerificationCodeInteractor]> {
 	private securityService = new SecurityService();
@@ -51,7 +50,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 
 		const decodedToken = this.securityService.decodeToken<UserToken>(refresh_token);
 
-		const [new_access_token, new_refresh_token] = [
+		const [new_access_token, new_refresh_token] = await Promise.all([
 			this.securityService.createToken({
 				user_id: decodedToken?.user_id,
 				username: decodedToken?.username,
@@ -62,7 +61,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				username: decodedToken?.username,
 				role: decodedToken?.role,
 			}),
-		];
+		]);
 
 		return res.status(statusCode.SUCCESS).json({
 			status: "success",
@@ -83,8 +82,8 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 				AUTHENTICATION.TOKEN_VERIFICATION.VALID
 		) {
 			const decodedToken = securityService.decodeToken<UserToken>(cookies.AUTH_REF_TOKEN);
-			console.log({ decodedToken });
-			const access_token = securityService.createToken(
+
+			const access_token = await securityService.createToken(
 				{
 					user_id: decodedToken?.user_id,
 					username: decodedToken?.username,
@@ -96,9 +95,10 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 			return res.status(statusCode.SUCCESS).json({
 				status: "success",
 				data: {
-					access_token,
+					access_token: access_token,
 					user_id: decodedToken.user_id,
 					username: decodedToken.username,
+					role: decodedToken.role,
 				},
 			});
 		}
@@ -168,6 +168,7 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 			data: {
 				user_id: isUserExists.user_id,
 				username: isUserExists.username,
+				role: isUserExists.role,
 				access_token,
 			},
 		});

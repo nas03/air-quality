@@ -43,6 +43,7 @@ export interface ConfigContextType {
 export type AuthUser = {
     user_id: number;
     username: string;
+    role: number;
 };
 
 export interface AuthContextType {
