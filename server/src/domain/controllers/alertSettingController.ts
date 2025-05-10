@@ -4,6 +4,7 @@ import { MailService } from "@/services";
 import axios from "axios";
 import dotenv from "dotenv";
 import type { Request, Response } from "express";
+import moment from "moment";
 import type { DistrictInteractor, StatisticInteractor } from "../interactors";
 import type { AlertSettingInteractor } from "../interactors/alertSettingInteractor";
 import { BaseController } from "./baseController";
@@ -218,10 +219,10 @@ export class AlertSettingController extends BaseController<
 
 		const forecast = await this.statisticInteractor.getDistrictHistory(
 			district_id as string,
-			dates[0],
-			new Date(dates[7].setHours(23, 59, 59)),
+			moment().utcOffset("+07:00").startOf("day").toDate(),
+			moment().utcOffset("+07:00").add(7, "days").endOf("day").toDate(),
 		);
-
+		console.log();
 		const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
 			"https://api.openweathermap.org/data/2.5/weather",
 			{
