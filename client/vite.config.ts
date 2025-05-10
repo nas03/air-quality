@@ -35,13 +35,13 @@ export default defineConfig({
     },
     server: {
         cors: {
-            origin: (origin, _req) => {
-                
-                if (origin === "http://localhost:443") return true;
-                if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin)) return true;
-                return false;
-            },
-            
+            origin: process.env.NODE_ENV === "development"
+                ? true
+                : (origin, _req) => {
+                    if (origin === "http://localhost:443") return true;
+                    if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin)) return true;
+                    return false;
+                },
         }
     }
 });

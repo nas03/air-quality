@@ -15,7 +15,8 @@ const server = express();
 server.use(
 	cors({
 		origin: (origin, callback) => {
-			if (origin === "https://localhost:443") return callback(null, true);
+			if (origin === "http://localhost:443") return callback(null, true);
+			if (origin === "http://localhost:5173") return callback(null, true);
 			if (origin === "http://13.213.59.37") return callback(null, true);
 			if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin))
 				return callback(null, true);
