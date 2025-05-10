@@ -174,6 +174,30 @@ export class AuthController extends BaseController<[UserInteractor, Verification
 		});
 	};
 
+	onSignedOut = async (req: Request, res: Response) => {
+		const securityService = new SecurityService();
+		const cookies = req.cookies;
+
+		if (
+			cookies?.AUTH_REF_TOKEN &&
+			securityService.verifyToken(cookies.AUTH_REF_TOKEN) ===
+				AUTHENTICATION.TOKEN_VERIFICATION.VALID
+		) {
+			res.cookie("AUTH_REF_TOKEN", "", {
+				httpOnly: true,
+				secure: false,
+				sameSite: "lax",
+				path: "/",
+				expires: new Date(0),
+			});
+
+			return res.status(statusCode.SUCCESS).json({
+				status: "success",
+				data: null,
+			});
+		}
+	};
+
 	onVerifyVerificationCode = async (req: Request, res: Response) => {
 		const { code } = req.params;
 		const decodeCode = this.securityService.decodeToken<{ user_id: number }>(code);

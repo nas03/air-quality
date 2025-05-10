@@ -28,6 +28,12 @@ const authRouter: Route[] = [
 		],
 	},
 	{
+		path: "/auth/logout",
+		method: "POST",
+		controller: authController.onSignedOut.bind(authController),
+		role: "user",
+	},
+	{
 		path: "/auth/verification/:code",
 		method: "POST",
 		controller: authController.onVerifyVerificationCode.bind(authController),
