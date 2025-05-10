@@ -9,7 +9,7 @@ export const AuthenticationProvider = ({ children }: { children: React.ReactNode
         const storedUser = sessionStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : null;
     });
-    const [cookies, _setCookie, removeCookie] = useCookies(["AUTH_REF_TOKEN"]);
+    const [_cookies, _setCookie, removeCookie] = useCookies(["AUTH_REF_TOKEN"]);
     const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("access_token"));
 
     const login = useCallback(
