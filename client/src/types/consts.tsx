@@ -27,20 +27,20 @@ export const getGradientDefs = (id: string) => {
         </defs>,
         <defs key={`gradient-1-${id}`}>
             <linearGradient id={id} x2="0" y2="1">
-                <stop offset="0%" stopColor={colorMap[1]} />
+                <stop offset="50%" stopColor={colorMap[1]} />
                 <stop offset="100%" stopColor={colorMap[0]} />
             </linearGradient>
         </defs>,
         <defs key={`gradient-2-${id}`}>
             <linearGradient id={id} x2="0" y2="1">
-                <stop offset="0%" stopColor={colorMap[2]} />
+                <stop offset="33.3%" stopColor={colorMap[2]} />
                 <stop offset="66.7%" stopColor={colorMap[1]} />
                 <stop offset="100%" stopColor={colorMap[0]} />
             </linearGradient>
         </defs>,
         <defs key={`gradient-3-${id}`}>
             <linearGradient id={id} x2="0" y2="1">
-                <stop offset="0%" stopColor={colorMap[3]} />
+                <stop offset="25%" stopColor={colorMap[3]} />
                 <stop offset="50%" stopColor={colorMap[2]} />
                 <stop offset="75%" stopColor={colorMap[1]} />
                 <stop offset="100%" stopColor={colorMap[0]} />

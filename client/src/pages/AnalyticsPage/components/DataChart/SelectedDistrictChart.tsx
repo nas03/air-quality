@@ -45,7 +45,7 @@ const SelectedDistrictChart: React.FC<DataLineChartProps> = ({ className, ...pro
                         : "Đang tải..."}
                 </p>
             </div>
-            <div className="h-[90%] w-full">
+            <div className="h-[95%] w-full">
                 <LineChart
                     grid={{ horizontal: true, vertical: true }}
                     margin={{ bottom: 60, left: 60 }}
