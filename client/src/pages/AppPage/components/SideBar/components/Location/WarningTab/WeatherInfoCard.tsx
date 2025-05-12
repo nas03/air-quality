@@ -14,6 +14,25 @@ const getIcon = (weatherId: number) => {
     else if (weatherId - 200 >= 0) return <IoThunderstorm size={32} className="mb-1 text-blue-500" />;
 };
 
+const getWeatherVi = (weather: string | undefined) => {
+    switch (weather) {
+        case "Thunderstorm":
+            return "Dông";
+        case "Drizzle":
+            return "Mưa phùn";
+        case "Rain":
+            return "Mưa";
+        case "Snow":
+            return "Tuyết";
+        case "Clear":
+            return "Quang đãng";
+        case "Clouds":
+            return "Có mây";
+        default:
+            return "";
+    }
+};
+
 const TemperatureDisplay = ({ avg }: { avg: number; max: number; min: number }) => (
     <div className="flex h-full flex-col">
         <p className="text-4xl font-bold text-gray-800">{avg}&#8451;</p>
@@ -40,12 +59,13 @@ const WeatherDisplay = ({
         {getIcon(weather.id)}
         {/* <img src={`https://rodrigokamada.github.io/openweathermap/images/${weather.icon}_t.png`} className="mb-1 h-[64px] w-[64px] text-blue-500" /> */}
         <p className="text-sm font-medium">
-            {weather.description
+            {/*  {weather.description
                 ? [
                       weather.description[0].toUpperCase(),
                       ...weather.description.slice(1, weather.description.length),
                   ].join("")
-                : ""}
+                : ""} */}{" "}
+            {getWeatherVi(weather.main)}
         </p>
         <p className="mt-1 text-sm text-gray-600">Tốc độ gió: {windSpeed}m/s</p>
     </div>
