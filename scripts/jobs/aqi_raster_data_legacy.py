@@ -10,8 +10,6 @@ import requests
 from dotenv import load_dotenv
 from minio import Minio  # type: ignore
 from osgeo import gdal  # type: ignore
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-import time
 
 from districts_avg_data import scrape_district_avg_data  # type: ignore
 
@@ -156,9 +154,6 @@ def createAQIRasterFile(filepath: str, output_path: str):
 
         # First, analyze the source file to understand its structure
         src_ds = gdal.Open(filepath, gdal.GA_ReadOnly)
-        if src_ds is None:
-            logger.error(f"Could not open source file: {filepath}")
-            return False
         src_metadata = gdal.Info(src_ds, format="json")
         logger.info(f"Input file size: {os.path.getsize(filepath)/1024:.2f} KB")
 
@@ -180,16 +175,10 @@ def createAQIRasterFile(filepath: str, output_path: str):
             ],
         )
 
-        temp_ds = gdal.Warp(aqi_filename, src_ds, options=warp_options)
-        if temp_ds is None:
-            logger.error(f"GDAL Warp failed for file: {filepath}")
-            return False
+        temp_ds = gdal.Warp(TEMP_FILE, src_ds, options=warp_options)
 
         # Read data from temporary file
         data = temp_ds.ReadAsArray()
-        if data is None:
-            logger.error(f"ReadAsArray failed for file: {filepath}")
-            return False
         rows, cols = data.shape
 
         # Calculate AQI with vectorized function for efficiency
@@ -250,10 +239,16 @@ def createAQIRasterFile(filepath: str, output_path: str):
             f"Output file size: {output_size_kb:.2f} KB (compression ratio: {os.path.getsize(filepath)/output_size_kb:.2f}x)"
         )
 
-        # Remove upload here (will batch upload later)
+        with open(output_path, "rb") as f:
+            files = [("file", (aqi_filename, f, "image/tiff"))]
+            requests.post(
+                f"https://api.nas03.xyz/api/files/",
+                files=files,
+                data={"filename": aqi_filepath},
+            )
 
         # Cleanup
-        os.remove(aqi_filename)
+        os.remove(TEMP_FILE)
         logger.info(f"Successfully created output file: {output_path}")
         try:
             samples_valid = validate_with_sampling(filepath, output_path)
@@ -265,8 +260,8 @@ def createAQIRasterFile(filepath: str, output_path: str):
 
     except Exception as e:
         logger.error(f"Error processing file {filepath}: {str(e)}")
-        if os.path.exists(aqi_filename):
-            os.remove(aqi_filename)
+        if os.path.exists(TEMP_FILE):
+            os.remove(TEMP_FILE)
         return False
 
 
@@ -308,21 +303,14 @@ def download_file(client: Minio, date: datetime.datetime) -> Optional[str]:
         return None
 
 
-def parallel_download_files(client: Minio, date_range: List[datetime.datetime], max_workers: int = 4) -> List[str]:
-    """Download PM2.5 files for the given date range in parallel."""
+def download_files(client: Minio, date_range: List[datetime.datetime]) -> List[str]:
+    """Download PM2.5 files for the given date range."""
     ensure_directory_exists(INPUT_FOLDER)
-    results = []
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_date = {executor.submit(download_file, client, date): date for date in date_range}
-        for future in as_completed(future_to_date):
-            date = future_to_date[future]
-            try:
-                path = future.result()
-                if path:
-                    results.append(path)
-            except Exception as exc:
-                logger.error(f"Download for {date.strftime('%Y-%m-%d')} generated an exception: {exc}")
-    return results
+    return [
+        path
+        for path in map(lambda date: download_file(client, date), date_range)
+        if path
+    ]
 
 
 def lerp(
@@ -398,11 +386,11 @@ def notify_geoserver(output_folder: str) -> None:
         logger.error(f"Error notifying GeoServer: {str(e)}")
 
 
-def process_single_file(input_path: str) -> Optional[str]:
+def process_single_file(input_path: str) -> bool:
     """Process a single file from input to output."""
     output_path = get_output_path(input_path)
-    success = createAQIRasterFile(input_path, output_path)
-    return output_path if success else None
+    raster_info = createAQIRasterFile(input_path, output_path)
+    return True
 
 
 def generate_date_range(days: int) -> List[datetime.datetime]:
@@ -422,93 +410,37 @@ def cleanup_downloaded_files(file_paths: List[str]) -> None:
             logger.error(f"Failed to delete file {file_path}: {str(e)}")
 
 
-def parallel_process_files(file_paths, max_workers=4):
-    results = []
-    with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        future_to_file = {executor.submit(process_single_file, path): path for path in file_paths}
-        for future in as_completed(future_to_file):
-            file_path = future_to_file[future]
-            try:
-                result = future.result()
-                results.append(result)
-            except Exception as exc:
-                logger.error(f"{file_path} generated an exception: {exc}")
-                results.append(None)
-    return results
-
-
-def batch_upload_files(file_paths: List[str]):
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-
-    def upload_file(output_path):
-        file_parts = output_path.split("/")
-        aqi_filepath = "/".join(file_parts[2:]).replace("PM25", "AQI")
-        aqi_filename = "/".join(file_parts[4:]).replace("PM25", "AQI")
-        try:
-            with open(output_path, "rb") as f:
-                files = [("file", (aqi_filename, f, "image/tiff"))]
-                response = requests.post(
-                    f"https://api.nas03.xyz/api/files/",
-                    files=files,
-                    data={"filename": aqi_filepath},
-                )
-                if response.status_code not in [200, 201]:
-                    logger.warning(f"Failed to upload {output_path}: {response.status_code} - {response.text}")
-                else:
-                    logger.info(f"Uploaded {output_path} successfully")
-        except Exception as e:
-            logger.error(f"Exception during upload of {output_path}: {str(e)}")
-
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [executor.submit(upload_file, path) for path in file_paths]
-        for future in as_completed(futures):
-            future.result()
-
-
 def scrape_aqi_data() -> None:
     """Main function to export AQI data."""
     try:
         logger.info("Starting AQI export process")
-        start_time = time.time()
 
         # Setup and load data
         minio_client = setup_minio_client()
 
-        # Generate date range and download files in parallel
+        # Generate date range and download files
         date_range = generate_date_range(8)  # Current date + next 7 days
-        logger.info("Starting parallel download of files")
-        download_start = time.time()
-        max_workers = os.cpu_count() or 4
-        downloaded_files = parallel_download_files(minio_client, date_range, max_workers=max_workers)
-        download_end = time.time()
-        logger.info(f"Downloaded {len(downloaded_files)} files in {download_end - download_start:.2f} seconds")
+        downloaded_files = download_files(minio_client, date_range)
 
         # Process files to create AQI raster files using the uploadData function
         logger.info("Starting AQI data processing with uploadData")
         scrape_district_avg_data(input_files=downloaded_files)
 
-        # Process files for GeoServer in parallel
-        logger.info("Starting parallel AQI image processing for GeoServer")
-        process_start = time.time()
-        results = parallel_process_files(downloaded_files, max_workers=max_workers)
-        process_end = time.time()
-        output_files = [r for r in results if r]
-        success_count = len(output_files)
-        logger.info(
-            f"Export complete. Processed {success_count}/{len(downloaded_files)} files successfully in {process_end - process_start:.2f} seconds"
-        )
+        # Process files for GeoServer
+        logger.info("Starting AQI image processing for GeoServer")
+        process_func = partial(process_single_file)
+        results = list(map(process_func, downloaded_files))
 
-        # Batch upload
-        logger.info("Starting batch upload of AQI files")
-        batch_upload_files(output_files)
+        success_count = sum(results)
+        logger.info(
+            f"Export complete. Processed {success_count}/{len(downloaded_files)} files successfully"
+        )
 
         notify_geoserver(OUTPUT_FOLDER)
 
         # Clean up downloaded files after processing
         logger.info("Cleaning up downloaded files")
         cleanup_downloaded_files(downloaded_files)
-        end_time = time.time()
-        logger.info(f"Total AQI export process completed in {end_time - start_time:.2f} seconds")
     except Exception as e:
         logger.error(f"An unexpected error occurred during export: {str(e)}")
         raise
