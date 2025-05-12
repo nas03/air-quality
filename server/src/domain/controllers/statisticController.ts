@@ -1,6 +1,7 @@
 import { BaseController } from "@/domain/controllers/baseController";
 import type { StatisticInteractor } from "@/domain/interactors";
 import type { Request, Response } from "express";
+import moment from "moment";
 
 export class StatisticController extends BaseController<[StatisticInteractor]> {
 	private statisticInteractor = this.interactors[0];
@@ -58,8 +59,8 @@ export class StatisticController extends BaseController<[StatisticInteractor]> {
 		const { districtsData, provinceData } =
 			await this.statisticInteractor.getAQIStatisticsByProvince(
 				province_id,
-				start_date,
-				end_date,
+				moment(start_date).startOf("day").toDate(),
+				moment(end_date).endOf("day").toDate(),
 			);
 		return res.status(200).json({
 			status: "success",

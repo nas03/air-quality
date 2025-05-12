@@ -15,12 +15,13 @@ const server = express();
 server.use(
 	cors({
 		origin: (origin, callback) => {
-			if (origin === "http://localhost:443") return callback(null, true);
-			if (origin === "http://localhost:5173") return callback(null, true);
-			if (origin === "http://13.213.59.37") return callback(null, true);
-			if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin))
-				return callback(null, true);
-			callback(new Error("Not allowed by CORS"));
+			// if (origin === "http://localhost:443") return callback(null, true);
+			// if (origin === "http://localhost:5173") return callback(null, true);
+			// if (origin === "http://13.213.59.37") return callback(null, true);
+			// if (origin && /^https:\/\/([a-zA-Z0-9-]+\.)*nas03\.xyz$/.test(origin))
+			// 	return callback(null, true);
+			// callback(new Error("Not allowed by CORS"));
+			return callback(null, true);
 		},
 		credentials: true,
 	}),
