@@ -80,8 +80,8 @@ export class DataInteractor {
 
 	getWindDataHistory = async (start_date: string, end_date: string, zip: JSZip) => {
 		const data = await this.windDataRepository.getWindDataHistory(
-			moment(start_date, "YYYY-MM-DD"),
-			moment(end_date, "YYYY-MM-DD"),
+			moment(start_date, "YYYY-MM-DD").startOf("day"),
+			moment(end_date, "YYYY-MM-DD").endOf("day"),
 		);
 		const dataBuffer = Buffer.from(JSON.stringify(data));
 		return zip.file("wind_data.json", dataBuffer);

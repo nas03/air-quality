@@ -2,6 +2,7 @@ import { statusCode } from "@/config/constant";
 import { StorageService } from "@/services";
 import type { Request, Response } from "express";
 import JSZip from "jszip";
+import moment from "moment";
 import type { DataInteractor } from "../interactors";
 import { BaseController } from "./baseController";
 
@@ -49,7 +50,16 @@ export class DataController extends BaseController<[DataInteractor]> {
 
 		const zip = new JSZip();
 
-		await this.dataInteractor.getRasterDataHistory(start_date, end_date, zip);
+		await this.dataInteractor.getRasterDataHistory(
+			start_date,
+			moment(end_date)
+				.add(7, "day")
+				.set("hour", 0)
+				.set("minute", 0)
+				.set("second", 0)
+				.format("YYYY-MM-DD"),
+			zip,
+		);
 		await this.dataInteractor.getStationDataHistory(start_date, end_date, zip);
 		await this.dataInteractor.getWindDataHistory(start_date, end_date, zip);
 		const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
@@ -72,8 +82,15 @@ export class DataController extends BaseController<[DataInteractor]> {
 		}
 
 		const zip = new JSZip();
+		const end_date = moment(date)
+			.add(7, "day")
+			.set("hour", 0)
+			.set("minute", 0)
+			.set("second", 0)
+			.format("YYYY-MM-DD");
 
-		await this.dataInteractor.getRasterDataHistory(date, date, zip);
+		await this.dataInteractor.getRasterDataHistory(date, end_date, zip);
+
 		await this.dataInteractor.getStationDataHistory(date, date, zip);
 		await this.dataInteractor.getWindDataHistory(date, date, zip);
 
