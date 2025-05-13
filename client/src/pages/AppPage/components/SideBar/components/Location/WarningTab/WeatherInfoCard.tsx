@@ -1,6 +1,5 @@
-import { Loading } from "@/components";
 import { cn } from "@/lib/utils";
-import { Card } from "antd";
+import { Card, Skeleton } from "antd";
 import React from "react";
 import { IoCloudy, IoRainy, IoSnow, IoSunny, IoThunderstorm } from "react-icons/io5";
 import { IPropsWeatherInfoCard } from "./types";
@@ -33,9 +32,13 @@ const getWeatherVi = (weather: string | undefined) => {
     }
 };
 
-const TemperatureDisplay = ({ avg }: { avg: number; max: number; min: number }) => (
-    <div className="flex h-full flex-col">
-        <p className="text-4xl font-bold text-gray-800">{avg}&#8451;</p>
+const TemperatureDisplay = ({ avg, loading }: { avg: number | string; max: number; min: number; loading: boolean }) => (
+    <div className="flex h-full flex-col justify-center">
+        {loading ? (
+            <Skeleton.Input active size="large" style={{ width: 60, height: 40, borderRadius: 8 }} />
+        ) : (
+            <p className="text-4xl font-bold text-gray-800">{avg}&#8451;</p>
+        )}
         {/*  <div className="mt-1 flex flex-row gap-2">
             <p className="text-xs text-orange-500">H: {max}&#8451;</p>
             <p className="text-xs text-blue-400">L: {min}&#8451;</p>
@@ -46,6 +49,7 @@ const TemperatureDisplay = ({ avg }: { avg: number; max: number; min: number }) 
 const WeatherDisplay = ({
     weather,
     windSpeed,
+    loading,
 }: {
     weather: {
         id: number;
@@ -54,20 +58,26 @@ const WeatherDisplay = ({
         icon: string;
     };
     windSpeed: number;
+    loading: boolean;
 }) => (
-    <div className="flex h-full flex-col items-center">
-        {getIcon(weather.id)}
-        {/* <img src={`https://rodrigokamada.github.io/openweathermap/images/${weather.icon}_t.png`} className="mb-1 h-[64px] w-[64px] text-blue-500" /> */}
-        <p className="text-sm font-medium">
-            {/*  {weather.description
-                ? [
-                      weather.description[0].toUpperCase(),
-                      ...weather.description.slice(1, weather.description.length),
-                  ].join("")
-                : ""} */}{" "}
-            {getWeatherVi(weather.main)}
+    <div className="flex h-full flex-col items-center justify-center">
+        {loading ? <Skeleton.Avatar active size={32} shape="circle" className="mb-1" /> : getIcon(weather.id)}
+        <p className="flex min-h-[20px] items-center text-sm font-medium">
+            {loading ? (
+                <Skeleton.Input active size="small" style={{ width: 60, height: 16, borderRadius: 4 }} />
+            ) : weather.main ? (
+                getWeatherVi(weather.main)
+            ) : (
+                "--"
+            )}
         </p>
-        <p className="mt-1 text-sm text-gray-600">Tốc độ gió: {windSpeed}m/s</p>
+        <p className="mt-1 flex min-h-[20px] items-center text-sm text-gray-600">
+            {loading ? (
+                <Skeleton.Input active size="small" style={{ width: 80, height: 16, borderRadius: 4 }} />
+            ) : (
+                `Tốc độ gió: ${windSpeed}m/s`
+            )}
+        </p>
     </div>
 );
 
@@ -75,13 +85,25 @@ const WeatherInfoCard: React.FC<IPropsWeatherInfoCard> = ({ className, loading =
     const { temperature, weather, wind_speed } = data;
 
     return (
-        <Card className={cn("h-[8rem] w-full rounded-lg border border-gray-200 hover:shadow-md", className)} {...props}>
-            <Loading loading={loading} className="h-full w-full">
-                <div className="flex w-full flex-row items-center justify-between">
-                    <TemperatureDisplay avg={temperature.avg} max={temperature.max} min={temperature.min} />
-                    <WeatherDisplay weather={weather} windSpeed={wind_speed} />
+        <Card className={cn("w-full rounded-lg border border-gray-200 hover:shadow-md", className)} {...props}>
+            <div className="mb-2 flex w-full items-center justify-between">
+                <span className="text-lg font-semibold tracking-tight text-gray-900">Thời tiết hiện tại</span>
+            </div>
+            {loading ? (
+                <div className="flex h-[5rem] w-full items-center justify-center">
+                    <Skeleton active paragraph={false} />
                 </div>
-            </Loading>
+            ) : (
+                <div className="flex w-full flex-row items-center justify-between">
+                    <TemperatureDisplay
+                        avg={temperature.avg}
+                        max={temperature.max}
+                        min={temperature.min}
+                        loading={false}
+                    />
+                    <WeatherDisplay weather={weather} windSpeed={wind_speed} loading={false} />
+                </div>
+            )}
         </Card>
     );
 };

@@ -92,17 +92,22 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
         }
     };
     return (
-        <Card className={cn("w-full rounded-lg shadow-md", className)} {...props}>
-            <div className="items-cen mb-3 flex w-full flex-row justify-between">
-                <Typography.Title level={5} className="">
+        <Card
+            className={cn(
+                "w-full rounded-2xl border-[2pt] border-gray-100 bg-white/80 p-6 backdrop-blur-md transition-shadow hover:shadow-2xl",
+                className,
+            )}
+            {...props}>
+            <div className="mb-4 flex w-full flex-row items-center justify-between">
+                <Typography.Title level={5} className="!mb-0 !text-lg !font-semibold tracking-tight text-gray-900">
                     {currentWeatherData?.location}
                 </Typography.Title>
                 <Tooltip title={"Xoá"} getPopupContainer={() => document.body}>
                     <div ref={deleteIconRef}>
                         <motion.div
-                            whileHover={{ scale: 1.08, rotate: -7 }}
+                            whileHover={{ scale: 1.12, rotate: -10 }}
                             whileTap={{ scale: 0.97 }}
-                            className="inline-block">
+                            className="inline-block transition-transform duration-200">
                             <Button
                                 shape="circle"
                                 danger
@@ -110,49 +115,47 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
                                 size="small"
                                 icon={<MdDeleteOutline size={18} />}
                                 onClick={handleDelete}
-                                className="flex items-center justify-center border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
-                                style={{ borderColor: "#ff4d4f" }}
+                                className="flex items-center justify-center border-none bg-red-50 text-red-500 shadow-sm transition-colors duration-200 hover:bg-red-100 hover:text-red-600"
+                                style={{ boxShadow: "0 2px 8px 0 rgba(255,77,79,0.08)" }}
                             />
                         </motion.div>
                     </div>
                 </Tooltip>
             </div>
-            <div className="flex w-full flex-row items-center justify-between">
-                <div className="flex h-full flex-col">
-                    <p className="text-4xl font-bold text-gray-800">{currentWeatherData?.temperature.avg}&#8451;</p>
-                    <p className="mt-1 text-sm text-gray-600">Tốc độ gió: {currentWeatherData?.wind_speed}m/s</p>
+            <div className="flex w-full flex-row items-center justify-between gap-4">
+                <div className="flex h-full flex-col justify-center">
+                    <p className="text-5xl font-extrabold leading-tight text-gray-800">
+                        {currentWeatherData?.temperature.avg}&#8451;
+                    </p>
+                    <p className="mt-2 text-base font-medium text-gray-500">
+                        Tốc độ gió:{" "}
+                        <span className="font-semibold text-blue-500">{currentWeatherData?.wind_speed}m/s</span>
+                    </p>
                 </div>
-                <div className="flex h-full flex-col items-center">
-                    <IoCloudy size={32} className="mb-1 text-blue-500" />
-                    <p className="text-sm font-medium">{getWeatherVi(currentWeatherData?.weather)}</p>
-                    {/*  <div className="mt-1 flex flex-row gap-2">
-                        <p className="text-xs text-orange-500">H: {currentWeatherData?.temperature.max}&#8451;</p>
-                        <p className="text-xs text-blue-400">L: {currentWeatherData?.temperature.min}&#8451;</p>
-                    </div> */}
+                <div className="flex h-full flex-col items-center justify-center rounded-xl border border-blue-100 bg-blue-50 px-4 py-2">
+                    <IoCloudy size={36} className="mb-1 text-blue-400" />
+                    <p className="text-base font-semibold text-blue-700">{getWeatherVi(currentWeatherData?.weather)}</p>
                 </div>
             </div>
-            <div className="mt-4 w-full border-t border-gray-200 pt-3">
-                <Typography.Text strong className="mb-2 flex w-full items-center justify-center text-sm text-gray-700">
+            <div className="mt-6 w-full border-t border-gray-100 pt-4">
+                <Typography.Text
+                    strong
+                    className="mb-3 flex w-full items-center justify-center text-base tracking-wide text-gray-700">
                     Dự báo chỉ số AQI VN
                 </Typography.Text>
-                <div className="overflow-x-auto">
-                    <div className="flex w-full flex-wrap justify-start">
+                <div className="w-full">
+                    <div className="grid grid-cols-4 grid-rows-2 gap-2">
                         {values.labels.map((day, index) => (
-                            <Tooltip
-                                key={index}
-                                title={getAqiLabel(values.data[index])}
-                                className="max-2xl:basis-1/4 2xl:basis-[1/8]">
-                                <div
-                                    className="flex flex-col items-center px-1"
-                                    style={{ width: `${100 / values.labels.length}%` }}>
+                            <Tooltip key={index} title={getAqiLabel(values.data[index])} className="flex-shrink-0">
+                                <div className="flex flex-col items-center">
                                     <div
                                         className={cn(
-                                            "flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold text-white",
+                                            "flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-base font-bold text-white shadow-md transition-transform duration-200 hover:scale-105",
                                             getAqiColor(values.data[index]),
                                         )}>
                                         {values.data[index]}
                                     </div>
-                                    <span className="mt-1 text-xs font-medium text-gray-600">{day}</span>
+                                    <span className="mt-2 text-xs font-medium tracking-tight text-gray-500">{day}</span>
                                 </div>
                             </Tooltip>
                         ))}
