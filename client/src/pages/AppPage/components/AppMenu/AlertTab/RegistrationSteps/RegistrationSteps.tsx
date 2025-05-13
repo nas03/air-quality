@@ -1,3 +1,4 @@
+import { EnvironmentOutlined, NotificationOutlined } from "@ant-design/icons";
 import { Steps } from "antd";
 import { RegistrationDataType } from "../types";
 import GetLocation from "./GetLocation";
@@ -23,13 +24,17 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
                 size="small"
                 items={[
                     {
-                        title: <p className="text-base font-semibold">Lựa chọn địa điểm</p>,
+                        title: (
+                            <span className="flex items-center gap-2 text-base font-semibold">
+                                <EnvironmentOutlined className="text-blue-500" />
+                                Lựa chọn địa điểm
+                            </span>
+                        ),
                         subTitle: (
-                            <p>
-                                Nhấn <span className="font-medium text-blue-600">Vị trí hiện tại</span> và{" "}
-                                <span className="font-medium text-blue-600">Cho phép</span> để lấy vị trí hiện tại của
-                                bạn
-                            </p>
+                            <span className="text-xs text-gray-500">
+                                Chọn tỉnh/thành phố và quận/huyện để nhận cảnh báo chất lượng không khí phù hợp vị trí
+                                của bạn.
+                            </span>
                         ),
                         description: (
                             <div className="mt-3">
@@ -40,13 +45,16 @@ const RegistrationSteps: React.FC<IPropsRegistrationSteps> = ({
                             </div>
                         ),
                     },
-                    /*  {
-                        title: <p className="text-base font-semibold">Tuỳ chỉnh cảnh báo</p>,
-                        description: <RegisterAlertInfo />,
-                    }, */
+
                     {
-                        title: <p className="text-base font-semibold">Tuỳ chỉnh nhận thông báo</p>,
-                        description: <RegisterSettings />,
+                        title: (
+                            <span className="flex items-center gap-2 text-base font-semibold">
+                                <NotificationOutlined className="text-green-500" />
+                                Tuỳ chỉnh nhận thông báo
+                            </span>
+                        ),
+                        subTitle: <span className="text-xs text-gray-500">Chọn phương thức nhận thông báo</span>,
+                        description: <RegisterSettings registrationData={registrationData} />,
                     },
                 ]}
             />

@@ -33,9 +33,11 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotificat
         try {
             setRegistrationLoading(true);
             const formData = form.getFieldsValue();
-
-            let receive_notifications = RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION;
-           /*  if (formData.sms_notification && !formData.email_notification)
+            console.log({ formData });
+            let receive_notifications = formData.email_notification
+                ? RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION
+                : RECEIVE_NOTIFICATIONS.DISABLED;
+            /*  if (formData.sms_notification && !formData.email_notification)
                 receive_notifications = RECEIVE_NOTIFICATIONS.SMS_NOTIFICATION;
             else if (!formData.sms_notification && formData.email_notification)
                 receive_notifications = RECEIVE_NOTIFICATIONS.EMAIL_NOTIFICATION;
@@ -87,8 +89,9 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotificat
     );
 
     return (
+        // <Card className="mx-auto mt-6 max-w-xl rounded-xl bg-white p-0 shadow-lg">
         <AlertRegistrationContext.Provider value={contextValue}>
-            <Form form={form}>
+            <Form form={form} layout="vertical">
                 <RegistrationSteps
                     setCurrentStep={setCurrentStep}
                     currentStep={currentStep}
@@ -97,6 +100,7 @@ const AlertRegistration: React.FC<IPropsAlertRegistration> = ({ refetchNotificat
                 />
             </Form>
         </AlertRegistrationContext.Provider>
+        // </Card>
     );
 };
 

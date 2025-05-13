@@ -124,17 +124,17 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
             </div>
             <div className="flex w-full flex-row items-center justify-between gap-4">
                 <div className="flex h-full flex-col justify-center">
-                    <p className="text-5xl font-extrabold leading-tight text-gray-800">
+                    <p className="text-4xl font-extrabold leading-tight text-gray-800 2xl:text-5xl">
                         {currentWeatherData?.temperature.avg}&#8451;
                     </p>
-                    <p className="mt-2 text-base font-medium text-gray-500">
+                    <p className="mt-2 text-sm font-medium text-gray-500 2xl:text-base">
                         Tốc độ gió:{" "}
                         <span className="font-semibold text-blue-500">{currentWeatherData?.wind_speed}m/s</span>
                     </p>
                 </div>
-                <div className="flex h-full flex-col items-center justify-center rounded-xl border border-blue-100 bg-blue-50 px-4 py-2">
+                <div className="flex h-full w-full flex-col items-center justify-center rounded-xl border border-blue-100 bg-blue-50 px-4 py-2">
                     <IoCloudy size={36} className="mb-1 text-blue-400" />
-                    <p className="text-base font-semibold text-blue-700">{getWeatherVi(currentWeatherData?.weather)}</p>
+                    <p className="text-sm font-semibold text-blue-700">{getWeatherVi(currentWeatherData?.weather)}</p>
                 </div>
             </div>
             <div className="mt-6 w-full border-t border-gray-100 pt-4">

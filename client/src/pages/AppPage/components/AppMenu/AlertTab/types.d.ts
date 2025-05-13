@@ -6,4 +6,4 @@ export type LocationDataType = {
     district_vn: string;
     vn_type: string;
 };
-export type RegistrationDataType = LocationDataType & { step: number };
+export type RegistrationDataType = Pick<LocationDataType, "district_id" | "province_id"> & { step: number };
