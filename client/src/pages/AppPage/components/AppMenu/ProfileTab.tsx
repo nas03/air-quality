@@ -3,7 +3,21 @@ import { Loading } from "@/components";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Divider, GetProp, Input, message, Upload, UploadProps } from "antd";
+import {
+    Avatar,
+    Button,
+    Card,
+    Divider,
+    Form,
+    GetProp,
+    Input,
+    message,
+    Modal,
+    Space,
+    Typography,
+    Upload,
+    UploadProps,
+} from "antd";
 import { useState } from "react";
 
 // Types
@@ -105,6 +119,8 @@ const AvatarUpload = ({
     );
 };
 
+const { Title, Text } = Typography;
+
 const ProfileTab = () => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>("/avatar.jpg");
@@ -116,6 +132,7 @@ const ProfileTab = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [passwordLoading, setPasswordLoading] = useState(false);
+    const [form] = Form.useForm();
 
     const userInfoQuery = useQuery({
         queryKey: ["user", user?.user_id],
@@ -181,77 +198,143 @@ const ProfileTab = () => {
     };
 
     return (
-        <Loading loading={userInfoQuery.isLoading} className={cn("flex flex-col gap-5 overflow-y-auto pl-6 pr-3")}>
-            <div>
-                <div className="flex justify-center">
-                    <AvatarUpload imageUrl={imageUrl} loading={loading} onChangeImage={handleChange} />
+        <Loading
+            loading={userInfoQuery.isLoading}
+            className={cn("mx-auto flex w-full max-w-2xl flex-col items-center gap-8 p-0 md:p-6")}>
+            <Card className="w-full max-w-lg rounded-2xl border-[2pt] bg-white dark:bg-slate-900">
+                <div className="flex flex-col items-center gap-4 py-6">
+                    <div className="relative flex flex-col items-center">
+                        <AvatarUpload imageUrl={imageUrl} loading={loading} onChangeImage={handleChange} />
+                        <Title level={4} className="mb-0 mt-2">
+                            {userInfoQuery.data?.username || "Người dùng"}
+                        </Title>
+                        <Text type="secondary">{userInfoQuery.data?.email}</Text>
+                    </div>
+                    <Divider className="my-2" />
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        className="w-full"
+                        initialValues={{
+                            username: userInfoQuery.data?.username,
+                            email: userInfoQuery.data?.email,
+                            phone_number: userInfoQuery.data?.phone_number,
+                        }}>
+                        <Form.Item label="Tên người dùng" name="username">
+                            <Space.Compact block>
+                                <Input
+                                    disabled={!editUsername}
+                                    defaultValue={userInfoQuery.data?.username}
+                                    className="rounded-l-lg"
+                                />
+                                {editUsername ? (
+                                    <>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                const value = form.getFieldValue("username");
+                                                submitUpdate("username", value);
+                                            }}>
+                                            Lưu
+                                        </Button>
+                                        <Button onClick={() => setEditUsername(false)}>Huỷ</Button>
+                                    </>
+                                ) : (
+                                    <Button onClick={() => setEditUsername(true)}>Chỉnh</Button>
+                                )}
+                            </Space.Compact>
+                        </Form.Item>
+                        <Form.Item label="Email" name="email">
+                            <Space.Compact block>
+                                <Input
+                                    disabled={!editEmail}
+                                    defaultValue={userInfoQuery.data?.email}
+                                    className="rounded-l-lg"
+                                />
+                                {editEmail ? (
+                                    <>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                const value = form.getFieldValue("email");
+                                                submitUpdate("email", value);
+                                            }}>
+                                            Lưu
+                                        </Button>
+                                        <Button onClick={() => setEditEmail(false)}>Huỷ</Button>
+                                    </>
+                                ) : (
+                                    <Button onClick={() => setEditEmail(true)}>Chỉnh</Button>
+                                )}
+                            </Space.Compact>
+                        </Form.Item>
+                        <Form.Item label="Số điện thoại" name="phone_number">
+                            <Space.Compact block>
+                                <Input
+                                    disabled={!editPhoneNumber}
+                                    defaultValue={userInfoQuery.data?.phone_number}
+                                    className="rounded-l-lg"
+                                />
+                                {editPhoneNumber ? (
+                                    <>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                const value = form.getFieldValue("phone_number");
+                                                submitUpdate("phone_number", value);
+                                            }}>
+                                            Lưu
+                                        </Button>
+                                        <Button onClick={() => setEditPhoneNumber(false)}>Huỷ</Button>
+                                    </>
+                                ) : (
+                                    <Button onClick={() => setEditPhoneNumber(true)}>Chỉnh</Button>
+                                )}
+                            </Space.Compact>
+                        </Form.Item>
+                    </Form>
                 </div>
-            </div>
-
-            <div className="grid gap-3">
-                <EditableField
-                    label="Tên người dùng"
-                    value={userInfoQuery.data?.username || ""}
-                    name="username"
-                    isEditing={editUsername}
-                    onEdit={() => setEditUsername(true)}
-                    onCancel={() => setEditUsername(false)}
-                    submitUpdate={submitUpdate}
-                />
-                <EditableField
-                    label="Email"
-                    value={userInfoQuery.data?.email || ""}
-                    name="email"
-                    type="email"
-                    isEditing={editEmail}
-                    onEdit={() => setEditEmail(true)}
-                    onCancel={() => setEditEmail(false)}
-                    submitUpdate={submitUpdate}
-                />
-                <EditableField
-                    label="Số điện thoại"
-                    value={userInfoQuery.data?.phone_number || ""}
-                    name="phone_number"
-                    type="tel"
-                    isEditing={editPhoneNumber}
-                    onEdit={() => setEditPhoneNumber(true)}
-                    onCancel={() => setEditPhoneNumber(false)}
-                    submitUpdate={submitUpdate}
-                />
-            </div>
-
-            <div>
-                <h3 className="text-xl font-semibold">Quyền riêng tư & Bảo mật</h3>
-                <Divider className="mt-3" />
-                <Button onClick={() => setShowPasswordForm((v) => !v)}>Cập nhật mật khẩu</Button>
-                {showPasswordForm && (
-                    <div className="mt-4 flex max-w-xs flex-col gap-3">
+            </Card>
+            <Card className="w-full max-w-lg rounded-2xl border-[2pt] bg-white dark:bg-slate-900">
+                <div className="flex flex-col gap-4 py-6">
+                    <Title level={5} className="mb-0">
+                        Quyền riêng tư & Bảo mật
+                    </Title>
+                    <Divider className="my-2" />
+                    <Button type="dashed" block onClick={() => setShowPasswordForm(true)}>
+                        Cập nhật mật khẩu
+                    </Button>
+                </div>
+            </Card>
+            <Modal
+                title="Cập nhật mật khẩu"
+                open={showPasswordForm}
+                onCancel={() => {
+                    setShowPasswordForm(false);
+                    setOldPassword("");
+                    setNewPassword("");
+                }}
+                onOk={handlePasswordUpdate}
+                okText="Lưu"
+                cancelText="Huỷ"
+                confirmLoading={passwordLoading}>
+                <Form layout="vertical">
+                    <Form.Item label="Mật khẩu cũ">
                         <Input.Password
-                            placeholder="Mật khẩu cũ"
+                            placeholder="Nhập mật khẩu cũ"
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                         />
+                    </Form.Item>
+                    <Form.Item label="Mật khẩu mới">
                         <Input.Password
-                            placeholder="Mật khẩu mới"
+                            placeholder="Nhập mật khẩu mới"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
-                        <div className="flex gap-2">
-                            <Button type="primary" loading={passwordLoading} onClick={handlePasswordUpdate}>
-                                Lưu
-                            </Button>
-                            <Button
-                                onClick={() => {
-                                    setShowPasswordForm(false);
-                                    setOldPassword("");
-                                    setNewPassword("");
-                                }}>
-                                Hủy
-                            </Button>
-                        </div>
-                    </div>
-                )}
-            </div>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Loading>
     );
 };

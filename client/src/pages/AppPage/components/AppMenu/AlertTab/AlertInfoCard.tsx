@@ -2,7 +2,8 @@ import { AlertInfo, deleteUserAlertById, getUserAlertByDistrict } from "@/api/al
 import { cn } from "@/lib/utils";
 import { AlertSetting } from "@/types/db";
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
-import { Card, Tooltip, Typography } from "antd";
+import { Button, Card, Tooltip, Typography } from "antd";
+import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { IoCloudy } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -98,7 +99,21 @@ const InfoCard: React.FC<IPropsInfoCard> = ({ className, data, onDelete, ...prop
                 </Typography.Title>
                 <Tooltip title={"Xoá"} getPopupContainer={() => document.body}>
                     <div ref={deleteIconRef}>
-                        <MdDeleteOutline onClick={handleDelete} size={30} className="cursor-pointer p-1 text-red-500" />
+                        <motion.div
+                            whileHover={{ scale: 1.08, rotate: -7 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="inline-block">
+                            <Button
+                                shape="circle"
+                                danger
+                                ghost
+                                size="small"
+                                icon={<MdDeleteOutline size={18} />}
+                                onClick={handleDelete}
+                                className="flex items-center justify-center border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                style={{ borderColor: "#ff4d4f" }}
+                            />
+                        </motion.div>
                     </div>
                 </Tooltip>
             </div>
