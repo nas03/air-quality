@@ -87,7 +87,13 @@ const MenuDrawer: React.FC<IPropsMenuDrawer> = ({ className, open }) => {
                 path: "/analytics",
                 icon: <MdAnalytics className="h-5 w-5" />,
             },
-            { label: "Hồ Sơ", icon: <AiFillProfile className="h-5 w-5" />, children: <ProfileTab /> },
+            user?.user_id
+                ? {
+                      label: "Hồ Sơ",
+                      icon: <AiFillProfile className="h-5 w-5" />,
+                      children: <ProfileTab />,
+                  }
+                : {},
         ] as Omit<MenuItemType, "key">[]
     )
         .filter((el) => el.label)

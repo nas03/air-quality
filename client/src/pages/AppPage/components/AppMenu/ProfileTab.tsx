@@ -12,7 +12,6 @@ import {
     GetProp,
     Input,
     message,
-    Modal,
     Space,
     Typography,
     Upload,
@@ -22,15 +21,6 @@ import { useState } from "react";
 
 // Types
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-type EditableFieldProps = {
-    label: string;
-    value: string;
-    name: string;
-    type?: string;
-    isEditing: boolean;
-    onEdit: () => void;
-    onCancel: () => void;
-};
 
 // Utils
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
@@ -50,47 +40,6 @@ const beforeUpload = (file: FileType) => {
 };
 
 // Components
-const EditableField = ({
-    label,
-    value,
-    name,
-    type = "text",
-    isEditing,
-    onEdit,
-    onCancel,
-    submitUpdate,
-}: EditableFieldProps & { submitUpdate: (name: string, value: string) => void }) => {
-    const [inputValue, setInputValue] = useState(value);
-    return (
-        <div className="grid grid-cols-7 border-b-2 border-slate-100 pb-3 text-sm">
-            <p className="col-span-2 flex flex-row items-start py-1 font-medium">{label}</p>
-            <div className="col-span-4 flex flex-col justify-center gap-3">
-                <input
-                    name={name}
-                    type={type}
-                    className={cn("px-3 py-1", isEditing ? "focus:rounded-md" : "border-none outline-none")}
-                    defaultValue={value}
-                    disabled={!isEditing}
-                    ref={(input) => isEditing && input?.focus()}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                {isEditing && (
-                    <div className="flex flex-row gap-3">
-                        <Button onClick={() => submitUpdate(name, inputValue)} type="primary">
-                            Lưu
-                        </Button>
-                        <Button onClick={onCancel}>Huỷ</Button>
-                    </div>
-                )}
-            </div>
-            <p
-                className={cn("flex items-center justify-center text-blue-500 hover:cursor-pointer hover:underline")}
-                onClick={onEdit}>
-                {!isEditing && "Chỉnh"}
-            </p>
-        </div>
-    );
-};
 
 const AvatarUpload = ({
     imageUrl,
@@ -182,6 +131,7 @@ const ProfileTab = () => {
             message.error("Không tìm thấy thông tin người dùng");
             return;
         }
+        setPasswordLoading(true);
         try {
             const res = await updateUserPassword(user.user_id, oldPassword, newPassword);
             if (res.status === "success") {
@@ -194,6 +144,8 @@ const ProfileTab = () => {
             }
         } catch (error) {
             message.error("Có lỗi xảy ra khi cập nhật mật khẩu!");
+        } finally {
+            setPasswordLoading(false);
         }
     };
 
@@ -301,40 +253,43 @@ const ProfileTab = () => {
                         Quyền riêng tư & Bảo mật
                     </Title>
                     <Divider className="my-2" />
-                    <Button type="dashed" block onClick={() => setShowPasswordForm(true)}>
-                        Cập nhật mật khẩu
-                    </Button>
+                    {!showPasswordForm ? (
+                        <Button type="dashed" block onClick={() => setShowPasswordForm(true)}>
+                            Cập nhật mật khẩu
+                        </Button>
+                    ) : (
+                        <Form layout="vertical">
+                            <Form.Item label="Mật khẩu cũ">
+                                <Input.Password
+                                    placeholder="Nhập mật khẩu cũ"
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                />
+                            </Form.Item>
+                            <Form.Item label="Mật khẩu mới">
+                                <Input.Password
+                                    placeholder="Nhập mật khẩu mới"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                            </Form.Item>
+                            <div className="mt-2 flex justify-end gap-2">
+                                <Button type="primary" loading={passwordLoading} onClick={handlePasswordUpdate}>
+                                    Lưu
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setShowPasswordForm(false);
+                                        setOldPassword("");
+                                        setNewPassword("");
+                                    }}>
+                                    Huỷ
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
                 </div>
             </Card>
-            <Modal
-                title="Cập nhật mật khẩu"
-                open={showPasswordForm}
-                onCancel={() => {
-                    setShowPasswordForm(false);
-                    setOldPassword("");
-                    setNewPassword("");
-                }}
-                onOk={handlePasswordUpdate}
-                okText="Lưu"
-                cancelText="Huỷ"
-                confirmLoading={passwordLoading}>
-                <Form layout="vertical">
-                    <Form.Item label="Mật khẩu cũ">
-                        <Input.Password
-                            placeholder="Nhập mật khẩu cũ"
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                        />
-                    </Form.Item>
-                    <Form.Item label="Mật khẩu mới">
-                        <Input.Password
-                            placeholder="Nhập mật khẩu mới"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                    </Form.Item>
-                </Form>
-            </Modal>
         </Loading>
     );
 };

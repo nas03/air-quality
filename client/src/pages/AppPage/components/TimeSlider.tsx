@@ -1,13 +1,13 @@
 import { IPropsTimeSlider } from "@/components/types";
 import { useTimeList } from "@/hooks/useContextHooks";
 import { cn } from "@/lib/utils";
-import { Slider, SliderSingleProps } from "antd";
+import { Button, Slider, SliderSingleProps } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlinePauseCircle } from "react-icons/ai";
 import { GoPlay } from "react-icons/go";
 
 const SLIDER_MAX = 10;
-const ANIMATION_INTERVAL = 2000;
+const ANIMATION_INTERVAL = 5000;
 const SLIDER_DATA_DEFAULT_IDX = 3;
 const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer }) => {
     const timeList = useTimeList();
@@ -95,12 +95,26 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer
     return (
         <div
             className={cn(
-                "bg-3 flex h-fit flex-row items-center gap-16 rounded-md bg-white/70 pb-5 pl-10 pr-16 pt-5 font-roboto shadow-2xl shadow-white/50 backdrop-blur-md",
+                "flex h-fit flex-row items-center gap-12 rounded-2xl border-[2pt] border-slate-200 bg-white/80 px-12 py-4 font-sans dark:bg-slate-900/90",
                 className,
             )}>
-            <button className="shrink-0 rounded-full text-4xl" onClick={handlePlayPause}>
-                {!state.isPlaying ? <GoPlay /> : <AiOutlinePauseCircle />}
-            </button>
+            <Button
+                shape="circle"
+                type={!state.isPlaying ? "primary" : "default"}
+                ghost={state.isPlaying}
+                size="large"
+                onClick={handlePlayPause}
+                className="flex shrink-0 items-center justify-center text-xl"
+                style={{ minWidth: 40, minHeight: 40 }}>
+                {!state.isPlaying ? (
+                    <GoPlay />
+                ) : (
+                    <AiOutlinePauseCircle
+                        color="rgb(64, 150, 255)"
+                        className="bg-[#rgb(64, 150, 255)] text-[#rgb(64, 150, 255)]"
+                    />
+                )}
+            </Button>
             {timeList.at(0) && (
                 <Slider
                     marks={state.marks}
@@ -112,7 +126,7 @@ const TimeSlider: React.FC<IPropsTimeSlider> = ({ setTime, className, openDrawer
                         autoAdjustOverflow: true,
                     }}
                     onChange={updateSliderValue}
-                    className="flex-1 font-sans"
+                    className="flex-1 px-2 font-sans"
                     id="time-slider"
                 />
             )}
