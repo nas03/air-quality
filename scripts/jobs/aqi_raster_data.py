@@ -442,8 +442,9 @@ def batch_upload_files(file_paths: List[str]):
 
     def upload_file(output_path):
         file_parts = output_path.split("/")
-        aqi_filepath = "/".join(file_parts[2:]).replace("PM25", "AQI")
-        aqi_filename = "/".join(file_parts[4:]).replace("PM25", "AQI")
+        
+        aqi_filepath = "/".join(file_parts[6:]).replace("PM25", "AQI")
+        aqi_filename = "/".join(file_parts[8:]).replace("PM25", "AQI")
         try:
             with open(output_path, "rb") as f:
                 files = [("file", (aqi_filename, f, "image/tiff"))]
