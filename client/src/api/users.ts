@@ -46,3 +46,17 @@ export const getUserInfoByUserId = async (user_id: number | undefined) => {
 
     return response.data.data;
 };
+
+export const updateUser = async (data: Partial<User>) => {
+    const response = await api.put<APIResponse<User>>("/user/update-info", data);
+    return response.data;
+};
+
+export const updateUserPassword = async (user_id: number, old_password: string, new_password: string) => {
+    const response = await api.put<APIResponse<null>>("/user/update-password", {
+        user_id,
+        old_password,
+        new_password,
+    });
+    return response.data;
+};

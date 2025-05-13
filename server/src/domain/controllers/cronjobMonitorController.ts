@@ -8,9 +8,6 @@ import { BaseController } from "./baseController";
 export class CronjobMonitorController extends BaseController<[CronjobMonitorInteractor]> {
 	private cronjobMonitorInteractor = this.interactors[0];
 
-	/**
-	 * Get a cronjob monitor record by timestamp
-	 */
 	onGetCronjobRecord = async (req: Request, res: Response) => {
 		const dateStr = req.query.date as string;
 
@@ -99,9 +96,6 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
 		}
 	};
 
-	/**
-	 * Update an existing cronjob monitor record
-	 */
 	onUpdateCronjobRecord = async (req: Request, res: Response) => {
 		const id = Number.parseInt(req.params.id, 10);
 
@@ -136,14 +130,10 @@ export class CronjobMonitorController extends BaseController<[CronjobMonitorInte
 	onRerunCronjob = async (req: Request, res: Response) => {
 		try {
 			const TIMEOUT = 300000; // 5 minutes
-			// const controller = new AbortController();
-			// const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
 			const request = await axios.post("http://13.213.59.37:5000/execute-cron", {
 				timeout: TIMEOUT, // Add axios timeout
 			});
-
-			// clearTimeout(timeoutId);
 
 			const result = request.data;
 			return res.status(statusCode.SUCCESS).json({
