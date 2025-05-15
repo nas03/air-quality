@@ -219,10 +219,10 @@ export class AlertSettingController extends BaseController<
 
 		const forecast = await this.statisticInteractor.getDistrictHistory(
 			district_id as string,
-			moment().utcOffset("+07:00").startOf("day").toDate(),
-			moment().utcOffset("+07:00").add(7, "days").endOf("day").toDate(),
+			moment().utcOffset("+00:00").startOf("day").toDate(),
+			moment().utcOffset("+00:00").add(7, "days").endOf("day").toDate(),
 		);
-		console.log();
+
 		const openWeatherCurrentData = await axios.get<OpenWeatherCurrentDataType>(
 			"https://api.openweathermap.org/data/2.5/weather",
 			{
