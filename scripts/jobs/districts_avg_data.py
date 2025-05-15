@@ -10,7 +10,6 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 from osgeo import gdal  # type: ignore
-import concurrent.futures
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -31,7 +30,6 @@ TEMP_FILE = "temp.tif"
 NODATA_VALUE = -9999
 DIST_NODATA = 65535
 OUTPUT_FOLDER = r"assets/output"
-
 # Load district data
 meta = pd.read_excel(META_PATH)
 dist_ds = gdal.Open(DIST_PATH, gdal.GA_ReadOnly)
@@ -85,57 +83,55 @@ def get_time_info(filename: str) -> datetime.datetime:
     return datetime.datetime(year, month, day)
 
 
-def process_file_worker(filepath: str) -> Optional[pd.DataFrame]:
-    """Worker function to process a single file. Loads globals inside the process."""
-    try:
-        meta = pd.read_excel(META_PATH)
-        dist_ds = gdal.Open(DIST_PATH, gdal.GA_ReadOnly)
-        dist = dist_ds.ReadAsArray()
-        # Get geotransform parameters
-        ulx, xres, xskew, uly, yskew, yres = dist_ds.GetGeoTransform()
-        lrx = ulx + (dist_ds.RasterXSize * xres)
-        lry = uly + (dist_ds.RasterYSize * yres)
+def process_geotiff(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
+    """Process GeoTIFF file and return data and district arrays."""
+    gdal.Warp(
+        TEMP_FILE,
+        filepath,
+        format="GTiff",
+        dstSRS="+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs",
+        xRes=100,
+        yRes=-100,
+        outputBounds=(ulx, lry, lrx, uly),
+        resampleAlg="near",
+        creationOptions=["COMPRESS=LZW"],
+    )
 
-        def process_geotiff(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
-            gdal.Warp(
-                TEMP_FILE,
-                filepath,
-                format="GTiff",
-                dstSRS="+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs",
-                xRes=100,
-                yRes=-100,
-                outputBounds=(ulx, lry, lrx, uly),
-                resampleAlg="near",
-                creationOptions=["COMPRESS=LZW"],
-            )
-            data = gdal.Open(TEMP_FILE, gdal.GA_ReadOnly).ReadAsArray()
-            rows, cols = data.shape
-            new_data = np.reshape(data, rows * cols)
-            new_dist = np.reshape(dist, rows * cols)
-            mask = (new_data != NODATA_VALUE) & (new_dist != DIST_NODATA)
-            return new_data[mask], new_dist[mask]
+    data = gdal.Open(TEMP_FILE, gdal.GA_ReadOnly).ReadAsArray()
+    rows, cols = data.shape
 
-        def create_dataframe(
-            data: np.ndarray, dist_data: np.ndarray, time_info: datetime.datetime
-        ) -> pd.DataFrame:
-            df = pd.DataFrame({"dist_ID": dist_data, "pm_25": data})
-            df = df.groupby("dist_ID", as_index=False).mean()
-            df = df.dropna(subset=["pm_25"])
-            df["aqi_index"] = df["pm_25"].apply(calculate_aqi)
-            df["time"] = time_info
-            sub_meta = meta[["ID", "GID_2"]].rename(columns={"ID": "dist_ID", "GID_2": "GID_2"})
-            df = pd.merge(df, sub_meta)
-            df = df.rename(columns={"GID_2": "district_id"})
-            df = df.drop(columns=["dist_ID"])
-            return df[["district_id", "pm_25", "aqi_index", "time"]]
+    new_data = np.reshape(data, rows * cols)
+    new_dist = np.reshape(dist, rows * cols)
 
-        _, filename = os.path.split(filepath)
-        time_info = get_time_info(filename)
-        data, dist_data = process_geotiff(filepath)
-        return create_dataframe(data, dist_data, time_info)
-    except Exception as e:
-        logger.error(f"Error processing file {filepath}: {e}")
-        return None
+    mask = (new_data != NODATA_VALUE) & (new_dist != DIST_NODATA)
+    return new_data[mask], new_dist[mask]
+
+
+def create_dataframe(
+    data: np.ndarray, dist_data: np.ndarray, time_info: datetime.datetime
+) -> pd.DataFrame:
+    """Create and process DataFrame from arrays."""
+    df = pd.DataFrame({"dist_ID": dist_data, "pm_25": data})
+    df = df.groupby("dist_ID", as_index=False).mean()
+    df = df.dropna(subset=["pm_25"])
+    df["aqi_index"] = df["pm_25"].apply(calculate_aqi)
+    df["time"] = time_info
+
+    # Merge with metadata
+    sub_meta = meta[["ID", "GID_2"]].rename(columns={"ID": "dist_ID", "GID_2": "GID_2"})
+    df = pd.merge(df, sub_meta)
+    df = df.rename(columns={"GID_2": "district_id"})
+    df = df.drop(columns=["dist_ID"])
+
+    return df[["district_id", "pm_25", "aqi_index", "time"]]
+
+
+def prepare_dataframe(filepath) -> pd.DataFrame:
+    """Process GeoTIFF files and prepare DataFrame."""
+    _, filename = os.path.split(filepath)
+    time_info = get_time_info(filename)
+    data, dist_data = process_geotiff(filepath)
+    return create_dataframe(data, dist_data, time_info)
 
 
 def get_db_connection():
@@ -185,23 +181,26 @@ def scrape_district_avg_data(input_files: Optional[List[str]] = None) -> None:
     try:
         logger.info("Starting data processing")
         conn = get_db_connection()
+
         files_to_process = (
             input_files
             if input_files
-            else list(glob.iglob(os.path.join(FOLDER_GEOTIFF_PATH, "*.tif")))
+            else glob.iglob(os.path.join(FOLDER_GEOTIFF_PATH, "*.tif"))
         )
         log = []
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            results = list(executor.map(process_file_worker, files_to_process))
-        for df in results:
-            if df is not None:
+        for filepath in files_to_process:
+            if os.path.exists(filepath) and os.path.isfile(filepath):
+                logger.info(f"Processing file: {filepath}")
+                df = prepare_dataframe(filepath=filepath)
                 log.append(df)
-        if log:
-            df = pd.concat(log)
-            insert_data(df, conn)
-            conn.commit()
+
+        df = pd.concat(log)
+        insert_data(df, conn)
+        conn.commit()
+
         conn.close()
         logger.info("Successfully processed all files")
+
     except psycopg2.Error as e:
         logger.error(f"Database error: {e}")
     except Exception as e:
