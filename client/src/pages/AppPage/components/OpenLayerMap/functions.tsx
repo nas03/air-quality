@@ -62,6 +62,7 @@ const fetchStationData = (map: Map, coordinates: number[], markerLayer: VectorLa
         location: stationProperties.station_name,
         time: stationProperties.timestamp,
         wind_speed: 0,
+        district_id: "",
     };
 };
 
@@ -80,7 +81,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
     if (!modelData?.features?.length) return null;
 
     const [aqiFeature, locationFeature] = modelData.features;
-    
+
     const locationProps = locationFeature.properties || "";
     let location = "";
 
@@ -100,6 +101,7 @@ const fetchModelData = async (url: string, coordinate: Coordinate): Promise<Mark
         location,
         time: "",
         wind_speed: 0,
+        district_id: locationProps.GID_2 || "",
     };
 };
 export const fetchLocationData = async (

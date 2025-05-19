@@ -2,7 +2,7 @@ import { CHART_CONFIGS } from "@/pages/AnalyticsPage/components/DataChart/config
 import { MonitoringOutputDataType } from "@/types/types";
 import { AreaChartOutlined } from "@ant-design/icons";
 import { Collapse, CollapseProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AirQualityHistoryChart from "./AirQualityHistoryChart";
 
 export interface ChartOptions {
@@ -73,6 +73,7 @@ const LocationDataCard: React.FC<IPropsTemplateCard> = ({ className, district_id
             ),
         },
     ];
+    useEffect(() => {}, [district_id]);
     return (
         <div className={className}>
             <Collapse

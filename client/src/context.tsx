@@ -38,6 +38,7 @@ export const GeoContext = createContext<GeoContextType>({
     location: "",
     wind_speed: 0,
     time: "",
+    district_id: "",
 });
 
 export const ConfigContext = createContext<ConfigContextType>({

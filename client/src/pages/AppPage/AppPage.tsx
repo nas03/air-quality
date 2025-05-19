@@ -68,6 +68,7 @@ const AppPage = () => {
         location: "",
         time: time,
         wind_speed: 0,
+        district_id: "",
     });
 
     useEffect(() => {
@@ -100,6 +101,7 @@ const AppPage = () => {
                     <TimeContext.Provider value={{ timeList: timeList || [], time }}>
                         <GeoContext.Provider
                             value={{
+                                district_id: markData.district_id,
                                 type: markData.type,
                                 coordinate: markData.coordinate,
                                 aqi_index: markData.aqi_index,

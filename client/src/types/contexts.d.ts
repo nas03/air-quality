@@ -17,6 +17,7 @@ export interface GeoContextType {
     location: string;
     wind_speed: number;
     time?: string;
+    district_id: string;
 }
 
 export interface ConfigContextType {

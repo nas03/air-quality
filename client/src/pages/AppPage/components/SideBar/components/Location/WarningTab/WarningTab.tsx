@@ -97,6 +97,7 @@ const WarningTab: React.FC<WarningTabProps> = ({ district_id, className }) => {
         const [lon, lat] = coordinate;
         weatherQuery.mutate([lon, lat]);
     }, [geoContext.coordinate]);
+
     const prepareAirQualityData = (): AirQualityInfo => {
         const aqi = data?.aqi_index ? data?.aqi_index.toString() : "--";
         const { color, icon } = getSvgAndColorByAQI(Number(aqi));

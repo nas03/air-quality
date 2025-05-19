@@ -1,6 +1,6 @@
 import { getStatisticHistoryByDistrict } from "@/api";
 
-import { TimeContext } from "@/context";
+import { GeoContext, TimeContext } from "@/context";
 import { cn } from "@/lib/utils";
 import { CHART_CONFIGS, ChartConfig } from "@/pages/AnalyticsPage/components/DataChart/config";
 import { aqiThresholds, colorMap, MonitoringData, pm25Thresholds } from "@/types/consts";
@@ -74,7 +74,10 @@ const AirQualityHistoryChart: React.FC<IPropsAirQualityHistoryChart> = ({
     useEffect(() => {
         mutation.mutate(district_id);
     }, [district_id]);
-
+    const geoContext = useContext(GeoContext);
+    useEffect(() => {
+        if (geoContext.district_id) mutation.mutate(geoContext.district_id);
+    }, [geoContext.district_id]);
     return (
         <div className={cn(className, "h-[23rem]")}>
             {chartData && chartData[config.chartType] && chartData[config.chartType].length > 0 ? (
